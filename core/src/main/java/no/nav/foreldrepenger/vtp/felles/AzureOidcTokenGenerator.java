@@ -14,9 +14,9 @@ import java.util.*;
 public class AzureOidcTokenGenerator {
 
 
-    private List<String> aud = Arrays.asList(
-            "OIDC"
-    );
+    private List<String> aud = Collections.emptyList();
+    private List<String> groups = new ArrayList<>();
+
     private NumericDate expiration = NumericDate.fromSeconds(NumericDate.now().getValue() + 3600*6);
     private String issuer;
     private NumericDate issuedAt = NumericDate.now();
@@ -26,21 +26,13 @@ public class AzureOidcTokenGenerator {
     private Map<String, String> additionalClaims = new HashMap<>();
 
     public AzureOidcTokenGenerator(String brukerId, String nonce) {
-        additionalClaims.put("azp", "OIDC");
-        additionalClaims.put("acr", "Level4");
         this.subject = brukerId;
         this.nonce = nonce;
-
     }
 
-    public void addAud(String e) {
-        this.aud = new ArrayList<>(aud);
+    public void setAud(String e) {
+        this.aud = new ArrayList<>();
         this.aud.add(e);
-    }
-
-    AzureOidcTokenGenerator withoutAzp() {
-        additionalClaims.remove("azp");
-        return this;
     }
 
     AzureOidcTokenGenerator withExpiration(NumericDate expiration) {
@@ -61,16 +53,15 @@ public class AzureOidcTokenGenerator {
     AzureOidcTokenGenerator withKid(String kid) {
         this.kid = kid;
         return this;
-
     }
 
-    AzureOidcTokenGenerator withClaim(String name, String value) {
-        additionalClaims.put(name, value);
+    public AzureOidcTokenGenerator withGroups(List<String> groups) {
+        this.groups = groups;
         return this;
     }
 
-    AzureOidcTokenGenerator withAud(List<String> aud) {
-        this.aud = aud;
+    public AzureOidcTokenGenerator withClaim(String name, String value) {
+        additionalClaims.put(name, value);
         return this;
     }
 
@@ -80,7 +71,9 @@ public class AzureOidcTokenGenerator {
         claims.setExpirationTime(expiration);
         claims.setGeneratedJwtId();
         claims.setIssuedAt(issuedAt);
+        claims.setNotBefore(issuedAt);
         claims.setSubject(subject);
+        claims.setClaim("ver", "2.0");
         if (!Strings.isNullOrEmpty(nonce)) {
             claims.setClaim("nonce", nonce);
         }
@@ -92,6 +85,7 @@ public class AzureOidcTokenGenerator {
         for (Map.Entry<String, String> entry : additionalClaims.entrySet()) {
             claims.setStringClaim(entry.getKey(), entry.getValue());
         }
+        claims.setClaim("groups", groups);
         RsaJsonWebKey senderJwk = KeyStoreTool.getJsonWebKey();
         JsonWebSignature jws = new JsonWebSignature();
         jws.setPayload(claims.toJson());
