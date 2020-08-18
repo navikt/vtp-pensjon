@@ -6,6 +6,8 @@ import no.nav.foreldrepenger.vtp.felles.AzureOidcTokenGenerator;
 import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
 import no.nav.foreldrepenger.vtp.server.rest.auth.Oauth2AccessTokenResponse;
 import no.nav.foreldrepenger.vtp.server.rest.auth.UserRepository;
+import no.nav.foreldrepenger.vtp.testmodell.ansatt.NAVAnsatt;
+import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
@@ -28,8 +30,6 @@ import java.util.stream.Collectors;
 @Path("/AzureAd")
 public class AzureAdNAVAnsattService {
     private static final Logger LOG = LoggerFactory.getLogger(AzureAdNAVAnsattService.class);
-    private static final Map<String, String> nonceCache = new HashMap<>();
-    private static final Map<String, String> clientIdCache = new HashMap<>();
 
     @GET
     @Path("/isAlive")
@@ -69,27 +69,39 @@ public class AzureAdNAVAnsattService {
             @Context HttpServletRequest req,
             @PathParam("tenant") String tenant,
             @FormParam("grant_type") String grantType,
+            @FormParam("client_id") String clientId,
             @FormParam("realm") String realm,
             @FormParam("code") String code,
             @FormParam("redirect_uri") String redirectUri) {
         // dummy sikkerhet, returnerer alltid en idToken/refresh_token
-        String token = createIdToken(req, code, tenant);
+        String token = createIdToken(req, code, tenant, clientId);
         LOG.info("Fikk parametere:" + req.getParameterMap().toString());
         LOG.info("kall på /oauth2/access_token, opprettet token: " + token + " med redirect-url: " + redirectUri);
         Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token);
+        oauthResponse.setAccessToken(code.split(";")[0]);
         return Response.ok(oauthResponse).build();
     }
 
-    private String createIdToken(HttpServletRequest req, String username, String tenant) {
-        String issuer = getIssuer(tenant);
-        String state = req.getParameter("state");
-        String nonce = nonceCache.get(state);
-        AzureOidcTokenGenerator tokenGenerator = new AzureOidcTokenGenerator(username, nonce).withIssuer(issuer);
-        if (clientIdCache.containsKey(state)) {
-            String clientId = clientIdCache.get(state);
-            tokenGenerator.addAud(clientId);
+    private String createIdToken(HttpServletRequest req, String code, String tenant, String clientId) {
+        try {
+            String[] codeData = code.split(";");
+            String username = codeData[0];
+            String nonce = codeData[1];
+            NAVAnsatt user = BasisdataProviderFileImpl.getInstance().getAnsatteIndeks().hentNAVAnsatt(username).orElseThrow(() -> new RuntimeException("Fant ikke NAV-ansatt med brukernavn " + username));
+
+            String issuer = getIssuer(tenant);
+            AzureOidcTokenGenerator tokenGenerator = new AzureOidcTokenGenerator(username, nonce).withIssuer(issuer);
+            tokenGenerator.setAud(clientId);
+
+            tokenGenerator.withClaim("tid", tenant);
+            tokenGenerator.withClaim("oid", UUID.nameUUIDFromBytes(user.cn.getBytes()).toString()); // user id - which is normally a UUID in Azure AD
+            tokenGenerator.withClaim("name", user.displayName);
+            tokenGenerator.withClaim("preferred_username", user.email);
+            tokenGenerator.withGroups(user.groups.stream().map(AzureADGroupMapping::toAzureGroupId).collect(Collectors.toList()));
+            return tokenGenerator.create();
+        } catch (Exception ex) {
+            throw new RuntimeException("Kunne ikke generere Azure AD-token", ex);
         }
-        return tokenGenerator.create();
     }
 
     // Authorize URL:
@@ -115,14 +127,20 @@ public class AzureAdNAVAnsattService {
             @QueryParam("scope") @DefaultValue("openid") String scope,
             @QueryParam("client_id") String clientId,
             @QueryParam("state") String state,
+            @QueryParam("nonce") String nonce,
             @QueryParam("redirect_uri") String redirectUri
     )
             throws Exception {
         LOG.info("kall mot AzureAD authorize med redirecturi " + redirectUri);
         Objects.requireNonNull(scope, "Missing the ?scope=xxx query parameter");
-        if (!Objects.equals(scope, "openid")) {
-            throw new IllegalArgumentException("Unsupported scope [" + scope + "], should be 'openid'");
+        List<String> validScopes = Arrays.asList("openid", "profile");
+        String[] scopes = scope.split("\\s+");
+        for (String s : scopes) {
+            if (!validScopes.contains(s)) {
+                throw new IllegalArgumentException("Unsupported scope [" + s + "], supported scopes are: " + StringUtils.joinWith(", ", validScopes));
+            }
         }
+
         Objects.requireNonNull(responseType, "Missing the ?responseType=xxx query parameter");
         if (!Objects.equals(responseType, "code")) {
             throw new IllegalArgumentException("Unsupported responseType [" + responseType + "], should be 'code'");
@@ -140,15 +158,10 @@ public class AzureAdNAVAnsattService {
         uriBuilder.addParameter("iss", issuer);
         uriBuilder.addParameter("redirect_uri", redirectUri);
 
-        clientIdCache.put(state, clientId);
-        if (!StringUtils.isEmpty(req.getParameter("nonce"))) {
-            nonceCache.put(state, req.getParameter("nonce"));
-        }
-
-        return authorizeHtmlPage(uriBuilder);
+        return authorizeHtmlPage(uriBuilder, nonce);
     }
 
-    private Response authorizeHtmlPage(URIBuilder location) throws URISyntaxException, NamingException {
+    private Response authorizeHtmlPage(URIBuilder location, String nonce) throws URISyntaxException, NamingException {
         // LAG HTML SIDE
         List<Map.Entry<String, String>> usernames = getUsernames();
 
@@ -164,7 +177,7 @@ public class AzureAdNAVAnsattService {
                 "        <table>\r\n" +
                 "            <tbody>\r\n" +
                 usernames.stream().map(
-                        username -> "<tr><a href=\"" + location.toString() + "&code=" + username.getKey() + "\"><h1>" + username.getValue() + "</h1></a></tr>\n")
+                        username -> "<tr><a href=\"" + location.toString() + "&code=" + username.getKey() + ";" + nonce + "\"><h1>" + username.getValue() + "</h1></a></tr>\n")
                         .collect(Collectors.joining("\n"))
                 +
                 "            </tbody>\n" +
