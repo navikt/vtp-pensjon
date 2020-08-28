@@ -70,6 +70,7 @@ public class EnhetRestMock {
     private Norg2RsEnhet enEnhet(long enhetId) {
         Norg2RsEnhet norg2RsEnhet = new Norg2RsEnhet();
         norg2RsEnhet.setEnhetId(enhetId);
+        norg2RsEnhet.setEnhetNr(String.valueOf(enhetId));
         norg2RsEnhet.setNavn("NAV Arbeid og ytelser Tønsberg");
         norg2RsEnhet.setOppgavebehandler(true);
         return norg2RsEnhet;

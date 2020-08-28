@@ -108,6 +108,7 @@ public class SoapWebServiceConfig {
         publishWebService(new PENFullmaktMock(), "/soap/esb/nav-cons-pen-pen-fullmaktWeb/sca/PENFullmaktWSEXP");
         publishWebService(new PENOppdragMock(), "/soap/esb/nav-cons-pen-pen-oppdragWeb/sca/PENOppdragWSEXP");
         publishWebService(new PSAKPPEN015Mock(), "/soap/esb/nav-cons-pen-psak-ppen015Web/sca/PSAKPPEN015WSEXP");
+        publishWebService(new PENInntektMock(),"/soap/esb/nav-cons-pen-pen-inntektWeb/sca/PENInntektWSEXP");
     }
 
     private void publishWebService(Object ws, String path, WebServiceFeature... features ) {

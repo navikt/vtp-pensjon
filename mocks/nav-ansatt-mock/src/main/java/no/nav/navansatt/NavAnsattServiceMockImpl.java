@@ -43,6 +43,7 @@ public class NavAnsattServiceMockImpl implements PSAKNAVAnsatt {
                 ASBOPenNAVEnhet asboEnhet = new ASBOPenNAVEnhet();
                 asboEnhet.setEnhetsId(enhet.getEnhetId());
                 asboEnhet.setEnhetsNavn(enhet.getNavn());
+                asboEnhet.setOrgEnhetsId("7000");
                 enheter.add(asboEnhet);
             }
 

@@ -8,6 +8,7 @@ import javax.jws.*;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
+import java.util.Collections;
 
 @WebService(targetNamespace = "http://nav-cons-pen-psak-navorgenhet/no/nav/inf", name = "PSAKNAVOrgEnhet")
 @XmlSeeAlso({no.nav.lib.pen.psakpselv.fault.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.navorgenhet.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.navorgenhet.ObjectFactory.class, ObjectFactory.class})
@@ -27,10 +28,16 @@ public class PsakNavOrgEnhetMock implements PSAKNAVOrgEnhet {
             @WebParam(name = "hentNAVEnhetRequest", targetNamespace = "")
                     no.nav.lib.pen.psakpselv.asbo.navorgenhet.ASBOPenNAVEnhet hentNAVEnhetRequest
     ) throws HentNAVEnhetFaultPenNAVEnhetIkkeFunnetMsg, HentNAVEnhetFaultPenGeneriskMsg {
+        ASBOPenNAVEnhet enhet = getAsboPenNAVEnhet();
+        return enhet;
+    }
+
+    private ASBOPenNAVEnhet getAsboPenNAVEnhet() {
         ASBOPenNAVEnhet enhet = new ASBOPenNAVEnhet();
         enhet.setEnhetsId("4407");
         enhet.setEnhetsNavn("NAV Arbeid og ytelser Tønsberg");
         enhet.setOrgNivaKode("GR");
+        enhet.setOrgEnhetsId("7000");
         return enhet;
     }
 
@@ -40,8 +47,17 @@ public class PsakNavOrgEnhetMock implements PSAKNAVOrgEnhet {
     }
 
     @Override
-    public ASBOPenNAVEnhetListe finnNAVEnhet(ASBOPenFinnNAVEnhetRequest finnNAVEnhetRequest) throws FinnNAVEnhetFaultPenGeneriskMsg {
-        throw new UnsupportedOperationException("Ikke implementert");
+    @WebMethod
+    @RequestWrapper(localName = "finnNAVEnhet", targetNamespace = "http://nav-cons-pen-psak-navorgenhet/no/nav/inf", className = "no.nav.inf.psak.navorgenhet.FinnNAVEnhet")
+    @ResponseWrapper(localName = "finnNAVEnhetResponse", targetNamespace = "http://nav-cons-pen-psak-navorgenhet/no/nav/inf", className = "no.nav.inf.psak.navorgenhet.FinnNAVEnhetResponse")
+    @WebResult(name = "finnNAVEnhetResponse", targetNamespace = "")
+    public no.nav.lib.pen.psakpselv.asbo.navorgenhet.ASBOPenNAVEnhetListe finnNAVEnhet(
+            @WebParam(name = "finnNAVEnhetRequest", targetNamespace = "")
+                    no.nav.lib.pen.psakpselv.asbo.navorgenhet.ASBOPenFinnNAVEnhetRequest finnNAVEnhetRequest
+    ) throws FinnNAVEnhetFaultPenGeneriskMsg {
+        ASBOPenNAVEnhetListe asboPenNAVEnhetListe = new ASBOPenNAVEnhetListe();
+        asboPenNAVEnhetListe.setNAVEnheter(Collections.singletonList(getAsboPenNAVEnhet()).toArray(ASBOPenNAVEnhet[]::new));
+        return asboPenNAVEnhetListe;
     }
 
     @Override
