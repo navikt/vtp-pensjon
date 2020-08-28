@@ -26,6 +26,10 @@ public class Oauth2AccessTokenResponse {
         this.accessToken = UUID.randomUUID().toString();
     }
 
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
     public String getIdToken() {
         return idToken;
     }
