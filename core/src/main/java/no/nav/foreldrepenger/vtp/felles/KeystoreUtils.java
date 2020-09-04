@@ -15,6 +15,9 @@ public class KeystoreUtils {
     }
 
     public static String getKeystoreFilePath() {
+        if (null != getenv("NAV_TRUSTSTORE_PATH")) {
+            return getenv("NAV_TRUSTSTORE_PATH");
+        }
         if (null != getenv("NO_NAV_MODIG_SECURITY_APPCERT_KEYSTORE")) {
             return getenv("NO_NAV_MODIG_SECURITY_APPCERT_KEYSTORE");
         }
@@ -22,6 +25,9 @@ public class KeystoreUtils {
     }
 
     public static String getKeyStorePassword() {
+        if (null != getenv("NAV_TRUSTSTORE_PASSWORD")) {
+            return getenv("NAV_TRUSTSTORE_PASSWORD");
+        }
         if (null != getenv("NO_NAV_MODIG_SECURITY_APPCERT_PASSWORD")) {
             return getenv("NO_NAV_MODIG_SECURITY_APPCERT_PASSWORD");
         }
