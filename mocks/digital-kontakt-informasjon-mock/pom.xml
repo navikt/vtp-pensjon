@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>digital-kontakt-informasjon-mock</artifactId>
-    <name>VTP ::digital-kontakt-informasjon-mock</name>
     <packaging>jar</packaging>
 
     <dependencies>

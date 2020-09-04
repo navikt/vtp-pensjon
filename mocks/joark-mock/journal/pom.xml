@@ -10,7 +10,6 @@
 
 	<artifactId>journal-mock</artifactId>
 	<packaging>jar</packaging>
-	<name>VTP ::joark-mock journal</name>
 
 	<dependencies>
 		<!-- Prosjektavhengigheter -->

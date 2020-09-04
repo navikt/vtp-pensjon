@@ -9,7 +9,6 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>gsak-mock</artifactId>
-	<name>VTP ::gsak-mock</name>
 	<packaging>jar</packaging>
 
 	<dependencies>

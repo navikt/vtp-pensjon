@@ -9,7 +9,6 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>nav-ansatt-mock</artifactId>
-	<name>VTP ::nav-ansatt-mock</name>
 	<packaging>jar</packaging>
 
 	<dependencies>

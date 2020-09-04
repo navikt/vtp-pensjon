@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>journalpost-mock</artifactId>
-    <name>VTP ::dokarkiv-mock</name>
     <packaging>jar</packaging>
 
     <dependencies>

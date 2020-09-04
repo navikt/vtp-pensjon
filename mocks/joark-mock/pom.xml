@@ -9,7 +9,6 @@
 
     <artifactId>joark-mock</artifactId>
     <packaging>jar</packaging>
-    <name>VTP ::joark-mock</name>
 
     <dependencies>
         <!-- Prosjektavhengigheter -->

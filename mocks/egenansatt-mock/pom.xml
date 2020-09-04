@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>egenansatt-mock</artifactId>
-    <name>VTP ::egenansatt-mock</name>
     <packaging>jar</packaging>
 
     <dependencies>

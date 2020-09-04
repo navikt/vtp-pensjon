@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>dialog-mock</artifactId>
-    <name>VTP ::dialog-mock</name>
     <packaging>jar</packaging>
 
     <dependencies>

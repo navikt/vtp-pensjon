@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>dokdist-mock</artifactId>
-    <name>VTP ::dokdist-mock</name>
     <packaging>jar</packaging>
 
     <dependencies>

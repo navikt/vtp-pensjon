@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>innsynjournal-mock</artifactId>
-    <name>VTP ::innsynjournal-mock</name>
     <packaging>jar</packaging>
 
     <dependencies>

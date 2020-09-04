@@ -9,7 +9,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>dokumentproduksjon-mock</artifactId>
-    <name>VTP ::dokumentproduksjon-mock</name>
     <packaging>jar</packaging>
 
     <dependencies>

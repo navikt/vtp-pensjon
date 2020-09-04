@@ -9,7 +9,6 @@
 
     <artifactId>medl-mock</artifactId>
     <packaging>jar</packaging>
-    <name>VTP ::medl-mock</name>
 
     <dependencies>
         <!-- Prosjektavhengigheter -->

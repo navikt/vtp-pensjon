@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>infotrygd-paaroerende-sykdom-mock</artifactId>
-    <name>VTP ::infotrygd-paaroerende-sykdom-mock</name>
     <packaging>jar</packaging>
 
     <build>

@@ -13,7 +13,6 @@
     <groupId>no.nav.pensjon.vtp</groupId>
     <artifactId>frontend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>frontend</name>
     <description>TestHub front-end javascript</description>
     <packaging>pom</packaging>
 
