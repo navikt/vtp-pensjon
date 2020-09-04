@@ -4,17 +4,16 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>no.nav.foreldrepenger.vtp</groupId>
-    <artifactId>vtp</artifactId>
+    <groupId>no.nav.pensjon.vtp</groupId>
+    <artifactId>vtp-pensjon</artifactId>
     <packaging>pom</packaging>
-    <name>VTP :: Root</name>
     <version>${revision}${sha1}${changelist}</version>
 
     <scm>
-        <connection>scm:git:https://github.com/navikt/vtp.git</connection>
-        <developerConnection>scm:git:https://github.com/navikt/vtp.git</developerConnection>
-        <url>https://github.com/navikt/vtp</url>
-        <tag>vtp</tag>
+        <connection>scm:git:https://github.com/navikt/vtp-pensjon.git</connection>
+        <developerConnection>scm:git:https://github.com/navikt/vtp-pensjon.git</developerConnection>
+        <url>https://github.com/navikt/vtp-pensjon</url>
+        <tag>vtp-pensjon</tag>
     </scm>
 
     <modules>
@@ -77,168 +76,168 @@
             <!-- Prosjektavhengigheter -->
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>testmodell</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>tps-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>gsak-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>joark-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>journalpost-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>infotrygd-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>infotrygd-kontantstotte-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>infotrygd-paaroerende-sykdom-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>arena-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>medl-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>inntekt-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>arbeidsforhold-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>organisasjon-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>sigrun-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>kafka-embedded-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>norg2-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>kodeverk-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>dokumentproduksjon-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>oppdrag-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>oppgave-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>dummy-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>autotest</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>ldap-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>dokdist-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>server</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>egenansatt-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>innsynjournal-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>psak-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>no.nav.foreldrepenger.vtp</groupId>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>dialog-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
