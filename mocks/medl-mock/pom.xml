@@ -23,11 +23,6 @@
             <artifactId>nav-medlemskap-v2-tjenestespesifikasjon</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>no.nav.tjenester</groupId>
-            <artifactId>medlemskapsunntak-api-v1</artifactId>
-        </dependency>
-
         <!-- 3dje parts biblioteker -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>

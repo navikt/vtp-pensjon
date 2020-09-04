@@ -391,11 +391,6 @@
                 <version>1.7</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.tjenester</groupId>
-                <artifactId>medlemskapsunntak-api-v1</artifactId>
-                <version>1.0</version>
-            </dependency>
-            <dependency>
                 <groupId>no.nav.tjenestespesifikasjoner</groupId>
                 <artifactId>behandleoppgave-v1-tjenestespesifikasjon</artifactId>
                 <version>${tjenestespesifikasjoner.version}</version>

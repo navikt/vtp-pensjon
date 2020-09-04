@@ -19,15 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Providers;
 
-import no.nav.tjenester.medlemskapsunntak.api.v1.Medlemskapsunntak;
-
 import static no.nav.medl2.rest.api.v1.MedlemskapsunntakApiParams.*;
-import static no.nav.tjenester.medlemskapsunntak.api.v1.HttpRequestConstants.HEADER_NAV_PERSONIDENT;
-import static no.nav.tjenester.medlemskapsunntak.api.v1.HttpRequestConstants.PARAM_EKSKLUDER_KILDER;
-import static no.nav.tjenester.medlemskapsunntak.api.v1.HttpRequestConstants.PARAM_FRA_OG_MED;
-import static no.nav.tjenester.medlemskapsunntak.api.v1.HttpRequestConstants.PARAM_INKLUDER_SPORINGSINFO;
-import static no.nav.tjenester.medlemskapsunntak.api.v1.HttpRequestConstants.PARAM_STATUSER;
-import static no.nav.tjenester.medlemskapsunntak.api.v1.HttpRequestConstants.PARAM_TIL_OG_MED;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,8 +37,8 @@ public class MedlemskapsunntakMock {
     @GET
     @Path("/{unntakId}")
     @ApiOperation(API_OPERATION_MEDLEMSKAPSUNNTAK)
-    public Medlemskapsunntak hentMedlemskapsunntak(
-            @ApiParam(API_PARAM_INKLUDER_SPORINGSINFO) @QueryParam(PARAM_INKLUDER_SPORINGSINFO) Boolean inkluderSporing,
+    public Object hentMedlemskapsunntak(
+            @ApiParam(API_PARAM_INKLUDER_SPORINGSINFO) @QueryParam("inkluderSporingsinfo") Boolean inkluderSporing,
             @ApiParam(value = API_PARAM_UNNTAK_ID, required = true) @NotNull @PathParam("unntakId") Long unntakId) {
         return null;
     }
@@ -54,13 +46,13 @@ public class MedlemskapsunntakMock {
     @GET
     @ApiOperation(API_OPERATION_MEDLEMSKAPSUNNTAK_I_PERIODE)
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<Medlemskapsunntak> hentMedlemskapsunntakIPeriode(
-            @ApiParam(API_PARAM_STATUSER) @QueryParam(PARAM_STATUSER) Set<String> statuser,
-            @ApiParam(API_PARAM_FRA_OG_MED) @QueryParam(PARAM_FRA_OG_MED) Dato fraOgMed,
-            @ApiParam(API_PARAM_TIL_OG_MED) @QueryParam(PARAM_TIL_OG_MED) Dato tilOgMed,
-            @ApiParam(API_PARAM_INKLUDER_SPORINGSINFO_PERSON) @QueryParam(PARAM_INKLUDER_SPORINGSINFO) boolean sporing,
-            @ApiParam(API_PARAM_EKSKLUDER_KILDER) @QueryParam(PARAM_EKSKLUDER_KILDER) Set<String> ekskluder,
-            @ApiParam(value = API_PARAM_PERSONIDENT, required = true) @NotNull @QueryParam(HEADER_NAV_PERSONIDENT) String ident) {
+    public List<Object> hentMedlemskapsunntakIPeriode(
+            @ApiParam(API_PARAM_STATUSER) @QueryParam("statuser") Set<String> statuser,
+            @ApiParam(API_PARAM_FRA_OG_MED) @QueryParam("fraOgMed") Dato fraOgMed,
+            @ApiParam(API_PARAM_TIL_OG_MED) @QueryParam("tilOgMed") Dato tilOgMed,
+            @ApiParam(API_PARAM_INKLUDER_SPORINGSINFO_PERSON) @QueryParam("inkluderSporingsinfo") boolean sporing,
+            @ApiParam(API_PARAM_EKSKLUDER_KILDER) @QueryParam("ekskluderKilder") Set<String> ekskluder,
+            @ApiParam(value = API_PARAM_PERSONIDENT, required = true) @NotNull @QueryParam("Nav-Personident") String ident) {
 
         return List.of();
     }
