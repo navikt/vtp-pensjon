@@ -7,7 +7,7 @@
     <groupId>no.nav.pensjon.vtp</groupId>
     <artifactId>vtp-pensjon</artifactId>
     <packaging>pom</packaging>
-    <version>${revision}${sha1}${changelist}</version>
+    <version>1.0-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://github.com/navikt/vtp-pensjon.git</connection>
@@ -35,7 +35,7 @@
 
         <kafka.version>2.3.1</kafka.version>
         <cxf.version>3.3.5</cxf.version>
-        <tjenestespesifikasjoner.version>1.2020.01.20-15.44-063ae9f84815</tjenestespesifikasjoner.version>
+        <tjenestespesifikasjoner.version>1.2020.07.17-17.06-31e5aa824db7</tjenestespesifikasjoner.version>
         <swagger.version>1.6.0</swagger.version>
 
     </properties>
@@ -456,38 +456,9 @@
                 <version>${tjenestespesifikasjoner.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.foreldrepenger.oppdrag</groupId>
-                <artifactId>oppdrag-klient</artifactId>
-                <version>1.0_20190110115356_1239f94</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>no.nav.vedtak.felles.integrasjon</groupId>
-                        <artifactId>felles-integrasjon-webservice</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-impl</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
                 <groupId>no.nav.tjenestespesifikasjoner</groupId>
                 <artifactId>tilbakekreving-v1-tjenestespesifikasjon</artifactId>
                 <version>${tjenestespesifikasjoner.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.foreldrepenger.kontrakter</groupId>
-                <artifactId>fpoppdrag-v2</artifactId>
-                <version>1.0_20190117140834_70d7fb3</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.foreldrepenger.kontrakter</groupId>
-                <artifactId>okonomistotte-v1</artifactId>
-                <version>2.0_20180730135256_2912e61</version>
             </dependency>
 
             <dependency>

@@ -1,9 +1,9 @@
 package no.nav.tjeneste.organisasjonenhet.v2;
 
-import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.binding.FinnNAVKontorUgyldigInput;
-import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.binding.HentOverordnetEnhetListeEnhetIkkeFunnet;
-import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.binding.OrganisasjonEnhetV2;
-import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.informasjon.Organisasjonsenhet;
+import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.FinnNAVKontorUgyldigInput;
+import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.HentOverordnetEnhetListeEnhetIkkeFunnet;
+import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.OrganisasjonEnhetV2;
+import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.informasjon.WSOrganisasjonsenhet;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.meldinger.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +31,10 @@ public class OrganisasjonEnhetMock implements OrganisasjonEnhetV2 {
     @WebResult(name = "response", targetNamespace = "")
     @RequestWrapper(localName = "finnNAVKontor", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjonEnhet/v2/", className = "no.nav.tjeneste.virksomhet.organisasjonenhet.v2.FinnNAVKontor")
     @ResponseWrapper(localName = "finnNAVKontorResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjonEnhet/v2/", className = "no.nav.tjeneste.virksomhet.organisasjonenhet.v2.FinnNAVKontorResponse")
-    public FinnNAVKontorResponse finnNAVKontor(
-            @WebParam(name = "request", targetNamespace = "") FinnNAVKontorRequest request) throws FinnNAVKontorUgyldigInput {
-        FinnNAVKontorResponse response = new FinnNAVKontorResponse();
-        Organisasjonsenhet orgEnhet = new Organisasjonsenhet();
+    public WSFinnNAVKontorResponse finnNAVKontor(
+            @WebParam(name = "request", targetNamespace = "") WSFinnNAVKontorRequest request) throws FinnNAVKontorUgyldigInput {
+        WSFinnNAVKontorResponse response = new WSFinnNAVKontorResponse();
+        WSOrganisasjonsenhet orgEnhet = new WSOrganisasjonsenhet();
         orgEnhet.setEnhetId("4407");
         orgEnhet.setEnhetNavn("NAV Arbeid og ytelser Tønsberg");
         response.setNAVKontor(orgEnhet);
@@ -46,9 +46,9 @@ public class OrganisasjonEnhetMock implements OrganisasjonEnhetV2 {
     @WebResult(name = "response", targetNamespace = "")
     @RequestWrapper(localName = "hentEnhetBolk", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjonEnhet/v2/", className = "no.nav.tjeneste.virksomhet.organisasjonenhet.v2.HentEnhetBolk")
     @ResponseWrapper(localName = "hentEnhetBolkResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjonEnhet/v2/", className = "no.nav.tjeneste.virksomhet.organisasjonenhet.v2.HentEnhetBolkResponse")
-    public HentEnhetBolkResponse hentEnhetBolk(
+    public WSHentEnhetBolkResponse hentEnhetBolk(
             @WebParam(name = "request", targetNamespace = "")
-                    HentEnhetBolkRequest request) {
+                    WSHentEnhetBolkRequest request) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
@@ -57,9 +57,9 @@ public class OrganisasjonEnhetMock implements OrganisasjonEnhetV2 {
     @WebResult(name = "response", targetNamespace = "")
     @RequestWrapper(localName = "hentFullstendigEnhetListe", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjonEnhet/v2/", className = "no.nav.tjeneste.virksomhet.organisasjonenhet.v2.HentFullstendigEnhetListe")
     @ResponseWrapper(localName = "hentFullstendigEnhetListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjonEnhet/v2/", className = "no.nav.tjeneste.virksomhet.organisasjonenhet.v2.HentFullstendigEnhetListeResponse")
-    public HentFullstendigEnhetListeResponse hentFullstendigEnhetListe(
+    public WSHentFullstendigEnhetListeResponse hentFullstendigEnhetListe(
             @WebParam(name = "request", targetNamespace = "")
-                    HentFullstendigEnhetListeRequest request) {
+                    WSHentFullstendigEnhetListeRequest request) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
@@ -73,9 +73,9 @@ public class OrganisasjonEnhetMock implements OrganisasjonEnhetV2 {
     @WebResult(name = "response", targetNamespace = "")
     @RequestWrapper(localName = "hentOverordnetEnhetListe", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjonEnhet/v2/", className = "no.nav.tjeneste.virksomhet.organisasjonenhet.v2.HentOverordnetEnhetListe")
     @ResponseWrapper(localName = "hentOverordnetEnhetListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjonEnhet/v2/", className = "no.nav.tjeneste.virksomhet.organisasjonenhet.v2.HentOverordnetEnhetListeResponse")
-    public HentOverordnetEnhetListeResponse hentOverordnetEnhetListe(
+    public WSHentOverordnetEnhetListeResponse hentOverordnetEnhetListe(
             @WebParam(name = "request", targetNamespace = "")
-                    HentOverordnetEnhetListeRequest request)
+                    WSHentOverordnetEnhetListeRequest request)
             throws HentOverordnetEnhetListeEnhetIkkeFunnet {
         throw new UnsupportedOperationException("Ikke implementert");
     }

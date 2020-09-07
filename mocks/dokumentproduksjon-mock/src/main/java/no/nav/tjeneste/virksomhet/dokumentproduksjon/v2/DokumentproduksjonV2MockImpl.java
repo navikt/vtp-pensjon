@@ -73,6 +73,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.soap.Addressing;
 import java.io.StringWriter;
+import java.util.Objects;
 
 
 @Addressing
@@ -101,7 +102,8 @@ public class DokumentproduksjonV2MockImpl implements DokumentproduksjonV2 {
 
     @Override
     public ProduserDokumentutkastResponse produserDokumentutkast(ProduserDokumentutkastRequest request) {
-        String data = xmlToString(((Element) request.getBrevdata()).getOwnerDocument());
+        // String data = xmlToString(((Element) request.getBrevdata()).getOwnerDocument());
+        String data = Objects.toString(request.getAny());
         String dokumenttypeId =  request.getDokumenttypeId();
 
         byte[] bytes = pdfGeneratorUtil.genererPdfByteArrayFraString(data);
@@ -122,8 +124,8 @@ public class DokumentproduksjonV2MockImpl implements DokumentproduksjonV2 {
     public ProduserIkkeredigerbartDokumentResponse produserIkkeredigerbartDokument(ProduserIkkeredigerbartDokumentRequest request) throws ProduserIkkeredigerbartDokumentDokumentErRedigerbart, ProduserIkkeredigerbartDokumentDokumentErVedlegg {
         Aktoer bruker = request.getDokumentbestillingsinformasjon().getBruker();
 
-        String data = xmlToString(((Element) request.getBrevdata()).getOwnerDocument());
-
+        // String data = xmlToString(((Element) request.getBrevdata()).getOwnerDocument());
+        String data = Objects.toString(request.getAny());
         LOG.info("Dokument produsert: " + data);
 
         String dokumenttypeId = request.getDokumentbestillingsinformasjon().getDokumenttypeId();
