@@ -20,9 +20,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>no.nav.tjenester</groupId>
-			<artifactId>nav-organisasjonEnhet-v2-tjenestespesifikasjon</artifactId>
-			<classifier>jaxws</classifier>
+			<groupId>no.nav.tjenestespesifikasjoner</groupId>
+			<artifactId>organisasjonEnhet-v2-tjenestespesifikasjon</artifactId>
 		</dependency>
 
 		<!-- 3dje parts biblioteker -->
