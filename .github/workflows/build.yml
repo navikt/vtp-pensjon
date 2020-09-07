@@ -29,8 +29,8 @@ jobs:
         shell: bash
         run: |
           echo "Building artifacts $BUILD_VERSION"
-          mvn -X clean install --settings ./.m2/settings.xml -Dchangelist= -Dsha1=-${BUILD_VERSION} -Dfile.encoding=UTF-8
-          echo "::set-env name=TAG::$(mvn help:evaluate --batch-mode --settings ./.m2/settings.xml --file .flattened -Dexpression=project.version -q -DforceStdout)"
+          mvn -X clean install --settings maven-settings.xml -Dchangelist= -Dsha1=-${BUILD_VERSION} -Dfile.encoding=UTF-8
+          echo "::set-env name=TAG::$(mvn help:evaluate --batch-mode --settings maven-settings.xml --file .flattened -Dexpression=project.version -q -DforceStdout)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
