@@ -52,16 +52,11 @@ public class ArbeidsevnevurderingV1Mock implements ArbeidsevnevurderingV1 {
         return response;
     }
 
-    /**
-     * @param plassholder
-     */
     @Override
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/arbeidsevnevurdering/v1/Bindingping/")
     @RequestWrapper(localName = "ping", targetNamespace = "http://nav.no/tjeneste/virksomhet/arbeidsevnevurdering/v1", className = "no.nav.tjeneste.virksomhet.arbeidsevnevurdering.v1.Ping")
     @ResponseWrapper(localName = "pingResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/arbeidsevnevurdering/v1", className = "no.nav.tjeneste.virksomhet.arbeidsevnevurdering.v1.PingResponse")
-    public void ping(
-            @WebParam(name = "plassholder", targetNamespace = "", mode = WebParam.Mode.INOUT)
-                    Holder<Object> plassholder) {
+    public void ping() {
 
     }
 
