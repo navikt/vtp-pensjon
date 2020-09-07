@@ -12,6 +12,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Set version
+        id: version
+        shell: bash
+        run: |
+          if [ -z ${GIT_BRANCH+x} ]; then
+              BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          else
+              BRANCH=$GIT_BRANCH
+          fi
+
+          # Replace / with -
+          BRANCH=$(echo "$BRANCH" | sed 's/\//-/g' | sed 's/origin-//')
+
+          echo "Branch: $BRANCH"
+          if [ $BRANCH = "master" ]; then
+             BRANCH_SUFFIX=""
+          else
+             BRANCH_SUFFIX="-$BRANCH"
+          fi
+
+          TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
+          COMMIT=$(git rev-parse --short=12 HEAD)
+          export VERSION="$TIME-$COMMIT$BRANCH_SUFFIX"
+          echo "Building version $VERSION"
+          echo "::set-env name=VERSION::$VERSION"
+          echo "::set-output name=VERSION::$VERSION"
       - uses: actions/cache@v2
         with:
           path: ~/.m2
@@ -36,13 +62,12 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build --pull --tag ${IMAGE_BASE}:${TAG} --tag ${IMAGE_BASE}:latest .
+          docker build --pull --tag ${IMAGE_BASE}:${VERSION} --tag ${IMAGE_BASE}:latest .
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker push ${IMAGE_BASE}:latest
-          docker push ${IMAGE_BASE}:${TAG}
+          docker push ${IMAGE_BASE}:${VERSION}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Publiser Release Note
         id: create_release
         uses: actions/create-release@v1.1.2
