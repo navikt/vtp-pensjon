@@ -54,9 +54,7 @@ jobs:
       - name: Build artifacts
         shell: bash
         run: |
-          echo "Building artifacts $BUILD_VERSION"
-          mvn clean install --settings maven-settings.xml -Dchangelist= -Dsha1=-${BUILD_VERSION} -Dfile.encoding=UTF-8
-          echo "::set-env name=TAG::$(mvn help:evaluate --batch-mode --settings maven-settings.xml --file .flattened -Dexpression=project.version -q -DforceStdout)"
+          mvn clean install --settings maven-settings.xml -Dfile.encoding=UTF-8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -74,5 +72,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.TAG }}
-          release_name: Release ${{ env.TAG }}
+          tag_name: ${{ env.VERSION }}
+          release_name: Release ${{ env.VERSION }}
