@@ -1,18 +1,5 @@
 package no.nav.foreldrepenger.vtp.felles;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.UnrecoverableEntryException;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.interfaces.RSAPublicKey;
-
 import org.jose4j.base64url.Base64Url;
 import org.jose4j.jwk.PublicJsonWebKey;
 import org.jose4j.jwk.RsaJsonWebKey;
@@ -21,6 +8,15 @@ import org.opensaml.security.credential.Credential;
 import org.opensaml.security.x509.impl.KeyStoreX509CredentialAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.*;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.interfaces.RSAPublicKey;
+import java.util.Optional;
 
 public class KeyStoreTool {
     private static final Logger log = LoggerFactory.getLogger(KeyStoreTool.class);
@@ -46,8 +42,12 @@ public class KeyStoreTool {
             KeyStore ks = KeyStore.getInstance("JKS");
             ks.load(keystoreFile, keystorePassword);
 
+            log.info("Henter tilgjengelige cert-aliases");
+            ks.aliases().asIterator().forEachRemaining(log::info);
+
             KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(keystorePassword);
-            KeyStore.PrivateKeyEntry pk = (KeyStore.PrivateKeyEntry) ks.getEntry(keyAndCertAlias, protParam);
+            KeyStore.PrivateKeyEntry pk = Optional.ofNullable((KeyStore.PrivateKeyEntry) ks.getEntry(keyAndCertAlias, protParam))
+                    .orElse((KeyStore.PrivateKeyEntry) ks.getEntry(ks.aliases().nextElement(), protParam));
             myPrivateKey = pk.getPrivateKey();
             Certificate cert = ks.getCertificate(keyAndCertAlias);
             myPublicKey = cert.getPublicKey();
