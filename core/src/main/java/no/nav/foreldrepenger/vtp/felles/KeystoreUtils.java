@@ -15,9 +15,6 @@ public class KeystoreUtils {
     }
 
     public static String getKeystoreFilePath() {
-        if (null != getenv("NAV_TRUSTSTORE_PATH")) {
-            return getenv("NAV_TRUSTSTORE_PATH");
-        }
         if (null != getenv("NO_NAV_MODIG_SECURITY_APPCERT_KEYSTORE")) {
             return getenv("NO_NAV_MODIG_SECURITY_APPCERT_KEYSTORE");
         }
@@ -25,9 +22,6 @@ public class KeystoreUtils {
     }
 
     public static String getKeyStorePassword() {
-        if (null != getenv("NAV_TRUSTSTORE_PASSWORD")) {
-            return getenv("NAV_TRUSTSTORE_PASSWORD");
-        }
         if (null != getenv("NO_NAV_MODIG_SECURITY_APPCERT_PASSWORD")) {
             return getenv("NO_NAV_MODIG_SECURITY_APPCERT_PASSWORD");
         }
@@ -38,18 +32,12 @@ public class KeystoreUtils {
         if (null != getenv("JAVAX_NET_SSL_TRUSTSTORE")) {
             return getenv("JAVAX_NET_SSL_TRUSTSTORE");
         }
-        if (null != getenv("NAV_TRUSTSTORE_PATH")) {
-            return getenv("NAV_TRUSTSTORE_PATH");
-        }
         return getProperty("user.home", ".") + "/.modig/truststore.jks";
     }
 
     public static String getTruststorePassword() {
         if (null != getenv("JAVAX_NET_SSL_TRUSTSTOREPASSWORD")) {
             return getenv("JAVAX_NET_SSL_TRUSTSTOREPASSWORD");
-        }
-        if (null != getenv("NAV_TRUSTSTORE_PASSWORD")) {
-            return getenv("NAV_TRUSTSTORE_PASSWORD");
         }
         return "changeit";
     }
