@@ -16,7 +16,8 @@ import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.interfaces.RSAPublicKey;
-import java.util.Optional;
+
+import static no.nav.foreldrepenger.vtp.felles.KeystoresGenerator.generateKeystoresIfNotExists;
 
 public class KeyStoreTool {
     private static final Logger log = LoggerFactory.getLogger(KeyStoreTool.class);
@@ -28,7 +29,6 @@ public class KeyStoreTool {
             return;
         }
 
-        KeystoresGenerator.generateKeystoresIfNotExists();
 
         org.apache.xml.security.Init.init();
 
@@ -38,16 +38,17 @@ public class KeyStoreTool {
         String keystorePath = getDefaultKeyStorePath();
         String keyAndCertAlias = getKeyAndCertAlias();
 
+        String outputFormat = "JKS";
+        generateKeystoresIfNotExists(outputFormat, keyAndCertAlias);
         try (FileInputStream keystoreFile = new FileInputStream(new File(keystorePath))) {
-            KeyStore ks = KeyStore.getInstance("JKS");
+            KeyStore ks = KeyStore.getInstance(outputFormat);
             ks.load(keystoreFile, keystorePassword);
 
             log.info("Henter tilgjengelige cert-aliases");
             ks.aliases().asIterator().forEachRemaining(log::info);
 
             KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(keystorePassword);
-            KeyStore.PrivateKeyEntry pk = Optional.ofNullable((KeyStore.PrivateKeyEntry) ks.getEntry(keyAndCertAlias, protParam))
-                    .orElse((KeyStore.PrivateKeyEntry) ks.getEntry(ks.aliases().nextElement(), protParam));
+            KeyStore.PrivateKeyEntry pk = (KeyStore.PrivateKeyEntry) ks.getEntry(keyAndCertAlias, protParam);
             myPrivateKey = pk.getPrivateKey();
             Certificate cert = ks.getCertificate(keyAndCertAlias);
             myPublicKey = cert.getPublicKey();
