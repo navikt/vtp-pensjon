@@ -6,10 +6,10 @@ metadata:
   labels:
     team: pensjontestdata
 spec:
-  image: docker.pkg.github.com/navikt/private-docker-images/vtp-pensjon:0.7.1
-  port: 8063 # Required. The port number which is exposed by the container and should receive HTTP traffic.
+  image: docker.pkg.github.com/navikt/vtp-pensjon/vtp-pensjon:2020.09.11-00.01-8de8ccf19151
+  port: 8060 # Required. The port number which is exposed by the container and should receive HTTP traffic.
   liveness: # HTTP endpoint that signals 200 OK when the application is running.
-    path: /rest/isAlive
+    path: rest/isAlive
     initialDelay: 20
     timeout: 5
     periodSeconds: 10     # How often (in seconds) to perform the probe. Default to 10 seconds
@@ -17,7 +17,7 @@ spec:
     # nais will try failureThreshold times before giving up and restarting the Pod
     # Defaults to 3
   readiness: # HTTP endpoint that signals 200 OK when it is okay to start routing traffic to the application.
-    path: /rest/isReady
+    path: rest/isReady
     initialDelay: 20
     timeout: 5
     periodSeconds: 10
@@ -38,11 +38,12 @@ spec:
       cpu: "600m"
       memory: "1024Mi"
   ingresses: # Optional. List of ingress URLs that will route HTTP traffic to the application.
-    - "https://vtp-t4.nais.preprod.local/"
+    - "https://vtp-pensjon-t4.nais.preprod.local/"
   vault:
     enabled: false
   env:
     - name: VTP_KAFKA_DISABLE
       value: "true"
     - name: VTP_LDAP_DISABLE
-      value: "true"
+      value: "false"
+
