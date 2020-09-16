@@ -1,4 +1,4 @@
-# jstest
+# vtp-pensjon-frontend
 
 ## Project setup
 ```
