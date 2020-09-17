@@ -1,4 +1,4 @@
-Fork av Virtuell Tjeneste Plattform (VTP) for pensjonsområdet
+Virtuell Tjeneste Plattform (VTP) for pensjonsområdet
 =================================
 
 
@@ -8,8 +8,8 @@ Fork av Virtuell Tjeneste Plattform (VTP) for pensjonsområdet
 ![alt text](vtp.png "Logo Title Text 1")
 
 
-#### VTP hjelper deg med å: 
-- virtualisere grensesnitt rundt applikasjonene i FP-familien. 
+#### vtp-pensjon hjelper deg med å: 
+- virtualisere grensesnitt rundt applikasjonene brukt i pensjonsområdet. 
 - instansierer og holde testdata konsistente på tvers av grensesnittene
 - ha en plattform for å simulere grensesnitt over REST, SOAP, Kafka, LDAP.
 - sikkerhetshåndtering over OAuth2
@@ -17,8 +17,7 @@ Fork av Virtuell Tjeneste Plattform (VTP) for pensjonsområdet
 - GUI for å opprette testdata for mennesker.
 
 ## Henvendelser
-- Team Foreldrepenger <teamforeldrepenger(at)nav.no>
-- Team Sykdom-i-familien
+- Team Pensjon
 
 ## For NAV-ansatte
 Interne henvendelser kan sendes via Slack i kanalen #vtp-chatten
@@ -30,8 +29,8 @@ Interne henvendelser kan sendes via Slack i kanalen #vtp-chatten
 - Maven (http://maven.apache.org/)
 
 ## Starte applikasjon
-For utvikling på VTP benytt oppsett for å starte server gjennom IDE.
-I verdikjedetester benyttes oftest Docker-image av VTP. Dette bygges i VTP sin pipeline. 
+For utvikling på vtp-pensjon benytt oppsett for å starte server gjennom IDE.
+I verdikjedetester benyttes oftest Docker-image av vtp-pensjon. Dette bygges i vtp-pensjon sin pipeline. 
 
 #### Starte backend-server via IDE
 * IntelliJ må konfigureres med å sette classpath of module til server, og sette working directory til `$MODULE_WORKING_DIR$` i run/debug-konfiguration.
@@ -40,14 +39,14 @@ I verdikjedetester benyttes oftest Docker-image av VTP. Dette bygges i VTP sin p
 
 #### Kjøre via docker run / docker-compose
 ##### For å bygge docker image lokalt: 
-Bygg prosjektet med `mvn clean install"`, bygg deretter docker-imaget med `docker build -t vtp .` 
-Imaget blir da tilgjengelig som vtp:latest
+Bygg prosjektet med `mvn clean install"`, bygg deretter docker-imaget med `docker build -t vtp-pensjon .` 
+Imaget blir da tilgjengelig som vtp-pensjon:latest
 
 ##### Hente docker-image bygget i pipe: 
-docker pull docker.pkg.github.com/navikt/vtp/vtp
+docker pull docker.pkg.github.com/navikt/vtp-pensjon/vtp-pensjon
 
 #### Starte front-end
-* I modulen frontend (/frontend), kjør `yarn run serve`. Når VTP bygges så pakkes det også med en statisk versjon av front-end som er tilgjengelig på rot av localhost:8060 eller https://localhost:8063.
+* I modulen frontend (/frontend), kjør `yarn run serve`. Når vtp-pensjon bygges så pakkes det også med en statisk versjon av front-end som er tilgjengelig på rot av localhost:8060 eller https://localhost:8063.
 * Dersom bygg feiler på utviklerimage, forsøk å oppdater node / yarn. Oppdaterte versjoner ligger på http://a34apvl063.devillo.no:81/software/.  
 
 
@@ -55,15 +54,11 @@ docker pull docker.pkg.github.com/navikt/vtp/vtp
 * Opprett testdata ved å legge scenario i /model/scenarios. Innledende tall brukes som referanse for å få instansiert scenario.
 * Tjenester for å opprette testdata finnes på [Swagger UI](https://localhost:8063/swagger/)  (Bruk HTTP for kall)
 
-## Kjør tester
-* Automatiske tester for FPSAK (og andre FP*-familieapplikasjoner) ligger i eget repo på GitHub (private): [fpsak-autotest](https://github.com/navikt/fpsak-autotest)
-* Automatiske tester for K9-applikasjoner ligger i eget repo på GitHub (private): [k9-verdikjede](https://github.com/navikt/k9-verdikjede)
- 
 
 ## Sertifiakter for SSL/TLS
-For å få VTP til å kjøre med SSL/TLS forbindelse over SOAP, REST og Kafka må keystore angitt i VTP være tilgjengelig i SUT (System under test) sin Truststore. 
+For å få vtp-pensjon til å kjøre med SSL/TLS forbindelse over SOAP, REST og Kafka må keystore angitt i VTP være tilgjengelig i SUT (System under test) sin Truststore. 
 For lokal utvikling på Team Foreldrepenger og Sykdom-i-familien opprettes key- og truststore i.h.t til instruksjoner i verdikjede/autotest. 
-Følgende systemvariabler kan defineres for å overstyre defaults i VTP: 
+Følgende systemvariabler kan defineres for å overstyre defaults i vtp-pensjon: 
 
 ```bash
 JAVAX_NET_SSL_TRUSTSTORE
