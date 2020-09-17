@@ -134,11 +134,11 @@
     ]
   },
   {
-    "cn": "psaks",
+    "cn": "ufopsaks",
     "givenname": "Pesys",
-    "sn": "Saksbehandler",
-    "displayName": "Pesys Saksbehandler",
-    "email": "pesys.saksbehandler@example.com",
+    "sn": "UfoeretrygdSaksbehandler",
+    "displayName": "Uføretrygd Saksbehandler",
+    "email": "ufoeretrygd.saksbehandler@example.com",
     "enheter": [
       "4407"
     ],
@@ -157,13 +157,59 @@
     ]
   },
   {
-    "cn": "psaka",
+    "cn": "ufopsaka",
     "givenname": "Pesys",
-    "sn": "Attesterer",
-    "displayName": "Pesys Attesterer",
-    "email": "pesys.attesterer@example.com",
+    "sn": "UFoeretrygdAttesterer",
+    "displayName": "Uføretrygd Attesterer",
+    "email": "ufoeretrygd.attesterer@example.com",
     "enheter": [
       "4407"
+    ],
+    "groups": [
+      "0000-GA-INNTK_UFOERE",
+      "0000-GA-PENSJON_NDU",
+      "0000-ga-pensjon_ufore",
+      "0000-GA-Pensjon_attestering",
+      "0000-GA-Pensjon_SPESIAL_BEREGNING_RESTPENSJON_PENSJONSBEHOLDNING",
+      "0000-GA-PENSJON_FULLMAKTADM",
+      "0000-GA-Pensjon_SPESIAL_PGI",
+      "0000-GA-PENSJON_SAKSBEHANDLER",
+      "0000-GA-Pensjon_Utland",
+      "0000-GA-Pensjon_UTVIDET",
+      "0000-GA-Pensjon"
+    ]
+  },
+  {
+    "cn": "penpsaka",
+    "givenname": "Pesys",
+    "sn": "PensjonAttesterer",
+    "displayName": "Pensjon Attesterer",
+    "email": "pensjon.attesterer@example.com",
+    "enheter": [
+      "4817"
+    ],
+    "groups": [
+      "0000-GA-INNTK_UFOERE",
+      "0000-GA-PENSJON_NDU",
+      "0000-ga-pensjon_ufore",
+      "0000-GA-Pensjon_attestering",
+      "0000-GA-Pensjon_SPESIAL_BEREGNING_RESTPENSJON_PENSJONSBEHOLDNING",
+      "0000-GA-PENSJON_FULLMAKTADM",
+      "0000-GA-Pensjon_SPESIAL_PGI",
+      "0000-GA-PENSJON_SAKSBEHANDLER",
+      "0000-GA-Pensjon_Utland",
+      "0000-GA-Pensjon_UTVIDET",
+      "0000-GA-Pensjon"
+    ]
+  },
+  {
+    "cn": "penpsaks",
+    "givenname": "Pesys",
+    "sn": "PensjonSaksbehandler",
+    "displayName": "Pensjon Saksbehandler",
+    "email": "pensjon.saksbehandler@example.com",
+    "enheter": [
+      "4817"
     ],
     "groups": [
       "0000-GA-INNTK_UFOERE",
