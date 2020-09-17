@@ -12,10 +12,9 @@
 
 	<dependencies>
 	       <!-- Eksterne avhengigheter -->
-
         <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
         </dependency>
         <dependency>
             <groupId>io.swagger</groupId>
