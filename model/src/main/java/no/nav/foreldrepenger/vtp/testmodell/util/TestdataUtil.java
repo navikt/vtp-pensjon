@@ -25,6 +25,21 @@ public class TestdataUtil {
 
     }
 
+    static public LocalDate generateBirtdayBetweenYears(int start, int end) {
+        LocalDate startRange = LocalDate.of(start, 1, 1);
+        LocalDate endRange = LocalDate.of(end, 12, 31);
+
+        long startEpoch = startRange.toEpochDay();
+        long endEpoch = endRange.toEpochDay();
+
+        Random random = new Random();
+
+        long randomEpochDay = random.longs(startEpoch, endEpoch).findFirst().orElse(0L);
+
+        return LocalDate.ofEpochDay(randomEpochDay);
+
+    }
+
     static public LocalDate generateBirthdateNowMinusThreeYears() {
 
         LocalDate endRange = LocalDateTime.now().toLocalDate();

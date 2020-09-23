@@ -3,7 +3,8 @@
 		"@type": "søker",
 		"ident": "${for1}",
 		"fornavn": "Donald",
-		"fødselsdato": "now()-P50Y",
+		"etternavn": "Duck",
+		"fødselsdato": "${for1_fødselsdato}",
 		"kjønn": "M",
 		"geografiskTilknytning": {
 			"type": "Land",
@@ -20,52 +21,30 @@
 		"personstatus": [
 			{
 				"kode": "BOSA",
-				"fom": "now()-P50Y"
+                "fom": "now()-P50Y"
 			}
 		],
 		"sivilstand": [
 			{
 				"kode": "GIFT"
 			}
-		],
-		"medlemskap": {
-			"perioder": [
-				{
-					"fom": "now() - P1Y",
-					"tom": "now() + P3Y",
-					"besluttetDato": "now() - P1Y",
-					"land": "DEU",
-					"trygdedekning": "IHT_Avtale",
-					"kilde": "ANNEN",
-					"lovvalgType": "ENDL",
-					"status": "GYLD"
-				}
-			]
-		}
+		]
 	},
 	"annenPart": {
 		"@type": "annenPart",
 		"ident": "${for2}",
 		"fornavn": "Dolly",
-		"fødselsdato": "now()-P50Y",
+		"etternavn": "Duck",
+		"fødselsdato": "${for2_fødselsdato}",
 		"kjønn": "K",
 		"personstatus": [
 			{
-				"kode": "BOSA"
+				"kode": "BOSA",
+				"fom": "now()-P50Y"
 			}
 		]
 	},
 	"familierelasjoner": [
-		{
-			"rolle": "BARN",
-			"til": {
-				"@type": "barn",
-				"ident": "${barn1}",
-				"fornavn": "${nevø1}",
-				"etternavn": "Duck",
-				"fødselsdato": "now()-P2D"
-			}
-		},
 		{
 			"rolle": "EKTE",
 			"til": {

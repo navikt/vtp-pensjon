@@ -8,11 +8,13 @@ public interface IdentGenerator {
      */
     String tilfeldigFnr();
 
-    /** Returnerer FNR for mann > 18 år */
-    String tilfeldigMannFnr();
+    /** Returnerer FNR for mann > 18 år
+     * @param foedselsdato*/
+    String tilfeldigMannFnr(String foedselsdato);
 
-    /** Returnerer FNR for kvinne > 18 år */
-    String tilfeldigKvinneFnr();
+    /** Returnerer FNR for kvinne > 18 år
+     * @param foedselsdato*/
+    String tilfeldigKvinneFnr(String foedselsdato);
 
     /** Returnerer FNR for barn (tilfeldig kjønn) < 18 år */
     String tilfeldigBarnUnderTreAarFnr();

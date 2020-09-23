@@ -1,22 +1,15 @@
 package no.nav.foreldrepenger.vtp.testmodell.personopplysning;
 
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-import com.fasterxml.jackson.annotation.Nulls;
-
 import no.nav.foreldrepenger.vtp.testmodell.identer.LokalIdentIndeks;
 import no.nav.foreldrepenger.vtp.testmodell.util.VariabelContainer;
+
+import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(Include.NON_NULL)
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY)
@@ -52,6 +45,10 @@ public abstract class BrukerModell {
         if (ident != null && !Objects.equals(lokalIdent, ident)) {
             this.vars.computeIfAbsent(lokalIdent, n -> ident);
         }
+    }
+
+    protected Optional<String> getFødselsdatoFraVars(String lokalIdent){
+        return Optional.ofNullable(this.vars.getVar(lokalIdent.replace("${", "").replace("}", "") + "_fødselsdato"));
     }
 
     protected LokalIdentIndeks getIdenter() {

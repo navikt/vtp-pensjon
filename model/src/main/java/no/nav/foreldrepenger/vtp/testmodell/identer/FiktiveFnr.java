@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.vtp.testmodell.identer;
 
 import no.nav.foreldrepenger.vtp.testmodell.enums.IdentType;
 import no.nav.foreldrepenger.vtp.testmodell.enums.Kjonn;
+import no.nav.foreldrepenger.vtp.testmodell.util.JsonMapper;
 import no.nav.foreldrepenger.vtp.testmodell.util.TestdataUtil;
 
 /**
@@ -18,28 +19,25 @@ public class FiktiveFnr implements IdentGenerator {
     public String tilfeldigFnr() {
         return new FoedselsnummerGenerator
                 .FodselsnummerGeneratorBuilder()
-                .fodselsdato(TestdataUtil.generateRandomPlausibleBirtdayParent())
+                .fodselsdato(TestdataUtil.generateBirtdayBetweenYears(1911, 1940))
                 .buildAndGenerate();
     }
 
-    /** Returnerer FNR for mann > 18 år */
     @Override
-    public String tilfeldigMannFnr() {
-        //return neste("mann");
+    public String tilfeldigMannFnr(String foedselsdato) {
         return new FoedselsnummerGenerator
                 .FodselsnummerGeneratorBuilder()
                 .kjonn(Kjonn.MANN)
-                .fodselsdato(TestdataUtil.generateRandomPlausibleBirtdayParent())
+                .fodselsdato(JsonMapper.parseLocalDate(foedselsdato))
                 .buildAndGenerate();
     }
 
-    /** Returnerer FNR for kvinne > 18 år */
     @Override
-    public String tilfeldigKvinneFnr() {
+    public String tilfeldigKvinneFnr(String foedselsdato) {
         return new FoedselsnummerGenerator
                 .FodselsnummerGeneratorBuilder()
                 .kjonn(Kjonn.KVINNE)
-                .fodselsdato(TestdataUtil.generateRandomPlausibleBirtdayParent())
+                .fodselsdato(JsonMapper.parseLocalDate(foedselsdato))
                 .buildAndGenerate();
     }
 

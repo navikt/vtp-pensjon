@@ -16,6 +16,8 @@ public abstract class VoksenModell extends PersonModell {
     public String getIdent() {
         return getIdenter() == null
             ? null
-            : getIdenter().getVoksenIdentForLokalIdent(getLokalIdent(), getKjønn());
+            : getFødselsdatoFraVars(getLokalIdent())
+                .map(dato -> getIdenter().getVoksenIdentForLokalIdent(getLokalIdent(), getKjønn(), dato))
+                .orElse(getIdenter().getVoksenIdentForLokalIdent(getLokalIdent(), getKjønn()));
     }
 }

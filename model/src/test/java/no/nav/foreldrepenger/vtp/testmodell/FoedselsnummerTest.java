@@ -1,15 +1,14 @@
 package no.nav.foreldrepenger.vtp.testmodell;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import no.nav.foreldrepenger.vtp.testmodell.identer.FiktiveFnr;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import no.nav.foreldrepenger.vtp.testmodell.identer.FiktiveFnr;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FoedselsnummerTest {
 
@@ -24,7 +23,7 @@ public class FoedselsnummerTest {
     @Test
     public void fiktiv_fnr_kjonn_mann() {
         FiktiveFnr fiktiveFnr = new FiktiveFnr();
-        String fnr = fiktiveFnr.tilfeldigMannFnr();
+        String fnr = fiktiveFnr.tilfeldigMannFnr(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
         assertThat(fnr).hasSize(11);
         Assert.assertTrue(Integer.parseInt(fnr.substring(6,9)) % 2 == 1);
     }
@@ -32,7 +31,7 @@ public class FoedselsnummerTest {
     @Test
     public void fiktiv_fnr_kjonn_kvinne() {
         FiktiveFnr fiktiveFnr = new FiktiveFnr();
-        String fnr = fiktiveFnr.tilfeldigKvinneFnr();
+        String fnr = fiktiveFnr.tilfeldigKvinneFnr(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
         assertThat(fnr).hasSize(11);
         Assert.assertTrue(Integer.parseInt(fnr.substring(6,9)) % 2 == 0);
     }

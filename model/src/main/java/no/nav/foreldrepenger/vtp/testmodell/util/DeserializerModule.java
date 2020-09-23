@@ -1,15 +1,5 @@
 package no.nav.foreldrepenger.vtp.testmodell.util;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.threeten.extra.PeriodDuration;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
@@ -20,6 +10,15 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
 import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.threeten.extra.PeriodDuration;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DeserializerModule extends SimpleModule {
 
@@ -29,7 +28,6 @@ public class DeserializerModule extends SimpleModule {
         super("VTP-DESERIALIZER", new Version(1, 0, 0, null, null, null));
         this.vars = vars;
 
-        this.addDeserializer(LocalDate.class, new LocalDateDeserializer());
         this.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());
 
         this.setDeserializerModifier(new BeanDeserializerModifier() {

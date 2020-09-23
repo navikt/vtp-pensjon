@@ -1,13 +1,16 @@
 package no.nav.foreldrepenger.vtp.testmodell.identer;
 
+import no.nav.foreldrepenger.vtp.testmodell.personopplysning.BrukerModell;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import no.nav.foreldrepenger.vtp.testmodell.personopplysning.BrukerModell;
-
 /** konverterer lokale identer brukt i testcase til utvalgte fødselsnummer hentet fra syntetisk liste. */
 public class LokalIdentIndeks {
+    private static final Logger LOG = LoggerFactory.getLogger(LokalIdentIndeks.class);
 
     private final IdentGenerator identGenerator;
     private final Map<String, String> identer = new ConcurrentHashMap<>(); // NOSONAR
@@ -26,7 +29,21 @@ public class LokalIdentIndeks {
         if (lokalIdent.matches("^\\d+$")) {
             return identer.computeIfAbsent(key(lokalIdent), i -> lokalIdent);
         }
-        return identer.computeIfAbsent(key(lokalIdent), i -> kjønn == BrukerModell.Kjønn.M ? identGenerator.tilfeldigMannFnr() : identGenerator.tilfeldigKvinneFnr());
+        return identer.computeIfAbsent(key(lokalIdent), i -> kjønn == BrukerModell.Kjønn.M ? identGenerator.tilfeldigMannFnr(null) : identGenerator.tilfeldigKvinneFnr(null));
+    }
+
+    public String getVoksenIdentForLokalIdent(String lokalIdent, BrukerModell.Kjønn kjønn, String foedselsdato) {
+        if (lokalIdent.matches("^\\d+$")) {
+            return identer.computeIfAbsent(key(lokalIdent), i -> lokalIdent);
+        }
+        return identer.computeIfAbsent(key(lokalIdent), i -> kjønn == BrukerModell.Kjønn.M ? identGenerator.tilfeldigMannFnr(foedselsdato) : identGenerator.tilfeldigKvinneFnr(foedselsdato));
+    }
+
+    public String getVoksenIdentForLokalIdent(String lokalIdent) {
+        if (lokalIdent.matches("^\\d+$")) {
+            return identer.computeIfAbsent(key(lokalIdent), i -> lokalIdent);
+        }
+        return identer.computeIfAbsent(key(lokalIdent), i -> identGenerator.tilfeldigFnr());
     }
 
     private String key(String lokalIdent) {

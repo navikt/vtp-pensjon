@@ -10,7 +10,10 @@ import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.arbeidsforhold.Arbeids
 import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
 import no.nav.foreldrepenger.vtp.testmodell.personopplysning.BarnModell;
 import no.nav.foreldrepenger.vtp.testmodell.personopplysning.PersonModell;
-import no.nav.foreldrepenger.vtp.testmodell.repo.*;
+import no.nav.foreldrepenger.vtp.testmodell.repo.Testscenario;
+import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioRepository;
+import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioTemplate;
+import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioTemplateRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -162,7 +165,7 @@ public class TestscenarioRestTjeneste {
                 fnrAnnenPart,
                 aktørIdSøker,
                 aktørIdAnnenPart,
-                fødselsdato.orElse(null));
+                testscenario.getPersonopplysninger().getSøker().getFødselsdato());
 
         TestscenariodataDto scenariodata = new TestscenariodataDto();
         if(testscenario.getSøkerInntektYtelse() != null) {
