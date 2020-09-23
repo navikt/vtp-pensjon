@@ -1,9 +1,6 @@
 package no.nav.foreldrepenger.vtp.kafkaembedded;
 
-import java.util.Collection;
-import java.util.Properties;
-import java.util.stream.Collectors;
-
+import no.nav.foreldrepenger.vtp.felles.KeystoreUtils;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -15,12 +12,15 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import no.nav.foreldrepenger.vtp.felles.KeystoreUtils;
+import java.util.Collection;
+import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class LocalKafkaServer {
 
     final static public String VTP_KAFKA_HOST = null != System.getenv("VTP_KAFKA_HOST") ? System.getenv("VTP_KAFKA_HOST") : "localhost";
     final private static Logger log = LoggerFactory.getLogger(LocalKafkaServer.class);
+    private static final String zookeeperAndKafkaTempInstanceDataDir = "" + System.currentTimeMillis(); //alltid ny zookeeper-node og ny kafka-cluster
     private final Collection<String> bootstrapTopics;
     private KafkaLocal kafka;
     private LocalKafkaProducer localProducer;
@@ -59,8 +59,7 @@ public class LocalKafkaServer {
 
     private static Properties setupZookeperProperties(int zookeeperPort) {
         Properties zkProperties = new Properties();
-        final String zookeeperTempInstanceDataDir = "" + System.currentTimeMillis(); // For å hindre NodeExists-feil på restart p.g.a. at data allerede finnes i katalogen.
-        zkProperties.put("dataDir", "target/zookeeper/" + zookeeperTempInstanceDataDir);
+        zkProperties.put("dataDir", "target/zookeeper/" + zookeeperAndKafkaTempInstanceDataDir);
         zkProperties.put("clientPort", "" + zookeeperPort);
         zkProperties.put("admin.enableServer", "false");
         zkProperties.put("jaasLoginRenew", "3600000");
@@ -94,7 +93,7 @@ public class LocalKafkaServer {
         kafkaProperties.put("listener.security.protocol.map", "INTERNAL:SASL_SSL,EXTERNAL:SASL_SSL"); //TODO: Fjern når POC fungerer
         kafkaProperties.put("zookeeper.connect", "localhost:" + zookeeperPort);
         kafkaProperties.put("offsets.topic.replication.factor", "1");
-        kafkaProperties.put("log.dirs", "target/kafka-logs");
+        kafkaProperties.put("log.dirs", "target/kafka-logs/" + zookeeperAndKafkaTempInstanceDataDir);
         kafkaProperties.put("auto.create.topics.enable", "true");
         kafkaProperties.put("listeners", "INTERNAL://:9092,EXTERNAL://:9093");
         kafkaProperties.put("advertised.listeners", "INTERNAL://localhost:9092,EXTERNAL://vtp:9093");
