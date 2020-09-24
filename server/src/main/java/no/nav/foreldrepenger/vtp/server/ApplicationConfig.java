@@ -38,6 +38,7 @@ import no.nav.tjeneste.virksomhet.infotrygd.rest.InfotrygdGrunnlagMock;
 import no.nav.tps.proxy.api.v1.innsyn.InnsynMock;
 import no.nav.vtp.DummyRestTjeneste;
 import no.nav.vtp.DummyRestTjenesteBoolean;
+import no.nav.vtp.EnonicMock;
 import no.nav.vtp.hentinntektlistebolk.HentInntektlisteBolkREST;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,6 +98,7 @@ public class ApplicationConfig extends Application {
         classes.add(FpFormidlingMock.class);
         classes.add(DummyRestTjeneste.class);
         classes.add(DummyRestTjenesteBoolean.class);
+        classes.add(EnonicMock.class);
         classes.add(MedlemskapsunntakMock.class);
         classes.add(OppgaveKontantstotteMockImpl.class);
         classes.add(OppgaveMockImpl.class);

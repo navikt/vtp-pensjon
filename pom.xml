@@ -205,6 +205,12 @@
 
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
+                <artifactId>enonic-mock</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>autotest</artifactId>
                 <version>${project.version}</version>
             </dependency>

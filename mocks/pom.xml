@@ -18,6 +18,7 @@
         <module>dokumentproduksjon-mock</module>
         <module>dokdist-mock</module>
         <module>dummy-mock</module>
+        <module>enonic-mock</module>
         <module>egenansatt-mock</module>
         <module>gsak-mock</module>
         <module>infotrygd-mock</module>
