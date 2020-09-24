@@ -1,7 +1,7 @@
 <template>
     <div class="vtpnavbar">
         <b-navbar toggleable="lg" type="dark" variant="info">
-            <b-navbar-brand href="#">VTP</b-navbar-brand>
+            <b-navbar-brand href="#">VTP Pensjon</b-navbar-brand>
 
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 

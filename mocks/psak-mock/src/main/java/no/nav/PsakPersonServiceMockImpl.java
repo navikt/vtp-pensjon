@@ -35,7 +35,7 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
         ASBOPenFinnPersonResponse asboPenFinnPersonResponse = new ASBOPenFinnPersonResponse();
         ASBOPenPersonListe liste = new ASBOPenPersonListe();
         liste.setPersoner(repo.getPersonIndeks().getAlleSøkere().parallelStream()
-                .map(PsakPersonAdapter::toASBOPerson)
+                .map(PsakpselvPersonAdapter::toASBOPerson)
                 .toArray(ASBOPenPerson[]::new));
 
         asboPenFinnPersonResponse.setPersoner(liste);
@@ -202,7 +202,7 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
     }
 
     private Optional<ASBOPenPerson> getASBOPerson(String fodselsnummer) {
-        return PsakPersonAdapter.getPreviouslyConverted(fodselsnummer)
+        return PsakpselvPersonAdapter.getPreviouslyConverted(fodselsnummer)
                 .or(() -> hentFraRepo(fodselsnummer))
                 .or(() -> logIkkeFunnet(fodselsnummer));
     }
@@ -210,12 +210,12 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
     private Optional<ASBOPenPerson> hentFraRepo(String fodselsnummer) {
         return repo.getPersonIndeks().getAlleSøkere().parallelStream()
             .filter(p -> p.getSøker().getIdent().equals(fodselsnummer))
-            .map(PsakPersonAdapter::toASBOPerson)
+            .map(PsakpselvPersonAdapter::toASBOPerson)
             .findFirst();
     }
 
     private Optional<ASBOPenPerson> logIkkeFunnet(String fodselsnummer) {
-        LOG.warn("Klarte ikke å finne person med fnr: " + fodselsnummer + " verken i repo eller blant konverterte: " + PsakPersonAdapter.getPreviouslyConverted());
+        LOG.warn("Klarte ikke å finne person med fnr: " + fodselsnummer + " verken i repo eller blant konverterte: " + PsakpselvPersonAdapter.getPreviouslyConverted());
         return Optional.empty();
     }
 

@@ -92,6 +92,7 @@ public class SoapWebServiceConfig {
         publishWebService(new NavAnsattServiceMockImpl(), "/soap/esb/nav-cons-pen-psak-navansattWeb/sca/PSAKNAVAnsattWSEXP");
         publishWebService(new PsakPersonServiceMockImpl(repo), "/soap/esb/nav-cons-pen-psak-personWeb/sca/PSAKPersonWSEXP");
         publishWebService(new PenPersonServiceMockImpl(repo), "/soap/esb/nav-cons-pen-pen-personWeb/sca/PENPersonWSEXP");
+        publishWebService(new PselvPersonServiceMockImpl(repo), "/soap/esb/nav-cons-pen-pselv-personWeb/sca/PSELVPersonWSEXP");
         publishWebService(new HenvendelseMock(), "/soap/esb/nav-cons-pen-psak-henvendelseWeb/sca/PSAKHenvendelseWSEXP");
         publishWebService(new SakMock(), "/soap/esb/nav-tjeneste-sak_v1Web/sca/SakWSEXP");
         publishWebService(new JournalMock(),"/soap/esb/nav-tjeneste-journal_v2Web/sca/JournalWSEXP");

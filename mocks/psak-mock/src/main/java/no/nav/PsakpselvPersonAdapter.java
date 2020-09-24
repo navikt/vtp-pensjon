@@ -9,8 +9,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PsakPersonAdapter {
-    private PsakPersonAdapter(){}
+public class PsakpselvPersonAdapter {
+    private PsakpselvPersonAdapter(){}
 
     private static final Map<String, ASBOPenPerson> PERSONER = new HashMap<>();
 
@@ -38,7 +38,7 @@ public class PsakPersonAdapter {
         asboPenPerson.setSprakBeskrivelse(søker.getSpråk());
         asboPenPerson.setBostedsAdresse(søker.getAdresse(AdresseType.BOSTEDSADRESSE)
                 .map(a -> (GateadresseModell)a)
-                .map(PsakPersonAdapter::convert)
+                .map(PsakpselvPersonAdapter::convert)
                 .orElse(null));
         asboPenPerson.setErEgenansatt(false);
         asboPenPerson.setBrukerprofil(new ASBOPenBrukerprofil());
@@ -77,7 +77,7 @@ public class PsakPersonAdapter {
         relasjon.setRelasjonsType(fr.getRolle().name());
         ASBOPenPerson annen = Stream.ofNullable(personopplysninger.getAnnenPart())
                 .filter(p -> p.getIdent().equals(fr.getTil().getIdent()))
-                .map(PsakPersonAdapter::populateAsboPenPerson)
+                .map(PsakpselvPersonAdapter::populateAsboPenPerson)
                 .peek(p -> relasjon.setFom(fetchDate(personopplysninger.getSøker().getSivilstand().getFom()).orElse(null)))
                 .peek(p -> relasjon.setTom(fetchDate(personopplysninger.getSøker().getSivilstand().getTom()).orElse(null)))
                 .findFirst().orElseGet(() -> createShallowASBOPerson(fr));
