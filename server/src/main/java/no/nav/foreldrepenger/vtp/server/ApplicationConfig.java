@@ -26,6 +26,7 @@ import no.nav.foreldrepenger.vtp.server.rest.azuread.navansatt.AzureAdNAVAnsattS
 import no.nav.foreldrepenger.vtp.server.rest.azuread.navansatt.MicrosoftGraphApiMock;
 import no.nav.infotrygdks.InfotrygdKontantstotteMock;
 import no.nav.infotrygdpaaroerendesykdom.rest.PårørendeSykdomMock;
+import no.nav.medl2.rest.api.v1.MedlemskapPingMock;
 import no.nav.medl2.rest.api.v1.MedlemskapsunntakMock;
 import no.nav.oppgave.OppgaveKontantstotteMockImpl;
 import no.nav.oppgave.OppgaveMockImpl;
@@ -100,6 +101,7 @@ public class ApplicationConfig extends Application {
         classes.add(DummyRestTjeneste.class);
         classes.add(DummyRestTjenesteBoolean.class);
         classes.add(EnonicMock.class);
+        classes.add(MedlemskapPingMock.class);
         classes.add(MedlemskapsunntakMock.class);
         classes.add(OppgaveKontantstotteMockImpl.class);
         classes.add(OppgaveMockImpl.class);
