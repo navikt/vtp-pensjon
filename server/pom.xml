@@ -115,6 +115,10 @@
             <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>nav-ansatt-mock</artifactId>
         </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>getapplicationversion</artifactId>
+        </dependency>
 
         <!-- NAV biblioteker -->
 
@@ -196,6 +200,10 @@
             <artifactId>digital-kontakt-informasjon-mock</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>getapplicationversion</artifactId>
         </dependency>
     </dependencies>
     <build>

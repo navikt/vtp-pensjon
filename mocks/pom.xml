@@ -40,6 +40,7 @@
         <module>nav-ansatt-mock</module>
         <module>psak-mock</module>
         <module>digital-kontakt-informasjon-mock</module>
+        <module>esb</module>
     </modules>
 
     <properties>

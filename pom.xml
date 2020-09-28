@@ -258,6 +258,12 @@
             </dependency>
 
             <dependency>
+                <groupId>no.nav.pensjon.vtp</groupId>
+                <artifactId>getapplicationversion</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>no.nav.tjenestespesifikasjoner</groupId>
                 <artifactId>dkif-tjenestespesifikasjon</artifactId>
                 <version>${tjenestespesifikasjoner.version}</version>

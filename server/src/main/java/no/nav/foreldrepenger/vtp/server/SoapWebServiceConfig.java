@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.vtp.server;
 
 import no.nav.*;
+import no.nav.esb.getapplicationversion.GetApplicationVersionMock;
 import no.nav.foreldrepenger.vtp.server.ws.SecurityTokenServiceMockImpl;
 import no.nav.foreldrepenger.vtp.testmodell.repo.JournalRepository;
 import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioBuilderRepository;
@@ -43,7 +44,7 @@ import java.lang.reflect.Method;
 
 public class SoapWebServiceConfig {
 
-    private JettyHttpServer jettyHttpServer;
+    private final JettyHttpServer jettyHttpServer;
 
     public SoapWebServiceConfig(JettyHttpServer jettyHttpServer) {
         this.jettyHttpServer = jettyHttpServer;
@@ -106,6 +107,7 @@ public class SoapWebServiceConfig {
         publishWebService(new PENOppdragMock(), "/soap/esb/nav-cons-pen-pen-oppdragWeb/sca/PENOppdragWSEXP");
         publishWebService(new PSAKPPEN015Mock(), "/soap/esb/nav-cons-pen-psak-ppen015Web/sca/PSAKPPEN015WSEXP");
         publishWebService(new PENInntektMock(),"/soap/esb/nav-cons-pen-pen-inntektWeb/sca/PENInntektWSEXP");
+        publishWebService(new GetApplicationVersionMock(),"/soap/esb/nav-cons-test-getapplicationversionWeb/sca/TESTGetApplicationVersionWSEXP");
     }
 
     private void publishWebService(Object ws, String path, WebServiceFeature... features ) {
