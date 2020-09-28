@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.vtp.server.rest.auth;
 import java.io.IOException;
 import java.util.List;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -21,6 +22,12 @@ import io.swagger.annotations.ApiOperation;
 @Path("/asm-pdp/authorize")
 public class PdpRestTjeneste {
     private final static Logger LOG = LoggerFactory.getLogger(PdpRestTjeneste.class);
+
+    @GET
+    @Path("/ping")
+    public Response ping() {
+        return Response.ok().build();
+    }
 
     @POST
     @Produces("application/xacml+json")

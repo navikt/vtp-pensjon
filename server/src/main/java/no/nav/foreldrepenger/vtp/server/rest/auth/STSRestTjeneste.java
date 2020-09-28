@@ -54,6 +54,25 @@ public class STSRestTjeneste {
         return new UserTokenResponse(token, 600000L, "jwt");
     }
 
+    @GET
+    @Path("/samltoken")
+    @Produces({MediaType.APPLICATION_JSON})
+    public SAMLResponse dummyToken() {
+        RequestSecurityTokenResponseType token = generator.buildRequestSecurityTokenResponseType("urn:oasis:names:tc:SAML:2.0:assertion");
+        StringWriter sw = new StringWriter();
+        JAXB.marshal(token, sw);
+        String xmlString = sw.toString();
+
+        SAMLResponse response = new SAMLResponse();
+        response.setAccess_token(Base64.getEncoder().withoutPadding().encodeToString(xmlString.getBytes()));
+        response.setDecodedToken(xmlString);
+        response.setToken_type("Bearer");
+        response.setIssued_token_type("urn:ietf:params:oauth:token-type:access_token");
+        response.setExpires_in(LocalDateTime.MAX);
+
+        return response;
+    }
+
     public static class SAMLResponse {
 
         private String access_token;
