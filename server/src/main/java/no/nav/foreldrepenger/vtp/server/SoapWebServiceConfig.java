@@ -84,6 +84,7 @@ public class SoapWebServiceConfig {
         publishWebService(new InntektMockImpl(repo), "/soap/inntektskomponenten-ws/inntekt/v3/Inntekt");
         publishWebService(new OppgaveServiceMockImpl(), "/soap/nav-gsak-ws/OppgaveV3");
         publishWebService(new ArbeidsforholdMockImpl(repo), "/soap/aareg-core/ArbeidsforholdService/v3");
+        publishWebService(new ArbeidsforholdMockImpl(repo), "/soap/aareg-services/ArbeidsforholdService/v3");
         publishWebService(new OrganisasjonV4MockImpl(repo), "/soap/ereg/ws/OrganisasjonService/v4");
         publishWebService(new OrganisasjonV5MockImpl(repo),"/soap/ereg/ws/OrganisasjonService/v5");
         publishWebService(new BehandleJournalV3ServiceMockImpl(),"/soap/services/behandlejournal/v3");
