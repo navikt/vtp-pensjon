@@ -21,12 +21,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Api(tags = {"Norg2 enheter"})
-@Path("/norg2/api/v1/enhet")
+@Path("/norg2/api/v1")
 public class EnhetRestMock {
     private static final Logger LOG = LoggerFactory.getLogger(EnhetRestMock.class);
     private TestscenarioBuilderRepository scenarioRepository = TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance());
 
     public EnhetRestMock() throws IOException {
+    }
+
+    @POST
+    @Produces({"application/json;charset=UTF-8"})
+    @io.swagger.annotations.ApiOperation(value = "Returnerer alle arbeidsfordelinger basert på multiple set av søkekriterier", response = Fordeling.class, responseContainer = "List", tags = {"arbeidsfordeling",})
+    @io.swagger.annotations.ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "Success", response = Fordeling.class, responseContainer = "List"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "Bad request"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "Not found"),
+            @io.swagger.annotations.ApiResponse(code = 500, message = "Internal Server Error")})
+    @Path("/arbeidsfordelinger")
+    public Response getArbeidsFordelinger(List<Fordeling> fordelinger, @QueryParam("skjermet") boolean skjermet)
+            throws NotFoundException {
+        LOG.info("kall på /norg2/api/v1/arbeidsfordelinger med entitites:" + fordelinger);
+        return Response.ok(fordelinger).build();
     }
 
     @GET
@@ -37,6 +52,7 @@ public class EnhetRestMock {
             @io.swagger.annotations.ApiResponse(code = 400, message = "Bad request"),
             @io.swagger.annotations.ApiResponse(code = 404, message = "Not found"),
             @io.swagger.annotations.ApiResponse(code = 500, message = "Internal Server Error")})
+    @Path("/enhet")
     public Response getAllEnheterUsingGET(@ApiParam(value = "Enhetsstatus resulterende enheter skal filtreres på", allowableValues = "UNDER_ETABLERING, AKTIV, UNDER_AVVIKLING, NEDLAGT") @QueryParam("enhetStatusListe") List<String> enhetStatusListe
             , @ApiParam(value = "Enhetsnumre for filtrering av enheter") @QueryParam("enhetsnummerListe") List<String> enhetsnummerListe
             , @ApiParam(value = "Hvorvidt enheter skal være oppgavebehandlende", allowableValues = "UFILTRERT, KUN_OPPGAVEBEHANDLERE, INGEN_OPPGAVEBEHANDLERE") @QueryParam("oppgavebehandlerFilter") String oppgavebehandlerFilter
@@ -53,7 +69,7 @@ public class EnhetRestMock {
     }
 
     @GET
-    @Path("/navkontor/{geografiskOmraade}")
+    @Path("/enhet/navkontor/{geografiskOmraade}")
     @Produces({"application/json;charset=UTF-8"})
     @io.swagger.annotations.ApiOperation(value = "Returnerer en NAV kontor som er en lokalkontor for spesifisert geografisk område", response = Norg2RsEnhet.class, tags = {"enhet",})
     @io.swagger.annotations.ApiResponses(value = {
@@ -69,7 +85,7 @@ public class EnhetRestMock {
     }
 
     @GET
-    @Path("/{enhetsnummer}")
+    @Path("/enhet/{enhetsnummer}")
     @Produces({"application/json;charset=UTF-8"})
     @io.swagger.annotations.ApiOperation(value = "Returnerer en enhet basert på enhetsnummer", response = Norg2RsEnhet.class, tags = {"enhet",})
     @io.swagger.annotations.ApiResponses(value = {
@@ -110,5 +126,42 @@ public class EnhetRestMock {
         norg2RsEnhet.setNavn("NAV Arbeid og ytelser Tønsberg");
         norg2RsEnhet.setOppgavebehandler(true);
         return norg2RsEnhet;
+    }
+
+    class Fordeling {
+        private String tema;
+        private String enhetNummer;
+
+        public Fordeling() {
+            super();
+        }
+
+        public Fordeling(String tema) {
+            super();
+            this.tema = tema;
+        }
+
+        public String getTema() {
+            return tema;
+        }
+        public void setTema(String tema) {
+            this.tema = tema;
+        }
+
+        public String getEnhetNummer() {
+            return enhetNummer;
+        }
+
+        public void setEnhetNummer(String enhetNummer) {
+            this.enhetNummer = enhetNummer;
+        }
+
+        @Override
+        public String toString() {
+            return "Fordeling{" +
+                    "tema='" + tema + '\'' +
+                    ", enhetNummer='" + enhetNummer + '\'' +
+                    '}';
+        }
     }
 }
