@@ -31,6 +31,7 @@ userinfo_endpoint: "https://graph.microsoft.com/oidc/userinfo"
 class WellKnownResponse {
     private final String baseUrl;
     private final String tenant;
+    private final String profile;
 
     @JsonProperty("authorization_endpoint")
     public String getAuthorizationEndpoint() {
@@ -83,6 +84,13 @@ class WellKnownResponse {
 
     @JsonProperty("issuer")
     public final String getIssuer() {
+        // Spesialhåndtering for Azure AD B2C.
+        // Veldig rart at Azure AD gjør det sånn, men vi får mocke det realistisk, det sparer oss
+        // for en del problemer andre steder (f.eks. LoginService sin issuer)
+        if (tenant.equals("NAVtestB2C.onmicrosoft.com")) {
+            return "https://login.microsoftonline.com/d38f25aa-eab8-4c50-9f28-ebf92c1256f2/v2.0" + ("B2C_1A_idporten_ver1".equals(profile) ? "/" : "");
+        }
+
         return "https://login.microsoftonline.com/" + tenant + "/v2.0";
     }
 
@@ -128,8 +136,9 @@ class WellKnownResponse {
         return baseUrl + "/rest/AzureGraphAPI/oidc/userinfo";
     }
 
-    WellKnownResponse(String url, String tenant) {
+    WellKnownResponse(String url, String tenant, String profile) {
         this.baseUrl = url;
         this.tenant = tenant;
+        this.profile = profile;
     }
 }

@@ -43,9 +43,9 @@ public class AzureAdNAVAnsattService {
     @Path("/{tenant}/v2.0/.well-known/openid-configuration")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Azure AD Discovery url", notes = ("Mock impl av Azure AD discovery urlen. "))
-    public Response wellKnown(@SuppressWarnings("unused") @Context HttpServletRequest req, @PathParam("tenant") String tenant) {
+    public Response wellKnown(@SuppressWarnings("unused") @Context HttpServletRequest req, @PathParam("tenant") String tenant, @QueryParam("p") String profile) {
         String baseUrl = getBaseUrl(req);
-        WellKnownResponse wellKnownResponse = new WellKnownResponse(baseUrl, tenant);
+        WellKnownResponse wellKnownResponse = new WellKnownResponse(baseUrl, tenant, profile);
         return Response.ok(wellKnownResponse).build();
     }
 
