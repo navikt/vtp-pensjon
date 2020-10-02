@@ -19,6 +19,7 @@ import no.nav.foreldrepenger.vtp.server.api.scenario.TestscenarioTemplateRestTje
 import no.nav.foreldrepenger.vtp.server.rest.IsAliveImpl;
 import no.nav.foreldrepenger.vtp.server.rest.IsReadyImpl;
 import no.nav.foreldrepenger.vtp.server.rest.PeproxyResource;
+import no.nav.foreldrepenger.vtp.server.rest.auth.LoginService;
 import no.nav.foreldrepenger.vtp.server.rest.auth.Oauth2RestService;
 import no.nav.foreldrepenger.vtp.server.rest.auth.PdpRestTjeneste;
 import no.nav.foreldrepenger.vtp.server.rest.auth.STSRestTjeneste;
@@ -117,6 +118,7 @@ public class ApplicationConfig extends Application {
 
         // tekniske ting
         classes.add(Oauth2RestService.class);
+        classes.add(LoginService.class);
         classes.add(AzureAdNAVAnsattService.class);
         classes.add(PeproxyResource.class);
         classes.add(MicrosoftGraphApiMock.class);
