@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.vtp.kafkaembedded;
 
-import java.util.Properties;
-
+import no.nav.foreldrepenger.vtp.felles.KeystoreUtils;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -12,7 +11,7 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import no.nav.foreldrepenger.vtp.felles.KeystoreUtils;
+import java.util.Properties;
 
 public class LocalKafkaProducer {
     private static final Logger LOG = LoggerFactory.getLogger(LocalKafkaProducer.class);
@@ -37,6 +36,7 @@ public class LocalKafkaProducer {
         props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, KeystoreUtils.getKeyStorePassword());
         String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
         props.put(SaslConfigs.SASL_JAAS_CONFIG, String.format(jaasTemplate, "vtp", "vtp"));
+        props.put(SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, "");
 
         // Create the producer
         producer = new KafkaProducer<String, String>(props);

@@ -4,7 +4,6 @@ import org.jose4j.base64url.Base64Url;
 import org.jose4j.jwk.PublicJsonWebKey;
 import org.jose4j.jwk.RsaJsonWebKey;
 import org.jose4j.lang.JoseException;
-import org.opensaml.security.credential.Credential;
 import org.opensaml.security.x509.impl.KeyStoreX509CredentialAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +82,7 @@ public class KeyStoreTool {
     }
 
 
-    public static synchronized Credential getDefaultCredential() {
+    public static synchronized KeyStoreX509CredentialAdapter getDefaultCredential() {
         init();
         KeyStoreX509CredentialAdapter credentialAdapter = new KeyStoreX509CredentialAdapter(keystore, getKeyAndCertAlias(), getKeyStorePassword());
         return credentialAdapter;

@@ -66,7 +66,7 @@ public class LocalKafkaServer {
 
         zkProperties.put("authorizer.class.name", "kafka.security.auth.SimpleAclAuthorizer");
         zkProperties.put("allow.everyone.if.no.acl.found", "true");
-        zkProperties.put("ssl.client.auth", "required");
+        zkProperties.put("ssl.client.auth", "none");
 
         zkProperties.put("ssl.keystore.location", KeystoreUtils.getKeystoreFilePath());
         zkProperties.put("ssl.keystore.password", KeystoreUtils.getKeyStorePassword());
@@ -101,6 +101,7 @@ public class LocalKafkaServer {
         kafkaProperties.put("sasl.enabled.mechanisms", "DIGEST-MD5,PLAIN");
         kafkaProperties.put("sasl.mechanism.inter.broker.protocol", "PLAIN");
         kafkaProperties.put("inter.broker.listener.name", "INTERNAL");
+        kafkaProperties.put(SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, "");
 
         String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
         kafkaProperties.put("SASL_SSL.".toLowerCase() + SaslConfigs.SASL_JAAS_CONFIG, String.format(jaasTemplate, "vtp", "vtp"));

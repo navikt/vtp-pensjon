@@ -14,4 +14,4 @@ services:
       - DISABLE_SSL=true
       - ISSO_OAUTH2_ISSUER=psak-localhost
     volumes:
-      - "~/.modig/:/root/.modig"
+      - "~/.modig:/root/.modig"

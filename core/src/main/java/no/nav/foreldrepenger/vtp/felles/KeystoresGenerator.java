@@ -127,8 +127,8 @@ class KeystoresGenerator {
             PublicKey pubKey,
             PrivateKey privKey)
             throws Exception {
-        String issuer = "CN=localhost";
-        String subject = "CN=localhost";
+        String issuer = "CN=vtp-pensjon";
+        String subject = "CN=vtp-pensjon";
 
         // Valid from January 1st 1970 until ten years from now
         Date validFrom = new Date(0);

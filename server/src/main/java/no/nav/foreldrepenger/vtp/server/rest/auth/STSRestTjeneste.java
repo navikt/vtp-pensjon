@@ -3,22 +3,28 @@ package no.nav.foreldrepenger.vtp.server.rest.auth;
 import io.swagger.annotations.Api;
 import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
 import no.nav.foreldrepenger.vtp.server.ws.STSIssueResponseGenerator;
+import no.nav.foreldrepenger.vtp.server.ws.SamlTokenGenerator;
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.lang.JoseException;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.*;
 import javax.xml.bind.JAXB;
 import java.io.StringWriter;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.Optional;
+
+import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 
 @Api(tags = {"Security Token Service"})
 @Path("/v1/sts")
 public class STSRestTjeneste {
     private final STSIssueResponseGenerator generator = new STSIssueResponseGenerator();
+    private final SamlTokenGenerator samlTokenGenerator = new SamlTokenGenerator();
 
     @POST
     @Path("/token/exchange")
@@ -57,20 +63,21 @@ public class STSRestTjeneste {
     @GET
     @Path("/samltoken")
     @Produces({MediaType.APPLICATION_JSON})
-    public SAMLResponse dummyToken() {
-        RequestSecurityTokenResponseType token = generator.buildRequestSecurityTokenResponseType("urn:oasis:names:tc:SAML:2.0:assertion");
-        StringWriter sw = new StringWriter();
-        JAXB.marshal(token, sw);
-        String xmlString = sw.toString();
+    public Response dummyToken(@Context SecurityContext securityContext, @Context HttpHeaders headers) throws Exception {
+        String username = Optional.ofNullable(securityContext)
+                .map(SecurityContext::getUserPrincipal)
+                .map(Principal::getName)
+                .orElse("CN=InternBruker,OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local");
 
-        SAMLResponse response = new SAMLResponse();
-        response.setAccess_token(Base64.getEncoder().withoutPadding().encodeToString(xmlString.getBytes()));
-        response.setDecodedToken(xmlString);
-        response.setToken_type("Bearer");
-        response.setIssued_token_type("urn:ietf:params:oauth:token-type:access_token");
-        response.setExpires_in(LocalDateTime.MAX);
+        String samlToken = samlTokenGenerator.issueToken(username);
+        SAMLResponse samlResponse = new SAMLResponse();
+        samlResponse.setAccess_token(encodeBase64String(samlToken.getBytes()));
+        samlResponse.setDecodedToken(samlToken);
+        samlResponse.setToken_type("Bearer");
+        samlResponse.setIssued_token_type("urn:ietf:params:oauth:token-type:saml2");
+        samlResponse.setExpires_in(LocalDateTime.MAX);
 
-        return response;
+        return Response.status(Response.Status.OK).entity(samlResponse).header("Cache-Control", "no-store").header("Pragma", "no-cache").build();
     }
 
     public static class SAMLResponse {

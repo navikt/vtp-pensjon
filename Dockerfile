@@ -1,7 +1,6 @@
 FROM navikt/java:11
 
 ENV JAVA_OPTS="-Dscenarios.dir=/app/model/scenarios/"
-ENV DUMMYPROP=fraDockerfile
 
 ARG JAR_FILE
 
@@ -15,6 +14,11 @@ RUN chmod -R 777 /app/model/scenarios/
 COPY server/kafkasecurity.conf /app/
 COPY server/src/main/resources/logback.xml logback.xml
 COPY server/target/app.jar app.jar
+
+RUN mkdir /root/.modig
+COPY server/truststore.jks /root/.modig/
+COPY server/keystore.jks /root/.modig/
+
 COPY run-java.sh /
 
 EXPOSE 8636 8063 8060 8389 9093

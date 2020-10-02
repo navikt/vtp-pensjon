@@ -1,34 +1,8 @@
 package no.nav.foreldrepenger.vtp.server;
 
-import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
-import org.apache.kafka.clients.admin.AdminClient;
-import org.eclipse.jetty.http.spi.JettyHttpServer;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.HandlerContainer;
-import org.eclipse.jetty.server.HttpConfiguration;
-import org.eclipse.jetty.server.HttpConnectionFactory;
-import org.eclipse.jetty.server.SecureRequestCustomizer;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.SslConnectionFactory;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.servlet.DefaultServlet;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.util.resource.Resource;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.eclipse.jetty.webapp.WebAppContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import no.nav.familie.topic.Topic;
 import no.nav.familie.topic.TopicManifest;
+import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
 import no.nav.foreldrepenger.vtp.felles.KeystoreUtils;
 import no.nav.foreldrepenger.vtp.felles.PropertiesUtils;
 import no.nav.foreldrepenger.vtp.kafkaembedded.LocalKafkaProducer;
@@ -40,13 +14,26 @@ import no.nav.foreldrepenger.vtp.server.api.pensjon_testdata.PensjonTestdataServ
 import no.nav.foreldrepenger.vtp.testmodell.repo.JournalRepository;
 import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioTemplateRepository;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.DelegatingTestscenarioRepository;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.DelegatingTestscenarioTemplateRepository;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.JournalRepositoryImpl;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
+import no.nav.foreldrepenger.vtp.testmodell.repo.impl.*;
 import no.nav.tjeneste.virksomhet.sak.v1.GsakRepo;
+import org.apache.kafka.clients.admin.AdminClient;
+import org.eclipse.jetty.http.spi.JettyHttpServer;
+import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.webapp.WebAppContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class MockServer {
@@ -68,7 +55,6 @@ public class MockServer {
     private String host = HTTP_HOST;
 
     public MockServer() throws Exception {
-        LOG.info("Dummyprop er satt til: " + System.getenv("DUMMYPROP"));
         this.port = Integer.parseInt(System.getProperty("autotest.vtp.port", SERVER_PORT));
 
         // Bør denne settes fra ENV_VAR?
