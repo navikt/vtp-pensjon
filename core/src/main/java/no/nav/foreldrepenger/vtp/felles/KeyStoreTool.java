@@ -16,7 +16,8 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.interfaces.RSAPublicKey;
 
-import static no.nav.foreldrepenger.vtp.felles.KeystoresGenerator.generateKeystoresIfNotExists;
+import static no.nav.foreldrepenger.vtp.felles.KeystoresGenerator.copyKeystoreAndTruststore;
+import static no.nav.foreldrepenger.vtp.felles.KeystoresGenerator.readKeystoresOrGenerateIfNotExists;
 
 public class KeyStoreTool {
     private static final Logger log = LoggerFactory.getLogger(KeyStoreTool.class);
@@ -38,7 +39,14 @@ public class KeyStoreTool {
         String keyAndCertAlias = getKeyAndCertAlias();
 
         String outputFormat = "JKS";
-        generateKeystoresIfNotExists(outputFormat, keyAndCertAlias);
+
+        try{
+            copyKeystoreAndTruststore();
+        }
+        catch(IOException e){
+            readKeystoresOrGenerateIfNotExists(outputFormat, keyAndCertAlias);
+        }
+
         try (FileInputStream keystoreFile = new FileInputStream(new File(keystorePath))) {
             KeyStore ks = KeyStore.getInstance(outputFormat);
             ks.load(keystoreFile, keystorePassword);

@@ -13,7 +13,9 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.math.BigInteger;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -25,7 +27,23 @@ class KeystoresGenerator {
     // TODO: Maybe use PKCS12? Java 9 and onwards uses that, Java 8 or below uses JKS.
     // String outputFormat = "PKCS12";
 
-    static void generateKeystoresIfNotExists(String outputFormat, String keyAndCertAlias) {
+    static void copyKeystoreAndTruststore() throws IOException {
+        copyFile(KeystoreUtils.getKeystoreFilePath(), "keystore.jks");
+        copyFile(KeystoreUtils.getTruststoreFilePath(), "truststore.jks");
+    }
+
+    private static void copyFile(String filePath, String fileName) throws IOException {
+        String serverDir = Paths.get("").toAbsolutePath().toString();
+
+        Path path = Files.copy(
+                Paths.get(serverDir, fileName),
+                Paths.get(filePath),
+                StandardCopyOption.REPLACE_EXISTING);
+
+        log.info(String.format("Copied %s/%s from project to %s (with replacing existing)", serverDir, fileName, path.toAbsolutePath()));
+    }
+
+    static void readKeystoresOrGenerateIfNotExists(String outputFormat, String keyAndCertAlias) {
         String keystorePath = KeystoreUtils.getKeystoreFilePath();
         String truststorePath = KeystoreUtils.getTruststoreFilePath();
 
@@ -34,6 +52,7 @@ class KeystoresGenerator {
 
         if (keystoreFile.length() == 0) {
             log.warn("Keystore keystoreFile {} does not exist - will auto-generate.", keystorePath);
+            log.warn("OBS! Generated SAML signature from the new private key will be unknown for PEN/POPP and will not be accepted");
             createKeystoreAndUpdateTrustStore(keyAndCertAlias, keystorePath, outputFormat, truststorePath);
             return;
         }
