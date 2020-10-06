@@ -37,7 +37,6 @@
         <cxf.version>3.4.0</cxf.version>
         <tjenestespesifikasjoner.version>1.2020.07.17-17.06-31e5aa824db7</tjenestespesifikasjoner.version>
         <swagger.version>1.6.2</swagger.version>
-        <oauth2-oidc-sdk.version>8.22</oauth2-oidc-sdk.version>
 
     </properties>
 
@@ -651,6 +650,19 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.11</version>
+            </dependency>
+
+            <!-- Ensure that com.nimbusds:oauth2-oidc-sdk doesn't pick up a SNAPSHOT version of net.minidev:json-smart -->
+            <dependency>
+                <groupId>net.minidev</groupId>
+                <artifactId>json-smart</artifactId>
+                <version>2.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>oauth2-oidc-sdk</artifactId>
+                <version>8.22</version>
             </dependency>
 
         </dependencies>
