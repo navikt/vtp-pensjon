@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.vtp.server.rest.auth;
+package no.nav.pensjon.vtp.auth;
 
 import java.util.ArrayList;
 import java.util.Arrays;

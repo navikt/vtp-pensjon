@@ -22,6 +22,7 @@
         <module>model</module>
         <module>mocks</module>
         <module>server</module>
+        <module>vtp-pensjon-application</module>
     </modules>
 
     <properties>
@@ -118,6 +119,11 @@
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>infotrygd-kontantstotte-mock</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.pensjon.vtp</groupId>
+                <artifactId>auth-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -273,6 +279,11 @@
                 <groupId>javax.ws.rs</groupId>
                 <artifactId>javax.ws.rs-api</artifactId>
                 <version>2.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>3.1.0</version>
             </dependency>
 
             <!-- CXF - for å kunne stubbe WS-trust -->
@@ -552,6 +563,11 @@
                         <artifactId>jsr311-api</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.swagger</groupId>

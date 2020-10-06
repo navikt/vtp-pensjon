@@ -66,7 +66,10 @@ public class MockServer {
         ContextHandlerCollection contextHandlerCollection = new ContextHandlerCollection();
         server.setHandler(contextHandlerCollection);
 
-        ldapServer = new LdapServer(new File(KeystoreUtils.getKeystoreFilePath()), KeystoreUtils.getKeyStorePassword().toCharArray());
+        final int listenerPortLdaps = Integer.valueOf(System.getProperty("ldaps.port", "8636")); // 636 er default port for LDAPS
+        final int listenerPortLdap = Integer.valueOf(System.getProperty("ldap.port", "8389")); // 389 er default port for LDAP
+
+        ldapServer = new LdapServer(new File(KeystoreUtils.getKeystoreFilePath()), KeystoreUtils.getKeyStorePassword().toCharArray(), listenerPortLdap, listenerPortLdaps);
         int kafkaBrokerPort = Integer.parseInt(System.getProperty("kafkaBrokerPort", "9092"));
         int zookeeperPort = Integer.parseInt(System.getProperty("zookeeper.port", "2181"));
         kafkaServer = new LocalKafkaServer(zookeeperPort, kafkaBrokerPort, getBootstrapTopics());

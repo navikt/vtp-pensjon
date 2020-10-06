@@ -16,7 +16,6 @@ import javax.net.ssl.SSLContext;
 
 import com.unboundid.ldap.sdk.Entry;
 import com.unboundid.ldif.LDIFAddChangeRecord;
-import no.nav.foreldrepenger.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.foreldrepenger.vtp.testmodell.ansatt.NAVAnsatt;
 import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import org.slf4j.Logger;
@@ -33,15 +32,13 @@ public class LdapServer {
 
     private static final Logger LOG = LoggerFactory.getLogger(LdapServer.class);
     private static final String BASEDATA_USERS_LDIF = "basedata/ldap_setup.ldif";
-    private final int listenerPortLdaps = Integer.valueOf(System.getProperty("ldaps.port", "8636")); // 636 er default port for LDAPS
-    private final int listenerPortLdap = Integer.valueOf(System.getProperty("ldap.port", "8389")); // 389 er default port for LDAP
 
     private InMemoryDirectoryServer directoryServer;
 
     private final File keystoreFile;
     private final char[] password;
 
-    public LdapServer(File keystoreFile, char[] password) throws Exception {
+    public LdapServer(File keystoreFile, char[] password, int listenerPortLdap, int listenerPortLdaps) throws Exception {
         this.keystoreFile = keystoreFile;
         this.password = password;
         InMemoryDirectoryServerConfig cfg = new InMemoryDirectoryServerConfig("DC=local");

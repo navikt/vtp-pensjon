@@ -1,11 +1,9 @@
-package no.nav.foreldrepenger.vtp.server.rest.auth;
+package no.nav.pensjon.vtp.auth;
 
 import java.net.URISyntaxException;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,13 +11,9 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
-import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
-import javax.naming.ldap.InitialLdapContext;
-import javax.naming.ldap.LdapName;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -43,7 +37,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
 import no.nav.foreldrepenger.vtp.felles.OidcTokenGenerator;
-
+import javax.inject.Inject;
 
 @Api(tags = {"Openam"})
 @Path("/isso")
@@ -55,6 +49,14 @@ public class Oauth2RestService {
 
     private static final Map<String, String> clientIdCache = new HashMap<>();
     private static final String DEFAULT_ISSUER = "https://vtp.local/issuer";
+
+    private UserRepository userRepository;
+
+    @Inject
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @GET
     @Path("/oauth2/authorize")
     @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
@@ -70,8 +72,7 @@ public class Oauth2RestService {
             @QueryParam("scope") @DefaultValue("openid") String scope,
             @QueryParam("client_id") String clientId,
             @QueryParam("state") String state,
-            @QueryParam("redirect_uri") String redirectUri)
-            throws Exception {
+            @QueryParam("redirect_uri") String redirectUri) throws URISyntaxException {
         LOG.info("kall mot oauth2/authorize med redirecturi " + redirectUri);
         Objects.requireNonNull(scope, "scope");
         if (!Objects.equals(scope, "openid")) {
@@ -93,7 +94,7 @@ public class Oauth2RestService {
         uriBuilder.addParameter("iss", getIssuer());
         uriBuilder.addParameter("redirect_uri", redirectUri);
         clientIdCache.put(state, clientId);
-        if (req.getParameter("nonce") != "") {
+        if (!"".equals(req.getParameter("nonce"))) {
             nonceCache.put(state, req.getParameter("nonce"));
         }
 
@@ -111,7 +112,7 @@ public class Oauth2RestService {
         return Response.status(HttpServletResponse.SC_FOUND).location(location.build()).build();
     }
 
-    private Response authorizeHtmlPage(URIBuilder location) throws URISyntaxException, NamingException {
+    private Response authorizeHtmlPage(URIBuilder location) {
         // LAG HTML SIDE
         List<Entry<String, String>> usernames = getUsernames();
 
@@ -139,19 +140,18 @@ public class Oauth2RestService {
         return Response.ok(html, MediaType.TEXT_HTML).build();
     }
 
-    private List<Map.Entry<String, String>> getUsernames() throws NamingException {
-        List<SearchResult> allUsers = UserRepository.getAllUsers();
+    private List<Map.Entry<String, String>> getUsernames() {
+        List<SearchResult> allUsers = userRepository.getAllUsers();
 
         // Long story, økonomi forventer (per 2018-10-30) at alle interne brukere har max 8 bokstaver i bruker identen sin :-(
         // pass derfor på at CN er definert med maks 8 bokstaver.
 
-        List<Map.Entry<String, String>> usernames = allUsers.stream()
+        return allUsers.stream()
                 .map(u -> {
                     String cn = getAttribute(u, "cn");
                     String displayName = getAttribute(u, "displayName");
-                    return new SimpleEntry<String, String>(cn, displayName);
+                    return new SimpleEntry<>(cn, displayName);
                 }).collect(Collectors.toList());
-        return usernames;
     }
 
     private String getAttribute(SearchResult u, String attribName) {
@@ -168,7 +168,6 @@ public class Oauth2RestService {
     @Path("/oauth2/access_token")
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "oauth2/access_token", notes = ("Mock impl av Oauth2 access_token"))
-    @SuppressWarnings("unused")
     public Response accessToken(
             @Context HttpServletRequest req,
             @FormParam("grant_type") String grantType,
@@ -223,7 +222,7 @@ public class Oauth2RestService {
     @Path("/oauth2/connect/jwk_uri")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "oauth2/connect/jwk_uri", notes = ("Mock impl av Oauth2 jwk_uri"))
-    public Response authorize(@SuppressWarnings("unused") @Context HttpServletRequest req) {
+    public Response authorize(@Context HttpServletRequest req) {
         LOG.info("kall på /oauth2/connect/jwk_uri");
         String jwks = KeyStoreTool.getJwks();
         LOG.info("JWKS: " + jwks);
@@ -238,7 +237,7 @@ public class Oauth2RestService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "json/authenticate", notes = ("Mock impl av OpenAM autenticate for service bruker innlogging"))
-    public Response serviceBrukerAuthenticate(@SuppressWarnings("unused") @Context HttpServletRequest req,
+    public Response serviceBrukerAuthenticate(@Context HttpServletRequest req,
                                               @ApiParam("Liste over aksjonspunkt som skal bekreftes, inklusiv data som trengs for å løse de.") EndUserAuthenticateTemplate enduserTemplate) {
         LOG.info("kall på /json/authenticate");
         if (enduserTemplate == null) {
@@ -275,7 +274,7 @@ public class Oauth2RestService {
     @Path("/oauth2/.well-known/openid-configuration")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Discovery url", notes = ("Mock impl av discovery urlen. "))
-    public Response wellKnown(@SuppressWarnings("unused") @Context HttpServletRequest req) {
+    public Response wellKnown(@Context HttpServletRequest req) {
         LOG.info("kall på /oauth2/.well-known/openid-configuration");
         String baseUrl = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort();
         WellKnownResponse wellKnownResponse = new WellKnownResponse(baseUrl, getIssuer());

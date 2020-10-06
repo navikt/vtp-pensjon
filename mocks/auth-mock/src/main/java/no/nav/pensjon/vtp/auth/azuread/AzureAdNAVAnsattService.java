@@ -1,11 +1,11 @@
-package no.nav.foreldrepenger.vtp.server.rest.azuread.navansatt;
+package no.nav.pensjon.vtp.auth.azuread;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import no.nav.foreldrepenger.vtp.felles.AzureOidcTokenGenerator;
 import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
-import no.nav.foreldrepenger.vtp.server.rest.auth.Oauth2AccessTokenResponse;
-import no.nav.foreldrepenger.vtp.server.rest.auth.UserRepository;
+import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse;
+import no.nav.pensjon.vtp.auth.UserRepository;
 import no.nav.foreldrepenger.vtp.testmodell.ansatt.NAVAnsatt;
 import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +13,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.SearchResult;
@@ -30,6 +31,13 @@ import java.util.stream.Collectors;
 @Path("/AzureAd")
 public class AzureAdNAVAnsattService {
     private static final Logger LOG = LoggerFactory.getLogger(AzureAdNAVAnsattService.class);
+
+    private UserRepository userRepository;
+
+    @Inject
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GET
     @Path("/isAlive")
@@ -190,7 +198,7 @@ public class AzureAdNAVAnsattService {
     }
 
     private List<Map.Entry<String, String>> getUsernames() throws NamingException {
-        List<SearchResult> allUsers = UserRepository.getAllUsers();
+        List<SearchResult> allUsers = userRepository.getAllUsers();
         List<Map.Entry<String, String>> usernames = allUsers.stream()
                 .map(u -> {
                     String cn = getAttribute(u, "cn");
