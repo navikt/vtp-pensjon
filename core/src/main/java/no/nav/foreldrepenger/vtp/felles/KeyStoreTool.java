@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -23,6 +25,7 @@ public class KeyStoreTool {
     private static final Logger log = LoggerFactory.getLogger(KeyStoreTool.class);
     private static RsaJsonWebKey jwk = null;
     private static KeyStore keystore = null;
+    private static final String KEYSTORE_FORMAT = "JKS";
 
     public static synchronized void init() {
         if (keystore != null) {
@@ -38,17 +41,15 @@ public class KeyStoreTool {
         String keystorePath = getDefaultKeyStorePath();
         String keyAndCertAlias = getKeyAndCertAlias();
 
-        String outputFormat = "JKS";
-
         try{
             copyKeystoreAndTruststore();
         }
         catch(IOException e){
-            readKeystoresOrGenerateIfNotExists(outputFormat, keyAndCertAlias);
+            readKeystoresOrGenerateIfNotExists(KEYSTORE_FORMAT, keyAndCertAlias);
         }
 
         try (FileInputStream keystoreFile = new FileInputStream(new File(keystorePath))) {
-            KeyStore ks = KeyStore.getInstance(outputFormat);
+            KeyStore ks = KeyStore.getInstance(KEYSTORE_FORMAT);
             ks.load(keystoreFile, keystorePassword);
 
             log.info("Henter tilgjengelige cert-aliases");
@@ -99,6 +100,29 @@ public class KeyStoreTool {
     public static synchronized RsaJsonWebKey getJsonWebKey() {
         init();
         return jwk;
+    }
+
+    /**
+     * Dette brukes bare for å generere et nytt nøkkel-par.
+     * 1. Generer nøkkel-par ved å kjøre main-metoden
+     * 2. Eksporter sertifikat etter generering:
+     * keytool -export -keystore ~/.modig/keystore.jks -alias localhost-ssl -file ~/.modig/ vtp-pensjon.cer
+     * 3. Importer sertifikaten inn i PEN lokale truststores som ligger i pesys/local/pen-secrets:
+     * keytool -import -alias localhost -file ~/.modig/vtp-pensjon.cer -storetype JKS -keystore ~/pesys/local/pen-secrets/truststore/truststore.jts
+     * 4. Importer sertifikaten inn i POPP lokale truststores som ligger i pesys/local/popp-secrets:
+     * keytool -import -alias localhost -file ~/.modig/vtp-pensjon.cer -storetype JKS -keystore ~/pesys/local/popp-secrets/truststore/truststore.jts
+     * 5. Lag en Pull-Request til pesys-master med oppdaterte lokale truststores
+     * 6. Kopier og erstatt vtp truststore og keystore i server/keystore.jks og server/truststore med nye genererte
+     * 7. Lag Pull-Request til vtp-master med oppdaterte truststore/keystore
+     * @param args
+     * @throws IOException
+     */
+    public static void main(String[] args) throws IOException {
+        System.out.println("------------GENERATING A NEW KEY-PAIR------------");
+        Files.deleteIfExists(Paths.get(KeystoreUtils.getKeystoreFilePath()));
+        Files.deleteIfExists(Paths.get(KeystoreUtils.getTruststoreFilePath()));
+        readKeystoresOrGenerateIfNotExists(KEYSTORE_FORMAT, getKeyAndCertAlias());
+        System.out.println("------------DONE------------");
     }
 
     public static String getJwks() {

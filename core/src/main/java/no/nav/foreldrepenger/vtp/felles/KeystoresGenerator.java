@@ -35,10 +35,10 @@ class KeystoresGenerator {
     private static void copyFile(String filePath, String fileName) throws IOException {
         String serverDir = Paths.get("").toAbsolutePath().toString();
 
-        Path path = Files.copy(
-                Paths.get(serverDir, fileName),
-                Paths.get(filePath),
-                StandardCopyOption.REPLACE_EXISTING);
+        Path source = Paths.get(serverDir, fileName);
+        Path target = Paths.get(filePath);
+        Files.createDirectories(target.getParent());
+        Path path = Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
 
         log.info(String.format("Copied %s/%s from project to %s (with replacing existing)", serverDir, fileName, path.toAbsolutePath()));
     }
@@ -52,7 +52,7 @@ class KeystoresGenerator {
 
         if (keystoreFile.length() == 0) {
             log.warn("Keystore keystoreFile {} does not exist - will auto-generate.", keystorePath);
-            log.warn("OBS! Generated SAML signature from the new private key will be unknown for PEN/POPP and will not be accepted");
+            log.warn("OBS! Generated SAML signature from the new private key will be unknown/new for PEN/POPP and will not be accepted");
             createKeystoreAndUpdateTrustStore(keyAndCertAlias, keystorePath, outputFormat, truststorePath);
             return;
         }

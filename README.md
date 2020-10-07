@@ -39,7 +39,7 @@ I verdikjedetester benyttes oftest Docker-image av vtp-pensjon. Dette bygges i v
 
 #### Kjøre via docker run / docker-compose
 ##### For å bygge docker image lokalt: 
-Bygg prosjektet med `mvn clean install"`, bygg deretter docker-imaget med `docker build -t vtp-pensjon .` 
+Bygg prosjektet med `mvn clean install`, bygg deretter docker-imaget med `docker build -t vtp-pensjon .` 
 Imaget blir da tilgjengelig som vtp-pensjon:latest
 
 ##### Hente docker-image bygget i pipe: 
@@ -57,7 +57,11 @@ docker pull docker.pkg.github.com/navikt/vtp-pensjon/vtp-pensjon
 
 ## Sertifiakter for SSL/TLS
 For å få vtp-pensjon til å kjøre med SSL/TLS forbindelse over SOAP, REST og Kafka må keystore angitt i VTP være tilgjengelig i SUT (System under test) sin Truststore. 
-For lokal utvikling på Team Foreldrepenger og Sykdom-i-familien opprettes key- og truststore i.h.t til instruksjoner i verdikjede/autotest. 
+
+For lokal utvikling på Team Pensjon bruker vi key- og truststore som hentes ved oppstart fra prosjekt-mappen. 
+Kopien av vtp sin public-nøkkelen er importert inn i PEN og POPP sine lokale truststores.
+For å generere et nytt gyldig nøkkelpar og   se ytterligere instruksjoner, kjør `KeyStoreTool.main`.
+
 Følgende systemvariabler kan defineres for å overstyre defaults i vtp-pensjon: 
 
 ```bash
