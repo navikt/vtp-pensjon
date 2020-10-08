@@ -95,10 +95,12 @@ public class SoapWebServiceConfig {
         publishWebService(new PsakPersonServiceMockImpl(repo), "/soap/esb/nav-cons-pen-psak-personWeb/sca/PSAKPersonWSEXP");
         publishWebService(new PenPersonServiceMockImpl(repo), "/soap/esb/nav-cons-pen-pen-personWeb/sca/PENPersonWSEXP");
         publishWebService(new PselvPersonServiceMockImpl(repo), "/soap/esb/nav-cons-pen-pselv-personWeb/sca/PSELVPersonWSEXP");
+        publishWebService(new PersonV2ServiceMockImpl(repo), "/soap/esb/nav-tjeneste-person_v2Web/sca/PersonWSEXP");
         publishWebService(new HenvendelseMock(), "/soap/esb/nav-cons-pen-psak-henvendelseWeb/sca/PSAKHenvendelseWSEXP");
         publishWebService(new SakMock(), "/soap/esb/nav-tjeneste-sak_v1Web/sca/SakWSEXP");
         publishWebService(new JournalMock(),"/soap/esb/nav-tjeneste-journal_v2Web/sca/JournalWSEXP");
         publishWebService(new PsakNavOrgEnhetMock(), "/soap/esb/nav-cons-pen-psak-navorgenhetWeb/sca/PSAKNAVOrgEnhetWSEXP");
+        publishWebService(new PenNavOrgEnhetMock(), "/soap/esb/nav-cons-pen-pen-navorgenhetWeb/sca/PENNAVOrgEnhetWSEXP");
         publishWebService(new DialogMock(),"/soap/henvendelse/services/domene.Virksomhet/Dialog_v1");
         publishWebService(new DigitalKontaktinformasjonV1Mock(),"/soap/ws/DigitalKontaktinformasjon/v1");
         publishWebService(new PenTjenestePensjonMock(), "/soap/esb/nav-cons-pen-pen-tjenestepensjonWeb/sca/PENTjenestepensjonWSEXP");
