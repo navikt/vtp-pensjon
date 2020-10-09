@@ -20,10 +20,10 @@ public class Oauth2AccessTokenResponse {
     @JsonProperty("token_type")
     private String tokenType = "Bearer";
 
-    public Oauth2AccessTokenResponse(String idToken) {
+    public Oauth2AccessTokenResponse(String idToken, String refreshToken, String accessToken) {
         this.idToken = idToken;
-        this.refreshToken = UUID.randomUUID().toString();
-        this.accessToken = UUID.randomUUID().toString();
+        this.refreshToken = refreshToken;
+        this.accessToken = accessToken;
     }
 
     public void setAccessToken(String accessToken) {

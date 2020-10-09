@@ -30,6 +30,7 @@ userinfo_endpoint: "https://graph.microsoft.com/oidc/userinfo"
 * */
 class WellKnownResponse {
     private final String baseUrl;
+    private final String graphUrl;
     private final String tenant;
     private final String profile;
 
@@ -133,11 +134,12 @@ class WellKnownResponse {
 
     @JsonProperty("userinfo_endpoint")
     public String getUserinfoEndpoint() {
-        return baseUrl + "/rest/AzureGraphAPI/oidc/userinfo";
+        return graphUrl + "/oidc/userinfo";
     }
 
-    WellKnownResponse(String url, String tenant, String profile) {
-        this.baseUrl = url;
+    WellKnownResponse(String baseUrl, String graphUrl, String tenant, String profile) {
+        this.baseUrl = baseUrl;
+        this.graphUrl = graphUrl;
         this.tenant = tenant;
         this.profile = profile;
     }

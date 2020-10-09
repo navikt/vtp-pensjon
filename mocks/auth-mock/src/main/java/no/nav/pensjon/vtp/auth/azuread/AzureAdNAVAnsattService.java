@@ -53,7 +53,8 @@ public class AzureAdNAVAnsattService {
     @ApiOperation(value = "Azure AD Discovery url", notes = ("Mock impl av Azure AD discovery urlen. "))
     public Response wellKnown(@SuppressWarnings("unused") @Context HttpServletRequest req, @PathParam("tenant") String tenant, @QueryParam("p") String profile) {
         String baseUrl = getBaseUrl(req);
-        WellKnownResponse wellKnownResponse = new WellKnownResponse(baseUrl, tenant, profile);
+        String graphUrl = getGraphUrl(req);
+        WellKnownResponse wellKnownResponse = new WellKnownResponse(baseUrl, graphUrl, tenant, profile);
         return Response.ok(wellKnownResponse).build();
     }
 
@@ -80,21 +81,36 @@ public class AzureAdNAVAnsattService {
             @FormParam("client_id") String clientId,
             @FormParam("realm") String realm,
             @FormParam("code") String code,
+            @FormParam("refresh_token") String refreshToken,
             @FormParam("redirect_uri") String redirectUri) {
-        // dummy sikkerhet, returnerer alltid en idToken/refresh_token
-        String token = createIdToken(req, code, tenant, clientId);
-        LOG.info("Fikk parametere:" + req.getParameterMap().toString());
-        LOG.info("kall på /oauth2/access_token, opprettet token: " + token + " med redirect-url: " + redirectUri);
-        Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token);
-        oauthResponse.setAccessToken(code.split(";")[0]);
-        return Response.ok(oauthResponse).build();
+        if ("authorization_code".equals(grantType)) {
+            String token = createIdToken(req, code, tenant, clientId);
+            String generatedRefreshToken = "refresh:" + code;
+            String generatedAccessToken = "access:" + code;
+            LOG.info("Fikk parametere:" + req.getParameterMap().toString());
+            LOG.info("kall på /oauth2/access_token, opprettet token: " + token + " med redirect-url: " + redirectUri);
+            Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken);
+            return Response.ok(oauthResponse).build();
+        } else if ("refresh_token".equals(grantType)) {
+            String usernameWithNonce = refreshToken.substring(8);
+            String token = createIdToken(req, usernameWithNonce /*+ ";"*/, tenant, clientId);
+            LOG.info("Fikk parametere:" + req.getParameterMap().toString());
+            LOG.info("refresh-token-kall på /oauth2/access_token, opprettet nytt token: " + token);
+            String generatedRefreshToken = "refresh:" + usernameWithNonce;
+            String generatedAccessToken = "access:" + usernameWithNonce;
+            Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken);
+            return Response.ok(oauthResponse).build();
+        } else {
+            LOG.error("Unknown grant_type " + grantType);
+            return Response.serverError().entity("Unknown grant_type " + grantType).build();
+        }
     }
 
     private String createIdToken(HttpServletRequest req, String code, String tenant, String clientId) {
         try {
             String[] codeData = code.split(";");
             String username = codeData[0];
-            String nonce = codeData[1];
+            String nonce = codeData.length > 1 ? codeData[1] : null;
             NAVAnsatt user = BasisdataProviderFileImpl.getInstance().getAnsatteIndeks().hentNAVAnsatt(username).orElseThrow(() -> new RuntimeException("Fant ikke NAV-ansatt med brukernavn " + username));
 
             String issuer = getIssuer(tenant);
@@ -219,6 +235,10 @@ public class AzureAdNAVAnsattService {
 
     private String getBaseUrl(@Context HttpServletRequest req) {
         return req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/rest/AzureAd";
+    }
+
+    private String getGraphUrl(@Context HttpServletRequest req) {
+        return req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/rest/MicrosoftGraphApi";
     }
 
     private String getIssuer(String tenant) {

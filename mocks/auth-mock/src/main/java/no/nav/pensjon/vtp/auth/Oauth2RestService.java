@@ -173,13 +173,36 @@ public class Oauth2RestService {
             @FormParam("grant_type") String grantType,
             @FormParam("realm") String realm,
             @FormParam("code") String code,
+            @FormParam("refresh_token") String refreshToken,
             @FormParam("redirect_uri") String redirectUri) {
-        // dummy sikkerhet, returnerer alltid en idToken/refresh_token
-        String token = createIdToken(req, code);
-        LOG.info("Fikk parametere:" + req.getParameterMap().toString());
-        LOG.info("kall på /oauth2/access_token, opprettet token: " + token + " med redirect-url: " + redirectUri);
-        Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token);
-        return Response.ok(oauthResponse).build();
+        if ("authorization_code".equals(grantType)) {
+            String token = createIdToken(req, code);
+            LOG.info("Fikk parametere:" + req.getParameterMap().toString());
+            LOG.info("kall på /oauth2/access_token, opprettet token: " + token + " med redirect-url: " + redirectUri);
+            String generatedRefreshToken = "refresh:" + code;
+            String generatedAccessToken = "access:" + code;
+            Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken);
+            return Response.ok(oauthResponse).build();
+        } else if ("refresh_token".equals(grantType)) {
+            if (!refreshToken.startsWith("refresh:")) {
+                String message = "Invalid refresh token " + code;
+                LOG.error(message);
+                return Response.status(Response.Status.FORBIDDEN).entity(message).build();
+            } else {
+                String username = refreshToken.substring(8);
+                String token = createIdToken(req, username);
+                LOG.info("Fikk parametere:" + req.getParameterMap().toString());
+                LOG.info("refresh-token-kall på /oauth2/access_token, opprettet nytt token: " + token);
+                String generatedRefreshToken = "refresh:" + username;
+                String generatedAccessToken = "access:" + username;
+                Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken);
+                return Response.ok(oauthResponse).build();
+            }
+        } else {
+            LOG.error("Unknown grant_type " + grantType);
+            return Response.serverError().entity("Unknown grant_type " + grantType).build();
+        }
+
     }
 
     private String getIssuer() {
