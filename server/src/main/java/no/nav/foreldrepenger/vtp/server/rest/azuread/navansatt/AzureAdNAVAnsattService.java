@@ -149,7 +149,7 @@ public class AzureAdNAVAnsattService {
             throws Exception {
         LOG.info("kall mot AzureAD authorize med redirecturi " + redirectUri);
         Objects.requireNonNull(scope, "Missing the ?scope=xxx query parameter");
-        List<String> validScopes = Arrays.asList("openid", "profile");
+        List<String> validScopes = Arrays.asList("openid", "profile", "offline_access");
         String[] scopes = scope.split("\\s+");
         for (String s : scopes) {
             if (!validScopes.contains(s)) {
