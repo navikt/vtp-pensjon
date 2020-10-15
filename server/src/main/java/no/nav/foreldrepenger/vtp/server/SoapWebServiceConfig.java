@@ -111,6 +111,7 @@ public class SoapWebServiceConfig {
         publishWebService(new PSAKPPEN015Mock(), "/soap/esb/nav-cons-pen-psak-ppen015Web/sca/PSAKPPEN015WSEXP");
         publishWebService(new PENInntektMock(),"/soap/esb/nav-cons-pen-pen-inntektWeb/sca/PENInntektWSEXP");
         publishWebService(new GetApplicationVersionMock(),"/soap/esb/nav-cons-test-getapplicationversionWeb/sca/TESTGetApplicationVersionWSEXP");
+        publishWebService(new PsakSamhandlerMock(),"/soap/esb/nav-cons-pen-psak-samhandlerWeb/sca/PSAKSamhandlerWSEXP");
     }
 
     private void publishWebService(Object ws, String path, WebServiceFeature... features ) {
