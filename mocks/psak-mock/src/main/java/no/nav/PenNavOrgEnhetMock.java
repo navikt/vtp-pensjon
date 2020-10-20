@@ -1,5 +1,11 @@
 package no.nav;
 
+import static java.util.Optional.ofNullable;
+
+import static no.nav.foreldrepenger.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl.getInstance;
+
+import no.nav.foreldrepenger.vtp.testmodell.enheter.EnheterIndeks;
+import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.inf.pen.navorgenhet.*;
 import no.nav.lib.pen.psakpselv.asbo.navorgenhet.*;
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory;
@@ -10,9 +16,8 @@ import javax.jws.*;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
-import java.util.Optional;
 
-import static no.nav.util.PenNAVEnhetUtil.getAsboPenNAVEnhet;
+import java.io.IOException;
 
 @WebService(
         targetNamespace = "http://nav-cons-pen-pen-navorgenhet/no/nav/inf/PENNAVOrgEnhet",
@@ -22,6 +27,16 @@ import static no.nav.util.PenNAVEnhetUtil.getAsboPenNAVEnhet;
 @XmlSeeAlso({ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.navorgenhet.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.navorgenhet.ObjectFactory.class, no.nav.inf.pen.navorgenhet.ObjectFactory.class})
 public class PenNavOrgEnhetMock implements PENNAVOrgEnhet {
     private static final Logger LOG = LoggerFactory.getLogger(PenNavOrgEnhetMock.class);
+
+    private final EnheterIndeks enheterIndeks;
+
+    public PenNavOrgEnhetMock() {
+        try {
+            this.enheterIndeks = getInstance(BasisdataProviderFileImpl.getInstance()).getEnheterIndeks();
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     @WebMethod
@@ -36,12 +51,18 @@ public class PenNavOrgEnhetMock implements PENNAVOrgEnhet {
             className = "no.nav.inf.pen.navorgenhet.HentNAVEnhetResponse"
     )
     @WebResult(
-            name = "hentNAVEnhetResponse",
-            targetNamespace = ""
+            name = "hentNAVEnhetResponse"
     )
-    public ASBOPenNAVEnhet hentNAVEnhet(@WebParam(name = "hentNAVEnhetRequest",targetNamespace = "") ASBOPenNAVEnhet asboPenNAVEnhet) throws HentNAVEnhetFaultPenNAVEnhetIkkeFunnetMsg, HentNAVEnhetFaultPenGeneriskMsg {
-        LOG.info("Kall mot PenNavOrgEnhetMock hentNAVEnhet med " + Optional.ofNullable(asboPenNAVEnhet).map(ASBOPenNAVEnhet::getEnhetsId).orElse(""));
-        return getAsboPenNAVEnhet();
+    public ASBOPenNAVEnhet hentNAVEnhet(@WebParam(name = "hentNAVEnhetRequest") ASBOPenNAVEnhet asboPenNAVEnhet) throws HentNAVEnhetFaultPenNAVEnhetIkkeFunnetMsg, HentNAVEnhetFaultPenGeneriskMsg {
+        LOG.info("Kall mot PenNavOrgEnhetMock hentNAVEnhet med " + ofNullable(asboPenNAVEnhet).map(ASBOPenNAVEnhet::getEnhetsId).orElse(""));
+        return enheterIndeks.finnByEnhetId(ofNullable(asboPenNAVEnhet.getEnhetsId()).orElseThrow(() -> new HentNAVEnhetFaultPenGeneriskMsg("EnhetsId was null")))
+                .map(m -> {
+                    ASBOPenNAVEnhet e  = new ASBOPenNAVEnhet();
+                    e.setEnhetsId(m.getEnhetId());
+                    e.setEnhetsNavn(m.getNavn());
+                    return e;
+                })
+                .orElseThrow(HentNAVEnhetFaultPenNAVEnhetIkkeFunnetMsg::new);
     }
 
     @WebMethod
