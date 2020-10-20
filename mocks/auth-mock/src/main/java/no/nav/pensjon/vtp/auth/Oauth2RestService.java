@@ -46,10 +46,11 @@ public class Oauth2RestService {
 
     private UserRepository userRepository;
 
-    @Inject
+    @Context
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     @GET
     @Path("/oauth2/authorize")
     @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})

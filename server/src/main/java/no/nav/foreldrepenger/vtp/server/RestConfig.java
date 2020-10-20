@@ -19,6 +19,7 @@ import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
 import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioTemplateRepository;
 import no.nav.foreldrepenger.vtp.testmodell.repo.impl.DelegatingTestscenarioTemplateRepository;
+import no.nav.pensjon.vtp.auth.UserRepository;
 import no.nav.tjeneste.virksomhet.sak.v1.GsakRepo;
 
 public class RestConfig {
@@ -32,11 +33,11 @@ public class RestConfig {
     }
 
     public void setup(TestscenarioBuilderRepository testScenarioRepository,
-                      GsakRepo gsakRepo,
-                      LocalKafkaProducer localKafkaProducer,
-                      AdminClient kafkaAdminClient,
-                      JournalRepository journalRepository,
-                      PensjonTestdataService pensjonTestdataService) {
+            GsakRepo gsakRepo,
+            LocalKafkaProducer localKafkaProducer,
+            AdminClient kafkaAdminClient,
+            JournalRepository journalRepository,
+            PensjonTestdataService pensjonTestdataService, UserRepository userRepository) {
         // Setup RESTEasy's HttpServletDispatcher at "/api/*".
         final ServletContextHandler context = new ServletContextHandler(handler, "/rest");
 
@@ -56,6 +57,7 @@ public class RestConfig {
                 defaultContextObjects.put(LocalKafkaProducer.class, localKafkaProducer);
                 defaultContextObjects.put(AdminClient.class, kafkaAdminClient);
                 defaultContextObjects.put(PensjonTestdataService.class, pensjonTestdataService);
+                defaultContextObjects.put(UserRepository.class, userRepository);
             }
         });
 

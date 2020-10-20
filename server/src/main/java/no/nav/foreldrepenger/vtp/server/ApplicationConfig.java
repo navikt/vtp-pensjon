@@ -141,30 +141,8 @@ public class ApplicationConfig extends Application {
         classes.add(KafkaRestTjeneste.class);
 
         classes.add(LocalDateStringConverterProvider.class);
-        classes.add(UserRepositoryResolver.class);
 
         return classes;
-    }
-
-    @Provider
-    public static class UserRepositoryResolver implements ContextResolver<UserRepository> {
-        @Override
-        public UserRepository getContext(Class<?> aClass) {
-            try {
-                Hashtable<String, String> props = new Hashtable<>();
-                props.put(javax.naming.Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-                props.put(javax.naming.Context.SECURITY_AUTHENTICATION, "none");
-
-                props.put(javax.naming.Context.PROVIDER_URL,
-                        ofNullable(System.getenv("LDAP_PROVIDER_URL"))
-                                .orElse("ldap://localhost:8389/")
-                );
-
-                return new UserRepository(new InitialLdapContext(props, null), UserRepository.defaultLdapName());
-            } catch (NamingException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     @Provider
