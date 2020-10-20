@@ -1,12 +1,10 @@
 package no.nav.foreldrepenger.vtp.server.rest.auth;
 
 import io.swagger.annotations.Api;
-import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
+import no.nav.foreldrepenger.vtp.felles.OidcTokenGenerator;
 import no.nav.foreldrepenger.vtp.server.ws.STSIssueResponseGenerator;
 import no.nav.foreldrepenger.vtp.server.ws.SamlTokenGenerator;
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType;
-import org.jose4j.jws.AlgorithmIdentifiers;
-import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.lang.JoseException;
 
 import javax.ws.rs.*;
@@ -52,12 +50,8 @@ public class STSRestTjeneste {
     @Produces({MediaType.APPLICATION_JSON})
     public UserTokenResponse dummyToken(@QueryParam("grant_type") String grant_type,
                                         @QueryParam("scope") String scope) throws JoseException {
-        JsonWebSignature jws = new JsonWebSignature();
-        jws.setAlgorithmHeaderValue("RS256");
-        jws.setKey(KeyStoreTool.getJsonWebKey().getPrivateKey());
-        jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA256);
-        String token = jws.getCompactSerialization();
-        return new UserTokenResponse(token, 600000L, "jwt");
+        String token = new OidcTokenGenerator("dummyBruker", "").withIssuer(Oauth2RestService.getIssuer()).create();
+        return new UserTokenResponse(token, 600000L, "Bearer");
     }
 
     @GET
