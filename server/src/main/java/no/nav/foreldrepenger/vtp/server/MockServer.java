@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.vtp.server;
 
+import static no.nav.foreldrepenger.vtp.server.RepositoryFactory.createUserRepository;
+
 import no.nav.familie.topic.Topic;
 import no.nav.familie.topic.TopicManifest;
 import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
@@ -15,6 +17,7 @@ import no.nav.foreldrepenger.vtp.testmodell.repo.JournalRepository;
 import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioTemplateRepository;
 import no.nav.foreldrepenger.vtp.testmodell.repo.impl.*;
+import no.nav.pensjon.vtp.auth.UserRepository;
 import no.nav.tjeneste.virksomhet.sak.v1.GsakRepo;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.eclipse.jetty.http.spi.JettyHttpServer;
@@ -66,7 +69,10 @@ public class MockServer {
         ContextHandlerCollection contextHandlerCollection = new ContextHandlerCollection();
         server.setHandler(contextHandlerCollection);
 
-        ldapServer = new LdapServer(new File(KeystoreUtils.getKeystoreFilePath()), KeystoreUtils.getKeyStorePassword().toCharArray());
+        final int listenerPortLdaps = Integer.valueOf(System.getProperty("ldaps.port", "8636")); // 636 er default port for LDAPS
+        final int listenerPortLdap = Integer.valueOf(System.getProperty("ldap.port", "8389")); // 389 er default port for LDAP
+
+        ldapServer = new LdapServer(new File(KeystoreUtils.getKeystoreFilePath()), KeystoreUtils.getKeyStorePassword().toCharArray(), listenerPortLdap, listenerPortLdaps);
         int kafkaBrokerPort = Integer.parseInt(System.getProperty("kafkaBrokerPort", "9092"));
         int zookeeperPort = Integer.parseInt(System.getProperty("zookeeper.port", "2181"));
         kafkaServer = new LocalKafkaServer(zookeeperPort, kafkaBrokerPort, getBootstrapTopics());
@@ -155,6 +161,8 @@ public class MockServer {
 
         PensjonTestdataService pensjonTestdataService = createPensjonTestdataService();
 
+        UserRepository userRepository = createUserRepository();
+
         addRestServices(handler,
                 testScenarioRepository,
                 templateRepository,
@@ -162,7 +170,8 @@ public class MockServer {
                 kafkaServer.getLocalProducer(),
                 kafkaServer.getKafkaAdminClient(),
                 journalRepository,
-                pensjonTestdataService);
+                pensjonTestdataService,
+                userRepository);
 
 
         addWebResources(handler);
@@ -204,11 +213,12 @@ public class MockServer {
     }
 
     protected void addRestServices(HandlerContainer handler, TestscenarioBuilderRepository testScenarioRepository,
-                                   DelegatingTestscenarioTemplateRepository templateRepository,
-                                   GsakRepo gsakRepo, LocalKafkaProducer localKafkaProducer, AdminClient kafkaAdminClient,
-                                   JournalRepository journalRepository,
-                                   PensjonTestdataService pensjonTestdataService) {
-        new RestConfig(handler, templateRepository).setup(testScenarioRepository, gsakRepo, localKafkaProducer, kafkaAdminClient,journalRepository, pensjonTestdataService);
+            DelegatingTestscenarioTemplateRepository templateRepository,
+            GsakRepo gsakRepo, LocalKafkaProducer localKafkaProducer, AdminClient kafkaAdminClient,
+            JournalRepository journalRepository,
+            PensjonTestdataService pensjonTestdataService, UserRepository userRepository) {
+        new RestConfig(handler, templateRepository)
+                .setup(testScenarioRepository, gsakRepo, localKafkaProducer, kafkaAdminClient,journalRepository, pensjonTestdataService, userRepository);
     }
 
     protected void addWebResources(HandlerContainer handlerContainer) {

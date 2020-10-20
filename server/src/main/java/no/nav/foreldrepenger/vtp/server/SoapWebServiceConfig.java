@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.vtp.server;
 
 import no.nav.*;
 import no.nav.esb.getapplicationversion.GetApplicationVersionMock;
-import no.nav.foreldrepenger.vtp.server.ws.SecurityTokenServiceMockImpl;
+import no.nav.pensjon.vtp.auth.SecurityTokenServiceMockImpl;
 import no.nav.foreldrepenger.vtp.testmodell.repo.JournalRepository;
 import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.navansatt.NavAnsattServiceMockImpl;

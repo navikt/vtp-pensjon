@@ -13,6 +13,7 @@
     <modules>
         <module>arbeidsforhold-mock</module>
         <module>arena-mock</module>
+        <module>auth-mock</module>
         <module>journalpost-mock</module>
         <module>dialog-mock</module>
         <module>dokumentproduksjon-mock</module>

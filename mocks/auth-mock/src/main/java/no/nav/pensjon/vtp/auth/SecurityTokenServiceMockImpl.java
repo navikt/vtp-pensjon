@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.vtp.server.ws;
+package no.nav.pensjon.vtp.auth;
 
 import javax.annotation.Resource;
 import javax.jws.HandlerChain;

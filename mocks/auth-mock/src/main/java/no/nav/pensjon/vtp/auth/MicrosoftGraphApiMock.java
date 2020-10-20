@@ -1,7 +1,6 @@
-package no.nav.foreldrepenger.vtp.server.rest.azuread.navansatt;
+package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
-import no.nav.foreldrepenger.vtp.server.rest.auth.UserRepository;
 import no.nav.foreldrepenger.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.foreldrepenger.vtp.testmodell.ansatt.NAVAnsatt;
 import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
