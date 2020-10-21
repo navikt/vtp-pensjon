@@ -1,18 +1,17 @@
-package no.nav.foreldrepenger.vtp.server.ws;
+package no.nav.pensjon.vtp.auth;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.security.Principal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 
-import no.nav.foreldrepenger.vtp.felles.KeystoreUtils;
 import org.apache.cxf.security.SecurityContext;
 import org.apache.cxf.sts.StaticSTSProperties;
 import org.apache.cxf.sts.operation.TokenIssueOperation;
@@ -24,8 +23,11 @@ import org.apache.cxf.sts.token.delegation.UsernameTokenDelegationHandler;
 import org.apache.cxf.sts.token.provider.SAMLTokenProvider;
 import org.apache.cxf.sts.token.provider.TokenProvider;
 import org.apache.cxf.sts.token.provider.TokenProviderParameters;
-import org.apache.cxf.ws.security.sts.provider.model.*;
-import org.apache.cxf.ws.security.sts.provider.model.utility.AttributedDateTime;
+import org.apache.cxf.ws.security.sts.provider.model.ObjectFactory;
+import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenCollectionType;
+import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseCollectionType;
+import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType;
+import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenType;
 import org.apache.wss4j.common.crypto.Crypto;
 import org.apache.wss4j.common.crypto.CryptoFactory;
 import org.apache.wss4j.common.ext.WSPasswordCallback;
@@ -34,6 +36,7 @@ import org.apache.wss4j.common.principal.CustomTokenPrincipal;
 import org.apache.wss4j.dom.engine.WSSConfig;
 
 import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
+import no.nav.foreldrepenger.vtp.felles.KeystoreUtils;
 
 public class STSIssueResponseGenerator {
 

@@ -1,9 +1,10 @@
-package no.nav.foreldrepenger.vtp.server.rest.auth;
+package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
+import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
+import no.nav.pensjon.vtp.auth.STSIssueResponseGenerator;
+import no.nav.pensjon.vtp.auth.SamlTokenGenerator;
 import no.nav.foreldrepenger.vtp.felles.OidcTokenGenerator;
-import no.nav.foreldrepenger.vtp.server.ws.STSIssueResponseGenerator;
-import no.nav.foreldrepenger.vtp.server.ws.SamlTokenGenerator;
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType;
 import org.jose4j.lang.JoseException;
 

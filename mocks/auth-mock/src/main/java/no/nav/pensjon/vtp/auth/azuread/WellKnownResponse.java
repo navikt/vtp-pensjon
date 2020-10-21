@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.vtp.server.rest.azuread.navansatt;
+package no.nav.pensjon.vtp.auth.azuread;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

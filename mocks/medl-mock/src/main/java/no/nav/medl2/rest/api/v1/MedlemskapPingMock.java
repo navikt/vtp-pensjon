@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 public class MedlemskapPingMock {
     @GET
     public Response ping() {
-        return Response.ok().build();
+        return Response.ok("pong").build();
     }
 }
 

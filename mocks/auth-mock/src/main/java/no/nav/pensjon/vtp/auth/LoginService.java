@@ -1,9 +1,10 @@
-package no.nav.foreldrepenger.vtp.server.rest.auth;
+package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
 import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
 import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioRepository;
-import org.apache.commons.lang.StringEscapeUtils;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jose4j.jwk.RsaJsonWebKey;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
@@ -52,7 +53,7 @@ public class LoginService {
                 String.join("", rows) +
                 (rows.isEmpty() ? "Det finnes visst ingen personer i VTP akkurat nå. Prøv å <a href=\"/#/\">laste inn et scenario</a>!" : "") +
                 "<form method=\"get\" action=\"login-redirect-with-cookie\">" +
-                "<input type=\"hidden\" name=\"redirect\" value=\""+ StringEscapeUtils.escapeHtml(redirect) +"\">" +
+                "<input type=\"hidden\" name=\"redirect\" value=\""+ StringEscapeUtils.escapeHtml4(redirect) +"\">" +
                 "<input name=\"fnr\" placeholder=\"Fyll inn et annet fødselsnummer\" style=\"width: 200px\"><input type=\"submit\"></form>" +
                 "</div>" +
                 "</body>" +

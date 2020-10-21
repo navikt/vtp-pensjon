@@ -39,12 +39,6 @@
             <artifactId>nav-fim-behandleJournal-v3-tjenestespesifikasjon</artifactId>
         </dependency>
 
-        <dependency>
-        <groupId>no.nav.tjenestespesifikasjoner</groupId>
-        <artifactId>nav-behandleInngaaendeJournal-v1-tjenestespesifikasjon</artifactId>
-        </dependency>
-
-
         <!-- 3dje parts biblioteker -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>

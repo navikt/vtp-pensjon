@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.vtp.server.ws;
+package no.nav.pensjon.vtp.auth;
 
 import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
 import org.w3c.dom.Document;

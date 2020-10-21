@@ -48,6 +48,10 @@
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>auth-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>norg2-mock</artifactId>
         </dependency>
         <dependency>
@@ -206,8 +210,10 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>getapplicationversion</artifactId>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+            <version>1.0.3</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <build>
