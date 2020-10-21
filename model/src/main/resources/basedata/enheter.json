@@ -49,6 +49,20 @@
 		 "type": "FPY"
 	 },
 	 {
+		 "diskresjonskode": "PEN-ANK",
+		 "navn": "Klage og anke enhet",
+		 "enhetId": "0042",
+		 "status": "AKTIV",
+		 "type": "FPY"
+	 },
+	 {
+		 "diskresjonskode": "PEN-FOR",
+		 "navn": "Forvaltningsenhet",
+		 "enhetId": "0044",
+		 "status": "AKTIV",
+		 "type": "FPY"
+	 },
+	 {
 		 "diskresjonskode": "UFO",
 		 "navn": "NAV Arbeid og ytelser Tønsberg",
 		 "enhetId": "4407",
