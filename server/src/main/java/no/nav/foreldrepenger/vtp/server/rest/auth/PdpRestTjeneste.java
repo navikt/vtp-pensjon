@@ -67,12 +67,12 @@ public class PdpRestTjeneste {
 
         if (antallPermits > 1) {
             int genPermits = antallPermits;
-            String permitResult = permit;
+            StringBuilder permitResult = new StringBuilder(permit);
             while (genPermits-- > 1) {
-                permitResult += ", " + permit;
+                permitResult.append(", ").append(permit);
             }
 
-            return " { \"Response\" : [" + permitResult + "] }";
+            return " { \"Response\" : [" + permitResult.toString() + "] }";
         } else {
             return " { \"Response\" : " + permit + "}";
         }
