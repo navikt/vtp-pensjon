@@ -1,7 +1,5 @@
 package no.nav.foreldrepenger.vtp.server;
 
-import static java.util.Optional.ofNullable;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -26,7 +24,7 @@ import no.nav.pensjon.vtp.auth.Oauth2RestService;
 import no.nav.pensjon.vtp.auth.PdpRestTjeneste;
 import no.nav.pensjon.vtp.auth.STSRestTjeneste;
 import no.nav.pensjon.vtp.auth.azuread.AzureAdNAVAnsattService;
-import no.nav.pensjon.vtp.auth.MicrosoftGraphApiMock;
+import no.nav.pensjon.vtp.auth.azuread.MicrosoftGraphApiMock;
 import no.nav.infotrygdks.InfotrygdKontantstotteMock;
 import no.nav.infotrygdpaaroerendesykdom.rest.PårørendeSykdomMock;
 import no.nav.medl2.rest.api.v1.MedlemskapPingMock;
@@ -34,7 +32,6 @@ import no.nav.medl2.rest.api.v1.MedlemskapsunntakMock;
 import no.nav.oppgave.OppgaveKontantstotteMockImpl;
 import no.nav.oppgave.OppgaveMockImpl;
 import no.nav.oppgave.OppgaveInternalAliveMockImpl;
-import no.nav.pensjon.vtp.auth.UserRepository;
 import no.nav.psak.aktoerregister.rest.api.v1.PsakAktoerIdentMock;
 import no.nav.sigrun.SigrunMock;
 import no.nav.tjeneste.fpformidling.FpFormidlingMock;
@@ -49,8 +46,6 @@ import no.nav.vtp.hentinntektlistebolk.HentInntektlisteBolkREST;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.naming.NamingException;
-import javax.naming.ldap.InitialLdapContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Produces;
@@ -70,8 +65,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Optional;
 import java.util.Set;
 
 public class ApplicationConfig extends Application {

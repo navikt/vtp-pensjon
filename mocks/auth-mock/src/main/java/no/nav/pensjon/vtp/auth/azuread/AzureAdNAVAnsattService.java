@@ -1,9 +1,12 @@
 package no.nav.pensjon.vtp.auth.azuread;
 
+import static no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.getInstance;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import no.nav.foreldrepenger.vtp.felles.AzureOidcTokenGenerator;
 import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
+import no.nav.foreldrepenger.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse;
 import no.nav.pensjon.vtp.auth.UserRepository;
 import no.nav.foreldrepenger.vtp.testmodell.ansatt.NAVAnsatt;
@@ -23,6 +26,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,10 +38,19 @@ public class AzureAdNAVAnsattService {
     private static final Logger LOG = LoggerFactory.getLogger(AzureAdNAVAnsattService.class);
 
     private UserRepository userRepository;
+    private final AnsatteIndeks ansatteIndeks;
 
-    @Inject
+    @Context
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public AzureAdNAVAnsattService() {
+        try {
+            ansatteIndeks = getInstance().getAnsatteIndeks();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GET
@@ -111,7 +125,7 @@ public class AzureAdNAVAnsattService {
             String[] codeData = code.split(";");
             String username = codeData[0];
             String nonce = codeData.length > 1 ? codeData[1] : null;
-            NAVAnsatt user = BasisdataProviderFileImpl.getInstance().getAnsatteIndeks().hentNAVAnsatt(username).orElseThrow(() -> new RuntimeException("Fant ikke NAV-ansatt med brukernavn " + username));
+            NAVAnsatt user = ansatteIndeks.hentNAVAnsatt(username).orElseThrow(() -> new RuntimeException("Fant ikke NAV-ansatt med brukernavn " + username));
 
             String issuer = getIssuer(tenant);
             AzureOidcTokenGenerator tokenGenerator = new AzureOidcTokenGenerator(username, nonce).withIssuer(issuer);
