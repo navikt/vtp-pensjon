@@ -199,7 +199,7 @@ public class Oauth2RestService {
 
     }
 
-    private String getIssuer() {
+    public static String getIssuer() {
         if (null != System.getenv("ISSO_OAUTH2_ISSUER")) {
             return System.getenv("ISSO_OAUTH2_ISSUER");
         } else {

@@ -69,7 +69,22 @@ public class PenPersonServiceMockImpl implements PENPerson {
     }
 
     @Override
-    public ASBOPenPerson hentFamilierelasjoner(ASBOPenHentFamilierelasjonerRequest hentFamilierelasjonerRequest) throws HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg, HentFamilierelasjonerFaultPenGeneriskMsg {
+    @WebMethod
+    @RequestWrapper(
+            localName = "hentFamilierelasjoner",
+            targetNamespace = "http://nav-cons-pen-pen-person/no/nav/inf/PENPerson",
+            className = "no.nav.inf.pen.person.HentFamilierelasjoner"
+    )
+    @ResponseWrapper(
+            localName = "hentFamilierelasjonerResponse",
+            targetNamespace = "http://nav-cons-pen-pen-person/no/nav/inf/PENPerson",
+            className = "no.nav.inf.pen.person.HentFamilierelasjonerResponse"
+    )
+    @WebResult(
+            name = "hentFamilierelasjonerResponse",
+            targetNamespace = ""
+    )
+    public ASBOPenPerson hentFamilierelasjoner(@WebParam(name = "hentFamilierelasjonerRequest", targetNamespace = "") ASBOPenHentFamilierelasjonerRequest hentFamilierelasjonerRequest) throws HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg, HentFamilierelasjonerFaultPenGeneriskMsg {
         return getASBOPenPerson(hentFamilierelasjonerRequest.getFodselsnummer()).orElseThrow(HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg::new);
     }
 

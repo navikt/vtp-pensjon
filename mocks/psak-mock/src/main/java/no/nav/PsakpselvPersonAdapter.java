@@ -82,6 +82,22 @@ public class PsakpselvPersonAdapter {
                 .peek(p -> relasjon.setTom(fetchDate(personopplysninger.getSøker().getSivilstand().getTom()).orElse(null)))
                 .findFirst().orElseGet(() -> createShallowASBOPerson(fr));
         relasjon.setPerson(annen);
+
+        //annen part må ha en lik relasjon også
+        ASBOPenPerson shallowSoker = new ASBOPenPerson();
+        shallowSoker.setFodselsnummer(personopplysninger.getSøker().getIdent());
+
+        ASBOPenRelasjon annenPartRelasjon = new ASBOPenRelasjon();
+        annenPartRelasjon.setRelasjonsType(relasjon.getRelasjonsType());
+        annenPartRelasjon.setFom(relasjon.getFom());
+        annenPartRelasjon.setFom(relasjon.getTom());
+        annenPartRelasjon.setAdresseStatus(relasjon.getAdresseStatus());
+        annenPartRelasjon.setPerson(shallowSoker);
+
+        ASBOPenRelasjonListe liste = new ASBOPenRelasjonListe();
+        liste.setRelasjoner(new ASBOPenRelasjon[]{annenPartRelasjon});
+        annen.setRelasjoner(liste);
+
         return relasjon;
     }
 
