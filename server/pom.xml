@@ -221,6 +221,10 @@
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>miscellaneous</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>kafka</artifactId>
         </dependency>
         <dependency>

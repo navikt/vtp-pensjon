@@ -23,6 +23,7 @@
         <module>mocks</module>
         <module>server</module>
         <module>vtp-pensjon-application</module>
+        <module>miscellaneous</module>
         <module>kafka</module>
     </modules>
 
@@ -275,6 +276,11 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>no.nav.pensjon.vtp</groupId>
+                <artifactId>miscellaneous</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>kafka</artifactId>
