@@ -16,7 +16,6 @@ import no.nav.pensjon.vtp.mocks.fpformidling.dto.DokumentProdusertDto;
 import no.nav.pensjon.vtp.mocks.fpformidling.dto.DokumentbestillingDto;
 import no.nav.pensjon.vtp.mocks.fpformidling.dto.HentBrevmalerDto;
 import no.nav.pensjon.vtp.mocks.fpformidling.dto.TekstFraSaksbehandlerDto;
-import no.nav.tjeneste.fpformidling.dto.*;
 
 @Api("/fpformidling")
 @Path("/fpformidling")

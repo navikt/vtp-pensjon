@@ -1,14 +1,39 @@
 package no.nav.pensjon.vtp.server;
 
-import no.nav.*;
-import no.nav.esb.getapplicationversion.GetApplicationVersionMock;
+import java.lang.reflect.Method;
+
+import javax.xml.ws.Endpoint;
+import javax.xml.ws.WebServiceFeature;
+
+import org.eclipse.jetty.http.spi.HttpSpiContextHandler;
+import org.eclipse.jetty.http.spi.JettyHttpContext;
+import org.eclipse.jetty.http.spi.JettyHttpServer;
+
 import no.nav.pensjon.vtp.auth.SecurityTokenServiceMockImpl;
-import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
-import no.nav.navansatt.NavAnsattServiceMockImpl;
-import no.nav.okonomi.tilbakekrevingservice.TilbakekrevingServiceMockImpl;
-import no.nav.pip.egen.ansatt.v1.EgenAnsattServiceMockImpl;
+import no.nav.pensjon.vtp.mocks.dialog.DialogMock;
+import no.nav.pensjon.vtp.mocks.egenansatt.pip.egen.ansatt.v1.EgenAnsattServiceMockImpl;
+import no.nav.pensjon.vtp.mocks.esb.getapplicationversion.GetApplicationVersionMock;
+import no.nav.pensjon.vtp.mocks.navansatt.NavAnsattServiceMockImpl;
+import no.nav.pensjon.vtp.mocks.oppdrag.okonomi.tilbakekrevingservice.TilbakekrevingServiceMockImpl;
 import no.nav.pensjon.vtp.mocks.organisasjonenhet.v2.OrganisasjonEnhetMock;
+import no.nav.pensjon.vtp.mocks.psak.HenvendelseMock;
+import no.nav.pensjon.vtp.mocks.psak.JournalMock;
+import no.nav.pensjon.vtp.mocks.psak.MedlemskapMock;
+import no.nav.pensjon.vtp.mocks.psak.OppgaveBehandlingMock;
+import no.nav.pensjon.vtp.mocks.psak.PENFullmaktMock;
+import no.nav.pensjon.vtp.mocks.psak.PENInntektMock;
+import no.nav.pensjon.vtp.mocks.psak.PENOppdragMock;
+import no.nav.pensjon.vtp.mocks.psak.PSAKPPEN015Mock;
+import no.nav.pensjon.vtp.mocks.psak.PenNavOrgEnhetMock;
+import no.nav.pensjon.vtp.mocks.psak.PenPersonServiceMockImpl;
+import no.nav.pensjon.vtp.mocks.psak.PenTjenestePensjonMock;
+import no.nav.pensjon.vtp.mocks.psak.PersonV2ServiceMockImpl;
+import no.nav.pensjon.vtp.mocks.psak.PsakNavOrgEnhetMock;
+import no.nav.pensjon.vtp.mocks.psak.PsakPersonServiceMockImpl;
+import no.nav.pensjon.vtp.mocks.psak.PsakSamhandlerMock;
+import no.nav.pensjon.vtp.mocks.psak.PselvPersonServiceMockImpl;
+import no.nav.pensjon.vtp.mocks.psak.SakMock;
+import no.nav.pensjon.vtp.mocks.tjenestespesifikasjoner.DigitalKontaktinformasjonV1Mock;
 import no.nav.pensjon.vtp.mocks.virksomhet.aktoer.v2.AktoerServiceMockImpl;
 import no.nav.pensjon.vtp.mocks.virksomhet.arbeidsfordeling.v1.ArbeidsfordelingMockImpl;
 import no.nav.pensjon.vtp.mocks.virksomhet.arbeidsforhold.v3.ArbeidsforholdMockImpl;
@@ -33,14 +58,8 @@ import no.nav.pensjon.vtp.mocks.virksomhet.organisasjon.v5.OrganisasjonV5MockImp
 import no.nav.pensjon.vtp.mocks.virksomhet.person.v3.PersonServiceMockImpl;
 import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
 import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.SakServiceMockImpl;
-import no.nav.tjenestespesifikasjoner.DigitalKontaktinformasjonV1Mock;
-import org.eclipse.jetty.http.spi.HttpSpiContextHandler;
-import org.eclipse.jetty.http.spi.JettyHttpContext;
-import org.eclipse.jetty.http.spi.JettyHttpServer;
-
-import javax.xml.ws.Endpoint;
-import javax.xml.ws.WebServiceFeature;
-import java.lang.reflect.Method;
+import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 
 public class SoapWebServiceConfig {
 
