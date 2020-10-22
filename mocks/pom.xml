@@ -37,7 +37,6 @@
         <module>organisasjon-mock</module>
         <module>sigrun-mock</module>
         <module>tps-mock</module>
-        <module>infotrygd-paaroerende-sykdom-mock</module>
         <module>nav-ansatt-mock</module>
         <module>psak-mock</module>
         <module>digital-kontakt-informasjon-mock</module>

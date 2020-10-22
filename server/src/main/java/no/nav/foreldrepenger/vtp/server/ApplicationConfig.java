@@ -26,7 +26,6 @@ import no.nav.pensjon.vtp.auth.STSRestTjeneste;
 import no.nav.pensjon.vtp.auth.azuread.AzureAdNAVAnsattService;
 import no.nav.pensjon.vtp.auth.azuread.MicrosoftGraphApiMock;
 import no.nav.infotrygdks.InfotrygdKontantstotteMock;
-import no.nav.infotrygdpaaroerendesykdom.rest.PårørendeSykdomMock;
 import no.nav.medl2.rest.api.v1.MedlemskapPingMock;
 import no.nav.medl2.rest.api.v1.MedlemskapsunntakMock;
 import no.nav.oppgave.OppgaveKontantstotteMockImpl;
@@ -109,7 +108,6 @@ public class ApplicationConfig extends Application {
         classes.add(OppgaveInternalAliveMockImpl.class);
         classes.add(AktoerIdentMock.class);
         classes.add(PsakAktoerIdentMock.class);
-        classes.add(PårørendeSykdomMock.class);
         classes.add(InnsynMock.class);
         classes.add(DokdistfordelingMock.class);
         classes.add(STSRestTjeneste.class);
