@@ -12,7 +12,7 @@ import no.nav.aktoerregister.rest.api.v1.AktoerIdentMock;
 import no.nav.dokarkiv.JournalpostMock;
 import no.nav.dokdistfordeling.DokdistfordelingMock;
 import no.nav.pensjon.vtp.miscellaneous.api.journalforing.JournalforingRestTjeneste;
-import no.nav.pensjon.vtp.server.api.kafka.KafkaRestTjeneste;
+import no.nav.pensjon.vtp.kafka.KafkaRestTjeneste;
 import no.nav.pensjon.vtp.miscellaneous.api.sak.SakRestTjeneste;
 import no.nav.pensjon.vtp.miscellaneous.api.scenario.TestscenarioRestTjeneste;
 import no.nav.pensjon.vtp.miscellaneous.api.scenario.TestscenarioTemplateRestTjeneste;

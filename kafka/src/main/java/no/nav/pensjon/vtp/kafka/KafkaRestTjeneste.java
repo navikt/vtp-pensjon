@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.server.api.kafka;
+package no.nav.pensjon.vtp.kafka;
 
 import java.util.ArrayList;
 import java.util.Collections;
