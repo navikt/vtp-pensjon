@@ -1,4 +1,11 @@
 server:
   port: 8060
-  servlet:
-    context-path: /rest
+cxf:
+  path: /soap
+spring:
+  jersey:
+    application-path: /rest
+
+pensjon:
+  testdata:
+    url: http://localhost:3000

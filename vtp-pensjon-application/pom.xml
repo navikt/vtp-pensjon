@@ -12,7 +12,9 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>no.nav.pensjon.vtp</groupId>
     <artifactId>vtp-pensjon-application</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
     <dependencyManagement>
         <dependencies>
@@ -23,22 +25,150 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-access</artifactId>
+                <version>1.2.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+                <version>3.4.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>medl-mock</artifactId>
+            <artifactId>ldap-mock</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>ldap-mock</artifactId>
+            <artifactId>tps-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>gsak-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>joark-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>journalpost-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>infotrygd-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>infotrygd-kontantstotte-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>medl-mock</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>auth-mock</artifactId>
         </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>norg2-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>inntekt-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>arbeidsforhold-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>organisasjon-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>sigrun-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>infotrygd-paaroerende-sykdom-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>kodeverk-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>dokumentproduksjon-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>oppdrag-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>dummy-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>dokdist-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>egenansatt-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>enonic-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>innsynjournal-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>oppgave-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>arena-mock</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>nav-ansatt-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>psak-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>dialog-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>digital-kontakt-informasjon-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>getapplicationversion</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>miscellaneous</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>frontend</artifactId>
+            <scope>provided</scope>
+       </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -55,6 +185,48 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-access</artifactId>
+        </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.2</version>
+                <executions>
+                    <execution>
+                        <id>unpack-frontend</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>no.nav.pensjon.vtp</groupId>
+                                    <artifactId>frontend</artifactId>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                    <includes>public/**</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
