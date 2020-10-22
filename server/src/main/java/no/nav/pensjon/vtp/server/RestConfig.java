@@ -6,7 +6,7 @@ import javax.servlet.ServletContextEvent;
 
 import no.nav.pensjon.vtp.kafkaembedded.LocalKafkaProducer;
 
-import no.nav.pensjon.vtp.server.api.pensjon_testdata.PensjonTestdataService;
+import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataService;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import org.apache.kafka.clients.admin.AdminClient;

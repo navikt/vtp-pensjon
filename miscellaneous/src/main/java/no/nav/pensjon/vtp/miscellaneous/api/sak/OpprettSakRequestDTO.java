@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.server.api.sak;
+package no.nav.pensjon.vtp.miscellaneous.api.sak;
 
 import java.util.List;
 

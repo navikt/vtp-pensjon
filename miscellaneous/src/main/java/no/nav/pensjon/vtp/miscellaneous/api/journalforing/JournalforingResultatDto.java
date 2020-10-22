@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.server.api.journalforing;
+package no.nav.pensjon.vtp.miscellaneous.api.journalforing;
 
 public class JournalforingResultatDto {
 

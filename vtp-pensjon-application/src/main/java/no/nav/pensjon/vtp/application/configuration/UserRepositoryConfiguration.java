@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
-import no.nav.pensjon.vtp.server.api.pensjon_testdata.PensjonTestdataService;
-import no.nav.pensjon.vtp.server.api.pensjon_testdata.PensjonTestdataServiceImpl;
+import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataService;
+import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataServiceImpl;
 import no.nav.pensjon.vtp.testmodell.repo.BasisdataProvider;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;

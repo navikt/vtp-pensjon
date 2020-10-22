@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.server.rest;
+package no.nav.pensjon.vtp.miscellaneous.rest;
 
 import static javax.ws.rs.client.ClientBuilder.newClient;
 

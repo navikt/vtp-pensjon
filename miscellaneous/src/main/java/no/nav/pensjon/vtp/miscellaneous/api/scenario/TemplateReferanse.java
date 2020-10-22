@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.server.api.scenario;
+package no.nav.pensjon.vtp.miscellaneous.api.scenario;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.server.api.pensjon_testdata;
+package no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata;
 
 import static java.util.Optional.of;
 

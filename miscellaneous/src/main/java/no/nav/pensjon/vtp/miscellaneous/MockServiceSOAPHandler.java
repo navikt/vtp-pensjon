@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.server;
+package no.nav.pensjon.vtp.miscellaneous;
 
 import java.util.HashSet;
 import java.util.Set;

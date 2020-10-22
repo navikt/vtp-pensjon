@@ -1,11 +1,11 @@
-package no.nav.pensjon.vtp.server.api.scenario;
+package no.nav.pensjon.vtp.miscellaneous.api.scenario;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import no.nav.pensjon.vtp.kontrakter.TestscenarioDto;
 import no.nav.pensjon.vtp.kontrakter.TestscenarioPersonopplysningDto;
 import no.nav.pensjon.vtp.kontrakter.TestscenariodataDto;
-import no.nav.pensjon.vtp.server.api.pensjon_testdata.PensjonTestdataService;
+import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataService;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.ArbeidsforholdModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BarnModell;

@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.server.rest;
+package no.nav.pensjon.vtp.miscellaneous.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -8,13 +8,13 @@ import javax.ws.rs.core.MediaType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(tags = { "isReady" })
-@Path("/isReady")
-public class IsReadyImpl {
+@Api(tags = { "isAlive" })
+@Path("/isAlive")
+public class IsAliveImpl {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @ApiOperation(value = "isReady", notes = ("Sjekker om systemet er ready for NAIS"))
+    @ApiOperation(value = "isAlive", notes = ("Sjekker om systemet er alive for NAIS"))
     public String buildPermitResponse() {
         return "OK";
     }
