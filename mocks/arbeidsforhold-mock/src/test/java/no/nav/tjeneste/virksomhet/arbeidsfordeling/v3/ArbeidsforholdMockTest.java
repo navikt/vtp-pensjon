@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.server;
+package no.nav.tjeneste.virksomhet.arbeidsfordeling.v3;
 
 import java.io.IOException;
 
@@ -31,7 +31,7 @@ public class ArbeidsforholdMockTest {
 
     @Before
     public void setup() throws IOException {
-        System.setProperty("scenarios.dir", "../model/scenarios");
+        System.setProperty("scenarios.dir", "../../model/scenarios");
         TestscenarioTemplateRepositoryImpl templateRepositoryImpl = TestscenarioTemplateRepositoryImpl.getInstance();
         templateRepositoryImpl.load();
 

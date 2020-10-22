@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.server;
+package no.nav.tjeneste.virksomhet.person.v3;
 
 /**
  * @author schrepfler
