@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.fpmock.server;
+package no.nav.pensjon.vtp.server;
 
 import java.net.MalformedURLException;
 import java.net.URL;

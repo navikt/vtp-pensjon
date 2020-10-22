@@ -16,7 +16,6 @@ import no.nav.pensjon.vtp.server.api.pensjon_testdata.PensjonTestdataServiceNull
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.*;
 import no.nav.pensjon.vtp.auth.UserRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.DelegatingTestscenarioRepository;

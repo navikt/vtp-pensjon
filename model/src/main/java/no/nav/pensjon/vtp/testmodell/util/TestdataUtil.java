@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.testmodell.util;
 
-import no.nav.foreldrepenger.vtp.testmodell.personopplysning.*;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AnnenPartModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonNavn;

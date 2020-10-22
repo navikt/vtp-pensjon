@@ -11,7 +11,6 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModeller;
-import no.nav.foreldrepenger.vtp.testmodell.personopplysning.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

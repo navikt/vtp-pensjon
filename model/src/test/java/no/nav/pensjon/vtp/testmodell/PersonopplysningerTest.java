@@ -1,7 +1,6 @@
 package no.nav.pensjon.vtp.testmodell;
 
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapperiodeModell;
-import no.nav.foreldrepenger.vtp.testmodell.personopplysning.*;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BarnModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell.Kjønn;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Landkode;
@@ -12,7 +11,6 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.StatsborgerskapModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.*;
 import no.nav.pensjon.vtp.testmodell.repo.impl.StringTestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
