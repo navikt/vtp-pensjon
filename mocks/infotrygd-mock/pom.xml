@@ -23,10 +23,6 @@
 
         <!-- 3dje parts biblioteker -->
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-http-spi</artifactId>
-        </dependency>
-        <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>core</artifactId>
         </dependency>

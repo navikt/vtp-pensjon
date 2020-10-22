@@ -12,10 +12,6 @@
 
 	<dependencies>
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-http-spi</artifactId>
-        </dependency>
-        <dependency>
             <groupId>no.nav.tjenester</groupId>
             <artifactId>aordningen-inntektsinformasjon-v1</artifactId>
         </dependency>

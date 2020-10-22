@@ -13,10 +13,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-http-spi</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>no.nav.tjenestespesifikasjoner</groupId>
 			<artifactId>nav-arbeidsforhold-v3-tjenestespesifikasjon</artifactId>
 		</dependency>
