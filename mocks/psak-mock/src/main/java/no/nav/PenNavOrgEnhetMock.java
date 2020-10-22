@@ -23,7 +23,7 @@ import java.io.IOException;
         targetNamespace = "http://nav-cons-pen-pen-navorgenhet/no/nav/inf/PENNAVOrgEnhet",
         name = "PENNAVOrgEnhet"
 )
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 @XmlSeeAlso({ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.navorgenhet.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.navorgenhet.ObjectFactory.class, no.nav.inf.pen.navorgenhet.ObjectFactory.class})
 public class PenNavOrgEnhetMock implements PENNAVOrgEnhet {
     private static final Logger LOG = LoggerFactory.getLogger(PenNavOrgEnhetMock.class);

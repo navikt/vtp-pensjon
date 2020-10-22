@@ -43,7 +43,7 @@ import no.nav.tjeneste.virksomhet.sak.v1.GsakRepo;
 
 @Addressing
 @WebService(name = "Oppgavebehandling_v3", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgavebehandling/v3")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class OppgavebehandlingServiceMockImpl implements OppgavebehandlingV3 {
 
     private static final Logger LOG = LoggerFactory.getLogger(OppgavebehandlingServiceMockImpl.class);

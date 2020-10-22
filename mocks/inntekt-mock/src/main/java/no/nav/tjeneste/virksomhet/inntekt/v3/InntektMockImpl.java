@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 @Addressing
 @WebService(name = "Inntekt_v3", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class InntektMockImpl implements InntektV3 {
 
     private static final Logger LOG = LoggerFactory.getLogger(InntektMockImpl.class);

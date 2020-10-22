@@ -15,7 +15,7 @@ import javax.xml.ws.ResponseWrapper;
         name = "PSAKSamhandler"
 )
 @XmlSeeAlso({no.nav.lib.pen.psakpselv.fault.samhandler.ObjectFactory.class, no.nav.inf.psak.samhandler.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.samhandler.ObjectFactory.class})
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class PsakSamhandlerMock implements PSAKSamhandler {
     private static final Logger LOG = LoggerFactory.getLogger(PsakSamhandlerMock.class);
 

@@ -39,7 +39,7 @@ import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.IdentDetaljer;
 
 @Addressing
 @WebService(name = "Aktoer_v2", targetNamespace = "http://nav.no/tjeneste/virksomhet/aktoer/v2")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class AktoerServiceMockImpl implements AktoerV2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(AktoerServiceMockImpl.class);

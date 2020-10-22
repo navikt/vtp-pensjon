@@ -14,7 +14,7 @@ import javax.xml.ws.ResponseWrapper;
 
 @WebService(targetNamespace = "http://nav.no/virksomhet/tjenester/medlemskap/v1", name = "Medlemskap")
 @XmlSeeAlso({ObjectFactory.class, no.nav.virksomhet.tjenester.medlemskap.feil.v1.ObjectFactory.class, no.nav.virksomhet.tjenester.medlemskap.meldinger.v1.ObjectFactory.class, no.nav.virksomhet.tjenester.felles.v1.ObjectFactory.class, no.nav.virksomhet.grunnlag.medlemskap.v1.ObjectFactory.class})
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class MedlemskapMock implements Medlemskap {
     /**
      * <p>Operasjonen skal tilby å hente en liste med medlemskapsperioder til en person.</p>

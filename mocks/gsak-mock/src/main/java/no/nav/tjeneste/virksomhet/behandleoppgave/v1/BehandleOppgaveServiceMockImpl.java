@@ -18,7 +18,7 @@ import no.nav.tjeneste.virksomhet.sak.v1.GsakRepo;
 
 @Addressing
 @WebService(targetNamespace = "http://nav.no/tjeneste/virksomhet/behandleoppgave/v1", name = "BehandleOppgaveV1")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class BehandleOppgaveServiceMockImpl implements BehandleOppgaveV1 {
 
     private static final Logger LOG = LoggerFactory.getLogger(BehandleOppgaveServiceMockImpl.class);

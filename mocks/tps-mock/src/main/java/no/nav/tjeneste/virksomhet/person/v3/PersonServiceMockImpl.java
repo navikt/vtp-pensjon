@@ -65,7 +65,7 @@ import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentVergeResponse;
 
 @Addressing
 @WebService(name = "Person_v3", targetNamespace = "http://nav.no/tjeneste/virksomhet/person/v3")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class PersonServiceMockImpl implements PersonV3 {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonServiceMockImpl.class);

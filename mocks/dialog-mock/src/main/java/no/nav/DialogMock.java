@@ -14,7 +14,7 @@ import javax.xml.ws.ResponseWrapper;
 
 @WebService(targetNamespace = "http://nav.no/tjeneste/virksomhet/dialog/v1", name = "Dialog_v1")
 @XmlSeeAlso({no.nav.tjeneste.virksomhet.dialog.v1.meldinger.ObjectFactory.class, no.nav.tjeneste.virksomhet.dialog.v1.feil.ObjectFactory.class, ObjectFactory.class, no.nav.tjeneste.virksomhet.dialog.v1.informasjon.ObjectFactory.class})
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class DialogMock implements DialogV1 {
     private static final Logger LOG = LoggerFactory.getLogger(DialogMock.class);
 

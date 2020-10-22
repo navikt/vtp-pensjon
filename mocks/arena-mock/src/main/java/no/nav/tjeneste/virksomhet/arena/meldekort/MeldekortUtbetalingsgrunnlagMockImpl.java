@@ -41,7 +41,7 @@ import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.meldinger.Obje
 
 @Addressing
 @WebService(endpointInterface = "no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.binding.MeldekortUtbetalingsgrunnlagV1")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class MeldekortUtbetalingsgrunnlagMockImpl implements MeldekortUtbetalingsgrunnlagV1 {
 
     private static final Logger LOG = LoggerFactory.getLogger(MeldekortUtbetalingsgrunnlagMockImpl.class);

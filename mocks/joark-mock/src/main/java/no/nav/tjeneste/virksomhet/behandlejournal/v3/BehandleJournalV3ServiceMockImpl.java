@@ -35,7 +35,7 @@ import no.nav.tjeneste.virksomhet.behandlejournal.v3.meldinger.LagreVedleggPaaJo
 
 
 @Addressing
-@HandlerChain(file="Handler-chain.xml")
+@HandlerChain(file="/Handler-chain.xml")
 @WebService(
         targetNamespace = "http://nav.no/tjeneste/virksomhet/behandleJournal/v3",
         name = "behandleJournal_v3"

@@ -16,7 +16,7 @@ import javax.xml.ws.ResponseWrapper;
 
 @WebService(targetNamespace = "http://nav.no/virksomhet/tjenester/arkiv/journal/v2", name = "Journal")
 @XmlSeeAlso({no.nav.virksomhet.tjenester.arkiv.journal.meldinger.v2.ObjectFactory.class, no.nav.virksomhet.tjenester.felles.v1.ObjectFactory.class, ObjectFactory.class, no.nav.virksomhet.gjennomforing.arkiv.journal.v2.ObjectFactory.class, no.nav.virksomhet.tjenester.arkiv.journal.feil.v2.ObjectFactory.class})
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class JournalMock implements Journal {
 
     /**

@@ -18,7 +18,7 @@ import no.nav.tjeneste.pip.egen.ansatt.v1.WSHentErEgenAnsattEllerIFamilieMedEgen
 
 @Addressing
 @WebService(name = "EgenAnsatt_v1", targetNamespace = "http://nav.no/tjeneste/pip/egenAnsatt/v1/")
-@HandlerChain(file="Handler-chain.xml")
+@HandlerChain(file="/Handler-chain.xml")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public class EgenAnsattServiceMockImpl implements EgenAnsattV1 {
     private static final Logger LOG = LoggerFactory.getLogger(EgenAnsattServiceMockImpl.class);

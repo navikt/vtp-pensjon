@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @WebService(targetNamespace = "http://nav-cons-pen-pen-person/no/nav/inf/PENPerson", name = "PENPerson")
 @XmlSeeAlso({no.nav.lib.pen.psakpselv.fault.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.person.ObjectFactory.class, ObjectFactory.class})
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class PenPersonServiceMockImpl implements PENPerson {
     private static final Logger LOG = LoggerFactory.getLogger(PenPersonServiceMockImpl.class);
     private final TestscenarioBuilderRepository repo;

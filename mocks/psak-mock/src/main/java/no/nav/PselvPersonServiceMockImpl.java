@@ -37,7 +37,7 @@ import no.nav.lib.pen.psakpselv.fault.ObjectFactory;
 @SuppressWarnings("ValidExternallyBoundObject")
 @WebService(targetNamespace = "http://nav-cons-pen-pselv-person/no/nav/inf", name = "PSELVPerson")
 @XmlSeeAlso({ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory.class, no.nav.inf.pselv.person.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.tjenestepensjon.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.person.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.person.ObjectFactory.class})
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class PselvPersonServiceMockImpl implements PSELVPerson {
     private static final Logger logger = LoggerFactory.getLogger(PsakPersonServiceMockImpl.class);
 

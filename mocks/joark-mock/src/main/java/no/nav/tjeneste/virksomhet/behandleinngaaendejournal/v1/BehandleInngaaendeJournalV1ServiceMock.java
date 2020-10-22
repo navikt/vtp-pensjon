@@ -17,7 +17,7 @@ import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.Addressing;
 
 @Addressing
-@HandlerChain(file="Handler-chain.xml")
+@HandlerChain(file="/Handler-chain.xml")
 @WebService(
         name = "BehandleInngaaendeJournal_v1",
         targetNamespace = "http://nav.no/tjeneste/virksomhet/behandleInngaaendeJournal/v1"

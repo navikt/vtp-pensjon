@@ -13,7 +13,7 @@ import javax.xml.ws.ResponseWrapper;
 
 @WebService(targetNamespace = "http://nav-cons-pen-pen-fullmakt/no/nav/inf", name = "PENFullmakt")
 @XmlSeeAlso({no.nav.lib.pen.psakpselv.fault.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.fullmakt.ObjectFactory.class, ObjectFactory.class})
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class PENFullmaktMock implements PENFullmakt {
 
     @Override

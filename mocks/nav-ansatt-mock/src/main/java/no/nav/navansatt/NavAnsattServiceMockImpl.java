@@ -23,7 +23,7 @@ import java.util.List;
 
 @Addressing
 @WebService(name = "PSAKNAVAnsatt", targetNamespace = "http://nav-cons-pen-psak-navansatt/no/nav/inf")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class NavAnsattServiceMockImpl implements PSAKNAVAnsatt {
 
     @WebMethod

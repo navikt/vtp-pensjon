@@ -19,7 +19,7 @@ import nav_lib_test.no.nav.test.asbo.ASBOTestGetApplicationVersionResponse;
         targetNamespace = "http://nav-lib-test/no/nav/inf"
 )
 @XmlSeeAlso({ObjectFactory.class, nav_lib_test.no.nav.test.asbo.ObjectFactory.class})
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class GetApplicationVersionMock implements TESTGetApplicationVersion {
     @WebMethod
     @WebResult(

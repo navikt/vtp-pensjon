@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @Addressing
 @WebService(name = "Arbeidsfordeling_v1", targetNamespace = "http://nav.no/tjeneste/virksomhet/arbeidsfordeling/v1/")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class ArbeidsfordelingMockImpl implements ArbeidsfordelingV1 {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArbeidsfordelingMockImpl.class);

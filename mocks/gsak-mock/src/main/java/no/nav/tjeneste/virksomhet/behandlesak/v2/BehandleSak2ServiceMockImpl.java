@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Addressing
 @WebService(targetNamespace = "http://nav.no/tjeneste/virksomhet/behandlesak/v2", name = "BehandleSakV2")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class BehandleSak2ServiceMockImpl implements BehandleSakV2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(BehandleSak2ServiceMockImpl.class);

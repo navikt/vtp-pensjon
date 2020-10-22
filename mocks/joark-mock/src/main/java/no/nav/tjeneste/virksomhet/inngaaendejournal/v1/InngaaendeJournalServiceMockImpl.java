@@ -38,7 +38,7 @@ import no.nav.tjeneste.virksomhet.inngaaendejournal.v1.meldinger.UtledJournalfoe
         name = "InngaaendeJournal_v1",
         targetNamespace = "http://nav.no/tjeneste/virksomhet/inngaaendeJournal/v1"
 )
-@HandlerChain(file="Handler-chain.xml")
+@HandlerChain(file="/Handler-chain.xml")
 public class InngaaendeJournalServiceMockImpl implements InngaaendeJournalV1 {
     private static final Logger LOG = LoggerFactory.getLogger(InngaaendeJournalServiceMockImpl.class);
 

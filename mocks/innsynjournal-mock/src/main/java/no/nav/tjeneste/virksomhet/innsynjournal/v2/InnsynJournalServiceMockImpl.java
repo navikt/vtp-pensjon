@@ -29,7 +29,7 @@ import no.nav.tjeneste.virksomhet.innsynjournal.v2.meldinger.IdentifiserJournalp
 
 @Addressing
 @WebService(name = "InnsynJournal_v2", targetNamespace = "http://nav.no/tjeneste/virksomhet/innsynJournal/v2")
-@HandlerChain(file="Handler-chain.xml")
+@HandlerChain(file="/Handler-chain.xml")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public class InnsynJournalServiceMockImpl implements InnsynJournalV2 {
     private static final Logger LOG = LoggerFactory.getLogger(InnsynJournalServiceMockImpl.class);

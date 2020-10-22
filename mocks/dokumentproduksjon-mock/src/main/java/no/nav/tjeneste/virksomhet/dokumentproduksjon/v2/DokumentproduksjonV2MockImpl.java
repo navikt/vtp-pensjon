@@ -78,7 +78,7 @@ import java.util.Objects;
 
 @Addressing
 @WebService(endpointInterface = "no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.DokumentproduksjonV2")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class DokumentproduksjonV2MockImpl implements DokumentproduksjonV2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(DokumentproduksjonV2MockImpl.class);

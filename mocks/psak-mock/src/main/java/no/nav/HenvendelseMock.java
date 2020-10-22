@@ -13,7 +13,7 @@ import javax.xml.ws.ResponseWrapper;
 
 @WebService(targetNamespace = "http://nav-cons-pen-psak-henvendelse/no/nav/inf", name = "PSAKHenvendelse")
 @XmlSeeAlso({no.nav.lib.pen.psakpselv.fault.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.henvendelse.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.henvendelse.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.oppgave.ObjectFactory.class, ObjectFactory.class})
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class HenvendelseMock implements PSAKHenvendelse {
     @Override
     public ASBOPenHenvendelse lagreHenvendelse(ASBOPenHenvendelse lagreHenvendelseRequest) throws LagreHenvendelseFaultPenGeneriskMsg, LagreHenvendelseFaultPenHenvendelseIkkeFunnetMsg {

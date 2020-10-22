@@ -20,7 +20,7 @@ import no.nav.tjeneste.virksomhet.kodeverk.v2.meldinger.HentKodeverkResponse;
 
 @Addressing
 @WebService(endpointInterface = "no.nav.tjeneste.virksomhet.kodeverk.v2.KodeverkPortType")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class KodeverkServiceMockImpl implements KodeverkPortType {
 
     private static final Logger LOG = LoggerFactory.getLogger(KodeverkServiceMockImpl.class);

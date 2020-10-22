@@ -11,7 +11,7 @@ import javax.xml.ws.ResponseWrapper;
 
 @WebService(targetNamespace = "http://nav.no/virksomhet/tjenester/sak/v1", name = "Sak")
 @XmlSeeAlso({ObjectFactory.class, no.nav.virksomhet.tjenester.sak.meldinger.v1.ObjectFactory.class, no.nav.virksomhet.gjennomforing.sak.v1.ObjectFactory.class})
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class SakMock implements Sak {
 
     @Override

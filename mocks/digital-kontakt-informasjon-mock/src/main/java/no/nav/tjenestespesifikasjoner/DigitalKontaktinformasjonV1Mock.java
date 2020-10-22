@@ -14,7 +14,7 @@ import javax.xml.ws.ResponseWrapper;
 
 @WebService(targetNamespace = "http://nav.no/tjeneste/virksomhet/digitalKontaktinformasjon/v1", name = "DigitalKontaktinformasjon_v1")
 @XmlSeeAlso({ObjectFactory.class, no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.ObjectFactory.class, no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.feil.ObjectFactory.class, no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.ObjectFactory.class})
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class DigitalKontaktinformasjonV1Mock implements DigitalKontaktinformasjonV1 {
     @Override
     public WSHentSikkerDigitalPostadresseBolkResponse hentSikkerDigitalPostadresseBolk(WSHentSikkerDigitalPostadresseBolkRequest wsHentSikkerDigitalPostadresseBolkRequest) throws HentSikkerDigitalPostadresseBolkSikkerhetsbegrensing, HentSikkerDigitalPostadresseBolkForMangeForespoersler {

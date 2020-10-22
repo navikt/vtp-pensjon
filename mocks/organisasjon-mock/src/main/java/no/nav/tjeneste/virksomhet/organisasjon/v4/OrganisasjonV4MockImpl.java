@@ -49,7 +49,7 @@ import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.ValiderOrganisasjonR
 
 @Addressing
 @WebService(name = "Organisasjon_v4", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjon/v4")
-@HandlerChain(file="Handler-chain.xml")
+@HandlerChain(file="/Handler-chain.xml")
 public class OrganisasjonV4MockImpl implements OrganisasjonV4 {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrganisasjonV4MockImpl.class);

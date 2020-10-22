@@ -31,7 +31,7 @@ import no.nav.tjeneste.virksomhet.journal.v3.meldinger.HentKjerneJournalpostList
 
 @Addressing
 @WebService(name = "Journal_v3", targetNamespace = "http://nav.no/tjeneste/virksomhet/journal/v3")
-@HandlerChain(file="Handler-chain.xml")
+@HandlerChain(file="/Handler-chain.xml")
 public class JournalV3ServiceMockImpl implements JournalV3 {
 
     private static final Logger LOG = LoggerFactory.getLogger(JournalV3ServiceMockImpl.class);

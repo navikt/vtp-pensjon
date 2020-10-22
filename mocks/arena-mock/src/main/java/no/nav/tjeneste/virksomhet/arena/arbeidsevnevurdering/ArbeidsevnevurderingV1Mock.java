@@ -20,7 +20,7 @@ import java.time.ZoneId;
 import java.util.GregorianCalendar;
 
 @WebService(name = "Arbeidsevnevurdering_v1", targetNamespace = "http://nav.no/tjeneste/virksomhet/arbeidsevnevurdering/v1")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class ArbeidsevnevurderingV1Mock implements ArbeidsevnevurderingV1 {
     /**
      * @param request

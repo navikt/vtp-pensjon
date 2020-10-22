@@ -45,7 +45,7 @@ import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.HentArbeidsforhold
 
 @Addressing
 @WebService(name = "Arbeidsforhold_v3", targetNamespace = "http://nav.no/tjeneste/virksomhet/arbeidsforhold/v3")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class ArbeidsforholdMockImpl implements ArbeidsforholdV3 {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArbeidsforholdMockImpl.class);

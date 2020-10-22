@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
         org.apache.cxf.ws.security.sts.provider.model.utility.ObjectFactory.class,
         org.apache.cxf.ws.security.sts.provider.model.xmldsig.ObjectFactory.class,
         org.apache.cxf.ws.addressing.ObjectFactory.class })
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @Addressing()
 public class SecurityTokenServiceMockImpl implements SecurityTokenService {

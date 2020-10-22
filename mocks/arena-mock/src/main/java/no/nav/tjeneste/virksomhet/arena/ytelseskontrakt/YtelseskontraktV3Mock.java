@@ -17,7 +17,7 @@ import javax.xml.ws.ResponseWrapper;
 
 @WebService(targetNamespace = "http://nav.no/tjeneste/virksomhet/ytelseskontrakt/v3", name = "Ytelseskontrakt_v3")
 @XmlSeeAlso({no.nav.tjeneste.virksomhet.ytelseskontrakt.v3.meldinger.ObjectFactory.class, no.nav.tjeneste.virksomhet.ytelseskontrakt.v3.metadata.ObjectFactory.class, no.nav.tjeneste.virksomhet.ytelseskontrakt.v3.feil.ObjectFactory.class, ObjectFactory.class, no.nav.tjeneste.virksomhet.ytelseskontrakt.v3.informasjon.ytelseskontrakt.ObjectFactory.class})
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class YtelseskontraktV3Mock implements YtelseskontraktV3 {
     private static final Logger LOG = LoggerFactory.getLogger(YtelseskontraktV3Mock.class);
 

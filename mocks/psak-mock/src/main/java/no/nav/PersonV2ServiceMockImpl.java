@@ -20,7 +20,7 @@ import javax.xml.ws.ResponseWrapper;
         targetNamespace = "http://nav.no/virksomhet/tjenester/person/v2",
         name = "Person"
 )
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 @XmlSeeAlso({no.nav.virksomhet.tjenester.person.v2.ObjectFactory.class, no.nav.virksomhet.part.person.v2.ObjectFactory.class, no.nav.virksomhet.tjenester.person.meldinger.v2.ObjectFactory.class, no.nav.virksomhet.tjenester.person.feil.v2.ObjectFactory.class})
 public class PersonV2ServiceMockImpl implements no.nav.virksomhet.tjenester.person.v2.Person {
 

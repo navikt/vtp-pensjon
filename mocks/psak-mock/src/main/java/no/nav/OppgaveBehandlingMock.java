@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @WebService(targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2", name = "Oppgavebehandling")
 @XmlSeeAlso({no.nav.virksomhet.tjenester.oppgavebehandling.feil.v2.ObjectFactory.class, ObjectFactory.class, no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.ObjectFactory.class})
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class OppgaveBehandlingMock implements Oppgavebehandling {
     /**
      * <p>Tjenesten lagreOppgaveBolk leveres av FGSAK.</p><ul><li><p>Tilbyr å masseendre oppgaver, for bruk i batcher</p></li><li><p>Operasjonen vil ferdigstille de oppgavene den klarer, de som ikke er mulig å ferdigstille vil bli samlet opp og det returneres en liste av disse med tilhørende feilkode og beskrivelse. Det vil ikke bli returnert feil (faults) bortsett fra generiske feil hvis systemene er nede</p></li></ul><p></p>

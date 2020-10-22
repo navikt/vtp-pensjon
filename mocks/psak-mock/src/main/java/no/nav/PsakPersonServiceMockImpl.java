@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Addressing
 @WebService(targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", name = "PSAKPerson")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class PsakPersonServiceMockImpl implements PSAKPerson {
     private static final Logger LOG = LoggerFactory.getLogger(PsakPersonServiceMockImpl.class);
     private final TestscenarioBuilderRepository repo;

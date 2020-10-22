@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 @Addressing
 @WebService(name = "TilbakekrevingPortType", targetNamespace = "http://okonomi.nav.no/tilbakekrevingService/")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public class TilbakekrevingServiceMockImpl implements TilbakekrevingPortType {
 

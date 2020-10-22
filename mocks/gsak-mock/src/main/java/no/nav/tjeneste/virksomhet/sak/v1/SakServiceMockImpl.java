@@ -36,7 +36,7 @@ import no.nav.tjeneste.virksomhet.sak.v1.meldinger.HentSakResponse;
  */
 @Addressing
 @WebService(name = "Sak_v1", targetNamespace = "http://nav.no/tjeneste/virksomhet/sak/v1")
-@HandlerChain(file = "Handler-chain.xml")
+@HandlerChain(file = "/Handler-chain.xml")
 public class SakServiceMockImpl implements SakV1 {
 
     private static final Logger LOG = LoggerFactory.getLogger(SakServiceMockImpl.class);

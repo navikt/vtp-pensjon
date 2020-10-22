@@ -31,7 +31,7 @@ import no.nav.tjeneste.virksomhet.oppgave.v3.meldinger.HentOppgaveResponse;
 
 @Addressing
 @WebService(name = "Oppgave_v3", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgave/v3")
-@HandlerChain(file="Handler-chain.xml")
+@HandlerChain(file="/Handler-chain.xml")
 public class OppgaveServiceMockImpl implements OppgaveV3 {
 
     private static final Logger LOG = LoggerFactory.getLogger(OppgaveServiceMockImpl.class);
