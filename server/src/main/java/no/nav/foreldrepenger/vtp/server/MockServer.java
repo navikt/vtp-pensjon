@@ -238,7 +238,7 @@ public class MockServer {
     }
 
     protected void addWebGui(HandlerContainer handlerContainer) {
-        WebAppContext ctx = new WebAppContext(handlerContainer, Resource.newClassPathResource("/webapps/frontend"), "/");
+        WebAppContext ctx = new WebAppContext(handlerContainer, Resource.newClassPathResource("/public"), "/");
         //ctx.setDefaultsDescriptor(null);
         ctx.setThrowUnavailableOnStartupException(true);
         ctx.setLogUrlOnStart(true);
@@ -248,7 +248,7 @@ public class MockServer {
         ServletHolder servletHolder = new ServletHolder(defaultServlet);
         servletHolder.setInitParameter("dirAllowed", "true");
 
-        ctx.addServlet(servletHolder, "/webapps/frontend");
+        ctx.addServlet(servletHolder, "/public");
 
     }
 

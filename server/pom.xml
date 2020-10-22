@@ -176,6 +176,11 @@
             <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>arena-mock</artifactId>
         </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>frontend</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>io.swagger</groupId>
@@ -269,47 +274,29 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.2</version>
                 <executions>
                     <execution>
-                        <id>copy Vue.js frontend html</id>
-                        <phase>generate-resources</phase>
+                        <id>unpack-frontend</id>
+                        <phase>process-resources</phase>
                         <goals>
-                            <goal>copy-resources</goal>
+                            <goal>unpack</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>src/main/resources/webapps/frontend</outputDirectory>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/frontend/dist</directory>
-                                    <includes>
-                                        <include>index.html</include>
-                                    </includes>
-                                </resource>
-                            </resources>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>no.nav.pensjon.vtp</groupId>
+                                    <artifactId>frontend</artifactId>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                    <includes>public/**</includes>
+                                </artifactItem>
+                            </artifactItems>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>copy Vue.js static resources</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>src/main/resources/webapps/frontend/</outputDirectory>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/frontend/dist</directory>
-                                    <excludes>
-                                        <exclude>index.html/</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-
                 </executions>
             </plugin>
             <plugin>

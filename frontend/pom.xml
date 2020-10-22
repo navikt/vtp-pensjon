@@ -12,9 +12,9 @@
 
     <groupId>no.nav.pensjon.vtp</groupId>
     <artifactId>frontend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <description>TestHub front-end javascript</description>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <build>
         <plugins>
@@ -44,7 +44,7 @@
                         <goals>
                             <goal>exec</goal>
                         </goals>
-                        <phase>package</phase>
+                        <phase>compile</phase>
                         <configuration>
                             <executable>npm</executable>
                             <!-- optional -->
@@ -55,6 +55,28 @@
                         </configuration>
                     </execution>
 
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-resource-one</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/public</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>/dist</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
