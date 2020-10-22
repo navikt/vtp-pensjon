@@ -1,8 +1,8 @@
 package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
-import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
-import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioRepository;
+import no.nav.pensjon.vtp.felles.KeyStoreTool;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jose4j.jwk.RsaJsonWebKey;

@@ -35,8 +35,8 @@ import org.apache.wss4j.common.ext.WSSecurityException;
 import org.apache.wss4j.common.principal.CustomTokenPrincipal;
 import org.apache.wss4j.dom.engine.WSSConfig;
 
-import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
-import no.nav.foreldrepenger.vtp.felles.KeystoreUtils;
+import no.nav.pensjon.vtp.felles.KeyStoreTool;
+import no.nav.pensjon.vtp.felles.KeystoreUtils;
 
 public class STSIssueResponseGenerator {
 

@@ -1,10 +1,8 @@
 package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
-import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
-import no.nav.pensjon.vtp.auth.STSIssueResponseGenerator;
-import no.nav.pensjon.vtp.auth.SamlTokenGenerator;
-import no.nav.foreldrepenger.vtp.felles.OidcTokenGenerator;
+
+import no.nav.pensjon.vtp.felles.OidcTokenGenerator;
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType;
 import org.jose4j.lang.JoseException;
 

@@ -1,7 +1,7 @@
 package no.nav.tjeneste.virksomhet.behandlesak.v2;
 
-import no.nav.foreldrepenger.vtp.testmodell.personopplysning.PersonModell;
-import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.sak.v1.GsakRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

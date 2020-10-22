@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.auth;
 
-import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
+import no.nav.pensjon.vtp.felles.KeyStoreTool;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

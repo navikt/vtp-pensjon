@@ -4,15 +4,21 @@ import no.nav.dokarkiv.generated.model.Bruker;
 import no.nav.dokarkiv.generated.model.Dokument;
 import no.nav.dokarkiv.generated.model.DokumentVariant;
 import no.nav.dokarkiv.generated.model.OpprettJournalpostRequest;
-import no.nav.foreldrepenger.vtp.testmodell.dokument.modell.DokumentModell;
-import no.nav.foreldrepenger.vtp.testmodell.dokument.modell.DokumentVariantInnhold;
-import no.nav.foreldrepenger.vtp.testmodell.dokument.modell.JournalpostBruker;
-import no.nav.foreldrepenger.vtp.testmodell.dokument.modell.JournalpostModell;
-import no.nav.foreldrepenger.vtp.testmodell.dokument.modell.koder.*;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentModell;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentVariantInnhold;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostBruker;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Arkivfiltype;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Arkivtema;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.BrukerType;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Dokumentkategori;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalposttyper;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Variantformat;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -62,7 +68,7 @@ public class JournalpostMapper {
     public JournalpostBruker mapAvsenderFraBruker(Bruker bruker){
         switch (bruker.getIdType()){
             case FNR:
-                return new JournalpostBruker(bruker.getId(),BrukerType.FNR);
+                return new JournalpostBruker(bruker.getId(), BrukerType.FNR);
             case AKTOERID:
                 return new JournalpostBruker(bruker.getId(),BrukerType.AKTOERID);
             case ORGNR:

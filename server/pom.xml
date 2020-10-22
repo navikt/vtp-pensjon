@@ -250,7 +250,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>no.nav.foreldrepenger.vtp.server.MockServer</mainClass>
+                            <mainClass>no.nav.pensjon.vtp.server.MockServer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

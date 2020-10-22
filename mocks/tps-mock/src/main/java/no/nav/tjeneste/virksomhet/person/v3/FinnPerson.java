@@ -1,8 +1,8 @@
 package no.nav.tjeneste.virksomhet.person.v3;
 
-import no.nav.foreldrepenger.vtp.testmodell.personopplysning.BrukerModell;
-import no.nav.foreldrepenger.vtp.testmodell.personopplysning.PersonModell;
-import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.feil.PersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Aktoer;

@@ -8,11 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import no.nav.foreldrepenger.vtp.felles.ConversionUtils;
-import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.inntektkomponent.FrilansArbeidsforholdsperiode;
-import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.inntektkomponent.InntektType;
-import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
-import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.inntektkomponent.Inntektsperiode;
+import no.nav.pensjon.vtp.felles.ConversionUtils;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.FrilansArbeidsforholdsperiode;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektType;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.Inntektsperiode;
 import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.AapenPeriode;
 import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.Aktoer;
 import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.ArbeidsInntektIdent;

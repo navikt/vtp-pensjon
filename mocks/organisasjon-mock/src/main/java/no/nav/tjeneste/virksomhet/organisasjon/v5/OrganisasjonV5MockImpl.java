@@ -1,8 +1,7 @@
 package no.nav.tjeneste.virksomhet.organisasjon.v5;
 
-import no.nav.foreldrepenger.vtp.felles.ConversionUtils;
-import no.nav.foreldrepenger.vtp.testmodell.organisasjon.OrganisasjonModell;
-import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.*;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.feil.UgyldigInput;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.informasjon.Organisasjon;

@@ -17,10 +17,10 @@ import org.slf4j.LoggerFactory;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.InntektYtelseModell;
-import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
+import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.tjenester.aordningen.inntektsinformasjon.Aktoer;
 import no.nav.tjenester.aordningen.inntektsinformasjon.ArbeidsInntektIdent;
 import no.nav.tjenester.aordningen.inntektsinformasjon.request.HentInntektListeBolkRequest;

@@ -5,8 +5,8 @@ import java.io.File;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import no.nav.foreldrepenger.vtp.felles.KeystoreUtils;
-import no.nav.foreldrepenger.vtp.ldap.LdapServer;
+import no.nav.pensjon.vtp.felles.KeystoreUtils;
+import no.nav.pensjon.vtp.ldap.LdapServer;
 
 @Configuration
 public class LdapServerConfiguration {

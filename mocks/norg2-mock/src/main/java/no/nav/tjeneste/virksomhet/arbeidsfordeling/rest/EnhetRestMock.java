@@ -2,10 +2,10 @@ package no.nav.tjeneste.virksomhet.arbeidsfordeling.rest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
-import no.nav.foreldrepenger.vtp.testmodell.enheter.Norg2Modell;
-import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioBuilderRepository;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.norg2.model.Norg2RsEnhet;
 import no.nav.norg2.model.Norg2RsOrganisering;
 import no.nav.norg2.model.Norg2RsSimpleEnhet;

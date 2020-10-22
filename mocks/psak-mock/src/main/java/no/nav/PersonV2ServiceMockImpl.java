@@ -1,6 +1,6 @@
 package no.nav;
 
-import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson;
 import no.nav.virksomhet.part.person.v2.*;
 import no.nav.virksomhet.tjenester.person.meldinger.v2.*;

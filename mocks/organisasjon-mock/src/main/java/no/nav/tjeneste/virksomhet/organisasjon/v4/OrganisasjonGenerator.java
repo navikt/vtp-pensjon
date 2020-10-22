@@ -2,7 +2,7 @@ package no.nav.tjeneste.virksomhet.organisasjon.v4;
 
 import java.time.LocalDate;
 
-import no.nav.foreldrepenger.vtp.felles.ConversionUtils;
+import no.nav.pensjon.vtp.felles.ConversionUtils;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.informasjon.Enhetstyper;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.informasjon.Naering;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.informasjon.ObjectFactory;

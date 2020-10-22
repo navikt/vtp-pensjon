@@ -14,7 +14,7 @@ import javax.xml.ws.ResponseWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.inf.pselv.person.HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg;
 import no.nav.inf.pselv.person.HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg;
 import no.nav.inf.pselv.person.HentKontoinformasjonFaultPenPersonIkkeFunnetMsg;

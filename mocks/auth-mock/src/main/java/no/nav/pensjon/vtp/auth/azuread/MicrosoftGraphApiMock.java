@@ -2,12 +2,12 @@ package no.nav.pensjon.vtp.auth.azuread;
 
 import static java.util.stream.Collectors.toList;
 
-import static no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.getInstance;
+import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.getInstance;
 
 import io.swagger.annotations.Api;
-import no.nav.foreldrepenger.vtp.testmodell.ansatt.AnsatteIndeks;
-import no.nav.foreldrepenger.vtp.testmodell.ansatt.NAVAnsatt;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
+import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
+import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;

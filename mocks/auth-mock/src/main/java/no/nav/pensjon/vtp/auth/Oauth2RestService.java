@@ -11,7 +11,6 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.SearchResult;
@@ -30,8 +29,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
-import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
-import no.nav.foreldrepenger.vtp.felles.OidcTokenGenerator;
+import no.nav.pensjon.vtp.felles.KeyStoreTool;
+import no.nav.pensjon.vtp.felles.OidcTokenGenerator;
 
 @Api(tags = {"Openam"})
 @Path("/isso")

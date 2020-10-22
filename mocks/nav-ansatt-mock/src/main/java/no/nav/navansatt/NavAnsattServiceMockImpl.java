@@ -1,10 +1,10 @@
 package no.nav.navansatt;
 
-import no.nav.foreldrepenger.vtp.testmodell.ansatt.AnsatteIndeks;
-import no.nav.foreldrepenger.vtp.testmodell.ansatt.NAVAnsatt;
-import no.nav.foreldrepenger.vtp.testmodell.enheter.EnheterIndeks;
-import no.nav.foreldrepenger.vtp.testmodell.enheter.Norg2Modell;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
+import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
+import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
+import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
+import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.inf.psak.navansatt.*;
 import no.nav.lib.pen.psakpselv.asbo.ASBOPenFagomrade;
 import no.nav.lib.pen.psakpselv.asbo.ASBOPenFagomradeListe;

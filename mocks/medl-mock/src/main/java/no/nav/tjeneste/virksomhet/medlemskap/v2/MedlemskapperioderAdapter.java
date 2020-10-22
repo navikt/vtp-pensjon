@@ -3,11 +3,11 @@ package no.nav.tjeneste.virksomhet.medlemskap.v2;
 import java.util.ArrayList;
 import java.util.List;
 
-import no.nav.foreldrepenger.vtp.felles.ConversionUtils;
-import no.nav.foreldrepenger.vtp.testmodell.medlemskap.MedlemskapperiodeModell;
-import no.nav.foreldrepenger.vtp.testmodell.personopplysning.BrukerModell;
-import no.nav.foreldrepenger.vtp.testmodell.personopplysning.PersonModell;
-import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.felles.ConversionUtils;
+import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapperiodeModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.Medlemsperiode;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.kodeverk.KildeMedTerm;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.kodeverk.LandkodeMedTerm;

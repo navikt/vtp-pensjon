@@ -2,10 +2,10 @@ package no.nav;
 
 import static java.util.Optional.ofNullable;
 
-import static no.nav.foreldrepenger.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl.getInstance;
+import static no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl.getInstance;
 
-import no.nav.foreldrepenger.vtp.testmodell.enheter.EnheterIndeks;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
+import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.inf.pen.navorgenhet.*;
 import no.nav.lib.pen.psakpselv.asbo.navorgenhet.*;
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory;

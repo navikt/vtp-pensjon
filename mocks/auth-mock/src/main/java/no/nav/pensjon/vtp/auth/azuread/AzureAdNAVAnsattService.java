@@ -1,22 +1,21 @@
 package no.nav.pensjon.vtp.auth.azuread;
 
-import static no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.getInstance;
+import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.getInstance;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import no.nav.foreldrepenger.vtp.felles.AzureOidcTokenGenerator;
-import no.nav.foreldrepenger.vtp.felles.KeyStoreTool;
-import no.nav.foreldrepenger.vtp.testmodell.ansatt.AnsatteIndeks;
+import no.nav.pensjon.vtp.felles.AzureOidcTokenGenerator;
+import no.nav.pensjon.vtp.felles.KeyStoreTool;
+import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse;
 import no.nav.pensjon.vtp.auth.UserRepository;
-import no.nav.foreldrepenger.vtp.testmodell.ansatt.NAVAnsatt;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.SearchResult;

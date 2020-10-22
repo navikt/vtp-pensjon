@@ -11,16 +11,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
-import no.nav.foreldrepenger.vtp.server.api.pensjon_testdata.PensjonTestdataService;
-import no.nav.foreldrepenger.vtp.server.api.pensjon_testdata.PensjonTestdataServiceImpl;
-import no.nav.foreldrepenger.vtp.testmodell.repo.BasisdataProvider;
-import no.nav.foreldrepenger.vtp.testmodell.repo.JournalRepository;
-import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioRepository;
-import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioTemplateRepository;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.JournalRepositoryImpl;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
+import no.nav.pensjon.vtp.server.api.pensjon_testdata.PensjonTestdataService;
+import no.nav.pensjon.vtp.server.api.pensjon_testdata.PensjonTestdataServiceImpl;
+import no.nav.pensjon.vtp.testmodell.repo.BasisdataProvider;
+import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
+import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.JournalRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.auth.UserRepository;
 import no.nav.tjeneste.virksomhet.sak.v1.GsakRepo;
 

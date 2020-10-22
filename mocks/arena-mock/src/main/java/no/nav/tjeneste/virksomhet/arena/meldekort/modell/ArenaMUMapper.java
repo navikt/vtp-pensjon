@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import no.nav.foreldrepenger.vtp.felles.ConversionUtils;
-import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.arena.ArenaMeldekort;
-import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.arena.ArenaSak;
-import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.arena.ArenaVedtak;
-import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.arena.SakStatus;
-import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.arena.VedtakStatus;
+import no.nav.pensjon.vtp.felles.ConversionUtils;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.ArenaMeldekort;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.ArenaSak;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.ArenaVedtak;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.SakStatus;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.VedtakStatus;
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.informasjon.Meldekort;
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.informasjon.ObjectFactory;
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.informasjon.Periode;

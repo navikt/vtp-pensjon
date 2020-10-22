@@ -15,10 +15,10 @@ import org.slf4j.LoggerFactory;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import no.nav.foreldrepenger.vtp.testmodell.enheter.Norg2Modell;
-import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioBuilderRepository;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 
 @Api(tags = {"ArbeidsfordelingMock"})
 @Path("/norg2/api/v1/arbeidsfordeling")

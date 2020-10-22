@@ -1,8 +1,8 @@
 package no.nav.tjeneste.virksomhet.dokumentproduksjon.v2;
 
-import no.nav.foreldrepenger.vtp.testmodell.dokument.JournalpostModellGenerator;
-import no.nav.foreldrepenger.vtp.testmodell.dokument.modell.koder.DokumenttypeId;
-import no.nav.foreldrepenger.vtp.testmodell.repo.JournalRepository;
+import no.nav.pensjon.vtp.testmodell.dokument.JournalpostModellGenerator;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId;
+import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.PdfGenerering.PdfGeneratorUtil;
 import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.AvbrytForsendelseAvbrytelseIkkeTillatt;
 import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.AvbrytForsendelseJournalpostAlleredeAvbrutt;
@@ -62,7 +62,6 @@ import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.meldinger.RedigerDokumen
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebService;

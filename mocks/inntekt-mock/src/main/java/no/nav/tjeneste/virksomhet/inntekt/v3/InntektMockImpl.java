@@ -1,10 +1,10 @@
 package no.nav.tjeneste.virksomhet.inntekt.v3;
 
 
-import no.nav.foreldrepenger.vtp.felles.ConversionUtils;
-import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.InntektYtelseModell;
-import no.nav.foreldrepenger.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
-import no.nav.foreldrepenger.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.felles.ConversionUtils;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.inntekt.v3.binding.*;
 import no.nav.tjeneste.virksomhet.inntekt.v3.feil.UgyldigInput;
 import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.*;

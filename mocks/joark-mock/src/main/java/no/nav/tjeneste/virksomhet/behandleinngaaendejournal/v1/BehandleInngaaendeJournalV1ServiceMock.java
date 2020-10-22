@@ -1,7 +1,7 @@
 package no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1;
 
 
-import no.nav.foreldrepenger.vtp.testmodell.repo.JournalRepository;
+import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1.binding.*;
 import no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1.meldinger.FerdigstillJournalfoeringRequest;
 import no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1.meldinger.OppdaterJournalpostRequest;

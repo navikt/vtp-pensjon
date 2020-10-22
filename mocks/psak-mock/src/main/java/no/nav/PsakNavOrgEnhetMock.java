@@ -2,8 +2,8 @@ package no.nav;
 
 import static java.util.Optional.ofNullable;
 
-import no.nav.foreldrepenger.vtp.testmodell.enheter.EnheterIndeks;
-import no.nav.foreldrepenger.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
+import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.inf.psak.navorgenhet.ObjectFactory;
 import no.nav.inf.psak.navorgenhet.*;
 import no.nav.lib.pen.psakpselv.asbo.navorgenhet.*;
@@ -16,7 +16,7 @@ import javax.xml.ws.ResponseWrapper;
 import java.io.IOException;
 import java.util.Collections;
 
-import static no.nav.foreldrepenger.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl.getInstance;
+import static no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl.getInstance;
 import static no.nav.util.PenNAVEnhetUtil.getAsboPenNAVEnhet;
 
 @WebService(targetNamespace = "http://nav-cons-pen-psak-navorgenhet/no/nav/inf", name = "PSAKNAVOrgEnhet")

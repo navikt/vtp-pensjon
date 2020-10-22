@@ -1,7 +1,11 @@
 package no.nav;
 
-import no.nav.foreldrepenger.vtp.testmodell.personopplysning.*;
 import no.nav.lib.pen.psakpselv.asbo.person.*;
+import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
+import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.GateadresseModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
+import no.nav.pensjon.vtp.testmodell.personopplysning.VoksenModell;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import no.nav.foreldrepenger.vtp.felles.DateUtil;
-import no.nav.foreldrepenger.vtp.testmodell.dokument.modell.DokumentModell;
-import no.nav.foreldrepenger.vtp.testmodell.dokument.modell.DokumentVariantInnhold;
-import no.nav.foreldrepenger.vtp.testmodell.dokument.modell.JournalpostModell;
+import no.nav.pensjon.vtp.felles.DateUtil;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentModell;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentVariantInnhold;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell;
 import no.nav.tjeneste.virksomhet.journal.v3.informasjon.Arkivfiltyper;
 import no.nav.tjeneste.virksomhet.journal.v3.informasjon.Dokumentkategorier;
 import no.nav.tjeneste.virksomhet.journal.v3.informasjon.DokumenttypeIder;

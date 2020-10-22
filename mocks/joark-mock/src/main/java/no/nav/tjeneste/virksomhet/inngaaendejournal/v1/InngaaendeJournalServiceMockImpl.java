@@ -14,8 +14,8 @@ import javax.xml.ws.soap.Addressing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import no.nav.foreldrepenger.vtp.testmodell.dokument.modell.JournalpostModell;
-import no.nav.foreldrepenger.vtp.testmodell.repo.JournalRepository;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell;
+import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import no.nav.tjeneste.virksomhet.inngaaendejournal.modell.InngaaendeJournalpostBuilder;
 import no.nav.tjeneste.virksomhet.inngaaendejournal.v1.binding.HentJournalpostJournalpostIkkeFunnet;
 import no.nav.tjeneste.virksomhet.inngaaendejournal.v1.binding.HentJournalpostJournalpostIkkeInngaaende;
