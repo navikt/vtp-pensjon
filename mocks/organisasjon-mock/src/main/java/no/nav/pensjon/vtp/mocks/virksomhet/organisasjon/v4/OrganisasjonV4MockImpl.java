@@ -14,6 +14,7 @@ import javax.xml.ws.soap.Addressing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.binding.FinnOrganisasjonForMangeForekomster;
@@ -46,7 +47,7 @@ import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.ValiderOrganisasjonR
 // import javax.persistence.EntityManager;
 // import javax.persistence.Persistence;
 
-
+@SoapService(path = "/ereg/ws/OrganisasjonService/v4")
 @Addressing
 @WebService(name = "Organisasjon_v4", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjon/v4")
 @HandlerChain(file="/Handler-chain.xml")

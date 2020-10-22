@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.organisasjon.v5;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.*;
@@ -24,6 +25,7 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import java.util.Optional;
 
+@SoapService(path = "/ereg/ws/OrganisasjonService/v5")
 @WebService(
         name = "Organisasjon_v5",
         targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjon/v5"

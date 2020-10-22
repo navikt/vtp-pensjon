@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.dokument.JournalpostModellGenerator;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
@@ -75,6 +76,7 @@ import java.io.StringWriter;
 import java.util.Objects;
 
 
+@SoapService(path = "/dokprod/ws/dokumentproduksjon/v2")
 @Addressing
 @WebService(endpointInterface = "no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.DokumentproduksjonV2")
 @HandlerChain(file = "/Handler-chain.xml")

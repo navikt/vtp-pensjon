@@ -14,6 +14,9 @@ import nav_lib_test.no.nav.inf.binding.TESTGetApplicationVersion;
 import nav_lib_test.no.nav.test.asbo.ASBOTestGetApplicationVersionRequest;
 import nav_lib_test.no.nav.test.asbo.ASBOTestGetApplicationVersionResponse;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
+
+@SoapService(path = "/esb/nav-cons-test-getapplicationversionWeb/sca/TESTGetApplicationVersionWSEXP")
 @WebService(
         name = "TESTGetApplicationVersion",
         targetNamespace = "http://nav-lib-test/no/nav/inf"

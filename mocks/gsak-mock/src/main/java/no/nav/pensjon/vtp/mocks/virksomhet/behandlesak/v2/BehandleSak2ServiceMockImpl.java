@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.behandlesak.v2;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@SoapService(path = "/nav-gsak-ws/BehandleSakV2")
 @Addressing
 @WebService(targetNamespace = "http://nav.no/tjeneste/virksomhet/behandlesak/v2", name = "BehandleSakV2")
 @HandlerChain(file = "/Handler-chain.xml")

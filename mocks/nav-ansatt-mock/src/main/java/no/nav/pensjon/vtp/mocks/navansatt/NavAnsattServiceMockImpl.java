@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.navansatt;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@SoapService(path = "/esb/nav-cons-pen-psak-navansattWeb/sca/PSAKNAVAnsattWSEXP")
 @Addressing
 @WebService(name = "PSAKNAVAnsatt", targetNamespace = "http://nav-cons-pen-psak-navansatt/no/nav/inf")
 @HandlerChain(file = "/Handler-chain.xml")

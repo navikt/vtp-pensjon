@@ -16,6 +16,7 @@ import javax.xml.ws.soap.Addressing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.mocks.virksomhet.journal.modell.JournalpostV3Bulider;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentModell;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell;
@@ -36,7 +37,7 @@ import no.nav.tjeneste.virksomhet.journal.v3.meldinger.HentDokumentURLResponse;
 import no.nav.tjeneste.virksomhet.journal.v3.meldinger.HentKjerneJournalpostListeRequest;
 import no.nav.tjeneste.virksomhet.journal.v3.meldinger.HentKjerneJournalpostListeResponse;
 
-
+@SoapService(path = "/joark/Journal/v3")
 @Addressing
 @WebService(name = "Journal_v3", targetNamespace = "http://nav.no/tjeneste/virksomhet/journal/v3")
 @HandlerChain(file="/Handler-chain.xml")

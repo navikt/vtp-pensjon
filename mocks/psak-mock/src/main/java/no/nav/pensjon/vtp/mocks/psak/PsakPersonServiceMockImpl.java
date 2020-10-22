@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.inf.psak.person.*;
 import no.nav.lib.pen.psakpselv.asbo.ASBOPenTomRespons;
@@ -13,6 +14,7 @@ import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.Addressing;
 import java.util.Optional;
 
+@SoapService(path = "/esb/nav-cons-pen-psak-personWeb/sca/PSAKPersonWSEXP")
 @Addressing
 @WebService(targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", name = "PSAKPerson")
 @HandlerChain(file = "/Handler-chain.xml")

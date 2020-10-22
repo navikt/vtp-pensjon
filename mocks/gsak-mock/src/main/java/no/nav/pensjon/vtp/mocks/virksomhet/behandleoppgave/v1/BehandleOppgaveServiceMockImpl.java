@@ -12,6 +12,7 @@ import javax.xml.ws.soap.Addressing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.tjeneste.virksomhet.behandleoppgave.v1.BehandleOppgaveV1;
 import no.nav.tjeneste.virksomhet.behandleoppgave.v1.WSFerdigstillOppgaveException;
 import no.nav.tjeneste.virksomhet.behandleoppgave.v1.WSOppgaveIkkeFunnetException;
@@ -21,6 +22,7 @@ import no.nav.tjeneste.virksomhet.behandleoppgave.v1.meldinger.WSFerdigstillOppg
 import no.nav.tjeneste.virksomhet.behandleoppgave.v1.meldinger.WSOpprettOppgaveResponse;
 import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
 
+@SoapService(path = "/nav-gsak-ws/BehandleOppgaveV1")
 @Addressing
 @WebService(targetNamespace = "http://nav.no/tjeneste/virksomhet/behandleoppgave/v1", name = "BehandleOppgaveV1")
 @HandlerChain(file = "/Handler-chain.xml")

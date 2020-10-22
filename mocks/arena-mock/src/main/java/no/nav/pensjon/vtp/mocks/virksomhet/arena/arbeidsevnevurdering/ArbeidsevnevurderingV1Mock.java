@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arena.arbeidsevnevurdering;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.tjeneste.virksomhet.arbeidsevnevurdering.v1.binding.ArbeidsevnevurderingV1;
 import no.nav.tjeneste.virksomhet.arbeidsevnevurdering.v1.binding.FinnArbeidsevnevurderingPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.arbeidsevnevurdering.v1.binding.FinnArbeidsevnevurderingSikkerhetsbegrensning;
@@ -12,13 +13,13 @@ import javax.jws.*;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.ws.Holder;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.GregorianCalendar;
 
+@SoapService(path = "/ail_ws/Arbeidsevnevurdering_v1")
 @WebService(name = "Arbeidsevnevurdering_v1", targetNamespace = "http://nav.no/tjeneste/virksomhet/arbeidsevnevurdering/v1")
 @HandlerChain(file = "/Handler-chain.xml")
 public class ArbeidsevnevurderingV1Mock implements ArbeidsevnevurderingV1 {

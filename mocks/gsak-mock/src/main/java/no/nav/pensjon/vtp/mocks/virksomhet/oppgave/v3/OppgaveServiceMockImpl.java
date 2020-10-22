@@ -13,6 +13,7 @@ import javax.xml.ws.soap.Addressing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.tjeneste.virksomhet.oppgave.v3.binding.HentOppgaveOppgaveIkkeFunnet;
 import no.nav.tjeneste.virksomhet.oppgave.v3.binding.OppgaveV3;
 import no.nav.tjeneste.virksomhet.oppgave.v3.informasjon.oppgave.Fagomrade;
@@ -28,7 +29,7 @@ import no.nav.tjeneste.virksomhet.oppgave.v3.meldinger.FinnOppgaveListeResponse;
 import no.nav.tjeneste.virksomhet.oppgave.v3.meldinger.HentOppgaveRequest;
 import no.nav.tjeneste.virksomhet.oppgave.v3.meldinger.HentOppgaveResponse;
 
-
+@SoapService(path = "/nav-gsak-ws/OppgaveV3")
 @Addressing
 @WebService(name = "Oppgave_v3", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgave/v3")
 @HandlerChain(file="/Handler-chain.xml")

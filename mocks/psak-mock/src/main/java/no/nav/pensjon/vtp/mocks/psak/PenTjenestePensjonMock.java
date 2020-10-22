@@ -3,12 +3,14 @@ package no.nav.pensjon.vtp.mocks.psak;
 import no.nav.inf.pen.tjenestepensjon.*;
 import no.nav.lib.pen.psakpselv.asbo.tjenestepensjon.ASBOPenTjenestepensjon;
 import no.nav.lib.pen.psakpselv.asbo.tjenestepensjon.ASBOPenTjenestepensjonForhold;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 
 import javax.jws.*;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+@SoapService(path = "/esb/nav-cons-pen-pen-tjenestepensjonWeb/sca/PENTjenestepensjonWSEXP")
 @WebService(targetNamespace = "http://nav-cons-pen-pen-tjenestepensjon/no/nav/inf", name = "PENTjenestepensjon")
 @XmlSeeAlso({no.nav.lib.pen.psakpselv.fault.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.tjenestepensjon.ObjectFactory.class, ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.tjenestepensjon.ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")

@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson;
 import no.nav.virksomhet.part.person.v2.*;
@@ -16,6 +17,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+@SoapService(path = "/esb/nav-tjeneste-person_v2Web/sca/PersonWSEXP")
 @WebService(
         targetNamespace = "http://nav.no/virksomhet/tjenester/person/v2",
         name = "Person"

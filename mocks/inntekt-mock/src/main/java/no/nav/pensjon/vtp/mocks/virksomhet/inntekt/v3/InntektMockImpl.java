@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3;
 
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3.modell.HentInntektlistBolkMapper;
 import no.nav.pensjon.vtp.felles.ConversionUtils;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@SoapService(path = "/inntektskomponenten-ws/inntekt/v3/Inntekt")
 @Addressing
 @WebService(name = "Inntekt_v3", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3")
 @HandlerChain(file = "/Handler-chain.xml")

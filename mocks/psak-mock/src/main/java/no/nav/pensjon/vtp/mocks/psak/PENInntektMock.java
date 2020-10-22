@@ -5,12 +5,14 @@ import no.nav.inf.pen.inntekt.ObjectFactory;
 import no.nav.inf.pen.inntekt.PENInntekt;
 import no.nav.lib.pen.psakpselv.asbo.inntekt.ASBOPenInntekt;
 import no.nav.lib.pen.psakpselv.asbo.inntekt.ASBOPenInntektListe;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 
 import javax.jws.*;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+@SoapService(path = "/esb/nav-cons-pen-pen-inntektWeb/sca/PENInntektWSEXP")
 @WebService(targetNamespace = "http://nav-cons-pen-pen-inntekt/no/nav/inf", name = "PENInntekt")
 @XmlSeeAlso({no.nav.lib.pen.psakpselv.fault.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.inntekt.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.inntekt.ObjectFactory.class, ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")

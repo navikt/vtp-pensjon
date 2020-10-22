@@ -2,12 +2,14 @@ package no.nav.pensjon.vtp.mocks.psak;
 
 import no.nav.inf.pen.oppdrag.*;
 import no.nav.lib.pen.psakpselv.asbo.oppdrag.ASBOPenSimuleringsresultatLinjeListe;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 
 import javax.jws.*;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+@SoapService(path = "/esb/nav-cons-pen-pen-oppdragWeb/sca/PENOppdragWSEXP")
 @WebService(targetNamespace = "http://nav-cons-pen-pen-oppdrag/no/nav/inf", name = "PENOppdrag")
 @XmlSeeAlso({ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.oppdrag.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.oppdrag.ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")

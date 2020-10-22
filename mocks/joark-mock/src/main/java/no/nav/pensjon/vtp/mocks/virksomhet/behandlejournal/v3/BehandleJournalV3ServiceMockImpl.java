@@ -12,6 +12,7 @@ import javax.xml.ws.soap.Addressing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.tjeneste.virksomhet.behandlejournal.v3.binding.ArkiverUstrukturertKravSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.behandlejournal.v3.binding.BehandleJournalV3;
 import no.nav.tjeneste.virksomhet.behandlejournal.v3.binding.FerdigstillDokumentopplastingFerdigstillDokumentopplastingjournalpostIkkeFunnet;
@@ -33,7 +34,7 @@ import no.nav.tjeneste.virksomhet.behandlejournal.v3.meldinger.JournalfoerUtgaae
 import no.nav.tjeneste.virksomhet.behandlejournal.v3.meldinger.LagreVedleggPaaJournalpostRequest;
 import no.nav.tjeneste.virksomhet.behandlejournal.v3.meldinger.LagreVedleggPaaJournalpostResponse;
 
-
+@SoapService(path = "/services/behandlejournal/v3")
 @Addressing
 @HandlerChain(file="/Handler-chain.xml")
 @WebService(

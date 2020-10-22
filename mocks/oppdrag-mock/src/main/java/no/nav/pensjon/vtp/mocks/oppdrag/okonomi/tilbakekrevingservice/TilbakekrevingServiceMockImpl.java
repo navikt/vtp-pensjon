@@ -19,7 +19,9 @@ import no.nav.okonomi.tilbakekrevingservice.KravgrunnlagHentListeResponse;
 import no.nav.okonomi.tilbakekrevingservice.TilbakekrevingPortType;
 import no.nav.okonomi.tilbakekrevingservice.TilbakekrevingsvedtakRequest;
 import no.nav.okonomi.tilbakekrevingservice.TilbakekrevingsvedtakResponse;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 
+@SoapService(path = "/tilbakekreving/services/tilbakekrevingService")
 @Addressing
 @WebService(name = "TilbakekrevingPortType", targetNamespace = "http://okonomi.nav.no/tilbakekrevingService/")
 @HandlerChain(file = "/Handler-chain.xml")

@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.behandleinngaaendejournal.v1;
 
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1.binding.*;
 import no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1.meldinger.FerdigstillJournalfoeringRequest;
@@ -16,6 +17,7 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.Addressing;
 
+@SoapService(path = "/services/behandleinngaaendejournal/v1")
 @Addressing
 @HandlerChain(file="/Handler-chain.xml")
 @WebService(

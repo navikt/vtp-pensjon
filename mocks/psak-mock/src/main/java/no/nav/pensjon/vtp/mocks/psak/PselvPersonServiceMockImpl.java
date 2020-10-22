@@ -14,6 +14,7 @@ import javax.xml.ws.ResponseWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.inf.pselv.person.HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg;
 import no.nav.inf.pselv.person.HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg;
@@ -34,6 +35,7 @@ import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPersonListe;
 import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenSlettAdresseRequest;
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory;
 
+@SoapService(path = "/esb/nav-cons-pen-pselv-personWeb/sca/PSELVPersonWSEXP")
 @SuppressWarnings("ValidExternallyBoundObject")
 @WebService(targetNamespace = "http://nav-cons-pen-pselv-person/no/nav/inf", name = "PSELVPerson")
 @XmlSeeAlso({ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory.class, no.nav.inf.pselv.person.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.tjenestepensjon.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.person.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.person.ObjectFactory.class})

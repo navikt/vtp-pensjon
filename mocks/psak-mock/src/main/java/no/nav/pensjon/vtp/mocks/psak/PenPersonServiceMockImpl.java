@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.inf.pen.person.*;
 import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenFinnAdresseListeRequest;
@@ -15,7 +16,7 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import java.util.Optional;
 
-
+@SoapService(path = "/esb/nav-cons-pen-pen-personWeb/sca/PENPersonWSEXP")
 @WebService(targetNamespace = "http://nav-cons-pen-pen-person/no/nav/inf/PENPerson", name = "PENPerson")
 @XmlSeeAlso({no.nav.lib.pen.psakpselv.fault.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.person.ObjectFactory.class, ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")

@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arena.ytelseskontrakt;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.tjeneste.virksomhet.ytelseskontrakt.v3.HentYtelseskontraktListeSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.ytelseskontrakt.v3.ObjectFactory;
 import no.nav.tjeneste.virksomhet.ytelseskontrakt.v3.YtelseskontraktV3;
@@ -15,6 +16,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+@SoapService(path = "/ail_ws/Ytelseskontrakt_v3")
 @WebService(targetNamespace = "http://nav.no/tjeneste/virksomhet/ytelseskontrakt/v3", name = "Ytelseskontrakt_v3")
 @XmlSeeAlso({no.nav.tjeneste.virksomhet.ytelseskontrakt.v3.meldinger.ObjectFactory.class, no.nav.tjeneste.virksomhet.ytelseskontrakt.v3.metadata.ObjectFactory.class, no.nav.tjeneste.virksomhet.ytelseskontrakt.v3.feil.ObjectFactory.class, ObjectFactory.class, no.nav.tjeneste.virksomhet.ytelseskontrakt.v3.informasjon.ytelseskontrakt.ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")

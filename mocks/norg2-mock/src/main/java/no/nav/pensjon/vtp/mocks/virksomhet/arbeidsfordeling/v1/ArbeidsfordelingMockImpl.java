@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsfordeling.v1;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.arbeidsfordeling.v1.binding.ArbeidsfordelingV1;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+@SoapService(path = "/norg2/ws/Arbeidsfordeling/v1")
 @Addressing
 @WebService(name = "Arbeidsfordeling_v1", targetNamespace = "http://nav.no/tjeneste/virksomhet/arbeidsfordeling/v1/")
 @HandlerChain(file = "/Handler-chain.xml")

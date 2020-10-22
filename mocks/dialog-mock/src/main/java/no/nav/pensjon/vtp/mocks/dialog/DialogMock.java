@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.dialog;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.tjeneste.virksomhet.dialog.v1.DialogV1;
 import no.nav.tjeneste.virksomhet.dialog.v1.HentDialogerPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.dialog.v1.ObjectFactory;
@@ -12,6 +13,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+@SoapService(path = "/henvendelse/services/domene.Virksomhet/Dialog_v1")
 @WebService(targetNamespace = "http://nav.no/tjeneste/virksomhet/dialog/v1", name = "Dialog_v1")
 @XmlSeeAlso({no.nav.tjeneste.virksomhet.dialog.v1.meldinger.ObjectFactory.class, no.nav.tjeneste.virksomhet.dialog.v1.feil.ObjectFactory.class, ObjectFactory.class, no.nav.tjeneste.virksomhet.dialog.v1.informasjon.ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")

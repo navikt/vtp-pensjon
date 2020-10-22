@@ -16,6 +16,7 @@ import javax.xml.ws.soap.Addressing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.felles.ConversionUtils;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
@@ -63,6 +64,7 @@ import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentSikkerhetstiltakRespon
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentVergeRequest;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentVergeResponse;
 
+@SoapService(path = "/tpsws/ws/Person/v3")
 @Addressing
 @WebService(name = "Person_v3", targetNamespace = "http://nav.no/tjeneste/virksomhet/person/v3")
 @HandlerChain(file = "/Handler-chain.xml")

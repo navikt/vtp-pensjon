@@ -4,6 +4,7 @@ import static java.util.Optional.ofNullable;
 
 import static no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl.getInstance;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.inf.pen.navorgenhet.*;
@@ -19,6 +20,7 @@ import javax.xml.ws.ResponseWrapper;
 
 import java.io.IOException;
 
+@SoapService(path = "/esb/nav-cons-pen-pen-navorgenhetWeb/sca/PENNAVOrgEnhetWSEXP")
 @WebService(
         targetNamespace = "http://nav-cons-pen-pen-navorgenhet/no/nav/inf/PENNAVOrgEnhet",
         name = "PENNAVOrgEnhet"

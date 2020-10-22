@@ -2,6 +2,7 @@ package no.nav.pensjon.vtp.mocks.psak;
 
 import static java.util.Optional.ofNullable;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.inf.psak.navorgenhet.ObjectFactory;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import static no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl.getInstance;
 import static no.nav.pensjon.vtp.mocks.psak.util.PenNAVEnhetUtil.getAsboPenNAVEnhet;
 
+@SoapService(path = "/esb/nav-cons-pen-psak-navorgenhetWeb/sca/PSAKNAVOrgEnhetWSEXP")
 @WebService(targetNamespace = "http://nav-cons-pen-psak-navorgenhet/no/nav/inf", name = "PSAKNAVOrgEnhet")
 @XmlSeeAlso({no.nav.lib.pen.psakpselv.fault.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.navorgenhet.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.navorgenhet.ObjectFactory.class, ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")

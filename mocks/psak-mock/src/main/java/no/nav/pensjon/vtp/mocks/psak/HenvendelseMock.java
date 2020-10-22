@@ -5,12 +5,14 @@ import no.nav.lib.pen.psakpselv.asbo.henvendelse.ASBOPenHentStatistikkRequest;
 import no.nav.lib.pen.psakpselv.asbo.henvendelse.ASBOPenHenvendelse;
 import no.nav.lib.pen.psakpselv.asbo.henvendelse.ASBOPenHenvendelseListe;
 import no.nav.lib.pen.psakpselv.asbo.henvendelse.ASBOPenStatistikk;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 
 import javax.jws.*;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+@SoapService(path = "/esb/nav-cons-pen-psak-henvendelseWeb/sca/PSAKHenvendelseWSEXP")
 @WebService(targetNamespace = "http://nav-cons-pen-psak-henvendelse/no/nav/inf", name = "PSAKHenvendelse")
 @XmlSeeAlso({no.nav.lib.pen.psakpselv.fault.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.henvendelse.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.henvendelse.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.oppgave.ObjectFactory.class, ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")
