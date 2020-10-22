@@ -20,7 +20,7 @@ import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.DelegatingTestscenarioTemplateRepository;
 import no.nav.pensjon.vtp.auth.UserRepository;
-import no.nav.tjeneste.virksomhet.sak.v1.GsakRepo;
+import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
 
 public class RestConfig {
 

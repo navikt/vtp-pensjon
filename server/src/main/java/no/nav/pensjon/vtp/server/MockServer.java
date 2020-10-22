@@ -23,7 +23,7 @@ import no.nav.pensjon.vtp.testmodell.repo.impl.DelegatingTestscenarioTemplateRep
 import no.nav.pensjon.vtp.testmodell.repo.impl.JournalRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
-import no.nav.tjeneste.virksomhet.sak.v1.GsakRepo;
+import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.eclipse.jetty.http.spi.JettyHttpServer;
 import org.eclipse.jetty.server.*;

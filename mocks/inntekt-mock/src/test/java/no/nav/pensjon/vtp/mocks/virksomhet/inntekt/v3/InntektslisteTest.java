@@ -1,0 +1,15 @@
+package no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3;
+
+import org.junit.Test;
+
+public class InntektslisteTest {
+
+
+    @Test
+    public void testHentInntektlisteBolk(){
+
+
+    }
+
+
+}

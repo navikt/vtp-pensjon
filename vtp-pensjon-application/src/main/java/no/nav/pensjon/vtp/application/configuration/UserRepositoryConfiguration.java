@@ -22,7 +22,7 @@ import no.nav.pensjon.vtp.testmodell.repo.impl.JournalRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.auth.UserRepository;
-import no.nav.tjeneste.virksomhet.sak.v1.GsakRepo;
+import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
 
 @Configuration
 public class UserRepositoryConfiguration {

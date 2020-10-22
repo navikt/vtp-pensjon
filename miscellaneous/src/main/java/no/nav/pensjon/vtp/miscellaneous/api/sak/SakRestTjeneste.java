@@ -17,7 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
-import no.nav.tjeneste.virksomhet.sak.v1.GsakRepo;
+import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
 import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sak;
 
 @Api(tags = "Gsak repository")
