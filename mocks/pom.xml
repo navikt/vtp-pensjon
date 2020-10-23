@@ -43,10 +43,6 @@
         <module>esb</module>
     </modules>
 
-    <properties>
-        <ks-tjenestespesifikasjoner.version>1.2019.12.18-12.22-ce897c4eb2c1</ks-tjenestespesifikasjoner.version>
-    </properties>
-
     <build>
         <plugins>
             <plugin>

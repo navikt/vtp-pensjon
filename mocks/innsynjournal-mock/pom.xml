@@ -20,7 +20,6 @@
         <dependency>
             <groupId>no.nav.tjenestespesifikasjoner</groupId>
             <artifactId>nav-innsynJournal-v2-tjenestespesifikasjon</artifactId>
-            <version>${ks-tjenestespesifikasjoner.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jvnet.jaxb2_commons</groupId>

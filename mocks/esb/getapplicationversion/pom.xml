@@ -19,7 +19,6 @@
         <dependency>
             <groupId>no.nav.tjenestespesifikasjoner</groupId>
             <artifactId>getapplicationversion</artifactId>
-            <version>${tjenestespesifikasjoner.version}</version>
         </dependency>
     </dependencies>
 </project>

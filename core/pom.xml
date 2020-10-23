@@ -34,11 +34,6 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk15on</artifactId>
-            <version>1.66</version>
-        </dependency>
-        <dependency>
-        	<groupId>com.sun.xml.ws</groupId>
-        	<artifactId>jaxws-rt</artifactId>
         </dependency>
         <dependency>
 		    <groupId>org.junit.vintage</groupId>
@@ -52,7 +47,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>5.1.18.RELEASE</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
