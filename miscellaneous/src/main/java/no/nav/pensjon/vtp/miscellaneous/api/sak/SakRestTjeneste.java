@@ -15,11 +15,14 @@ import org.slf4j.LoggerFactory;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
 import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
 import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sak;
 
+@JaxrsResource
 @Api(tags = "Gsak repository")
 @Path("/api/sak")
 public class SakRestTjeneste {

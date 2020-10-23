@@ -13,6 +13,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Api(tags = "Oppgave Mock")

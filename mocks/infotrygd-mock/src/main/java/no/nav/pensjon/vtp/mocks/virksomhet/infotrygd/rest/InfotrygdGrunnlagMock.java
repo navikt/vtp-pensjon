@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.trex.Grunnlag;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.trex.TRexModell;
@@ -22,6 +24,7 @@ import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 
+@JaxrsResource
 @Api(tags = {"Infotrygdmock/grunnlag"})
 @Path("/infotrygd/grunnlag")
 public class InfotrygdGrunnlagMock {

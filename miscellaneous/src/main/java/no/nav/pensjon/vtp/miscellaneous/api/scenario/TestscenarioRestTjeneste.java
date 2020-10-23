@@ -2,6 +2,8 @@ package no.nav.pensjon.vtp.miscellaneous.api.scenario;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.kontrakter.TestscenarioDto;
 import no.nav.pensjon.vtp.kontrakter.TestscenarioPersonopplysningDto;
 import no.nav.pensjon.vtp.kontrakter.TestscenariodataDto;
@@ -23,6 +25,7 @@ import javax.ws.rs.core.*;
 import java.time.LocalDate;
 import java.util.*;
 
+@JaxrsResource
 @Api(tags = {"Testscenario"})
 @Path("/api/testscenarios")
 public class TestscenarioRestTjeneste {

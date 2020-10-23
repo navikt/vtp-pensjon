@@ -5,6 +5,8 @@ import static java.util.stream.Collectors.toList;
 import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.getInstance;
 
 import io.swagger.annotations.Api;
+
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
@@ -22,6 +24,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JaxrsResource
 @Api(tags = {"AzureAd"})
 @Path("/MicrosoftGraphApi")
 public class MicrosoftGraphApiMock {

@@ -2,6 +2,8 @@ package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsfordeling.rest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
+
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@JaxrsResource
 @Api(tags = {"Norg2 enheter"})
 @Path("/norg2/api/v1")
 public class EnhetRestMock {

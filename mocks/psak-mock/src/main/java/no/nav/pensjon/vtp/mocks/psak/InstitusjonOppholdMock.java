@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Api(tags = {"InstitusjonOpphold"})
 @Path("/v1/person/institusjonsopphold")
 public class InstitusjonOppholdMock {

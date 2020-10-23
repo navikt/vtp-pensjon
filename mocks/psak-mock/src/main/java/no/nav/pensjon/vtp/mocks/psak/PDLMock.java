@@ -13,9 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
 /**
  * VTP-teamet jobber med å lage mock for PDL, og dette er midlertidig løsning frem til vi merger inn i vtp-en
  */
+@JaxrsResource
 @Api(tags = {"PDL"})
 @Path("/graphql")
 public class PDLMock {

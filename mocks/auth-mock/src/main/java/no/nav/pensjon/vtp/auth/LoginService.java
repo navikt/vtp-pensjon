@@ -1,6 +1,8 @@
 package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
+
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.felles.KeyStoreTool;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 
@@ -26,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@JaxrsResource
 @Api(tags = {"LoginService"})
 @Path("/loginservice")
 public class LoginService {

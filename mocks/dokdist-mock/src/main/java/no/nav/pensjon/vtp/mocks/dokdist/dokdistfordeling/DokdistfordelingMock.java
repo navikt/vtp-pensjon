@@ -10,6 +10,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Api(tags = {"Dokdist"})
 @Path("dokdist/v1/distribuerjournalpost")
 public class DokdistfordelingMock {

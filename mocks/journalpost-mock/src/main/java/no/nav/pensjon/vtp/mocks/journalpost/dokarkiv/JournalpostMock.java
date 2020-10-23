@@ -3,6 +3,7 @@ package no.nav.pensjon.vtp.mocks.journalpost.dokarkiv;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import no.nav.dokarkiv.generated.model.*;
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@JaxrsResource
 @Api(tags = {"Dokarkiv"})
 @Path("/dokarkiv/rest/journalpostapi/v1")
 public class JournalpostMock {

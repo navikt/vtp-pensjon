@@ -13,6 +13,9 @@ import org.slf4j.LoggerFactory;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Api(tags = {"infotrygd-kontantstotte"})
 @Path("/infotrygd-kontantstotte/v1/harBarnAktivKontantstotte")
 public class InfotrygdKontantstotteMock {

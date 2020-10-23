@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalstatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.JournalRepositoryImpl;
 
+@JaxrsResource
 @Api(tags = "Journalføringsmock")
 @Path("/api/journalforing")
 public class JournalforingRestTjeneste {

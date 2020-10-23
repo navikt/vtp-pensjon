@@ -15,11 +15,14 @@ import org.slf4j.LoggerFactory;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 
+@JaxrsResource
 @Api(tags = {"ArbeidsfordelingMock"})
 @Path("/norg2/api/v1/arbeidsfordeling")
 public class ArbeidsfordelingRestMock {

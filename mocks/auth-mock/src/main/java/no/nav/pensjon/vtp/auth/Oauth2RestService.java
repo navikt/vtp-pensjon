@@ -29,9 +29,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.felles.KeyStoreTool;
 import no.nav.pensjon.vtp.felles.OidcTokenGenerator;
 
+@JaxrsResource
 @Api(tags = {"Openam"})
 @Path("/isso")
 public class Oauth2RestService {

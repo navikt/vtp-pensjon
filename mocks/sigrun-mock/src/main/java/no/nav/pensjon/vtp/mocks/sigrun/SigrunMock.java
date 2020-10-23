@@ -19,11 +19,14 @@ import org.slf4j.LoggerFactory;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.sigrun.Inntektsår;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 
+@JaxrsResource
 @Api(tags = {"Sigrun/beregnetskatt"})
 @Path("/api/beregnetskatt")
 public class SigrunMock {

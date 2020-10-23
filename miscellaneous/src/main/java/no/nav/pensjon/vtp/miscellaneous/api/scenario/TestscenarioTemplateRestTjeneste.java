@@ -18,9 +18,13 @@ import org.slf4j.LoggerFactory;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 
+
+@JaxrsResource
 @Api(tags = { "Testscenario/templates" })
 @Path("/api/testscenario/templates")
 public class TestscenarioTemplateRestTjeneste {

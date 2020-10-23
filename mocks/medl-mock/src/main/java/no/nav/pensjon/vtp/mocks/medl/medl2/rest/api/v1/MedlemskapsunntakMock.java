@@ -26,6 +26,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Path("medl2/api/v1/medlemskapsunntak")
 @Produces(MediaType.APPLICATION_JSON)
 @Api(tags = {"Medlemskapsunntak"})

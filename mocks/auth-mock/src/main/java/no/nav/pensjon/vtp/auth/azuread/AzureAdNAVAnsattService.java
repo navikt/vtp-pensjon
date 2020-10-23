@@ -4,6 +4,8 @@ import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.felles.AzureOidcTokenGenerator;
 import no.nav.pensjon.vtp.felles.KeyStoreTool;
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
@@ -31,6 +33,7 @@ import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@JaxrsResource
 @Api(tags = {"AzureAd"})
 @Path("/AzureAd")
 public class AzureAdNAVAnsattService {

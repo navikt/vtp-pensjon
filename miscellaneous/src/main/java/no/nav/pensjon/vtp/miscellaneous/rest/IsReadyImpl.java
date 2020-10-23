@@ -8,6 +8,9 @@ import javax.ws.rs.core.MediaType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Api(tags = { "isReady" })
 @Path("/isReady")
 public class IsReadyImpl {

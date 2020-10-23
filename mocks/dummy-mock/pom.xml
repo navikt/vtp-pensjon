@@ -10,7 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>dummy-mock</artifactId>
     <packaging>jar</packaging>
+
     <dependencies>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
         <dependency>
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>

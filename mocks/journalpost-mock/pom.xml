@@ -14,6 +14,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
         </dependency>
