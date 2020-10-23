@@ -62,7 +62,7 @@
                 <version>3.1.0</version>
                 <executions>
                     <execution>
-                        <id>copy-resource-one</id>
+                        <id>copy-frontend-resources</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -72,7 +72,7 @@
                             <outputDirectory>${project.build.outputDirectory}/public</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>/dist</directory>
+                                    <directory>${project.basedir}/dist</directory>
                                 </resource>
                             </resources>
                         </configuration>
