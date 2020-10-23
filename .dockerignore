@@ -1,9 +1,5 @@
 *
-!server/target
-!server/lib
-!model
-!resources/pipeline
-!server/src/main/resources/logback.xml
-!*.sh
+!model/scenarios
 !truststore.jks
 !keystore.jks
+!vtp-pensjon-application/target/*.jar
