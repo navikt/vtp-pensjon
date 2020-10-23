@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.server;
 
+import static java.util.Optional.ofNullable;
+
 import static no.nav.pensjon.vtp.server.RepositoryFactory.createUserRepository;
 
 import no.nav.familie.topic.Topic;
@@ -243,7 +245,8 @@ public class MockServer {
     }
 
     protected void addWebGui(HandlerContainer handlerContainer) {
-        WebAppContext ctx = new WebAppContext(handlerContainer, Resource.newClassPathResource("/public"), "/");
+        final Resource webApp = ofNullable(Resource.newClassPathResource("/public")).orElseThrow(() -> new RuntimeException("Unable to locate public resources"));
+        final WebAppContext ctx = new WebAppContext(handlerContainer, webApp, "/");
         //ctx.setDefaultsDescriptor(null);
         ctx.setThrowUnavailableOnStartupException(true);
         ctx.setLogUrlOnStart(true);
@@ -254,7 +257,6 @@ public class MockServer {
         servletHolder.setInitParameter("dirAllowed", "true");
 
         ctx.addServlet(servletHolder, "/public");
-
     }
 
     protected void setConnectors(Server server) {

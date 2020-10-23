@@ -158,10 +158,6 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-http-spi</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
@@ -170,7 +166,6 @@
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>frontend</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -253,22 +248,7 @@
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
-                    <execution>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.basedir}/target/lib/</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.2</version>
-                <executions>
+                    <!-- Unpacks the frontend resources for use when testing from an IDE -->
                     <execution>
                         <id>unpack-frontend</id>
                         <phase>process-resources</phase>
@@ -286,6 +266,15 @@
                                     <includes>public/**</includes>
                                 </artifactItem>
                             </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/target/lib/</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
