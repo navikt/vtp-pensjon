@@ -278,7 +278,7 @@
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>kafka</artifactId>
-                <version>${project.version}</version>
+                <version>${kafka.version}</version>
             </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
