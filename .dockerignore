@@ -5,5 +5,5 @@
 !resources/pipeline
 !server/src/main/resources/logback.xml
 !*.sh
-!server/truststore.jks
-!server/keystore.jks
+!truststore.jks
+!keystore.jks

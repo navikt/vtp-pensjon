@@ -15,8 +15,8 @@ COPY server/src/main/resources/logback.xml logback.xml
 COPY server/target/app.jar app.jar
 
 RUN mkdir /root/.modig
-COPY server/truststore.jks /root/.modig/
-COPY server/keystore.jks /root/.modig/
+COPY truststore.jks /root/.modig/
+COPY keystore.jks /root/.modig/
 
 COPY run-java.sh /
 

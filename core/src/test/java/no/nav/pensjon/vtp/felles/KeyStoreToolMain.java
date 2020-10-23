@@ -16,7 +16,7 @@ public class KeyStoreToolMain {
      * 4. Importer sertifikaten inn i POPP lokale truststores som ligger i pesys/local/popp-secrets:
      * keytool -import -alias localhost -file ~/.modig/vtp-pensjon.cer -storetype JKS -keystore ~/pesys/local/popp-secrets/truststore/truststore.jts
      * 5. Lag en Pull-Request til pesys-master med oppdaterte lokale truststores
-     * 6. Kopier og erstatt vtp truststore og keystore i server/keystore.jks og server/truststore med nye genererte
+     * 6. Kopier og erstatt vtp truststore og keystore i keystore.jks og truststore med nye genererte
      * 7. Lag Pull-Request til vtp-master med oppdaterte truststore/keystore
      * @param args
      * @throws IOException
