@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.kafkaembedded;
 
+import static java.util.Optional.ofNullable;
+
 import no.nav.pensjon.vtp.felles.KeystoreUtils;
 
 import org.apache.kafka.clients.admin.AdminClient;
@@ -13,6 +15,7 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
 import java.util.Collection;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -133,7 +136,9 @@ public class LocalKafkaServer {
 
         Properties kafkaProperties = setupKafkaProperties(zookeeperPort, kafkaBrokerPort);
         Properties zkProperties = setupZookeperProperties(zookeeperPort);
-        System.setProperty(JaasUtils.JAVA_LOGIN_CONFIG_PARAM, "kafkasecurity.conf");
+
+        URL url = ofNullable(getClass().getResource("/kafkasecurity.conf")).orElseThrow(() -> new RuntimeException("Unable to locate kafkasecurity.conf"));
+        System.setProperty(JaasUtils.JAVA_LOGIN_CONFIG_PARAM, url.toString());
         log.info("Kafka startes med Jaas login config param: " + System.getProperty(JaasUtils.JAVA_LOGIN_CONFIG_PARAM));
 
 

@@ -24,7 +24,6 @@
         <module>server</module>
         <module>vtp-pensjon-application</module>
         <module>miscellaneous</module>
-        <module>kafka</module>
     </modules>
 
     <properties>

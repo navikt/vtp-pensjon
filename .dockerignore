@@ -4,7 +4,6 @@
 !model
 !resources/pipeline
 !server/src/main/resources/logback.xml
-!server/kafkasecurity.conf
 !*.sh
 !server/truststore.jks
 !server/keystore.jks

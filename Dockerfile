@@ -11,7 +11,6 @@ COPY server/target/lib/*.jar /app/lib/
 COPY model/scenarios/ /app/model/scenarios/
 RUN chmod -R 777 /app/model/scenarios/
 
-COPY server/kafkasecurity.conf /app/
 COPY server/src/main/resources/logback.xml logback.xml
 COPY server/target/app.jar app.jar
 
