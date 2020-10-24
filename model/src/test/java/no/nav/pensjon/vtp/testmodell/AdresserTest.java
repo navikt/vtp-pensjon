@@ -10,10 +10,13 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
 import no.nav.pensjon.vtp.testmodell.personopplysning.GateadresseModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Landkode;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.UstrukturertAdresseModell;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
@@ -26,7 +29,7 @@ public class AdresserTest {
 
     @Test
     public void sjekk_scenarios() throws Exception {
-        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl());
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl(), new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks());
         TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl();
         templateRepository.load();
         for (TestscenarioTemplate testScenarioTemplate : templateRepository.getTemplates()) {

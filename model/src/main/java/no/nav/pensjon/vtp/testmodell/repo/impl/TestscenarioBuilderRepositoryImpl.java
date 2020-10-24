@@ -26,17 +26,21 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
 
     private static final Logger log = LoggerFactory.getLogger(TestscenarioBuilderRepositoryImpl.class);
 
-    private final BasisdataProvider basisdata;
     private final Map<String, Testscenario> scenarios = new ConcurrentHashMap<>(); // not ordered for front-end
     private final Map<String, LokalIdentIndeks> identer = new ConcurrentHashMap<>();
-    private final PersonIndeks personIndeks = new PersonIndeks();
-    private final InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
-    private final OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
 
-    protected TestscenarioBuilderRepositoryImpl(BasisdataProvider basisdata) {
+    private final BasisdataProvider basisdata;
+    private final PersonIndeks personIndeks;
+    private final InntektYtelseIndeks inntektYtelseIndeks;
+    private final OrganisasjonIndeks organisasjonIndeks;
+
+    protected TestscenarioBuilderRepositoryImpl(BasisdataProvider basisdata, PersonIndeks personIndeks,
+            InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonIndeks organisasjonIndeks) {
         this.basisdata = basisdata;
+        this.personIndeks = personIndeks;
+        this.inntektYtelseIndeks = inntektYtelseIndeks;
+        this.organisasjonIndeks = organisasjonIndeks;
     }
-
 
     @Override
     public Map<String, Testscenario> getTestscenarios() {
@@ -93,21 +97,6 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
     @Override
     public LokalIdentIndeks getIdenter(String unikScenarioId) {
         return identer.computeIfAbsent(unikScenarioId, n -> new LokalIdentIndeks(n, basisdata.getIdentGenerator()));
-    }
-
-    @Override
-    public InntektYtelseIndeks getInntektYtelseIndeks() {
-        return inntektYtelseIndeks;
-    }
-
-    @Override
-    public OrganisasjonIndeks getOrganisasjonIndeks() {
-        return organisasjonIndeks;
-    }
-
-    @Override
-    public PersonIndeks getPersonIndeks() {
-        return personIndeks;
     }
 
     @Override

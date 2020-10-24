@@ -4,6 +4,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class InntektYtelseIndeks {
 
     private final Map<String, InntektYtelseModell> byIdent = new ConcurrentHashMap<>();

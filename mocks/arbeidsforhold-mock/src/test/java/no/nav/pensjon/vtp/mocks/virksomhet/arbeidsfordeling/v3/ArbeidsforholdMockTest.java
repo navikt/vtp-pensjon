@@ -1,11 +1,15 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsfordeling.v3;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import no.nav.pensjon.vtp.mocks.virksomhet.arbeidsforhold.v3.ArbeidsforholdMockImpl;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
@@ -19,19 +23,29 @@ import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.R
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerRequest;
 
 public class ArbeidsforholdMockTest {
+    private final BasisdataProviderFileImpl basisdataProviderFile = getBasisdataProviderFile();
 
-    private TestscenarioRepository testRepo;
+    private final PersonIndeks personIndeks = new PersonIndeks();
+    private final InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
+    private final OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
 
+    private final TestscenarioRepository testRepo = new TestscenarioRepositoryImpl(basisdataProviderFile, personIndeks, inntektYtelseIndeks, organisasjonIndeks);
     private TestscenarioTemplateRepository templateRepository;
 
+    private BasisdataProviderFileImpl getBasisdataProviderFile() {
+        try {
+            return new BasisdataProviderFileImpl();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Before
-    public void setup() throws IOException {
-        System.setProperty("scenarios.dir", "../../model/scenarios");
-        TestscenarioTemplateRepositoryImpl templateRepositoryImpl = new TestscenarioTemplateRepositoryImpl();
+    public void setup() {
+        TestscenarioTemplateRepositoryImpl templateRepositoryImpl = new TestscenarioTemplateRepositoryImpl(new File("../../model/scenarios"));
         templateRepositoryImpl.load();
 
         templateRepository = templateRepositoryImpl;
-        testRepo = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl());
     }
 
     @Test
@@ -40,7 +54,7 @@ public class ArbeidsforholdMockTest {
 
         Testscenario testscenario = testRepo.opprettTestscenario(template);
 
-        ArbeidsforholdMockImpl arbeidsforholdMock = new ArbeidsforholdMockImpl(testRepo.getInntektYtelseIndeks(), testRepo.getPersonIndeks());
+        ArbeidsforholdMockImpl arbeidsforholdMock = new ArbeidsforholdMockImpl(inntektYtelseIndeks, personIndeks);
 
         FinnArbeidsforholdPrArbeidstakerRequest finnArbeidsforholdPrArbeidstakerRequest = new FinnArbeidsforholdPrArbeidstakerRequest();
 
@@ -53,7 +67,6 @@ public class ArbeidsforholdMockTest {
         finnArbeidsforholdPrArbeidstakerRequest.setRapportertSomRegelverk(regelverk);
 
         testscenario.getSøkerInntektYtelse();
-
 
         try {
             arbeidsforholdMock.finnArbeidsforholdPrArbeidstaker(finnArbeidsforholdPrArbeidstakerRequest);

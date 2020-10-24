@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,19 +33,12 @@ public class TestscenarioTemplateRepositoryImpl implements TestscenarioTemplateR
 
     private final File rootDir;
 
-    public TestscenarioTemplateRepositoryImpl(File rootDir) {
-        Objects.requireNonNull(rootDir, "rootDir");
-        if (!rootDir.exists()) {
-            throw new IllegalArgumentException("Finner ikke scenarios root : " + rootDir);
-        } else if (rootDir.isDirectory()) {
-            throw new IllegalArgumentException("Er ikke directory : " + rootDir);
-        }
-        this.rootDir = rootDir;
+    public TestscenarioTemplateRepositoryImpl() {
+        this(new File(System.getProperty(SCENARIOS_DIR_PROPERTY, ".")));
     }
 
-    public TestscenarioTemplateRepositoryImpl() {
-        File start = new File(System.getProperty(SCENARIOS_DIR_PROPERTY, "."));
-        File scDir = start;
+    public TestscenarioTemplateRepositoryImpl(final File file) {
+        File scDir = file;
         File scenariosDir = new File(scDir, SCENARIOS_DIR);
         while (scDir != null && !scenariosDir.exists()) {
             scenariosDir = new File(scDir, SCENARIOS_DIR);
@@ -55,7 +47,7 @@ public class TestscenarioTemplateRepositoryImpl implements TestscenarioTemplateR
 
         if (scDir == null) {
             String workDir = new File(".").getAbsolutePath();
-            throw new IllegalArgumentException("Fant ikke scenarios dir, fra property scenarios.dir=" + start + ", workdir=" + workDir);
+            throw new IllegalArgumentException("Fant ikke scenarios dir, fra property scenarios.dir=" + file + ", workdir=" + workDir);
         } else {
             this.rootDir = scenariosDir;
         }

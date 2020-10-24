@@ -79,7 +79,8 @@ public class TestscenarioFraTemplateMapper {
         JsonMapper jsonMapper = new JsonMapper(testscenario.getVariabelContainer());
         if (node.has("vars")) {
             JsonNode vars = node.get("vars");
-            Map<String,String> defaultVars = new ObjectMapper().convertValue(vars, new TypeReference<Map<String,String>>(){});
+            Map<String,String> defaultVars = new ObjectMapper().convertValue(vars, new TypeReference<>() {
+            });
             jsonMapper.addVars(defaultVars);
         }
 

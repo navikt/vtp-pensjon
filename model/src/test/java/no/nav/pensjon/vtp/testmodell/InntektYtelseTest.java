@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.RelatertYtelseTema;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.ArenaMeldekort;
@@ -34,6 +35,8 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.beregningsgrunnlag.
 import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.ytelse.InfotrygdYtelse;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.Inntektsperiode;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
@@ -46,7 +49,7 @@ public class InntektYtelseTest {
 
     @Test
     public void skal_skrive_scenario_til_inntektytelse_json() throws Exception {
-        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl());
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl(), new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks());
         TestscenarioTilTemplateMapper mapper = new TestscenarioTilTemplateMapper();
 
         InntektYtelseModell inntektYtelse = new InntektYtelseModell();

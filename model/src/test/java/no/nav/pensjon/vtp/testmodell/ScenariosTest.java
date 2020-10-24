@@ -1,5 +1,8 @@
 package no.nav.pensjon.vtp.testmodell;
 
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
@@ -23,7 +26,7 @@ public class ScenariosTest {
 
         Collection<TestscenarioTemplate> scenarioTemplates = templateRepository.getTemplates();
 
-        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl());
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl(), new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks());
         for (TestscenarioTemplate sc : scenarioTemplates) {
             TestscenarioImpl testScenario = testScenarioRepository.opprettTestscenario(sc);
             sjekkIdenterErInjisert(testScenario);

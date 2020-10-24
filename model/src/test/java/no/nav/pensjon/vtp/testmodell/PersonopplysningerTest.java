@@ -2,7 +2,9 @@ package no.nav.pensjon.vtp.testmodell;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapperiodeModell;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BarnModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell.Kjønn;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Landkode;
@@ -38,7 +40,7 @@ public class PersonopplysningerTest {
     public void skal_skrive_scenario_til_personopplysninger_json() throws Exception {
         BasisdataProviderFileImpl basisdata = new BasisdataProviderFileImpl();
         PersonIndeks personIndeks = new PersonIndeks();
-        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(basisdata);
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(basisdata, personIndeks, new InntektYtelseIndeks(), new OrganisasjonIndeks());
 
         TestscenarioTilTemplateMapper mapper = new TestscenarioTilTemplateMapper();
 

@@ -52,21 +52,6 @@ public class UserRepositoryConfiguration {
     }
 
     @Bean
-    public InntektYtelseIndeks inntektYtelseIndeks(final TestscenarioRepository testscenarioRepository) {
-        return testscenarioRepository.getInntektYtelseIndeks();
-    }
-
-    @Bean
-    public OrganisasjonIndeks organisasjonIndeks(final TestscenarioRepository testscenarioRepository) {
-        return testscenarioRepository.getOrganisasjonIndeks();
-    }
-
-    @Bean
-    public PersonIndeks personIndeks(final TestscenarioRepository testscenarioRepository) {
-        return testscenarioRepository.getPersonIndeks();
-    }
-
-    @Bean
     public TestscenarioTemplateRepository testscenarioTemplateRepository() {
         TestscenarioTemplateRepositoryImpl templateRepositoryImpl = new TestscenarioTemplateRepositoryImpl();
         templateRepositoryImpl.load();
@@ -74,8 +59,9 @@ public class UserRepositoryConfiguration {
     }
 
     @Bean
-    public TestscenarioRepository testscenarioRepository(BasisdataProvider basisdataProvider) {
-        return new TestscenarioRepositoryImpl(basisdataProvider);
+    public TestscenarioRepository testscenarioRepository(BasisdataProvider basisdataProvider, PersonIndeks personIndeks,
+            InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonIndeks organisasjonIndeks) {
+        return new TestscenarioRepositoryImpl(basisdataProvider, personIndeks, inntektYtelseIndeks, organisasjonIndeks);
     }
 
     @Bean
