@@ -6,14 +6,14 @@ import java.util.Map;
 import java.util.Optional;
 
 public class OrganisasjonIndeks {
-    private Map<String, OrganisasjonModell> organisasjoner = new HashMap<>();
+    private final Map<String, OrganisasjonModell> organisasjoner = new HashMap<>();
+
+    public Optional<OrganisasjonModell> getOrganisasjon(String orgnr) {
+        return getModellForIdent(orgnr);
+    }
 
     public synchronized Optional<OrganisasjonModell> getModellForIdent(String orgnr) {
         return Optional.ofNullable(organisasjoner.get(orgnr));
-    }
-
-    public synchronized OrganisasjonModell roundRobin(int round) {
-        return organisasjoner.get(round % organisasjoner.size());
     }
 
     public synchronized void leggTil(List<OrganisasjonModell> modeller) {

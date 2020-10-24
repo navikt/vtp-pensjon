@@ -1,20 +1,19 @@
 package no.nav.pensjon.vtp.testmodell.repo;
 
+import java.util.Map;
+
 import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
-
-import java.util.Map;
-import java.util.Optional;
 
 public interface TestscenarioBuilderRepository {
 
     InntektYtelseIndeks getInntektYtelseIndeks();
 
-    PersonIndeks getPersonIndeks();
+    OrganisasjonIndeks getOrganisasjonIndeks();
 
-    Optional<OrganisasjonModell> getOrganisasjon(String orgnr);
+    PersonIndeks getPersonIndeks();
 
     LokalIdentIndeks getIdenter(String unikScenarioId);
 

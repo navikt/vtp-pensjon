@@ -33,12 +33,6 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
     private final InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
     private final OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
 
-    @Override
-    public Optional<OrganisasjonModell> getOrganisasjon(String orgnr) {
-        return organisasjonIndeks.getModellForIdent(orgnr);
-    }
-
-
     protected TestscenarioBuilderRepositoryImpl(BasisdataProvider basisdata) {
         this.basisdata = basisdata;
     }
@@ -104,6 +98,11 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
     @Override
     public InntektYtelseIndeks getInntektYtelseIndeks() {
         return inntektYtelseIndeks;
+    }
+
+    @Override
+    public OrganisasjonIndeks getOrganisasjonIndeks() {
+        return organisasjonIndeks;
     }
 
     @Override

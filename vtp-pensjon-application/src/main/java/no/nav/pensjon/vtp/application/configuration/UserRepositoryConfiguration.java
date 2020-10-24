@@ -16,6 +16,7 @@ import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataServ
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.BasisdataProvider;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
@@ -54,6 +55,12 @@ public class UserRepositoryConfiguration {
     public InntektYtelseIndeks inntektYtelseIndeks(final TestscenarioRepository testscenarioRepository) {
         return testscenarioRepository.getInntektYtelseIndeks();
     }
+
+    @Bean
+    public OrganisasjonIndeks organisasjonIndeks(final TestscenarioRepository testscenarioRepository) {
+        return testscenarioRepository.getOrganisasjonIndeks();
+    }
+
     @Bean
     public PersonIndeks personIndeks(final TestscenarioRepository testscenarioRepository) {
         return testscenarioRepository.getPersonIndeks();
