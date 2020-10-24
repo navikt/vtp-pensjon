@@ -43,13 +43,16 @@ import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTilTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
+import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
 public class InntektYtelseTest {
     private static final JsonMapper jsonMapper =  new JsonMapper();
 
     @Test
     public void skal_skrive_scenario_til_inntektytelse_json() throws Exception {
-        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl(), new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks());
+        VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks(), BasisdataProviderFileImpl.loadAdresser(),
+                virksomhetIndeks);
         TestscenarioTilTemplateMapper mapper = new TestscenarioTilTemplateMapper();
 
         InntektYtelseModell inntektYtelse = new InntektYtelseModell();
@@ -57,7 +60,7 @@ public class InntektYtelseTest {
         initInfotrygdModell(inntektYtelse);
         initInntektskomponentModell(inntektYtelse);
 
-        TestscenarioImpl scenario = new TestscenarioImpl("test3", "test3-123", testScenarioRepository);
+        TestscenarioImpl scenario = new TestscenarioImpl("test3", "test3-123", testScenarioRepository, virksomhetIndeks);
         scenario.setSøkerInntektYtelse(inntektYtelse);
 
         String json = skrivInntektYtelse(scenario, mapper);

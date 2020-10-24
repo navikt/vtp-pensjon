@@ -1,26 +1,28 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import no.nav.pensjon.vtp.testmodell.util.TestdataUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import no.nav.pensjon.vtp.testmodell.identer.FiktiveFnr;
+import no.nav.pensjon.vtp.testmodell.identer.IdentGenerator;
 import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModeller;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import no.nav.pensjon.vtp.testmodell.repo.BasisdataProvider;
-import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AnnenPartModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonNavn;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
+import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
+import no.nav.pensjon.vtp.testmodell.util.TestdataUtil;
 
 public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioBuilderRepository {
 
@@ -29,14 +31,14 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
     private final Map<String, Testscenario> scenarios = new ConcurrentHashMap<>(); // not ordered for front-end
     private final Map<String, LokalIdentIndeks> identer = new ConcurrentHashMap<>();
 
-    private final BasisdataProvider basisdata;
+    private final IdentGenerator identGenerator = new FiktiveFnr();
+
     private final PersonIndeks personIndeks;
     private final InntektYtelseIndeks inntektYtelseIndeks;
     private final OrganisasjonIndeks organisasjonIndeks;
 
-    protected TestscenarioBuilderRepositoryImpl(BasisdataProvider basisdata, PersonIndeks personIndeks,
+    protected TestscenarioBuilderRepositoryImpl(PersonIndeks personIndeks,
             InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonIndeks organisasjonIndeks) {
-        this.basisdata = basisdata;
         this.personIndeks = personIndeks;
         this.inntektYtelseIndeks = inntektYtelseIndeks;
         this.organisasjonIndeks = organisasjonIndeks;
@@ -50,11 +52,6 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
     @Override
     public Testscenario getTestscenario(String id) {
         return scenarios.get(id);
-    }
-
-    @Override
-    public BasisdataProvider getBasisdata() {
-        return basisdata;
     }
 
     public void indekser(TestscenarioImpl testScenario) {
@@ -96,7 +93,7 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
 
     @Override
     public LokalIdentIndeks getIdenter(String unikScenarioId) {
-        return identer.computeIfAbsent(unikScenarioId, n -> new LokalIdentIndeks(n, basisdata.getIdentGenerator()));
+        return identer.computeIfAbsent(unikScenarioId, n -> new LokalIdentIndeks(n, identGenerator));
     }
 
     @Override

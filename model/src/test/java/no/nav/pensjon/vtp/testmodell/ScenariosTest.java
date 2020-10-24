@@ -26,7 +26,7 @@ public class ScenariosTest {
 
         Collection<TestscenarioTemplate> scenarioTemplates = templateRepository.getTemplates();
 
-        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl(), new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks());
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks(), BasisdataProviderFileImpl.loadAdresser(), BasisdataProviderFileImpl.loadVirksomheter());
         for (TestscenarioTemplate sc : scenarioTemplates) {
             TestscenarioImpl testScenario = testScenarioRepository.opprettTestscenario(sc);
             sjekkIdenterErInjisert(testScenario);

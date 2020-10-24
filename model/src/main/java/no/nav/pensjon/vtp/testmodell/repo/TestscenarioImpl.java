@@ -3,11 +3,13 @@ package no.nav.pensjon.vtp.testmodell.repo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.Inntektsperiode;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModeller;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
@@ -15,6 +17,7 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.PersonArbeidsgiver;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.util.VariabelContainer;
 import no.nav.pensjon.vtp.testmodell.virksomhet.ScenarioVirksomheter;
+import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
 public class TestscenarioImpl implements Testscenario {
 
@@ -31,20 +34,20 @@ public class TestscenarioImpl implements Testscenario {
 
     private InntektYtelseModell annenpartInntektYtelse;
 
-    private OrganisasjonModeller organisasjonModeller = new OrganisasjonModeller();
+    private final OrganisasjonModeller organisasjonModeller = new OrganisasjonModeller();
 
-    private ScenarioVirksomheter scenarioVirksomheter;
+    private final ScenarioVirksomheter scenarioVirksomheter;
 
     /** Unik testscenario id. */
-    private String id;
+    private final String id;
 
-    private VariabelContainer vars = new VariabelContainer();
+    private final VariabelContainer vars = new VariabelContainer();
 
-    public TestscenarioImpl(String templateNavn, String id, TestscenarioBuilderRepository scenarioIndeks) {
+    public TestscenarioImpl(String templateNavn, String id, TestscenarioBuilderRepository scenarioIndeks, final VirksomhetIndeks virksomhetIndeks) {
         this.templateNavn = templateNavn;
         this.id = id;
 
-        this.scenarioVirksomheter = new ScenarioVirksomheter(this.templateNavn, scenarioIndeks.getBasisdata().getVirksomhetIndeks());
+        this.scenarioVirksomheter = new ScenarioVirksomheter(this.templateNavn, virksomhetIndeks);
 
         this.identer = scenarioIndeks.getIdenter(getId());
     }
@@ -134,8 +137,8 @@ public class TestscenarioImpl implements Testscenario {
             return Collections.emptyList();
         }
         return iyModell.getInntektskomponentModell().getInntektsperioder().stream()
-            .map(ip -> ip.getPersonligArbeidsgiver())
-            .filter(pa -> pa != null)
+            .map(Inntektsperiode::getPersonligArbeidsgiver)
+            .filter(Objects::nonNull)
             .collect(Collectors.toList());
     }
 }

@@ -23,22 +23,22 @@ import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.R
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerRequest;
 
 public class ArbeidsforholdMockTest {
-    private final BasisdataProviderFileImpl basisdataProviderFile = getBasisdataProviderFile();
-
     private final PersonIndeks personIndeks = new PersonIndeks();
     private final InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
     private final OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
 
-    private final TestscenarioRepository testRepo = new TestscenarioRepositoryImpl(basisdataProviderFile, personIndeks, inntektYtelseIndeks, organisasjonIndeks);
-    private TestscenarioTemplateRepository templateRepository;
+    private final TestscenarioRepository testRepo = getTestscenarioRepository();
 
-    private BasisdataProviderFileImpl getBasisdataProviderFile() {
+    private TestscenarioRepositoryImpl getTestscenarioRepository() {
         try {
-            return new BasisdataProviderFileImpl();
+            return new TestscenarioRepositoryImpl(personIndeks, inntektYtelseIndeks, organisasjonIndeks, BasisdataProviderFileImpl.loadAdresser(),
+                    BasisdataProviderFileImpl.loadVirksomheter());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
+    private TestscenarioTemplateRepository templateRepository;
 
     @Before
     public void setup() {
