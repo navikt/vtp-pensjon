@@ -16,7 +16,7 @@ public class MuterScenarioTest {
 
     @Test
     public void slettScenarioTest() throws Exception{
-        TestscenarioTemplateRepositoryImpl templateRepository = TestscenarioTemplateRepositoryImpl.getInstance();
+        TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl();
         templateRepository.load();
         Collection<TestscenarioTemplate> scenarioTemplates = templateRepository.getTemplates();
         TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl());

@@ -27,7 +27,7 @@ public class AdresserTest {
     @Test
     public void sjekk_scenarios() throws Exception {
         TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl());
-        TestscenarioTemplateRepositoryImpl templateRepository = TestscenarioTemplateRepositoryImpl.getInstance();
+        TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl();
         templateRepository.load();
         for (TestscenarioTemplate testScenarioTemplate : templateRepository.getTemplates()) {
             TestscenarioImpl testScenario = testScenarioRepository.opprettTestscenario(testScenarioTemplate);

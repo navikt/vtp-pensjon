@@ -34,8 +34,6 @@ public class TestscenarioTemplateRepositoryImpl implements TestscenarioTemplateR
 
     private final File rootDir;
 
-    private static TestscenarioTemplateRepositoryImpl testscenarioTemplateRepository;
-
     public TestscenarioTemplateRepositoryImpl(File rootDir) {
         Objects.requireNonNull(rootDir, "rootDir");
         if (!rootDir.exists()) {
@@ -46,17 +44,7 @@ public class TestscenarioTemplateRepositoryImpl implements TestscenarioTemplateR
         this.rootDir = rootDir;
     }
 
-    public static synchronized TestscenarioTemplateRepositoryImpl getInstance(){
-        if(testscenarioTemplateRepository == null){
-            testscenarioTemplateRepository = new TestscenarioTemplateRepositoryImpl();
-        }
-        return testscenarioTemplateRepository;
-    }
-
-
-
-
-    private TestscenarioTemplateRepositoryImpl() {
+    public TestscenarioTemplateRepositoryImpl() {
         File start = new File(System.getProperty(SCENARIOS_DIR_PROPERTY, "."));
         File scDir = start;
         File scenariosDir = new File(scDir, SCENARIOS_DIR);
@@ -129,7 +117,7 @@ public class TestscenarioTemplateRepositoryImpl implements TestscenarioTemplateR
     private Map<String, String> loadTemplateVars(File varsFile) throws IOException {
         if (varsFile.exists()) {
             try (InputStream is = new FileInputStream(varsFile)) {
-                TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {
+                TypeReference<HashMap<String, String>> typeRef = new TypeReference<>() {
                 };
                 return jsonMapper.lagObjectMapper().readValue(is, typeRef);
             }

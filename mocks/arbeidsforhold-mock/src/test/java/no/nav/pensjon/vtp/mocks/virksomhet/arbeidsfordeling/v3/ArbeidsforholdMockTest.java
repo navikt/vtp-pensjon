@@ -28,7 +28,7 @@ public class ArbeidsforholdMockTest {
     @Before
     public void setup() throws IOException {
         System.setProperty("scenarios.dir", "../../model/scenarios");
-        TestscenarioTemplateRepositoryImpl templateRepositoryImpl = TestscenarioTemplateRepositoryImpl.getInstance();
+        TestscenarioTemplateRepositoryImpl templateRepositoryImpl = new TestscenarioTemplateRepositoryImpl();
         templateRepositoryImpl.load();
 
         templateRepository = templateRepositoryImpl;

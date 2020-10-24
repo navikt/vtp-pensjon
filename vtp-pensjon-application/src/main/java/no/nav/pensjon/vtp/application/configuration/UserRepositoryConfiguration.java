@@ -56,7 +56,7 @@ public class UserRepositoryConfiguration {
 
     @Bean
     public TestscenarioTemplateRepository testscenarioTemplateRepository() {
-        TestscenarioTemplateRepositoryImpl templateRepositoryImpl = TestscenarioTemplateRepositoryImpl.getInstance();
+        TestscenarioTemplateRepositoryImpl templateRepositoryImpl = new TestscenarioTemplateRepositoryImpl();
         templateRepositoryImpl.load();
         return templateRepositoryImpl;
     }

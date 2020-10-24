@@ -18,7 +18,7 @@ public class ScenariosTest {
 
     @Test
     public void skal_laste_scenarios() throws Exception {
-        TestscenarioTemplateRepositoryImpl templateRepository = TestscenarioTemplateRepositoryImpl.getInstance();
+        TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl();
         templateRepository.load();
 
         Collection<TestscenarioTemplate> scenarioTemplates = templateRepository.getTemplates();
