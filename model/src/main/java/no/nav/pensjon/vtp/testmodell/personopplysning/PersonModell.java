@@ -17,7 +17,7 @@ import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapModell;
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapperiodeModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonstatusModell.Personstatuser;
 
-public abstract class PersonModell extends BrukerModell {
+public abstract class   PersonModell extends BrukerModell {
 
     /** NAV kodeverk: http://nav.no/kodeverk/Kodeverk/Diskresjonskoder. */
     public enum Diskresjonskoder {

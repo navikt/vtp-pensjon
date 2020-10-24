@@ -40,13 +40,9 @@ public class TestscenarioImpl implements Testscenario {
 
     private VariabelContainer vars = new VariabelContainer();
 
-    @SuppressWarnings("unused")
-    private TestscenarioBuilderRepository scenarioIndeks;
-
     public TestscenarioImpl(String templateNavn, String id, TestscenarioBuilderRepository scenarioIndeks) {
         this.templateNavn = templateNavn;
         this.id = id;
-        this.scenarioIndeks = scenarioIndeks;
 
         this.scenarioVirksomheter = new ScenarioVirksomheter(this.templateNavn, scenarioIndeks.getBasisdata().getVirksomhetIndeks());
 

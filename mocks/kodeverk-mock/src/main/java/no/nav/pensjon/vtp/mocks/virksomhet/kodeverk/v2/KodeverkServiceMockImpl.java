@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.kodeverk.v2.KodeverkPortType;
 import no.nav.tjeneste.virksomhet.kodeverk.v2.meldinger.FinnKodeverkListeRequest;
 import no.nav.tjeneste.virksomhet.kodeverk.v2.meldinger.FinnKodeverkListeResponse;
@@ -27,14 +26,6 @@ import no.nav.tjeneste.virksomhet.kodeverk.v2.meldinger.HentKodeverkResponse;
 public class KodeverkServiceMockImpl implements KodeverkPortType {
 
     private static final Logger LOG = LoggerFactory.getLogger(KodeverkServiceMockImpl.class);
-
-    private TestscenarioBuilderRepository scenarioRepository;
-
-    public KodeverkServiceMockImpl() {}
-
-    public KodeverkServiceMockImpl(TestscenarioBuilderRepository scenarioRepository) {
-        this.scenarioRepository = scenarioRepository;
-    }
 
     @Override
     public void ping() {
