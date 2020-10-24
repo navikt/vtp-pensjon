@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
@@ -21,7 +20,7 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.GateadresseModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Landkode;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.UstrukturertAdresseModell;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
+import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
@@ -41,7 +40,7 @@ public class AdresserTest {
         TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl();
         templateRepository.load();
         for (TestscenarioTemplate testScenarioTemplate : templateRepository.getTemplates()) {
-            TestscenarioImpl testScenario = testScenarioRepository.opprettTestscenario(testScenarioTemplate);
+            Testscenario testScenario = testScenarioRepository.opprettTestscenario(testScenarioTemplate);
             sjekkAdresseIndeks(testScenario);
         }
     }
@@ -94,7 +93,7 @@ public class AdresserTest {
         assertThat(adresser2).hasSize(adresser.size());
     }
 
-    private void sjekkAdresseIndeks(TestscenarioImpl sc) {
+    private void sjekkAdresseIndeks(Testscenario sc) {
         assertThat(sc.getAdresseIndeks()).isNotNull();
         AdresseModell bostedsadresse = sc.getAdresseIndeks().finn(AdresseType.BOSTEDSADRESSE, Landkode.NOR);
         assertThat(bostedsadresse).isNotNull();

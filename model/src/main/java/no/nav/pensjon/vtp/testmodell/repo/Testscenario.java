@@ -20,7 +20,7 @@ import no.nav.pensjon.vtp.testmodell.util.VariabelContainer;
 import no.nav.pensjon.vtp.testmodell.virksomhet.ScenarioVirksomheter;
 import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
-public class TestscenarioImpl {
+public class Testscenario {
 
     private final String templateNavn;
 
@@ -44,7 +44,7 @@ public class TestscenarioImpl {
 
     private final VariabelContainer vars = new VariabelContainer();
 
-    public TestscenarioImpl(String templateNavn, String id, IdenterIndeks scenarioIndeks, final VirksomhetIndeks virksomhetIndeks) {
+    public Testscenario(String templateNavn, String id, IdenterIndeks scenarioIndeks, final VirksomhetIndeks virksomhetIndeks) {
         this.templateNavn = templateNavn;
         this.id = id;
 

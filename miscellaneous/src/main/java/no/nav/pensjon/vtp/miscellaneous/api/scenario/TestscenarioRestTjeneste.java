@@ -12,7 +12,7 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.Arbeidsforhold
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BarnModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
+import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
@@ -48,7 +48,7 @@ public class TestscenarioRestTjeneste {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "", notes = "Henter alle templates som er initiert i minnet til VTP", responseContainer = "List", response = TestscenarioDto.class)
     public List<TestscenarioDto> hentInitialiserteCaser() {
-        Map<String, TestscenarioImpl> testscenarios = testscenarioRepository.getTestscenarios();
+        Map<String, Testscenario> testscenarios = testscenarioRepository.getTestscenarios();
         List<TestscenarioDto> testscenarioList = new ArrayList<>();
 
         testscenarios.forEach((key, testscenario) -> {
@@ -68,7 +68,7 @@ public class TestscenarioRestTjeneste {
     @ApiOperation(value = "", notes = "Returnerer testscenario som matcher id", response = TestscenarioDto.class)
     public Response hentScenario(@PathParam(SCENARIO_ID) String id){
         if (testscenarioRepository.getTestscenario(id) != null) {
-            TestscenarioImpl testscenario = testscenarioRepository.getTestscenario(id);
+            Testscenario testscenario = testscenarioRepository.getTestscenario(id);
             return Response
                     .status(Response.Status.OK)
                     .entity(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()))
@@ -104,7 +104,7 @@ public class TestscenarioRestTjeneste {
 
         TestscenarioTemplate template = templateRepository.finn(templateKey);
         Map<String, String> userSuppliedVariables = getUserSuppliedVariables(uriInfo.getQueryParameters(), TEMPLATE_KEY);
-        TestscenarioImpl testscenario = testscenarioRepository.opprettTestscenario(template, userSuppliedVariables);
+        Testscenario testscenario = testscenarioRepository.opprettTestscenario(template, userSuppliedVariables);
         logger.info("Initialiserer testscenario i VTP fra template: [{}] med id: [{}] ", templateKey, testscenario.getId());
 
         pensjonTestdataService.opprettData(testscenario);
@@ -120,7 +120,7 @@ public class TestscenarioRestTjeneste {
     @ApiOperation(value = "", notes = ("Initialiserer et testscenario basert på angitt json streng og returnerer det initialiserte objektet"), response = TestscenarioDto.class)
     public Response initialiserTestScenario(String testscenarioJson,  @Context UriInfo uriInfo) {
         Map<String, String> userSuppliedVariables = getUserSuppliedVariables(uriInfo.getQueryParameters(), TEMPLATE_KEY);
-        TestscenarioImpl testscenario = testscenarioRepository.opprettTestscenarioFraJsonString(testscenarioJson, userSuppliedVariables);
+        Testscenario testscenario = testscenarioRepository.opprettTestscenarioFraJsonString(testscenarioJson, userSuppliedVariables);
         logger.info("Initialiserer testscenario med ekstern testdatadefinisjon. Opprettet med id: [{}] ", testscenario.getId());
         return Response
                 .status(Response.Status.CREATED)
@@ -141,11 +141,11 @@ public class TestscenarioRestTjeneste {
     }
 
 
-    private TestscenarioDto konverterTilTestscenarioDto(TestscenarioImpl testscenario) {
+    private TestscenarioDto konverterTilTestscenarioDto(Testscenario testscenario) {
         return konverterTilTestscenarioDto(testscenario, null, null);
     }
 
-    private TestscenarioDto konverterTilTestscenarioDto(TestscenarioImpl testscenario, String templateNavn) {
+    private TestscenarioDto konverterTilTestscenarioDto(Testscenario testscenario, String templateNavn) {
         String templateKey = null;
         if (templateNavn != null) {
             templateKey = templateNavn.replaceFirst("[-_].+$", "");
@@ -153,7 +153,7 @@ public class TestscenarioRestTjeneste {
         return konverterTilTestscenarioDto(testscenario, templateKey, templateNavn);
     }
 
-    private TestscenarioDto konverterTilTestscenarioDto(TestscenarioImpl testscenario, String templateKey, String templateName) {
+    private TestscenarioDto konverterTilTestscenarioDto(Testscenario testscenario, String templateKey, String templateName) {
         String fnrSøker = testscenario.getPersonopplysninger().getSøker().getIdent();
         String fnrAnnenPart = null;
         String aktørIdAnnenPart = null;
@@ -196,7 +196,7 @@ public class TestscenarioRestTjeneste {
 
     }
 
-    private Optional<LocalDate> fødselsdatoBarn(TestscenarioImpl testscenario) {
+    private Optional<LocalDate> fødselsdatoBarn(Testscenario testscenario) {
         Optional<BarnModell> barnModell = testscenario.getPersonopplysninger().getFamilierelasjoner()
                 .stream()
                 .filter(modell -> modell.getTil() instanceof BarnModell)

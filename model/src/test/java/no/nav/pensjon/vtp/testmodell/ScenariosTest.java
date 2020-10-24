@@ -7,7 +7,7 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
+import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
@@ -35,7 +35,7 @@ public class ScenariosTest {
         TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks(), virksomhetIndeks);
         TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks(), testscenarioFraTemplateMapper);
         for (TestscenarioTemplate sc : scenarioTemplates) {
-            TestscenarioImpl testScenario = testScenarioRepository.opprettTestscenario(sc);
+            Testscenario testScenario = testScenarioRepository.opprettTestscenario(sc);
             sjekkIdenterErInjisert(testScenario);
             Personopplysninger pers = testScenario.getPersonopplysninger();
             assertThat(pers).isNotNull();
@@ -45,7 +45,7 @@ public class ScenariosTest {
         }
     }
 
-    private void sjekkIdenterErInjisert(TestscenarioImpl sc) {
+    private void sjekkIdenterErInjisert(Testscenario sc) {
         sc.getIdenter().getAlleIdenter().entrySet().forEach(System.out::println);
         System.out.println("--------------");
     }

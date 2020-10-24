@@ -3,9 +3,9 @@ package no.nav.pensjon.vtp.testmodell.repo;
 import java.util.Map;
 
 public interface TestscenarioBuilderRepository {
-    Map<String, TestscenarioImpl> getTestscenarios();
+    Map<String, Testscenario> getTestscenarios();
 
-    TestscenarioImpl getTestscenario(String id);
+    Testscenario getTestscenario(String id);
 
     Boolean slettScenario(String id);
 }

@@ -35,7 +35,7 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.beregningsgrunnlag.
 import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.ytelse.InfotrygdYtelse;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.Inntektsperiode;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
+import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTilTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
@@ -55,7 +55,7 @@ public class InntektYtelseTest {
         initInfotrygdModell(inntektYtelse);
         initInntektskomponentModell(inntektYtelse);
 
-        TestscenarioImpl scenario = new TestscenarioImpl("test3", "test3-123", identerIndeks, virksomhetIndeks);
+        Testscenario scenario = new Testscenario("test3", "test3-123", identerIndeks, virksomhetIndeks);
         scenario.setSøkerInntektYtelse(inntektYtelse);
 
         String json = skrivInntektYtelse(scenario, mapper);
@@ -164,7 +164,7 @@ public class InntektYtelseTest {
         return arenaSak;
     }
 
-    private String skrivInntektYtelse(TestscenarioImpl scenario, TestscenarioTilTemplateMapper mapper) throws IOException {
+    private String skrivInntektYtelse(Testscenario scenario, TestscenarioTilTemplateMapper mapper) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BufferedOutputStream buf = new BufferedOutputStream(baos);
         mapper.skrivInntektYtelse(jsonMapper.canonicalMapper(), buf, scenario, scenario.getSøkerInntektYtelse());

@@ -12,7 +12,7 @@ import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModeller;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
+import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
 import no.nav.pensjon.vtp.testmodell.virksomhet.ScenarioVirksomheter;
@@ -38,24 +38,24 @@ public class TestscenarioFraTemplateMapper {
         this.virksomhetIndeks = virksomhetIndeks;
     }
 
-    public TestscenarioImpl lagTestscenario(TestscenarioTemplate template) {
+    public Testscenario lagTestscenario(TestscenarioTemplate template) {
         String uuid = UUID.randomUUID().toString();
         Map<String, String> emptyMap = Collections.emptyMap();
         return lagTestscenario(template, uuid, emptyMap);
     }
 
-    public TestscenarioImpl lagTestscenario(TestscenarioTemplate template, String unikTestscenarioId, Map<String, String> vars) {
-        TestscenarioImpl testScenario = new TestscenarioImpl(template.getTemplateNavn(), unikTestscenarioId, identerIndeks, virksomhetIndeks);
+    public Testscenario lagTestscenario(TestscenarioTemplate template, String unikTestscenarioId, Map<String, String> vars) {
+        Testscenario testScenario = new Testscenario(template.getTemplateNavn(), unikTestscenarioId, identerIndeks, virksomhetIndeks);
         load(testScenario, template, vars);
         return testScenario;
     }
 
-    public TestscenarioImpl lagTestscenarioFraJsonString(String testscenarioJson, String unikTestscenarioId, Map<String, String> vars) {
+    public Testscenario lagTestscenarioFraJsonString(String testscenarioJson, String unikTestscenarioId, Map<String, String> vars) {
         ObjectNode node = hentObjecetNodeForTestscenario(testscenarioJson);
         String templateNavn = hentTemplateNavnFraJsonString(node);
-        TestscenarioImpl testscenarioImpl = new TestscenarioImpl(templateNavn, unikTestscenarioId, identerIndeks, virksomhetIndeks);
-        loadTestscenarioFraJsonString(testscenarioImpl, node, vars);
-        return testscenarioImpl;
+        Testscenario testscenario = new Testscenario(templateNavn, unikTestscenarioId, identerIndeks, virksomhetIndeks);
+        loadTestscenarioFraJsonString(testscenario, node, vars);
+        return testscenario;
     }
 
     private ObjectNode hentObjecetNodeForTestscenario(String testscenarioJson) {
@@ -78,7 +78,7 @@ public class TestscenarioFraTemplateMapper {
     }
 
 
-    private void loadTestscenarioFraJsonString(TestscenarioImpl testscenario, ObjectNode node, Map<String, String> overrideVars) {
+    private void loadTestscenarioFraJsonString(Testscenario testscenario, ObjectNode node, Map<String, String> overrideVars) {
         JsonMapper jsonMapper = new JsonMapper(testscenario.getVariabelContainer());
         if (node.has("vars")) {
             JsonNode vars = node.get("vars");
@@ -118,7 +118,7 @@ public class TestscenarioFraTemplateMapper {
         }
     }
 
-    private void load(TestscenarioImpl scenario, TestscenarioTemplate template, Map<String, String> overrideVars) {
+    private void load(Testscenario scenario, TestscenarioTemplate template, Map<String, String> overrideVars) {
         JsonMapper jsonMapper = new JsonMapper(scenario.getVariabelContainer());
         jsonMapper.addVars(template.getDefaultVars());
         jsonMapper.addVars(overrideVars);
@@ -169,7 +169,7 @@ public class TestscenarioFraTemplateMapper {
     }
 
     /** Setter opp indekser som kan injiseres i modellen. */
-    private void initJsonMapper(JsonMapper jsonMapper, TestscenarioImpl scenario) {
+    private void initJsonMapper(JsonMapper jsonMapper, Testscenario scenario) {
         // adresse maler
         scenario.setAdresseIndeks(adresseIndeks);
 
