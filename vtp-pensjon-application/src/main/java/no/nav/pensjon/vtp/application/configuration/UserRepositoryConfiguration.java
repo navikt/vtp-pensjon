@@ -26,6 +26,7 @@ import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.JournalRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
@@ -66,9 +67,9 @@ public class UserRepositoryConfiguration {
 
     @Bean
     public TestscenarioRepository testscenarioRepository(PersonIndeks personIndeks,
-            InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonIndeks organisasjonIndeks, AdresseIndeks adresseIndeks,
-            VirksomhetIndeks virksomhetIndeks) {
-        return new TestscenarioRepositoryImpl(personIndeks, inntektYtelseIndeks, organisasjonIndeks, adresseIndeks, virksomhetIndeks);
+            InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonIndeks organisasjonIndeks,
+            TestscenarioFraTemplateMapper testscenarioFraTemplateMapper) {
+        return new TestscenarioRepositoryImpl(personIndeks, inntektYtelseIndeks, organisasjonIndeks, testscenarioFraTemplateMapper);
     }
 
     @Bean

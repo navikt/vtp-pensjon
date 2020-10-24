@@ -7,16 +7,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 import no.nav.pensjon.vtp.mocks.virksomhet.arbeidsforhold.v3.ArbeidsforholdMockImpl;
+import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidstakerUgyldigInput;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.NorskIdent;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Regelverker;
@@ -31,8 +35,11 @@ public class ArbeidsforholdMockTest {
 
     private TestscenarioRepositoryImpl getTestscenarioRepository() {
         try {
-            return new TestscenarioRepositoryImpl(personIndeks, inntektYtelseIndeks, organisasjonIndeks, BasisdataProviderFileImpl.loadAdresser(),
-                    BasisdataProviderFileImpl.loadVirksomheter());
+            AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
+            VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
+            TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks(), virksomhetIndeks);
+            return new TestscenarioRepositoryImpl(personIndeks, inntektYtelseIndeks, organisasjonIndeks,
+                    testscenarioFraTemplateMapper);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

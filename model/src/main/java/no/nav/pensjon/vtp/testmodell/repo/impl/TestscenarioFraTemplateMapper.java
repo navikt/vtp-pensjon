@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
@@ -20,25 +22,20 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
-public class TestscenarioFraTemplateMapper {
+import org.springframework.stereotype.Component;
 
+@Component
+public class TestscenarioFraTemplateMapper {
     private final AdresseIndeks adresseIndeks;
-    private final TestscenarioRepositoryImpl testScenarioRepository;
+    private final IdenterIndeks identerIndeks;
     private final VirksomhetIndeks virksomhetIndeks;
 
-    public TestscenarioFraTemplateMapper(AdresseIndeks adresseIndeks, TestscenarioRepositoryImpl testScenarioRepository,
-            VirksomhetIndeks virksomhetIndeks) {
+    public TestscenarioFraTemplateMapper(AdresseIndeks adresseIndeks, IdenterIndeks identerIndeks, VirksomhetIndeks virksomhetIndeks) {
         this.adresseIndeks = adresseIndeks;
+        this.identerIndeks = identerIndeks;
         this.virksomhetIndeks = virksomhetIndeks;
-        Objects.requireNonNull(testScenarioRepository, "testScenarioRepository");
-        this.testScenarioRepository = testScenarioRepository;
-    }
-
-    public TestscenarioBuilderRepositoryImpl getTestscenarioRepository() {
-        return testScenarioRepository;
     }
 
     public TestscenarioImpl lagTestscenario(TestscenarioTemplate template) {
@@ -48,7 +45,7 @@ public class TestscenarioFraTemplateMapper {
     }
 
     public TestscenarioImpl lagTestscenario(TestscenarioTemplate template, String unikTestscenarioId, Map<String, String> vars) {
-        TestscenarioImpl testScenario = new TestscenarioImpl(template.getTemplateNavn(), unikTestscenarioId, testScenarioRepository, virksomhetIndeks);
+        TestscenarioImpl testScenario = new TestscenarioImpl(template.getTemplateNavn(), unikTestscenarioId, identerIndeks, virksomhetIndeks);
         load(testScenario, template, vars);
         return testScenario;
     }
@@ -56,7 +53,7 @@ public class TestscenarioFraTemplateMapper {
     public TestscenarioImpl lagTestscenarioFraJsonString(String testscenarioJson, String unikTestscenarioId, Map<String, String> vars) {
         ObjectNode node = hentObjecetNodeForTestscenario(testscenarioJson);
         String templateNavn = hentTemplateNavnFraJsonString(node);
-        TestscenarioImpl testscenarioImpl = new TestscenarioImpl(templateNavn, unikTestscenarioId, testScenarioRepository, virksomhetIndeks);
+        TestscenarioImpl testscenarioImpl = new TestscenarioImpl(templateNavn, unikTestscenarioId, identerIndeks, virksomhetIndeks);
         loadTestscenarioFraJsonString(testscenarioImpl, node, vars);
         return testscenarioImpl;
     }
@@ -119,8 +116,6 @@ public class TestscenarioFraTemplateMapper {
             Personopplysninger personopplysninger = objectMapper.convertValue(personopplysningerResult, Personopplysninger.class);
             testscenario.setPersonopplysninger(personopplysninger);
         }
-
-        testScenarioRepository.indekser(testscenario);
     }
 
     private void load(TestscenarioImpl scenario, TestscenarioTemplate template, Map<String, String> overrideVars) {
@@ -171,8 +166,6 @@ public class TestscenarioFraTemplateMapper {
         } catch (IOException e) {
             throw new IllegalArgumentException("Kunne ikke lese organisasjon.json for scenario:" + scenario, e);
         }
-
-        testScenarioRepository.indekser(scenario);
     }
 
     /** Setter opp indekser som kan injiseres i modellen. */

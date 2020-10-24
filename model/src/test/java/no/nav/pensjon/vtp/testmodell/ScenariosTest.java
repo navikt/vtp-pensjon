@@ -1,15 +1,19 @@
 package no.nav.pensjon.vtp.testmodell;
 
+import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
 import org.junit.Test;
 
@@ -26,7 +30,10 @@ public class ScenariosTest {
 
         Collection<TestscenarioTemplate> scenarioTemplates = templateRepository.getTemplates();
 
-        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks(), BasisdataProviderFileImpl.loadAdresser(), BasisdataProviderFileImpl.loadVirksomheter());
+        AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
+        VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
+        TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks(), virksomhetIndeks);
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks(), testscenarioFraTemplateMapper);
         for (TestscenarioTemplate sc : scenarioTemplates) {
             TestscenarioImpl testScenario = testScenarioRepository.opprettTestscenario(sc);
             sjekkIdenterErInjisert(testScenario);

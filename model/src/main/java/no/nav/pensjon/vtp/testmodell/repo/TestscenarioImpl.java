@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.Inntektsperiode;
@@ -43,7 +44,7 @@ public class TestscenarioImpl implements Testscenario {
 
     private final VariabelContainer vars = new VariabelContainer();
 
-    public TestscenarioImpl(String templateNavn, String id, TestscenarioBuilderRepository scenarioIndeks, final VirksomhetIndeks virksomhetIndeks) {
+    public TestscenarioImpl(String templateNavn, String id, IdenterIndeks scenarioIndeks, final VirksomhetIndeks virksomhetIndeks) {
         this.templateNavn = templateNavn;
         this.id = id;
 
@@ -84,6 +85,7 @@ public class TestscenarioImpl implements Testscenario {
         return this.personopplysninger;
     }
 
+    @Override
     public OrganisasjonModeller getOrganisasjonModeller() {
         return organisasjonModeller;
     }
@@ -125,6 +127,7 @@ public class TestscenarioImpl implements Testscenario {
     }
 
     /** Returnerer alle personlige arbeidsgivere (fra søker og annen part). */
+    @Override
     public Set<PersonArbeidsgiver> getPersonligArbeidsgivere() {
         ArrayList<PersonArbeidsgiver> result = new ArrayList<>();
         result.addAll(getPersonArbeidsgivere(getSøkerInntektYtelse()));

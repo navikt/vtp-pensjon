@@ -2,6 +2,7 @@ package no.nav.pensjon.vtp.testmodell;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapperiodeModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
@@ -43,13 +44,13 @@ public class PersonopplysningerTest {
         PersonIndeks personIndeks = new PersonIndeks();
         VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
         AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
-        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(personIndeks, new InntektYtelseIndeks(), new OrganisasjonIndeks(),
-                adresseIndeks,
-                virksomhetIndeks);
+        IdenterIndeks identerIndeks = new IdenterIndeks();
+        TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, identerIndeks, virksomhetIndeks);
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(personIndeks, new InntektYtelseIndeks(), new OrganisasjonIndeks(), testscenarioFraTemplateMapper);
 
         TestscenarioTilTemplateMapper mapper = new TestscenarioTilTemplateMapper();
 
-        TestscenarioImpl scenario = new TestscenarioImpl("test", "test-1", testScenarioRepository, virksomhetIndeks);
+        TestscenarioImpl scenario = new TestscenarioImpl("test", "test-1", identerIndeks, virksomhetIndeks);
         JsonMapper jsonMapper =  new JsonMapper(scenario.getVariabelContainer());
         String lokalIdent = "#id1#";
         SøkerModell søker = new SøkerModell(lokalIdent, "Donald", LocalDate.now().minusYears(20), Kjønn.M);
@@ -73,8 +74,9 @@ public class PersonopplysningerTest {
 
         // Act - readback
 
-        TestscenarioFraTemplateMapper readMapper = new TestscenarioFraTemplateMapper(adresseIndeks, testScenarioRepository, virksomhetIndeks);
+        TestscenarioFraTemplateMapper readMapper = new TestscenarioFraTemplateMapper(adresseIndeks, identerIndeks, virksomhetIndeks);
         Testscenario scenario2 = readMapper.lagTestscenario(new StringTestscenarioTemplate("my-template", json, null, null));
+        testScenarioRepository.indekser(scenario2);
 
         // Assert
         SøkerModell søker2 = scenario2.getPersonopplysninger().getSøker();

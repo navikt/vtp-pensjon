@@ -1,19 +1,23 @@
 package no.nav.pensjon.vtp.testmodell;
 
+import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadAdresser;
+import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadVirksomheter;
+
+import java.util.Collection;
+import java.util.Objects;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
-import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
-
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.Collection;
-import java.util.Objects;
 
 public class MuterScenarioTest {
 
@@ -22,7 +26,8 @@ public class MuterScenarioTest {
         TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl();
         templateRepository.load();
         Collection<TestscenarioTemplate> scenarioTemplates = templateRepository.getTemplates();
-        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks(), BasisdataProviderFileImpl.loadAdresser(), BasisdataProviderFileImpl.loadVirksomheter());
+        TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(loadAdresser(), new IdenterIndeks(), loadVirksomheter());
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks(), testscenarioFraTemplateMapper);
 
         TestscenarioImpl testScenario = testScenarioRepository.opprettTestscenario(scenarioTemplates.stream().findFirst().get());
 

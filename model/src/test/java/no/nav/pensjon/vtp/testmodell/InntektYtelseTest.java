@@ -13,7 +13,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
+import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.RelatertYtelseTema;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.ArenaMeldekort;
@@ -21,8 +21,8 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.ArenaSak;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.ArenaVedtak;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.SakStatus;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.VedtakStatus;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.InfotrygdModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.InfotrygdBehandlingstema;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.InfotrygdModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.InfotrygdSakStatus;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.InfotrygdSakType;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.InfotrygdTema;
@@ -35,12 +35,9 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.beregningsgrunnlag.
 import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.ytelse.InfotrygdYtelse;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.Inntektsperiode;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTilTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
 import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
@@ -51,8 +48,7 @@ public class InntektYtelseTest {
     @Test
     public void skal_skrive_scenario_til_inntektytelse_json() throws Exception {
         VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
-        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks(), BasisdataProviderFileImpl.loadAdresser(),
-                virksomhetIndeks);
+        IdenterIndeks identerIndeks = new IdenterIndeks();
         TestscenarioTilTemplateMapper mapper = new TestscenarioTilTemplateMapper();
 
         InntektYtelseModell inntektYtelse = new InntektYtelseModell();
@@ -60,7 +56,7 @@ public class InntektYtelseTest {
         initInfotrygdModell(inntektYtelse);
         initInntektskomponentModell(inntektYtelse);
 
-        TestscenarioImpl scenario = new TestscenarioImpl("test3", "test3-123", testScenarioRepository, virksomhetIndeks);
+        TestscenarioImpl scenario = new TestscenarioImpl("test3", "test3-123", identerIndeks, virksomhetIndeks);
         scenario.setSøkerInntektYtelse(inntektYtelse);
 
         String json = skrivInntektYtelse(scenario, mapper);

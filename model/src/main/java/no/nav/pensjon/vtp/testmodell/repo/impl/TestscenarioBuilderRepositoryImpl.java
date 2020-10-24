@@ -7,9 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import no.nav.pensjon.vtp.testmodell.identer.FiktiveFnr;
-import no.nav.pensjon.vtp.testmodell.identer.IdentGenerator;
-import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
@@ -21,7 +18,6 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 import no.nav.pensjon.vtp.testmodell.util.TestdataUtil;
 
 public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioBuilderRepository {
@@ -29,9 +25,6 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
     private static final Logger log = LoggerFactory.getLogger(TestscenarioBuilderRepositoryImpl.class);
 
     private final Map<String, Testscenario> scenarios = new ConcurrentHashMap<>(); // not ordered for front-end
-    private final Map<String, LokalIdentIndeks> identer = new ConcurrentHashMap<>();
-
-    private final IdentGenerator identGenerator = new FiktiveFnr();
 
     private final PersonIndeks personIndeks;
     private final InntektYtelseIndeks inntektYtelseIndeks;
@@ -54,7 +47,7 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
         return scenarios.get(id);
     }
 
-    public void indekser(TestscenarioImpl testScenario) {
+    public void indekser(Testscenario testScenario) {
         scenarios.put(testScenario.getId(), testScenario);
         Personopplysninger personopplysninger = testScenario.getPersonopplysninger();
         if (personopplysninger == null) {
@@ -89,11 +82,6 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
             List<OrganisasjonModell> modeller = organisasjonModeller.getModeller();
             organisasjonIndeks.leggTil(modeller);
         }
-    }
-
-    @Override
-    public LokalIdentIndeks getIdenter(String unikScenarioId) {
-        return identer.computeIfAbsent(unikScenarioId, n -> new LokalIdentIndeks(n, identGenerator));
     }
 
     @Override

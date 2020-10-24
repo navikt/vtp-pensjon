@@ -8,10 +8,13 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
 import no.nav.pensjon.vtp.testmodell.personopplysning.GateadresseModell;
@@ -21,15 +24,20 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.UstrukturertAdresseModell;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
+import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
 public class AdresserTest {
 
     @Test
     public void sjekk_scenarios() throws Exception {
-        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks(), BasisdataProviderFileImpl.loadAdresser(), BasisdataProviderFileImpl.loadVirksomheter());
+        AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
+        VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
+        TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks(), virksomhetIndeks);
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new PersonIndeks(), new InntektYtelseIndeks(), new OrganisasjonIndeks(), testscenarioFraTemplateMapper);
         TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl();
         templateRepository.load();
         for (TestscenarioTemplate testScenarioTemplate : templateRepository.getTemplates()) {
