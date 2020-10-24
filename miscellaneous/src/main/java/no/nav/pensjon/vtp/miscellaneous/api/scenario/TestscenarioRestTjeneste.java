@@ -212,7 +212,7 @@ public class TestscenarioRestTjeneste {
         for (Map.Entry<String, List<String>> e : queryParameters.entrySet()) {
             if (skipTheseKeys.contains(e.getKey())) {
                 continue; // tar inn som egen nøkkel, skipper her
-            } else if (e.getValue().size() > 1 || e.getValue().isEmpty()) {
+            } else if (e.getValue().size() != 1) {
                 continue; // støtter ikke multi-value eller tomme
             }
             result.put(e.getKey(), e.getValue().get(0));

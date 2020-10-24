@@ -2,12 +2,9 @@ package no.nav.pensjon.vtp.testmodell.repo;
 
 import java.util.Map;
 
-public interface TestscenarioRepository extends TestscenarioBuilderRepository {
-
-    @Override
+public interface TestscenarioRepository {
     Map<String, Testscenario> getTestscenarios();
 
-    @Override
     Testscenario getTestscenario(String id);
 
     Testscenario opprettTestscenario(TestscenarioTemplate template);
@@ -16,5 +13,5 @@ public interface TestscenarioRepository extends TestscenarioBuilderRepository {
 
     Testscenario opprettTestscenarioFraJsonString(String testscenarioJson, Map<String, String> userSuppliedVariables);
 
-    void indekser(Testscenario testscenario);
+    Boolean slettScenario(String id);
 }

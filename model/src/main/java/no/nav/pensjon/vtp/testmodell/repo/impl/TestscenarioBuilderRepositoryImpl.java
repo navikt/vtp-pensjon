@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
@@ -20,7 +21,8 @@ import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.util.TestdataUtil;
 
-public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioBuilderRepository {
+@Component
+public class TestscenarioBuilderRepositoryImpl implements TestscenarioBuilderRepository {
 
     private static final Logger log = LoggerFactory.getLogger(TestscenarioBuilderRepositoryImpl.class);
 
@@ -30,7 +32,7 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
     private final InntektYtelseIndeks inntektYtelseIndeks;
     private final OrganisasjonIndeks organisasjonIndeks;
 
-    protected TestscenarioBuilderRepositoryImpl(PersonIndeks personIndeks,
+    public TestscenarioBuilderRepositoryImpl(PersonIndeks personIndeks,
             InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonIndeks organisasjonIndeks) {
         this.personIndeks = personIndeks;
         this.inntektYtelseIndeks = inntektYtelseIndeks;

@@ -17,17 +17,12 @@ import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataServ
 import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.JournalRepositoryImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
@@ -63,13 +58,6 @@ public class UserRepositoryConfiguration {
         TestscenarioTemplateRepositoryImpl templateRepositoryImpl = new TestscenarioTemplateRepositoryImpl();
         templateRepositoryImpl.load();
         return templateRepositoryImpl;
-    }
-
-    @Bean
-    public TestscenarioRepository testscenarioRepository(PersonIndeks personIndeks,
-            InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonIndeks organisasjonIndeks,
-            TestscenarioFraTemplateMapper testscenarioFraTemplateMapper) {
-        return new TestscenarioRepositoryImpl(personIndeks, inntektYtelseIndeks, organisasjonIndeks, testscenarioFraTemplateMapper);
     }
 
     @Bean

@@ -8,4 +8,6 @@ public interface TestscenarioBuilderRepository {
     Testscenario getTestscenario(String id);
 
     Boolean slettScenario(String id);
+
+    void indekser(Testscenario testscenario);
 }
