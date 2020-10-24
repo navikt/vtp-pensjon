@@ -1,19 +1,15 @@
 package no.nav.pensjon.vtp.auth;
 
+import static java.util.Comparator.comparing;
+
 import java.net.URISyntaxException;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.SearchResult;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -32,6 +28,8 @@ import io.swagger.annotations.ApiParam;
 import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.felles.KeyStoreTool;
 import no.nav.pensjon.vtp.felles.OidcTokenGenerator;
+import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
+import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
 
 @JaxrsResource
 @Api(tags = {"Openam"})
@@ -45,18 +43,16 @@ public class Oauth2RestService {
     private static final Map<String, String> clientIdCache = new HashMap<>();
     private static final String DEFAULT_ISSUER = "http://localhost:8060/rest/isso/oauth2";
 
-    private UserRepository userRepository;
+    private final AnsatteIndeks ansatteIndeks;
 
-    @Context
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public Oauth2RestService(AnsatteIndeks ansatteIndeks) {
+        this.ansatteIndeks = ansatteIndeks;
     }
 
     @GET
     @Path("/oauth2/authorize")
     @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
     @ApiOperation(value = "oauth2/authorize", notes = ("Mock impl av Oauth2 authorize"))
-    @SuppressWarnings("unused")
     public Response authorize(
             @Context HttpServletRequest req,
             @Context HttpServletResponse resp,
@@ -108,9 +104,6 @@ public class Oauth2RestService {
     }
 
     private Response authorizeHtmlPage(URIBuilder location) {
-        // LAG HTML SIDE
-        List<Entry<String, String>> usernames = getUsernames();
-
         String html = "<!DOCTYPE html>\n"
                 + "<html>\n" +
                 "<head>\n" +
@@ -122,8 +115,9 @@ public class Oauth2RestService {
                 "       <caption><h3>Velg bruker:</h3></caption>\n" +
                 "        <table>\r\n" +
                 "            <tbody>\r\n" +
-                usernames.stream().map(
-                        username -> "<tr><a href=\"" + location.toString() + "&code=" + username.getKey() + "\"><h1>" + username.getValue() + "</h1></a></tr>\n")
+                ansatteIndeks.hentAlleAnsatte()
+                        .sorted(comparing(NAVAnsatt::getDisplayName))
+                        .map(username -> "<tr><a href=\"" + location.toString() + "&code=" + username.cn + "\"><h1>" + username.displayName + "</h1></a></tr>\n")
                         .collect(Collectors.joining("\n"))
                 +
                 "            </tbody>\n" +
@@ -133,29 +127,6 @@ public class Oauth2RestService {
                 "</html>";
 
         return Response.ok(html, MediaType.TEXT_HTML).build();
-    }
-
-    private List<Map.Entry<String, String>> getUsernames() {
-        List<SearchResult> allUsers = userRepository.getAllUsers();
-
-        // Long story, økonomi forventer (per 2018-10-30) at alle interne brukere har max 8 bokstaver i bruker identen sin :-(
-        // pass derfor på at CN er definert med maks 8 bokstaver.
-
-        return allUsers.stream()
-                .map(u -> {
-                    String cn = getAttribute(u, "cn");
-                    String displayName = getAttribute(u, "displayName");
-                    return new SimpleEntry<>(cn, displayName);
-                }).collect(Collectors.toList());
-    }
-
-    private String getAttribute(SearchResult u, String attribName) {
-        Attribute attribute = u.getAttributes().get(attribName);
-        try {
-            return (String) attribute.get();
-        } catch (NamingException e) {
-            throw new IllegalStateException(e);
-        }
     }
 
     // TODO (FC): Trengs denne fortsatt?

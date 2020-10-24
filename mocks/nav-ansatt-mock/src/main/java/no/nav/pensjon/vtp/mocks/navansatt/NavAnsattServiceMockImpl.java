@@ -36,9 +36,9 @@ public class NavAnsattServiceMockImpl implements PSAKNAVAnsatt {
     @WebMethod
     @RequestWrapper(localName = "hentNAVAnsattEnhetListe", targetNamespace = "http://nav-cons-pen-psak-navansatt/no/nav/inf", className = "no.nav.inf.psak.navansatt.HentNAVAnsattEnhetListe")
     @ResponseWrapper(localName = "hentNAVAnsattEnhetListeResponse", targetNamespace = "http://nav-cons-pen-psak-navansatt/no/nav/inf", className = "no.nav.inf.psak.navansatt.HentNAVAnsattEnhetListeResponse")
-    @WebResult(name = "hentNAVAnsattEnhetListeResponse", targetNamespace = "")
+    @WebResult(name = "hentNAVAnsattEnhetListeResponse")
     @Override
-    public ASBOPenNAVEnhetListe hentNAVAnsattEnhetListe(@WebParam(name = "hentNAVAnsattEnhetListeRequest",targetNamespace = "") ASBOPenNAVAnsatt asboPenNAVAnsatt) throws HentNAVAnsattEnhetListeFaultPenGeneriskMsg, HentNAVAnsattEnhetListeFaultPenNAVAnsattIkkeFunnetMsg {
+    public ASBOPenNAVEnhetListe hentNAVAnsattEnhetListe(@WebParam(name = "hentNAVAnsattEnhetListeRequest") ASBOPenNAVAnsatt asboPenNAVAnsatt) throws HentNAVAnsattEnhetListeFaultPenGeneriskMsg, HentNAVAnsattEnhetListeFaultPenNAVAnsattIkkeFunnetMsg {
         NAVAnsatt ansatt = ansatteIndeks.hentNAVAnsatt(asboPenNAVAnsatt.getAnsattId()).orElseThrow(() -> new HentNAVAnsattEnhetListeFaultPenNAVAnsattIkkeFunnetMsg("NAV-ansatt '" + asboPenNAVAnsatt.getAnsattId() + "' ikke funnet."));
 
         List<ASBOPenNAVEnhet> enheter = new ArrayList<>();
@@ -59,9 +59,9 @@ public class NavAnsattServiceMockImpl implements PSAKNAVAnsatt {
     @WebMethod
     @RequestWrapper(localName = "hentNAVAnsattFagomradeListe", targetNamespace = "http://nav-cons-pen-psak-navansatt/no/nav/inf", className = "no.nav.inf.psak.navansatt.HentNAVAnsattFagomradeListe")
     @ResponseWrapper(localName = "hentNAVAnsattFagomradeListeResponse", targetNamespace = "http://nav-cons-pen-psak-navansatt/no/nav/inf", className = "no.nav.inf.psak.navansatt.HentNAVAnsattFagomradeListeResponse")
-    @WebResult(name = "hentNAVAnsattFagomradeListeResponse", targetNamespace = "")
+    @WebResult(name = "hentNAVAnsattFagomradeListeResponse")
     @Override
-    public ASBOPenFagomradeListe hentNAVAnsattFagomradeListe(@WebParam(name = "hentNAVAnsattFagomradeListeRequest",targetNamespace = "") ASBOPenNAVAnsatt asboPenNAVAnsatt) throws HentNAVAnsattFagomradeListeFaultPenGenerisksMsg, HentNAVAnsattFagomradeListeFaultPenNAVAnsattIkkeFunnetMsg {
+    public ASBOPenFagomradeListe hentNAVAnsattFagomradeListe(@WebParam(name = "hentNAVAnsattFagomradeListeRequest") ASBOPenNAVAnsatt asboPenNAVAnsatt) {
         ASBOPenFagomradeListe liste = new ASBOPenFagomradeListe();
         ASBOPenFagomrade omrade = new ASBOPenFagomrade();
         omrade.setFagomradeBeskrivelse("Spesialkompetanse for pepperkakebaking");
@@ -76,12 +76,11 @@ public class NavAnsattServiceMockImpl implements PSAKNAVAnsatt {
     @RequestWrapper(localName = "hentNAVAnsattListe", targetNamespace = "http://nav-cons-pen-psak-navansatt/no/nav/inf", className = "no.nav.inf.psak.navansatt.HentNAVAnsattListe")
     @ResponseWrapper(localName = "hentNAVAnsattListeResponse", targetNamespace = "http://nav-cons-pen-psak-navansatt/no/nav/inf", className = "no.nav.inf.psak.navansatt.HentNAVAnsattListeResponse"
     )
-    @WebResult(name = "hentNAVAnsattListeResponse", targetNamespace = "")
+    @WebResult(name = "hentNAVAnsattListeResponse")
     @Override
-    public ASBOPenNAVAnsattListe hentNAVAnsattListe(@WebParam(name = "hentNAVAnsattListeRequest",targetNamespace = "") ASBOPenNAVEnhet enhet) throws HentNAVAnsattListeFaultPenNAVEnhetIkkeFunnetMsg, HentNAVAnsattListeFaultPenGenerisksMsg {
+    public ASBOPenNAVAnsattListe hentNAVAnsattListe(@WebParam(name = "hentNAVAnsattListeRequest") ASBOPenNAVEnhet enhet) {
         ASBOPenNAVAnsattListe liste = new ASBOPenNAVAnsattListe();
         liste.setNAVAnsatte(ansatteIndeks.hentAlleAnsatte()
-                .stream()
                 .filter(ansatt -> ansatt.enheter.contains(enhet.getEnhetsId()))
                 .map(ansatt -> {
             ASBOPenNAVAnsatt asboAnsatt = new ASBOPenNAVAnsatt();
@@ -97,9 +96,9 @@ public class NavAnsattServiceMockImpl implements PSAKNAVAnsatt {
     @WebMethod
     @RequestWrapper(localName = "hentNAVAnsatt", targetNamespace = "http://nav-cons-pen-psak-navansatt/no/nav/inf", className = "no.nav.inf.psak.navansatt.HentNAVAnsatt")
     @ResponseWrapper(localName = "hentNAVAnsattResponse", targetNamespace = "http://nav-cons-pen-psak-navansatt/no/nav/inf", className = "no.nav.inf.psak.navansatt.HentNAVAnsattResponse")
-    @WebResult(name = "hentNAVAnsattResponse", targetNamespace = "")
+    @WebResult(name = "hentNAVAnsattResponse")
     @Override
-    public ASBOPenNAVAnsatt hentNAVAnsatt(@WebParam(name = "hentNAVAnsattRequest",targetNamespace = "") ASBOPenNAVAnsatt asboPenNAVAnsatt) throws HentNAVAnsattFaultPenGeneriskMsg, HentNAVAnsattFaultPenNAVAnsattIkkeFunnetMsg {
+    public ASBOPenNAVAnsatt hentNAVAnsatt(@WebParam(name = "hentNAVAnsattRequest") ASBOPenNAVAnsatt asboPenNAVAnsatt) throws HentNAVAnsattFaultPenNAVAnsattIkkeFunnetMsg {
         NAVAnsatt ansatt = ansatteIndeks.hentNAVAnsatt(asboPenNAVAnsatt.getAnsattId()).orElseThrow(() -> new HentNAVAnsattFaultPenNAVAnsattIkkeFunnetMsg("NAV-ansatt '" + asboPenNAVAnsatt.getAnsattId() + "' ikke funnet."));
         asboPenNAVAnsatt.setAnsattNavn(ansatt.displayName);
         asboPenNAVAnsatt.setFornavn(ansatt.givenname);

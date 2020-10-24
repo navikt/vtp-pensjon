@@ -7,7 +7,6 @@ import java.net.URL;
 import java.security.KeyStore;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.net.ssl.KeyManager;
@@ -69,8 +68,7 @@ public class LdapServer {
 
 
     private void readNAVAnsatte(InMemoryDirectoryServer server) throws Exception {
-        List<NAVAnsatt> ansatte = ansatteIndeks.hentAlleAnsatte();
-        for (NAVAnsatt ansatt : ansatte) {
+        for (NAVAnsatt ansatt : (Iterable<NAVAnsatt>) ansatteIndeks.hentAlleAnsatte()::iterator) {
             Entry entry = new Entry("CN=" + ansatt.cn + "_xxx,OU=Users,OU=NAV,OU=BusinessUnits,DC=test,DC=local");
             entry.addAttribute("objectClass", "user", "organizationalPerson", "person", "top");
             entry.addAttribute("objectCategory", "CN=Person,CN=Schema,CN=Configuration,DC=test,DC=local");

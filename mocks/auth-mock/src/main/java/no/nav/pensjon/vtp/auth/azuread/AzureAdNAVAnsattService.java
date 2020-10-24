@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.auth.azuread;
 
+import static java.util.Comparator.comparing;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -8,7 +10,6 @@ import no.nav.pensjon.vtp.felles.AzureOidcTokenGenerator;
 import no.nav.pensjon.vtp.felles.KeyStoreTool;
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse;
-import no.nav.pensjon.vtp.auth.UserRepository;
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,9 +17,6 @@ import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.SearchResult;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -26,7 +24,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,11 +34,9 @@ public class AzureAdNAVAnsattService {
     private static final Logger LOG = LoggerFactory.getLogger(AzureAdNAVAnsattService.class);
 
     private final AnsatteIndeks ansatteIndeks;
-    private final UserRepository userRepository;
 
-    public AzureAdNAVAnsattService(AnsatteIndeks ansatteIndeks, UserRepository userRepository) {
+    public AzureAdNAVAnsattService(AnsatteIndeks ansatteIndeks) {
         this.ansatteIndeks = ansatteIndeks;
-        this.userRepository = userRepository;
     }
 
     @GET
@@ -56,7 +51,7 @@ public class AzureAdNAVAnsattService {
     @Path("/{tenant}/v2.0/.well-known/openid-configuration")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Azure AD Discovery url", notes = ("Mock impl av Azure AD discovery urlen. "))
-    public Response wellKnown(@SuppressWarnings("unused") @Context HttpServletRequest req, @PathParam("tenant") String tenant, @QueryParam("p") String profile) {
+    public Response wellKnown(@Context HttpServletRequest req, @PathParam("tenant") String tenant, @QueryParam("p") String profile) {
         String baseUrl = getBaseUrl(req);
         String graphUrl = getGraphUrl(req);
         WellKnownResponse wellKnownResponse = new WellKnownResponse(baseUrl, graphUrl, tenant, profile);
@@ -67,7 +62,7 @@ public class AzureAdNAVAnsattService {
     @Path("/{tenant}/discovery/v2.0/keys")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "azureAd/discovery/keys", notes = ("Mock impl av Azure AD jwk_uri"))
-    public Response authorize(@SuppressWarnings("unused") @Context HttpServletRequest req) {
+    public Response authorize(@Context HttpServletRequest req) {
         LOG.info("kall på /oauth2/connect/jwk_uri");
         String jwks = KeyStoreTool.getJwks();
         LOG.info("JWKS: " + jwks);
@@ -78,7 +73,6 @@ public class AzureAdNAVAnsattService {
     @Path("/{tenant}/oauth2/v2.0/token")
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "azureAd/access_token", notes = ("Mock impl av Azure AD access_token"))
-    @SuppressWarnings("unused")
     public Response accessToken(
             @Context HttpServletRequest req,
             @PathParam("tenant") String tenant,
@@ -89,7 +83,7 @@ public class AzureAdNAVAnsattService {
             @FormParam("refresh_token") String refreshToken,
             @FormParam("redirect_uri") String redirectUri) {
         if ("authorization_code".equals(grantType)) {
-            String token = createIdToken(req, code, tenant, clientId);
+            String token = createIdToken(code, tenant, clientId);
             String generatedRefreshToken = "refresh:" + code;
             String generatedAccessToken = "access:" + code;
             LOG.info("Fikk parametere:" + req.getParameterMap().toString());
@@ -98,7 +92,7 @@ public class AzureAdNAVAnsattService {
             return Response.ok(oauthResponse).build();
         } else if ("refresh_token".equals(grantType)) {
             String usernameWithNonce = refreshToken.substring(8);
-            String token = createIdToken(req, usernameWithNonce /*+ ";"*/, tenant, clientId);
+            String token = createIdToken(usernameWithNonce /*+ ";"*/, tenant, clientId);
             LOG.info("Fikk parametere:" + req.getParameterMap().toString());
             LOG.info("refresh-token-kall på /oauth2/access_token, opprettet nytt token: " + token);
             String generatedRefreshToken = "refresh:" + usernameWithNonce;
@@ -111,7 +105,7 @@ public class AzureAdNAVAnsattService {
         }
     }
 
-    private String createIdToken(HttpServletRequest req, String code, String tenant, String clientId) {
+    private String createIdToken(String code, String tenant, String clientId) {
         try {
             String[] codeData = code.split(";");
             String username = codeData[0];
@@ -147,7 +141,6 @@ public class AzureAdNAVAnsattService {
     @Path("/{tenant}/v2.0/authorize")
     @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
     @ApiOperation(value = "AzureAD/v2.0/authorize", notes = ("Mock impl av Azure AD authorize"))
-    @SuppressWarnings("unused")
     public Response authorize(
             @Context HttpServletRequest req,
             @Context HttpServletResponse resp,
@@ -190,10 +183,7 @@ public class AzureAdNAVAnsattService {
         return authorizeHtmlPage(uriBuilder, nonce);
     }
 
-    private Response authorizeHtmlPage(URIBuilder location, String nonce) throws URISyntaxException, NamingException {
-        // LAG HTML SIDE
-        List<Map.Entry<String, String>> usernames = getUsernames();
-
+    private Response authorizeHtmlPage(URIBuilder location, String nonce) {
         String html = "<!DOCTYPE html>\n"
                 + "<html>\n" +
                 "<head>\n" +
@@ -205,8 +195,9 @@ public class AzureAdNAVAnsattService {
                 "       <caption><h3>Velg bruker:</h3></caption>\n" +
                 "        <table>\r\n" +
                 "            <tbody>\r\n" +
-                usernames.stream().map(
-                        username -> "<tr><a href=\"" + location.toString() + "&code=" + username.getKey() + ";" + nonce + "\"><h1>" + username.getValue() + "</h1></a></tr>\n")
+                ansatteIndeks.hentAlleAnsatte()
+                        .sorted(comparing(NAVAnsatt::getDisplayName))
+                        .map(username -> "<tr><a href=\"" + location.toString() + "&code=" + username.cn + ";" + nonce + "\"><h1>" + username.displayName + "</h1></a></tr>\n")
                         .collect(Collectors.joining("\n"))
                 +
                 "            </tbody>\n" +
@@ -216,26 +207,6 @@ public class AzureAdNAVAnsattService {
                 "</html>";
 
         return Response.ok(html, MediaType.TEXT_HTML).build();
-    }
-
-    private List<Map.Entry<String, String>> getUsernames() throws NamingException {
-        List<SearchResult> allUsers = userRepository.getAllUsers();
-        List<Map.Entry<String, String>> usernames = allUsers.stream()
-                .map(u -> {
-                    String cn = getAttribute(u, "cn");
-                    String displayName = getAttribute(u, "displayName");
-                    return new AbstractMap.SimpleEntry<String, String>(cn, displayName);
-                }).collect(Collectors.toList());
-        return usernames;
-    }
-
-    private String getAttribute(SearchResult u, String attribName) {
-        Attribute attribute = u.getAttributes().get(attribName);
-        try {
-            return (String) attribute.get();
-        } catch (NamingException e) {
-            throw new IllegalStateException(e);
-        }
     }
 
     private String getBaseUrl(@Context HttpServletRequest req) {

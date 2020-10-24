@@ -3,12 +3,13 @@ package no.nav.pensjon.vtp.testmodell.ansatt;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class AnsatteIndeks {
     private List<NAVAnsatt> ansatte = new ArrayList<>();
 
-    public List<NAVAnsatt> hentAlleAnsatte() {
-        return ansatte;
+    public Stream<NAVAnsatt> hentAlleAnsatte() {
+        return ansatte.stream();
     }
 
     public void leggTil(List<NAVAnsatt> ansatte) throws RuntimeException {
