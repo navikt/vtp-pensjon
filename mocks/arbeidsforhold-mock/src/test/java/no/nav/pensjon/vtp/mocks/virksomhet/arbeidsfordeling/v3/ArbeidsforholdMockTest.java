@@ -12,7 +12,7 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
-import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
@@ -59,7 +59,7 @@ public class ArbeidsforholdMockTest {
     public void finnArbeidsforholdPrArbeidstakerTest(){
         TestscenarioTemplate template = templateRepository.finn("50");
 
-        Testscenario testscenario = testRepo.opprettTestscenario(template);
+        TestscenarioImpl testscenario = testRepo.opprettTestscenario(template);
 
         ArbeidsforholdMockImpl arbeidsforholdMock = new ArbeidsforholdMockImpl(inntektYtelseIndeks, personIndeks);
 

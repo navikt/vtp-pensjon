@@ -5,16 +5,16 @@ import java.util.Map;
 public interface TestscenarioRepository extends TestscenarioBuilderRepository {
 
     @Override
-    Map<String, Testscenario> getTestscenarios();
+    Map<String, TestscenarioImpl> getTestscenarios();
 
     @Override
-    Testscenario getTestscenario(String id);
+    TestscenarioImpl getTestscenario(String id);
 
-    Testscenario opprettTestscenario(TestscenarioTemplate template);
+    TestscenarioImpl opprettTestscenario(TestscenarioTemplate template);
 
-    Testscenario opprettTestscenario(TestscenarioTemplate template, Map<String, String> userSuppliedVariables);
+    TestscenarioImpl opprettTestscenario(TestscenarioTemplate template, Map<String, String> userSuppliedVariables);
 
-    Testscenario opprettTestscenarioFraJsonString(String testscenarioJson, Map<String, String> userSuppliedVariables);
+    TestscenarioImpl opprettTestscenarioFraJsonString(String testscenarioJson, Map<String, String> userSuppliedVariables);
 
-    void indekser(Testscenario testscenario);
+    void indekser(TestscenarioImpl testscenario);
 }

@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.VoksenModell;
-import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 
 public class PensjonTestdataServiceImpl implements PensjonTestdataService {
     private final Logger logger = getLogger(getClass());
@@ -31,15 +31,15 @@ public class PensjonTestdataServiceImpl implements PensjonTestdataService {
     }
 
     @Override
-    public void opprettData(final Testscenario testscenario) {
+    public void opprettData(final TestscenarioImpl testscenario) {
         of(testscenario)
-                .map(Testscenario::getPersonopplysninger)
+                .map(TestscenarioImpl::getPersonopplysninger)
                 .map(Personopplysninger::getSøker)
                 .map(VoksenModell::getIdent)
                 .ifPresent(this::lagrePerson);
 
         of(testscenario)
-                .map(Testscenario::getPersonopplysninger)
+                .map(TestscenarioImpl::getPersonopplysninger)
                 .map(Personopplysninger::getAnnenPart)
                 .map(VoksenModell::getIdent)
                 .ifPresent(this::lagrePerson);

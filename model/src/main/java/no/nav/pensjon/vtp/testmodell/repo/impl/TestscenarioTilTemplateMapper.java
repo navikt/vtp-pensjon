@@ -6,14 +6,10 @@ import java.io.OutputStream;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
-import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 
 public class TestscenarioTilTemplateMapper {
-
-    public TestscenarioTilTemplateMapper() {
-    }
-
-    public void skrivInntektYtelse(ObjectMapper objectMapper, OutputStream out, Testscenario scenario, InntektYtelseModell inntektYtelse) {
+    public void skrivInntektYtelse(ObjectMapper objectMapper, OutputStream out, TestscenarioImpl scenario, InntektYtelseModell inntektYtelse) {
         try {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(out, inntektYtelse);
         } catch (IOException e) {
@@ -21,7 +17,7 @@ public class TestscenarioTilTemplateMapper {
         }
     }
 
-    public void skrivPersonopplysninger(ObjectMapper objectMapper, OutputStream out, Testscenario scenario) {
+    public void skrivPersonopplysninger(ObjectMapper objectMapper, OutputStream out, TestscenarioImpl scenario) {
         try {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(out, scenario.getPersonopplysninger());
         } catch (IOException e) {

@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata;
 
-import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 
 public interface PensjonTestdataService {
-    void opprettData(Testscenario testscenario);
+    void opprettData(TestscenarioImpl testscenario);
 }

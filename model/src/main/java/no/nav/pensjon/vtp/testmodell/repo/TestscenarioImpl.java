@@ -20,7 +20,7 @@ import no.nav.pensjon.vtp.testmodell.util.VariabelContainer;
 import no.nav.pensjon.vtp.testmodell.virksomhet.ScenarioVirksomheter;
 import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
-public class TestscenarioImpl implements Testscenario {
+public class TestscenarioImpl {
 
     private final String templateNavn;
 
@@ -53,12 +53,10 @@ public class TestscenarioImpl implements Testscenario {
         this.identer = scenarioIndeks.getIdenter(getId());
     }
 
-    @Override
     public String getTemplateNavn() {
         return templateNavn;
     }
 
-    @Override
     public String getId() {
         return id;
     }
@@ -80,12 +78,10 @@ public class TestscenarioImpl implements Testscenario {
         personopplysninger.setIdenter(identer);
     }
 
-    @Override
     public Personopplysninger getPersonopplysninger() {
         return this.personopplysninger;
     }
 
-    @Override
     public OrganisasjonModeller getOrganisasjonModeller() {
         return organisasjonModeller;
     }
@@ -98,17 +94,14 @@ public class TestscenarioImpl implements Testscenario {
         return scenarioVirksomheter;
     }
 
-    @Override
     public VariabelContainer getVariabelContainer() {
         return vars;
     }
 
-    @Override
     public InntektYtelseModell getSøkerInntektYtelse() {
         return søkerInntektYtelse;
     }
 
-    @Override
     public InntektYtelseModell getAnnenpartInntektYtelse() {
         return annenpartInntektYtelse;
     }
@@ -127,7 +120,6 @@ public class TestscenarioImpl implements Testscenario {
     }
 
     /** Returnerer alle personlige arbeidsgivere (fra søker og annen part). */
-    @Override
     public Set<PersonArbeidsgiver> getPersonligArbeidsgivere() {
         ArrayList<PersonArbeidsgiver> result = new ArrayList<>();
         result.addAll(getPersonArbeidsgivere(getSøkerInntektYtelse()));

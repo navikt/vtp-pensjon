@@ -16,7 +16,6 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SivilstandModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.StatsborgerskapModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
-import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.StringTestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
@@ -75,7 +74,7 @@ public class PersonopplysningerTest {
         // Act - readback
 
         TestscenarioFraTemplateMapper readMapper = new TestscenarioFraTemplateMapper(adresseIndeks, identerIndeks, virksomhetIndeks);
-        Testscenario scenario2 = readMapper.lagTestscenario(new StringTestscenarioTemplate("my-template", json, null, null));
+        TestscenarioImpl scenario2 = readMapper.lagTestscenario(new StringTestscenarioTemplate("my-template", json, null, null));
         testScenarioRepository.indekser(scenario2);
 
         // Assert
@@ -87,7 +86,7 @@ public class PersonopplysningerTest {
         assertThat(søkerFraIndeks).isEqualTo(søker2);
     }
 
-    private String skrivPersonopplysninger(Testscenario scenario, TestscenarioTilTemplateMapper mapper, JsonMapper jsonMapper) throws IOException {
+    private String skrivPersonopplysninger(TestscenarioImpl scenario, TestscenarioTilTemplateMapper mapper, JsonMapper jsonMapper) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BufferedOutputStream buf = new BufferedOutputStream(baos);
         mapper.skrivPersonopplysninger(jsonMapper.canonicalMapper(), buf, scenario);

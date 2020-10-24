@@ -16,15 +16,15 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonNavn;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
-import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 import no.nav.pensjon.vtp.testmodell.util.TestdataUtil;
 
 public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioBuilderRepository {
 
     private static final Logger log = LoggerFactory.getLogger(TestscenarioBuilderRepositoryImpl.class);
 
-    private final Map<String, Testscenario> scenarios = new ConcurrentHashMap<>(); // not ordered for front-end
+    private final Map<String, TestscenarioImpl> scenarios = new ConcurrentHashMap<>(); // not ordered for front-end
 
     private final PersonIndeks personIndeks;
     private final InntektYtelseIndeks inntektYtelseIndeks;
@@ -38,16 +38,16 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
     }
 
     @Override
-    public Map<String, Testscenario> getTestscenarios() {
+    public Map<String, TestscenarioImpl> getTestscenarios() {
         return scenarios;
     }
 
     @Override
-    public Testscenario getTestscenario(String id) {
+    public TestscenarioImpl getTestscenario(String id) {
         return scenarios.get(id);
     }
 
-    public void indekser(Testscenario testScenario) {
+    public void indekser(TestscenarioImpl testScenario) {
         scenarios.put(testScenario.getId(), testScenario);
         Personopplysninger personopplysninger = testScenario.getPersonopplysninger();
         if (personopplysninger == null) {
