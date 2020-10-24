@@ -6,9 +6,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class InntektYtelseIndeks {
 
-    private Map<String, InntektYtelseModell> byIdent = new ConcurrentHashMap<>();
+    private final Map<String, InntektYtelseModell> byIdent = new ConcurrentHashMap<>();
 
-    public Optional<InntektYtelseModell> getModellForIdent(String ident) {
+    public Optional<InntektYtelseModell> getInntektYtelseModell(String ident) {
         return Optional.ofNullable(byIdent.get(ident));
     }
 
@@ -18,4 +18,7 @@ public class InntektYtelseIndeks {
         }
     }
 
+    public Optional<InntektYtelseModell> getInntektYtelseModellFraAktørId(String aktørId) {
+        return getInntektYtelseModell(aktørId.substring(aktørId.length() - 11));
+    }
 }

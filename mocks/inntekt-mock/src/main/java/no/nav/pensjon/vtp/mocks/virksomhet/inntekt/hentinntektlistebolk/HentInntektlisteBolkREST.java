@@ -18,9 +18,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.tjenester.aordningen.inntektsinformasjon.Aktoer;
 import no.nav.tjenester.aordningen.inntektsinformasjon.ArbeidsInntektIdent;
 import no.nav.tjenester.aordningen.inntektsinformasjon.request.HentInntektListeBolkRequest;
@@ -33,10 +33,10 @@ import no.nav.pensjon.vtp.mocks.virksomhet.inntekt.hentinntektlistebolk.modell.H
 public class HentInntektlisteBolkREST {
     private static final Logger LOG = LoggerFactory.getLogger(HentInntektlisteBolkREST.class);
 
-    private final TestscenarioRepository testscenarioRepository;
+    private final InntektYtelseIndeks inntektYtelseIndeks;
 
-    public HentInntektlisteBolkREST(TestscenarioRepository testscenarioRepository) {
-        this.testscenarioRepository = testscenarioRepository;
+    public HentInntektlisteBolkREST(InntektYtelseIndeks inntektYtelseIndeks) {
+        this.inntektYtelseIndeks = inntektYtelseIndeks;
     }
 
     @POST
@@ -55,7 +55,7 @@ public class HentInntektlisteBolkREST {
         response.setArbeidsInntektIdentListe(new ArrayList<>());
 
         for(Aktoer aktoer : identListe){
-            Optional<InntektYtelseModell> inntektYtelseModell = testscenarioRepository.getInntektYtelseModellFraAktørId(aktoer.getIdentifikator());
+            Optional<InntektYtelseModell> inntektYtelseModell = inntektYtelseIndeks.getInntektYtelseModellFraAktørId(aktoer.getIdentifikator());
             if(inntektYtelseModell.isPresent()) {
                 InntektskomponentModell inntektskomponentModell = inntektYtelseModell.get().getInntektskomponentModell();
                 ArbeidsInntektIdent arbeidsInntektIdent = HentInntektlisteBolkMapperRest.makeArbeidsInntektIdent(

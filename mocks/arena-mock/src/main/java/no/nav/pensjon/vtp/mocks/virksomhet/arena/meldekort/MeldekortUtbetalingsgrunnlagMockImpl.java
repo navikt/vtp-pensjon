@@ -24,9 +24,9 @@ import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.mocks.virksomhet.arena.meldekort.modell.ArenaMUMapper;
 import no.nav.pensjon.vtp.felles.ConversionUtils;
 import no.nav.pensjon.vtp.testmodell.Feilkode;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.ArenaModell;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.binding.FinnMeldekortUtbetalingsgrunnlagListeAktoerIkkeFunnet;
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.binding.FinnMeldekortUtbetalingsgrunnlagListeSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.binding.FinnMeldekortUtbetalingsgrunnlagListeUgyldigInput;
@@ -53,10 +53,10 @@ public class MeldekortUtbetalingsgrunnlagMockImpl implements MeldekortUtbetaling
 
     private static ObjectFactory of = new ObjectFactory();
     private static ArenaMUMapper arenaMapper = new ArenaMUMapper();
-    private TestscenarioBuilderRepository scenarioRepository;
+    private final InntektYtelseIndeks inntektYtelseIndeks;
 
-    public MeldekortUtbetalingsgrunnlagMockImpl(TestscenarioBuilderRepository scenarioRepository) {
-        this.scenarioRepository = scenarioRepository;
+    public MeldekortUtbetalingsgrunnlagMockImpl(InntektYtelseIndeks inntektYtelseIndeks) {
+        this.inntektYtelseIndeks = inntektYtelseIndeks;
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/meldekortutbetalingsgrunnlag/v1/meldekortutbetalingsgrunnlag_v1/FinnMeldekortUtbetalingsgrunnlagListeRequest")
@@ -77,7 +77,7 @@ public class MeldekortUtbetalingsgrunnlagMockImpl implements MeldekortUtbetaling
             UgyldigInput faultInfo = lagUgyldigInput(aktørId);
             throw new FinnMeldekortUtbetalingsgrunnlagListeUgyldigInput(faultInfo.getFeilmelding(), faultInfo);
         }
-        Optional<InntektYtelseModell> iyIndeksOpt = scenarioRepository.getInntektYtelseModellFraAktørId(aktørId);
+        Optional<InntektYtelseModell> iyIndeksOpt = inntektYtelseIndeks.getInntektYtelseModellFraAktørId(aktørId);
         if (!iyIndeksOpt.isPresent()) {
             return response;
         }

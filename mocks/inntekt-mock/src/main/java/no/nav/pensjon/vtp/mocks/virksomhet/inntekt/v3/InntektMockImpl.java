@@ -4,9 +4,9 @@ package no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3;
 import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3.modell.HentInntektlistBolkMapper;
 import no.nav.pensjon.vtp.felles.ConversionUtils;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.inntekt.v3.ObjectFactory;
 import no.nav.tjeneste.virksomhet.inntekt.v3.binding.*;
 import no.nav.tjeneste.virksomhet.inntekt.v3.feil.UgyldigInput;
@@ -44,15 +44,11 @@ public class InntektMockImpl implements InntektV3 {
     private static ObjectFactory of = new ObjectFactory();
     private static HentInntektlistBolkMapper hentInntektlistBolkMapper = new HentInntektlistBolkMapper();
 
-    private TestscenarioBuilderRepository scenarioRepository;
+    private final InntektYtelseIndeks inntektYtelseIndeks;
 
-    public InntektMockImpl() {
+    public InntektMockImpl(InntektYtelseIndeks inntektYtelseIndeks) {
+        this.inntektYtelseIndeks = inntektYtelseIndeks;
     }
-
-    public InntektMockImpl(TestscenarioBuilderRepository scenarioRepository) {
-        this.scenarioRepository = scenarioRepository;
-    }
-
 
     @Override
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/inntekt/v3/Inntekt_v3/hentInntektListeBolkRequest")
@@ -86,10 +82,10 @@ public class InntektMockImpl implements InntektV3 {
             for (Aktoer aktoer : request.getIdentListe()) {
                 if(aktoer instanceof PersonIdent){
                     String fnr = ((PersonIdent) aktoer).getPersonIdent();
-                    inntektYtelseModell = scenarioRepository.getInntektYtelseModell(fnr);
+                    inntektYtelseModell = inntektYtelseIndeks.getInntektYtelseModell(fnr);
                 } else if (aktoer instanceof AktoerId){
                     String aktoerId = ((AktoerId) aktoer).getAktoerId();
-                    inntektYtelseModell = scenarioRepository.getInntektYtelseModellFraAktørId(aktoerId);
+                    inntektYtelseModell = inntektYtelseIndeks.getInntektYtelseModellFraAktørId(aktoerId);
                 }
                 if (inntektYtelseModell.isPresent()) {
                     InntektskomponentModell modell = inntektYtelseModell.get().getInntektskomponentModell();

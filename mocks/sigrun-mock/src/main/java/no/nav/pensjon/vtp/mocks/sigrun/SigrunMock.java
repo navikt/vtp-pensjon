@@ -20,11 +20,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.sigrun.Inntektsår;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.sigrun.Oppføring;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 
 @JaxrsResource
 @Api(tags = {"Sigrun/beregnetskatt"})
@@ -32,12 +32,12 @@ import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 public class SigrunMock {
     private static final Logger LOG = LoggerFactory.getLogger(SigrunMock.class);
 
+    private final InntektYtelseIndeks inntektYtelseIndeks;
     private final PersonIndeks personIndeks;
-    private final TestscenarioRepositoryImpl testscenarioRepository;
 
-    public SigrunMock(PersonIndeks personIndeks, TestscenarioRepositoryImpl testscenarioRepository) {
+    public SigrunMock(InntektYtelseIndeks inntektYtelseIndeks, PersonIndeks personIndeks) {
+        this.inntektYtelseIndeks = inntektYtelseIndeks;
         this.personIndeks = personIndeks;
-        this.testscenarioRepository = testscenarioRepository;
     }
 
     @GET
@@ -71,7 +71,7 @@ public class SigrunMock {
             Response.status(404, "Det forespurte inntektsåret er ikke støttet.");
         }
 
-        Optional<InntektYtelseModell> inntektYtelseModell = testscenarioRepository.getInntektYtelseModell(brukerFnr);
+        Optional<InntektYtelseModell> inntektYtelseModell = inntektYtelseIndeks.getInntektYtelseModell(brukerFnr);
         String response;
 
         if (inntektYtelseModell.isPresent() && !inntektYtelseModell.get().getSigrunModell().getInntektsår().isEmpty()) {

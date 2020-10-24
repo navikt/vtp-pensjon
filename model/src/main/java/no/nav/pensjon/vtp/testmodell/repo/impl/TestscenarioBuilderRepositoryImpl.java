@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import no.nav.pensjon.vtp.testmodell.util.TestdataUtil;
 import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModeller;
@@ -103,28 +102,17 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
     }
 
     @Override
+    public InntektYtelseIndeks getInntektYtelseIndeks() {
+        return inntektYtelseIndeks;
+    }
+
+    @Override
     public PersonIndeks getPersonIndeks() {
         return personIndeks;
-    }
-
-    @Override
-    public Optional<InntektYtelseModell> getInntektYtelseModell(String ident) {
-        return inntektYtelseIndeks.getModellForIdent(ident);
-    }
-
-    @Override
-    public Optional<InntektYtelseModell> getInntektYtelseModellFraAktørId(String aktørId) {
-        return inntektYtelseIndeks.getModellForIdent(aktørId.substring(aktørId.length() - 11));
     }
 
     @Override
     public Boolean slettScenario(String id) {
         return scenarios.remove(id) != null;
     }
-
-    @Override
-    public Boolean endreTestscenario(Testscenario testscenario) {
-        return null;
-    }
-
 }
