@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.mocks.sigrun;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,7 +22,8 @@ import io.swagger.annotations.ApiOperation;
 import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.sigrun.Inntektsår;
-import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.sigrun.Oppføring;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 
 @JaxrsResource
@@ -32,14 +32,12 @@ import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 public class SigrunMock {
     private static final Logger LOG = LoggerFactory.getLogger(SigrunMock.class);
 
-    TestscenarioRepositoryImpl testscenarioRepository;
+    private final PersonIndeks personIndeks;
+    private final TestscenarioRepositoryImpl testscenarioRepository;
 
-    public SigrunMock() {
-        try {
-            testscenarioRepository = TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance());
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+    public SigrunMock(PersonIndeks personIndeks, TestscenarioRepositoryImpl testscenarioRepository) {
+        this.personIndeks = personIndeks;
+        this.testscenarioRepository = testscenarioRepository;
     }
 
     @GET
@@ -64,8 +62,8 @@ public class SigrunMock {
         LOG.info("Sigrun for aktørId: {} ", aktørId);
 
         if (brukerFnr == null && aktørId != null) {
-            brukerFnr = testscenarioRepository.getPersonIndeks().finnByAktørIdent(aktørId).getIdent();
-        } else if (brukerFnr == null && aktørId == null) {
+            brukerFnr = personIndeks.finnByAktørIdent(aktørId).getIdent();
+        } else if (brukerFnr == null) {
             LOG.info("sigrun. fnr eller aktoerid må være oppgitt.");
             return Response.status(400, "Kan ikke ha tomt felt for både aktoerid og naturligident.").build();
         } else if (inntektsAar == null) {
@@ -74,14 +72,14 @@ public class SigrunMock {
         }
 
         Optional<InntektYtelseModell> inntektYtelseModell = testscenarioRepository.getInntektYtelseModell(brukerFnr);
-        String response = "";
+        String response;
 
         if (inntektYtelseModell.isPresent() && !inntektYtelseModell.get().getSigrunModell().getInntektsår().isEmpty()) {
             List<Inntektsår> inntektsår = inntektYtelseModell.get().getSigrunModell().getInntektsår();
-            String test = inntektsår.get(0).getOppføring().stream().map(t -> t.toString()).collect(Collectors.joining(",\n"));
+            String test = inntektsår.get(0).getOppføring().stream().map(Oppføring::toString).collect(Collectors.joining(",\n"));
 
             response = String.format("[\n%s\n]", test);
-        } else if (!inntektYtelseModell.isPresent()){
+        } else if (inntektYtelseModell.isEmpty()){
             LOG.info("Kunne ikke finne bruker.");
             return Response.status(404,"Kunne ikke finne bruker").build();
         } else {

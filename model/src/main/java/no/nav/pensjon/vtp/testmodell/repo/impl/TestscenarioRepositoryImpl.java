@@ -12,17 +12,7 @@ import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 /** Indeks av alle testdata instanser. */
 public class TestscenarioRepositoryImpl extends TestscenarioBuilderRepositoryImpl implements TestscenarioRepository {
 
-    private static TestscenarioRepositoryImpl instance;
-
-
-    public static synchronized TestscenarioRepositoryImpl getInstance(BasisdataProvider basisdata) {
-        if(instance == null){
-            instance = new TestscenarioRepositoryImpl(basisdata);
-        }
-        return instance;
-    }
-
-    private TestscenarioRepositoryImpl(BasisdataProvider basisdata) {
+    public TestscenarioRepositoryImpl(BasisdataProvider basisdata) {
         super(basisdata);
     }
 

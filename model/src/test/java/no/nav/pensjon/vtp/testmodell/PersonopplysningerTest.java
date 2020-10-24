@@ -1,9 +1,12 @@
 package no.nav.pensjon.vtp.testmodell;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapperiodeModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BarnModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell.Kjønn;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Landkode;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell.Diskresjonskoder;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SivilstandModell;
@@ -33,7 +36,9 @@ public class PersonopplysningerTest {
 
     @Test
     public void skal_skrive_scenario_til_personopplysninger_json() throws Exception {
-        TestscenarioRepositoryImpl testScenarioRepository = TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance());
+        BasisdataProviderFileImpl basisdata = new BasisdataProviderFileImpl();
+        PersonIndeks personIndeks = new PersonIndeks();
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(basisdata);
 
         TestscenarioTilTemplateMapper mapper = new TestscenarioTilTemplateMapper();
 
@@ -69,7 +74,7 @@ public class PersonopplysningerTest {
         assertThat(søker2).isNotNull();
         assertThat(søker2.getEtternavn()).isNotEmpty();
 
-        SøkerModell søkerFraIndeks = testScenarioRepository.getPersonIndeks().finnByIdent(søker2.getIdent());
+        SøkerModell søkerFraIndeks = personIndeks.finnByIdent(søker2.getIdent());
         assertThat(søkerFraIndeks).isEqualTo(søker2);
     }
 
@@ -78,6 +83,6 @@ public class PersonopplysningerTest {
         BufferedOutputStream buf = new BufferedOutputStream(baos);
         mapper.skrivPersonopplysninger(jsonMapper.canonicalMapper(), buf, scenario);
         buf.flush();
-        return baos.toString("UTF8");
+        return baos.toString(UTF_8);
     }
 }

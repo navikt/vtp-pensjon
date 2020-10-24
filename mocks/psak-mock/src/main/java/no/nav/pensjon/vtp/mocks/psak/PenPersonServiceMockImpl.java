@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.inf.pen.person.*;
 import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenFinnAdresseListeRequest;
 import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenFinnAdresseListeResponse;
@@ -22,10 +22,11 @@ import java.util.Optional;
 @HandlerChain(file = "/Handler-chain.xml")
 public class PenPersonServiceMockImpl implements PENPerson {
     private static final Logger LOG = LoggerFactory.getLogger(PenPersonServiceMockImpl.class);
-    private final TestscenarioBuilderRepository repo;
 
-    public PenPersonServiceMockImpl(TestscenarioBuilderRepository repo) {
-        this.repo = repo;
+    private final PersonIndeks personIndeks;
+
+    public PenPersonServiceMockImpl(PersonIndeks personIndeks) {
+        this.personIndeks = personIndeks;
     }
 
     @Override
@@ -102,7 +103,7 @@ public class PenPersonServiceMockImpl implements PENPerson {
     }
 
     private Optional<ASBOPenPerson> getASBOPenPerson(String fodselsnummer) {
-        return repo.getPersonIndeks().getAlleSøkere().parallelStream()
+        return personIndeks.getAlleSøkere().parallelStream()
                         .filter(p -> p.getSøker().getIdent().equals(fodselsnummer))
                         .map(PsakpselvPersonAdapter::toASBOPerson)
                         .findFirst()

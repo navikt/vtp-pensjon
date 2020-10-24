@@ -32,23 +32,13 @@ public class BasisdataProviderFileImpl implements BasisdataProvider {
 
     private final JsonMapper jsonMapper = new JsonMapper();
 
-    private static BasisdataProviderFileImpl instance;
-
-    private BasisdataProviderFileImpl() throws IOException{
+    public BasisdataProviderFileImpl() throws IOException{
         loadAdresser();
         loadEnheter();
         loadAnsatte();
         loadVirksomheter();
         loadOrganisasjoner();
     }
-
-    public static synchronized BasisdataProviderFileImpl getInstance() throws IOException{
-        if(instance == null){
-            instance = new BasisdataProviderFileImpl();
-        }
-        return instance;
-    }
-
 
     @Override
     public VirksomhetIndeks getVirksomhetIndeks() {
@@ -77,25 +67,25 @@ public class BasisdataProviderFileImpl implements BasisdataProvider {
 
     private void loadAdresser() throws IOException {
         try (InputStream is = getClass().getResourceAsStream("/basedata/adresse-maler.json")) {
-            TypeReference<List<AdresseModell>> typeRef = new TypeReference<List<AdresseModell>>() {
+            TypeReference<List<AdresseModell>> typeRef = new TypeReference<>() {
             };
             List<AdresseModell> adresser = jsonMapper.lagObjectMapper().readValue(is, typeRef);
-            adresser.forEach(a -> adresseIndeks.leggTil(a));
+            adresser.forEach(adresseIndeks::leggTil);
         }
     }
 
     private void loadEnheter() throws IOException {
         try (InputStream is = getClass().getResourceAsStream("/basedata/enheter.json")) {
-            TypeReference<List<Norg2Modell>> typeRef = new TypeReference<List<Norg2Modell>>() {
+            TypeReference<List<Norg2Modell>> typeRef = new TypeReference<>() {
             };
             List<Norg2Modell> adresser = jsonMapper.lagObjectMapper().readValue(is, typeRef);
             enheterIndeks.leggTil(adresser);
         }
     }
 
-    private void loadAnsatte() throws IOException {
+    private void loadAnsatte() {
         try (InputStream is = AnsatteIndeks.class.getResourceAsStream("/basedata/navansatte.json")) {
-            TypeReference<List<NAVAnsatt>> typeRef = new TypeReference<List<NAVAnsatt>>() {
+            TypeReference<List<NAVAnsatt>> typeRef = new TypeReference<>() {
             };
             final JsonMapper jsonMapper = new JsonMapper();
             List<NAVAnsatt> ansatte = jsonMapper.lagObjectMapper().readValue(is, typeRef);
@@ -107,7 +97,7 @@ public class BasisdataProviderFileImpl implements BasisdataProvider {
 
     private void loadVirksomheter() throws IOException {
         try (InputStream is = getClass().getResourceAsStream("/basedata/virksomheter.json")) {
-            TypeReference<List<VirksomhetModell>> typeRef = new TypeReference<List<VirksomhetModell>>() {
+            TypeReference<List<VirksomhetModell>> typeRef = new TypeReference<>() {
             };
             List<VirksomhetModell> virksomheter = jsonMapper.lagObjectMapper().readValue(is, typeRef);
             virksomhetIndeks.leggTil(virksomheter);
@@ -116,7 +106,7 @@ public class BasisdataProviderFileImpl implements BasisdataProvider {
 
     private void loadOrganisasjoner() throws IOException {
         try (InputStream is = getClass().getResourceAsStream("/basedata/organisasjon.json")) {
-            TypeReference<List<OrganisasjonModell>> typeRef = new TypeReference<List<OrganisasjonModell>>() {
+            TypeReference<List<OrganisasjonModell>> typeRef = new TypeReference<>() {
             };
             List<OrganisasjonModell> organisasjoner = jsonMapper.lagObjectMapper().readValue(is, typeRef);
             organisasjonIndeks.leggTil(organisasjoner);

@@ -16,8 +16,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ScenariosTest {
 
-    private static final String TEST_SCENARIO_NAVN = "100-mor-og-far-bosatt-i-norge";
-
     @Test
     public void skal_laste_scenarios() throws Exception {
         TestscenarioTemplateRepositoryImpl templateRepository = TestscenarioTemplateRepositoryImpl.getInstance();
@@ -25,7 +23,7 @@ public class ScenariosTest {
 
         Collection<TestscenarioTemplate> scenarioTemplates = templateRepository.getTemplates();
 
-        TestscenarioRepositoryImpl testScenarioRepository = TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance());
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl());
         for (TestscenarioTemplate sc : scenarioTemplates) {
             TestscenarioImpl testScenario = testScenarioRepository.opprettTestscenario(sc);
             sjekkIdenterErInjisert(testScenario);
@@ -38,9 +36,7 @@ public class ScenariosTest {
     }
 
     private void sjekkIdenterErInjisert(TestscenarioImpl sc) {
-        sc.getIdenter().getAlleIdenter().entrySet().forEach(e -> {
-            System.out.println(e);
-        });
+        sc.getIdenter().getAlleIdenter().entrySet().forEach(System.out::println);
         System.out.println("--------------");
     }
 

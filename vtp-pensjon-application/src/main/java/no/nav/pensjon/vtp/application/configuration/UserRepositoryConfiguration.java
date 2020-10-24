@@ -13,6 +13,9 @@ import org.springframework.context.annotation.DependsOn;
 
 import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataService;
 import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataServiceImpl;
+import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
+import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.BasisdataProvider;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
@@ -37,8 +40,18 @@ public class UserRepositoryConfiguration {
     }
 
     @Bean
+    public AnsatteIndeks ansatteIndeks(BasisdataProvider basisdataProvider) {
+        return basisdataProvider.getAnsatteIndeks();
+    }
+
+    @Bean
     public BasisdataProvider basisdataProvider() throws IOException {
-        return BasisdataProviderFileImpl.getInstance();
+        return new BasisdataProviderFileImpl();
+    }
+
+    @Bean
+    public PersonIndeks personIndeks(final TestscenarioRepository testscenarioRepository) {
+        return testscenarioRepository.getPersonIndeks();
     }
 
     @Bean
@@ -50,7 +63,7 @@ public class UserRepositoryConfiguration {
 
     @Bean
     public TestscenarioRepository testscenarioRepository(BasisdataProvider basisdataProvider) {
-        return TestscenarioRepositoryImpl.getInstance(basisdataProvider);
+        return new TestscenarioRepositoryImpl(basisdataProvider);
     }
 
     @Bean
@@ -60,7 +73,12 @@ public class UserRepositoryConfiguration {
 
     @Bean
     public JournalRepository journalRepository() {
-        return JournalRepositoryImpl.getInstance();
+        return new JournalRepositoryImpl();
+    }
+
+    @Bean
+    public EnheterIndeks enheterIndeks(BasisdataProvider basisdataProvider) {
+        return basisdataProvider.getEnheterIndeks();
     }
 
     @Bean

@@ -22,6 +22,7 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell.Rolle;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
@@ -72,9 +73,11 @@ public class PersonServiceMockImpl implements PersonV3 {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonServiceMockImpl.class);
 
-    private TestscenarioBuilderRepository repo;
+    private final PersonIndeks personIndeks;
+    private final TestscenarioBuilderRepository repo;
 
-    public PersonServiceMockImpl(TestscenarioBuilderRepository repo) {
+    public PersonServiceMockImpl(PersonIndeks personIndeks, TestscenarioBuilderRepository repo) {
+        this.personIndeks = personIndeks;
         this.repo = repo;
     }
 
@@ -94,7 +97,7 @@ public class PersonServiceMockImpl implements PersonV3 {
         Bruker person = new PersonAdapter().fra(bruker);
 
 
-        Personopplysninger pers = repo.getPersonIndeks().finnPersonopplysningerByIdent(bruker.getIdent());
+        Personopplysninger pers = personIndeks.finnPersonopplysningerByIdent(bruker.getIdent());
 
         boolean erBarnet = false;
         for (FamilierelasjonModell relasjon : pers.getFamilierelasjoner()) {
@@ -127,7 +130,7 @@ public class PersonServiceMockImpl implements PersonV3 {
     }
 
     public PersonModell finnPerson(Aktoer aktoer) throws HentPersonPersonIkkeFunnet {
-        return new FinnPerson(repo).finnPerson(aktoer);
+        return new FinnPerson(personIndeks, repo).finnPerson(aktoer);
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/person/v3/Person_v3/hentGeografiskTilknytningRequest")

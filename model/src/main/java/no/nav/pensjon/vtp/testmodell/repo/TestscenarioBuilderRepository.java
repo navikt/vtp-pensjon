@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.testmodell.repo;
 
-import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
 import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
@@ -10,8 +9,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface TestscenarioBuilderRepository {
-
-    EnheterIndeks getEnheterIndeks();
 
     PersonIndeks getPersonIndeks();
 

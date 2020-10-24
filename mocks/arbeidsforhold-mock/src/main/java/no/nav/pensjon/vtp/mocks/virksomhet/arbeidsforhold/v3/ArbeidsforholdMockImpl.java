@@ -21,6 +21,7 @@ import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.Arbeidsforhold;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.ArbeidsforholdModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidsgiverForMangeForekomster;
@@ -50,15 +51,12 @@ import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.HentArbeidsforhold
 public class ArbeidsforholdMockImpl implements ArbeidsforholdV3 {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArbeidsforholdMockImpl.class);
-//    private static final EntityManager entityManager = Persistence.createEntityManagerFactory("arbeidsforhold").createEntityManager();
 
-    private TestscenarioBuilderRepository scenarioRepository;
+    private final PersonIndeks personIndeks;
+    private final TestscenarioBuilderRepository scenarioRepository;
 
-    public ArbeidsforholdMockImpl() {
-
-    }
-
-    public ArbeidsforholdMockImpl(TestscenarioBuilderRepository scenarioRepository) {
+    public ArbeidsforholdMockImpl(PersonIndeks personIndeks, TestscenarioBuilderRepository scenarioRepository) {
+        this.personIndeks = personIndeks;
         this.scenarioRepository = scenarioRepository;
     }
 
@@ -166,14 +164,14 @@ public class ArbeidsforholdMockImpl implements ArbeidsforholdV3 {
     }
 
     private List<String> identerSøkere() {
-        return scenarioRepository.getPersonIndeks().getAlleSøkere()
+        return personIndeks.getAlleSøkere()
                 .stream()
                 .map(t -> t.getSøker().getIdent())
                 .collect(Collectors.toList());
     }
 
     private List<String> identerAnnenpart() {
-        return scenarioRepository.getPersonIndeks().getAlleAnnenPart()
+        return personIndeks.getAlleAnnenPart()
                 .stream()
                 .map(t -> t.getAnnenPart().getIdent())
                 .collect(Collectors.toList());

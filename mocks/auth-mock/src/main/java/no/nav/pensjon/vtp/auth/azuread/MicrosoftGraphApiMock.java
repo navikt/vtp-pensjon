@@ -2,14 +2,11 @@ package no.nav.pensjon.vtp.auth.azuread;
 
 import static java.util.stream.Collectors.toList;
 
-import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.getInstance;
-
 import io.swagger.annotations.Api;
 
 import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
-import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -17,7 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,18 +27,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class MicrosoftGraphApiMock {
     private final AnsatteIndeks ansatteIndeks;
 
-    public MicrosoftGraphApiMock() {
-        try {
-            ansatteIndeks = getInstance().getAnsatteIndeks();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public MicrosoftGraphApiMock(AnsatteIndeks ansatteIndeks) {
+        this.ansatteIndeks = ansatteIndeks;
     }
 
     @GET
     @Produces({ "application/json;charset=UTF-8" })
     @Path("/oidc/userinfo")
-    public Response userinfo(@HeaderParam("Authorization") String auth) throws IOException {
+    public Response userinfo(@HeaderParam("Authorization") String auth) {
         if (!auth.startsWith("Bearer access:")) {
             return Response
                     .status(Response.Status.FORBIDDEN)
@@ -52,7 +45,6 @@ public class MicrosoftGraphApiMock {
         String accessToken = auth.substring(14);
         String ident = accessToken.split(";")[0];
 
-        AnsatteIndeks ansatteIndeks = BasisdataProviderFileImpl.getInstance().getAnsatteIndeks();
         NAVAnsatt ansatt = ansatteIndeks.hentNAVAnsatt(ident).orElseThrow(() -> new RuntimeException("Ansatt med ident " + ident + " ikke funnet i VTP."));
 
         Map<String, String> response = new HashMap<>();

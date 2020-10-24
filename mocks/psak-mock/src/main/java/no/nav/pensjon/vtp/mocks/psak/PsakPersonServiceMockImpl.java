@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.inf.psak.person.*;
 import no.nav.lib.pen.psakpselv.asbo.ASBOPenTomRespons;
 import no.nav.lib.pen.psakpselv.asbo.person.*;
@@ -20,10 +20,11 @@ import java.util.Optional;
 @HandlerChain(file = "/Handler-chain.xml")
 public class PsakPersonServiceMockImpl implements PSAKPerson {
     private static final Logger LOG = LoggerFactory.getLogger(PsakPersonServiceMockImpl.class);
-    private final TestscenarioBuilderRepository repo;
 
-    public PsakPersonServiceMockImpl(TestscenarioBuilderRepository repo) {
-        this.repo = repo;
+    private final PersonIndeks personIndeks;
+
+    public PsakPersonServiceMockImpl(PersonIndeks personIndeks) {
+        this.personIndeks = personIndeks;
     }
 
     @Override
@@ -36,7 +37,7 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
     ) throws FinnPersonFaultPenGeneriskMsg {
         ASBOPenFinnPersonResponse asboPenFinnPersonResponse = new ASBOPenFinnPersonResponse();
         ASBOPenPersonListe liste = new ASBOPenPersonListe();
-        liste.setPersoner(repo.getPersonIndeks().getAlleSøkere().parallelStream()
+        liste.setPersoner(personIndeks.getAlleSøkere().parallelStream()
                 .map(PsakpselvPersonAdapter::toASBOPerson)
                 .toArray(ASBOPenPerson[]::new));
 
@@ -210,7 +211,7 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
     }
 
     private Optional<ASBOPenPerson> hentFraRepo(String fodselsnummer) {
-        return repo.getPersonIndeks().getAlleSøkere().parallelStream()
+        return personIndeks.getAlleSøkere().parallelStream()
             .filter(p -> p.getSøker().getIdent().equals(fodselsnummer))
             .map(PsakpselvPersonAdapter::toASBOPerson)
             .findFirst();

@@ -5,14 +5,11 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.DelegatingTestscenarioRepository;
-import no.nav.pensjon.vtp.testmodell.repo.impl.DelegatingTestscenarioTemplateRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.mocks.virksomhet.arbeidsforhold.v3.ArbeidsforholdMockImpl;
@@ -21,7 +18,6 @@ import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPr
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.NorskIdent;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Regelverker;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerRequest;
-import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerResponse;
 
 public class ArbeidsforholdMockTest {
 
@@ -35,10 +31,8 @@ public class ArbeidsforholdMockTest {
         TestscenarioTemplateRepositoryImpl templateRepositoryImpl = TestscenarioTemplateRepositoryImpl.getInstance();
         templateRepositoryImpl.load();
 
-        templateRepository = new DelegatingTestscenarioTemplateRepository(templateRepositoryImpl);
-        DelegatingTestscenarioRepository testScenarioRepository = new DelegatingTestscenarioRepository(TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance()));
-        testRepo = testScenarioRepository;
-
+        templateRepository = templateRepositoryImpl;
+        testRepo = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl());
     }
 
     @Test
@@ -47,7 +41,7 @@ public class ArbeidsforholdMockTest {
 
         Testscenario testscenario = testRepo.opprettTestscenario(template);
 
-        ArbeidsforholdMockImpl arbeidsforholdMock = new ArbeidsforholdMockImpl(testRepo);
+        ArbeidsforholdMockImpl arbeidsforholdMock = new ArbeidsforholdMockImpl(testRepo.getPersonIndeks(), testRepo);
 
         FinnArbeidsforholdPrArbeidstakerRequest finnArbeidsforholdPrArbeidstakerRequest = new FinnArbeidsforholdPrArbeidstakerRequest();
 
@@ -59,17 +53,13 @@ public class ArbeidsforholdMockTest {
         regelverk.setKodeverksRef("A_ORDNINGEN");
         finnArbeidsforholdPrArbeidstakerRequest.setRapportertSomRegelverk(regelverk);
 
-        InntektYtelseModell søkerInntektYtelse = testscenario.getSøkerInntektYtelse();
+        testscenario.getSøkerInntektYtelse();
 
 
         try {
-            FinnArbeidsforholdPrArbeidstakerResponse finnArbeidsforholdPrArbeidstakerResponse = arbeidsforholdMock.finnArbeidsforholdPrArbeidstaker(finnArbeidsforholdPrArbeidstakerRequest);
-
-            String s = "";
-        } catch (FinnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning finnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning) {
+            arbeidsforholdMock.finnArbeidsforholdPrArbeidstaker(finnArbeidsforholdPrArbeidstakerRequest);
+        } catch (FinnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning | FinnArbeidsforholdPrArbeidstakerUgyldigInput finnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning) {
             finnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning.printStackTrace();
-        } catch (FinnArbeidsforholdPrArbeidstakerUgyldigInput finnArbeidsforholdPrArbeidstakerUgyldigInput) {
-            finnArbeidsforholdPrArbeidstakerUgyldigInput.printStackTrace();
         }
     }
 }

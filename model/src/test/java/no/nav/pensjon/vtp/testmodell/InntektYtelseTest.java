@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.testmodell;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -44,7 +46,7 @@ public class InntektYtelseTest {
 
     @Test
     public void skal_skrive_scenario_til_inntektytelse_json() throws Exception {
-        TestscenarioRepositoryImpl testScenarioRepository = TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance());
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl());
         TestscenarioTilTemplateMapper mapper = new TestscenarioTilTemplateMapper();
 
         InntektYtelseModell inntektYtelse = new InntektYtelseModell();
@@ -166,6 +168,6 @@ public class InntektYtelseTest {
         BufferedOutputStream buf = new BufferedOutputStream(baos);
         mapper.skrivInntektYtelse(jsonMapper.canonicalMapper(), buf, scenario, scenario.getSøkerInntektYtelse());
         buf.flush();
-        return baos.toString("UTF8");
+        return baos.toString(UTF_8);
     }
 }

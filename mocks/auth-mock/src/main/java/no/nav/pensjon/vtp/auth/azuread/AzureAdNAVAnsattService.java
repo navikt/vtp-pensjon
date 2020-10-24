@@ -1,7 +1,5 @@
 package no.nav.pensjon.vtp.auth.azuread;
 
-import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.getInstance;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -28,7 +26,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,20 +36,12 @@ import java.util.stream.Collectors;
 public class AzureAdNAVAnsattService {
     private static final Logger LOG = LoggerFactory.getLogger(AzureAdNAVAnsattService.class);
 
-    private UserRepository userRepository;
     private final AnsatteIndeks ansatteIndeks;
+    private final UserRepository userRepository;
 
-    @Context
-    public void setUserRepository(UserRepository userRepository) {
+    public AzureAdNAVAnsattService(AnsatteIndeks ansatteIndeks, UserRepository userRepository) {
+        this.ansatteIndeks = ansatteIndeks;
         this.userRepository = userRepository;
-    }
-
-    public AzureAdNAVAnsattService() {
-        try {
-            ansatteIndeks = getInstance().getAnsatteIndeks();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @GET

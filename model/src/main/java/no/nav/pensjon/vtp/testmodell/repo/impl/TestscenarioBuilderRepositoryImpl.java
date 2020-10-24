@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import no.nav.pensjon.vtp.testmodell.util.TestdataUtil;
-import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
 import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
@@ -31,9 +30,9 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
     private final BasisdataProvider basisdata;
     private final Map<String, Testscenario> scenarios = new ConcurrentHashMap<>(); // not ordered for front-end
     private final Map<String, LokalIdentIndeks> identer = new ConcurrentHashMap<>();
-    private PersonIndeks personIndeks = new PersonIndeks();
-    private InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
-    private OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
+    private final PersonIndeks personIndeks = new PersonIndeks();
+    private final InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
+    private final OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
 
     @Override
     public Optional<OrganisasjonModell> getOrganisasjon(String orgnr) {
@@ -61,11 +60,6 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
         return basisdata;
     }
 
-    @Override
-    public EnheterIndeks getEnheterIndeks() {
-        return getBasisdata().getEnheterIndeks();
-    }
-
     public void indekser(TestscenarioImpl testScenario) {
         scenarios.put(testScenario.getId(), testScenario);
         Personopplysninger personopplysninger = testScenario.getPersonopplysninger();
@@ -88,7 +82,7 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
             personIndeks.indekserFamilierelasjonBrukere(personopplysninger.getFamilierelasjoner());
 
             personIndeks.indekserPersonopplysningerByIdent(personopplysninger);
-            testScenario.getPersonligArbeidsgivere().forEach(p -> personIndeks.leggTil(p));
+            testScenario.getPersonligArbeidsgivere().forEach(personIndeks::leggTil);
 
             inntektYtelseIndeks.leggTil(personopplysninger.getSøker().getIdent(), testScenario.getSøkerInntektYtelse());
             if (personopplysninger.getAnnenPart() != null) {

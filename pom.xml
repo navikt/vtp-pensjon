@@ -706,12 +706,6 @@
                 </exclusions>
             </dependency>
 
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.11</version>
-            </dependency>
-
             <!-- Ensure that com.nimbusds:oauth2-oidc-sdk doesn't pick up a SNAPSHOT version of net.minidev:json-smart -->
             <dependency>
                 <groupId>net.minidev</groupId>

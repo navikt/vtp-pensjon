@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.felles.ConversionUtils;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
@@ -45,9 +46,11 @@ import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.IdentDetaljer;
 public class AktoerServiceMockImpl implements AktoerV2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(AktoerServiceMockImpl.class);
-    private TestscenarioBuilderRepository repo;
+    private final PersonIndeks personIndeks;
+    private final TestscenarioBuilderRepository repo;
 
-    public AktoerServiceMockImpl(TestscenarioBuilderRepository repo) {
+    public AktoerServiceMockImpl(PersonIndeks personIndeks, TestscenarioBuilderRepository repo) {
+        this.personIndeks = personIndeks;
         this.repo = repo;
     }
 
@@ -60,7 +63,7 @@ public class AktoerServiceMockImpl implements AktoerV2 {
                                                              @WebParam(name = "hentIdentForAktoerIdRequest", targetNamespace = "") HentIdentForAktoerIdRequest request)
             throws HentIdentForAktoerIdPersonIkkeFunnet {
         LOG.info("hentIdentForAktoerId: " + request.getAktoerId());
-        BrukerModell brukerModell = repo.getPersonIndeks().finnByAktørIdent(request.getAktoerId());
+        BrukerModell brukerModell = personIndeks.finnByAktørIdent(request.getAktoerId());
 
         if (brukerModell == null) {
             throw new HentIdentForAktoerIdPersonIkkeFunnet("Fant ingen ident for aktoerid: " + request.getAktoerId(), new PersonIkkeFunnet());
@@ -81,7 +84,7 @@ public class AktoerServiceMockImpl implements AktoerV2 {
             throws HentAktoerIdForIdentPersonIkkeFunnet {
         LOG.info("hentIdentForAktoerId: " + request.getIdent());
 
-        BrukerModell brukerModell = repo.getPersonIndeks().finnByIdent(request.getIdent());
+        BrukerModell brukerModell = personIndeks.finnByIdent(request.getIdent());
 
         if (brukerModell == null) {
             throw new HentAktoerIdForIdentPersonIkkeFunnet("Fant ingen aktoerid for ident: " + request.getIdent(), new PersonIkkeFunnet());
@@ -106,7 +109,7 @@ public class AktoerServiceMockImpl implements AktoerV2 {
 
         hentAktoerIdForIdentListeRequest.getIdentListe().stream()
             .forEach(ident -> {
-                BrukerModell bruker = repo.getPersonIndeks().finnByIdent(ident);
+                BrukerModell bruker = personIndeks.finnByIdent(ident);
                 identTilAktørId.put(ident, bruker == null ? null : bruker.getAktørIdent());
             });
 

@@ -22,7 +22,7 @@ public class JournalRepoTest {
 
         String sakId = "12381";
 
-        JournalRepository journalRepository = JournalRepositoryImpl.getInstance();
+        JournalRepository journalRepository = new JournalRepositoryImpl();
 
         DokumentModell dokumentModell = new DokumentModell();
         dokumentModell.setDokumentId("1235");
@@ -46,7 +46,7 @@ public class JournalRepoTest {
 
     @Test
     public void skalFinneJournalposterPåAvsenderFnr(){
-        JournalRepository journalRepository = JournalRepositoryImpl.getInstance();
+        JournalRepository journalRepository = new JournalRepositoryImpl();
 
         String avsenderFnrSøker = "01020304056";
         String avsenderFnrIkkeSøker = "99999999999";
@@ -70,7 +70,7 @@ public class JournalRepoTest {
 
     @Test
     public void skalSetteJournalpostIdVedLagring() {
-        JournalRepository journalRepository = JournalRepositoryImpl.getInstance();
+        JournalRepository journalRepository = new JournalRepositoryImpl();
 
         JournalpostModell journalpostModell = new JournalpostModell();
         journalpostModell.setKommunikasjonsretning("Inn");

@@ -4,7 +4,6 @@ import static java.util.Optional.ofNullable;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
-import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.inf.psak.navorgenhet.ObjectFactory;
 import no.nav.inf.psak.navorgenhet.*;
 import no.nav.lib.pen.psakpselv.asbo.navorgenhet.*;
@@ -14,10 +13,8 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
-import java.io.IOException;
 import java.util.Collections;
 
-import static no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl.getInstance;
 import static no.nav.pensjon.vtp.mocks.psak.util.PenNAVEnhetUtil.getAsboPenNAVEnhet;
 
 @SoapService(path = "/esb/nav-cons-pen-psak-navorgenhetWeb/sca/PSAKNAVOrgEnhetWSEXP")
@@ -27,12 +24,8 @@ import static no.nav.pensjon.vtp.mocks.psak.util.PenNAVEnhetUtil.getAsboPenNAVEn
 public class PsakNavOrgEnhetMock implements PSAKNAVOrgEnhet {
     private final EnheterIndeks enheterIndeks;
 
-    public PsakNavOrgEnhetMock() {
-        try {
-            this.enheterIndeks = getInstance(BasisdataProviderFileImpl.getInstance()).getEnheterIndeks();
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
+    public PsakNavOrgEnhetMock(EnheterIndeks enheterIndeks) {
+        this.enheterIndeks = enheterIndeks;
     }
 
     @Override

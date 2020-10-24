@@ -26,7 +26,7 @@ public class AdresserTest {
 
     @Test
     public void sjekk_scenarios() throws Exception {
-        TestscenarioRepositoryImpl testScenarioRepository = TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance());
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl());
         TestscenarioTemplateRepositoryImpl templateRepository = TestscenarioTemplateRepositoryImpl.getInstance();
         templateRepository.load();
         for (TestscenarioTemplate testScenarioTemplate : templateRepository.getTemplates()) {
@@ -71,7 +71,7 @@ public class AdresserTest {
         List<Object> adresser = Arrays.asList(gateadresse, a, a1, a2);
 
         StringWriter sw = new StringWriter();
-        TypeReference<List<AdresseModell>> typeAdresseListe = new TypeReference<List<AdresseModell>>() {
+        TypeReference<List<AdresseModell>> typeAdresseListe = new TypeReference<>() {
         };
         new JsonMapper().lagObjectMapper().writerWithDefaultPrettyPrinter().forType(typeAdresseListe).writeValue(sw, adresser);
 

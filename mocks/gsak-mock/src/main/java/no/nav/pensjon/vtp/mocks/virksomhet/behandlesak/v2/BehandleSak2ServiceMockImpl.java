@@ -2,6 +2,7 @@ package no.nav.pensjon.vtp.mocks.virksomhet.behandlesak.v2;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.behandlesak.v2.BehandleSakV2;
@@ -29,12 +30,13 @@ import java.util.stream.Collectors;
 public class BehandleSak2ServiceMockImpl implements BehandleSakV2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(BehandleSak2ServiceMockImpl.class);
-    private GsakRepo gsakRepo;
-    private TestscenarioBuilderRepository repository;
 
-    public BehandleSak2ServiceMockImpl(GsakRepo gsakRepo, TestscenarioBuilderRepository repository) {
+    private final GsakRepo gsakRepo;
+    private final PersonIndeks personIndeks;
+
+    public BehandleSak2ServiceMockImpl(GsakRepo gsakRepo, PersonIndeks personIndeks) {
         this.gsakRepo = gsakRepo;
-        this.repository = repository;
+        this.personIndeks = personIndeks;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class BehandleSak2ServiceMockImpl implements BehandleSakV2 {
 
         Set<String> identer = request.getSak().getGjelderBrukerListe().stream().map(a -> a.getIdent()).collect(Collectors.toSet());
 
-        List<PersonModell> personer = identer.stream().map(i -> (PersonModell) repository.getPersonIndeks().finnByIdent(i))
+        List<PersonModell> personer = identer.stream().map(i -> (PersonModell) personIndeks.finnByIdent(i))
             .collect(Collectors.toList());
 
         WSSak wsSak = request.getSak();

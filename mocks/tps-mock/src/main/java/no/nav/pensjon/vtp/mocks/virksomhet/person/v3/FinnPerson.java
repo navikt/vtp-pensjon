@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.person.v3;
 
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
@@ -11,9 +12,11 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonIdent;
 
 public class FinnPerson {
 
-    private TestscenarioBuilderRepository repo;
+    private final PersonIndeks personIndeks;
+    private final TestscenarioBuilderRepository repo;
 
-    public FinnPerson(TestscenarioBuilderRepository repo) {
+    public FinnPerson(PersonIndeks personIndeks, TestscenarioBuilderRepository repo) {
+        this.personIndeks = personIndeks;
         this.repo = repo;
     }
 
@@ -24,11 +27,11 @@ public class FinnPerson {
         if (aktoer instanceof PersonIdent) {
             PersonIdent personIdent = (PersonIdent) aktoer;
             ident = personIdent.getIdent().getIdent();
-            bruker = repo.getPersonIndeks().finnByIdent(ident);
+            bruker = personIndeks.finnByIdent(ident);
         } else {
             AktoerId aktoerId = (AktoerId) aktoer;
             ident = aktoerId.getAktoerId();
-            bruker = repo.getPersonIndeks().finnByAktørIdent(ident);
+            bruker = personIndeks.finnByAktørIdent(ident);
         }
 
         if (bruker == null) {

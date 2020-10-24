@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl;
 
+import static java.util.Optional.ofNullable;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -8,32 +10,22 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Repository;
+
 import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentModell;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 
+@Repository
 public class JournalRepositoryImpl implements JournalRepository {
 
-    private HashMap<String, JournalpostModell> journalposter;
-    private HashMap<String, DokumentModell> dokumenter;
+    private final HashMap<String, JournalpostModell> journalposter;
+    private final HashMap<String, DokumentModell> dokumenter;
 
-    private AtomicInteger journalpostId;
-    private AtomicInteger dokumentId;
+    private final AtomicInteger journalpostId;
+    private final AtomicInteger dokumentId;
 
-    private static JournalRepositoryImpl instance;
-
-
-    public static synchronized JournalRepositoryImpl getInstance(){
-
-        if(instance == null){
-            instance = new JournalRepositoryImpl();
-        }
-
-        return instance;
-    }
-
-
-    private JournalRepositoryImpl() {
+    public JournalRepositoryImpl() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("Mdkm");
         journalposter = new HashMap<>();
         dokumenter = new HashMap<>();
@@ -43,11 +35,7 @@ public class JournalRepositoryImpl implements JournalRepository {
 
     @Override
     public Optional<DokumentModell> finnDokumentMedDokumentId(String dokumentId) {
-        if(dokumenter.containsKey(dokumentId)){
-            return Optional.ofNullable(dokumenter.get(dokumentId));
-        } else {
-            return Optional.ofNullable(null);
-        }
+        return ofNullable(dokumenter.get(dokumentId));
     }
 
     @Override
@@ -66,16 +54,12 @@ public class JournalRepositoryImpl implements JournalRepository {
 
     @Override
     public Optional<JournalpostModell> finnJournalpostMedJournalpostId(String journalpostId){
-        if(journalposter.containsKey(journalpostId)){
-            return Optional.ofNullable(journalposter.get(journalpostId));
-        } else {
-            return Optional.ofNullable(null);
-        }
+        return ofNullable(journalposter.get(journalpostId));
     }
 
     @Override
     public String leggTilJournalpost(JournalpostModell journalpostModell){
-        String journalpostId = "";
+        String journalpostId;
         if(journalpostModell.getJournalpostId() != null && !journalpostModell.getJournalpostId().isEmpty()){
             journalpostId = journalpostModell.getJournalpostId();
         } else {
@@ -84,7 +68,7 @@ public class JournalRepositoryImpl implements JournalRepository {
         }
 
         for(DokumentModell dokumentModell : journalpostModell.getDokumentModellList()){
-            String dokumentId = "";
+            String dokumentId;
             if(dokumentModell.getDokumentId() != null && !journalpostModell.getJournalpostId().isEmpty()){
                 dokumentId = dokumentModell.getDokumentId();
             } else {

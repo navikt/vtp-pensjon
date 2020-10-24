@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.inntekt.hentinntektlistebolk;
 
-import java.io.IOException;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +20,7 @@ import io.swagger.annotations.ApiOperation;
 import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
-import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.tjenester.aordningen.inntektsinformasjon.Aktoer;
 import no.nav.tjenester.aordningen.inntektsinformasjon.ArbeidsInntektIdent;
 import no.nav.tjenester.aordningen.inntektsinformasjon.request.HentInntektListeBolkRequest;
@@ -35,17 +33,11 @@ import no.nav.pensjon.vtp.mocks.virksomhet.inntekt.hentinntektlistebolk.modell.H
 public class HentInntektlisteBolkREST {
     private static final Logger LOG = LoggerFactory.getLogger(HentInntektlisteBolkREST.class);
 
+    private final TestscenarioRepository testscenarioRepository;
 
-    TestscenarioRepositoryImpl testscenarioRepository;
-
-    public HentInntektlisteBolkREST() {
-        try {
-            testscenarioRepository = TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance());
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+    public HentInntektlisteBolkREST(TestscenarioRepository testscenarioRepository) {
+        this.testscenarioRepository = testscenarioRepository;
     }
-
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -53,7 +45,7 @@ public class HentInntektlisteBolkREST {
     public HentInntektListeBolkResponse hentInntektlisteBolk(HentInntektListeBolkRequest request){
 
         List<Aktoer> identListe = request.getIdentListe();
-        LOG.info("Henter inntekter for personer: {}", identListe.stream().map(t-> t.getIdentifikator()).collect(Collectors.joining(",")));
+        LOG.info("Henter inntekter for personer: {}", identListe.stream().map(Aktoer::getIdentifikator).collect(Collectors.joining(",")));
 
         YearMonth fom = request.getMaanedFom() != null ? request.getMaanedFom() : YearMonth.of(1990,1);
         YearMonth tom = request.getMaanedTom() != null ? request.getMaanedTom() : YearMonth.of(1990,1);

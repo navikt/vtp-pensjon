@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.infotrygd.rest;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +20,6 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.trex.Grunnlag;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.trex.TRexModell;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
-import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 
 @JaxrsResource
 @Api(tags = {"Infotrygdmock/grunnlag"})
@@ -31,14 +28,10 @@ public class InfotrygdGrunnlagMock {
 
     private static final Logger LOG = LoggerFactory.getLogger(InfotrygdGrunnlagMock.class);
     private static final String LOG_PREFIX = "InfotrygdGrunnlag Rest kall til {}";
-    private TestscenarioBuilderRepository scenarioRepository;
+    private final TestscenarioBuilderRepository scenarioRepository;
 
-    public InfotrygdGrunnlagMock() {
-        try {
-            this.scenarioRepository = TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance());
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+    public InfotrygdGrunnlagMock(TestscenarioBuilderRepository scenarioRepository) {
+        this.scenarioRepository = scenarioRepository;
     }
 
     @GET

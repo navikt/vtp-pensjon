@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public class MuterScenarioTest {
 
@@ -18,13 +19,13 @@ public class MuterScenarioTest {
         TestscenarioTemplateRepositoryImpl templateRepository = TestscenarioTemplateRepositoryImpl.getInstance();
         templateRepository.load();
         Collection<TestscenarioTemplate> scenarioTemplates = templateRepository.getTemplates();
-        TestscenarioRepositoryImpl testScenarioRepository = TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance());
+        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(new BasisdataProviderFileImpl());
 
         TestscenarioImpl testScenario = testScenarioRepository.opprettTestscenario(scenarioTemplates.stream().findFirst().get());
 
         Assert.assertTrue(testScenarioRepository.getTestscenarios().size() > 0);
         testScenarioRepository.slettScenario(testScenario.getId());
 
-        Assert.assertTrue(testScenarioRepository.getTestscenarios().values().stream().filter(ts -> (ts.getId() == testScenario.getId())).count() == 0);
+        Assert.assertEquals(0, testScenarioRepository.getTestscenarios().values().stream().filter(ts -> (Objects.equals(ts.getId(), testScenario.getId()))).count());
     }
 }

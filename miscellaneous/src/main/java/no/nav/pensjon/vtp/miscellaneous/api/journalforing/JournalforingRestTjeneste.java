@@ -16,21 +16,24 @@ import no.nav.pensjon.vtp.testmodell.dokument.JournalpostModellGenerator;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
-import no.nav.pensjon.vtp.testmodell.repo.impl.JournalRepositoryImpl;
 
 @JaxrsResource
 @Api(tags = "Journalføringsmock")
 @Path("/api/journalforing")
 public class JournalforingRestTjeneste {
-
     private static final Logger LOG = LoggerFactory.getLogger(JournalforingRestTjeneste.class);
-
 
     private static final String DOKUMENTTYYPEID_KEY = "dokumenttypeid";
     private static final String AKTORID_KEY = "fnr";
     private static final String JOURNALPOST_ID = "journalpostid";
     private static final String SAKSNUMMER = "saksnummer";
     private static final String JOURNALSTATUS = "journalstatus";
+
+    private final JournalRepository journalRepository;
+
+    public JournalforingRestTjeneste(JournalRepository journalRepository) {
+        this.journalRepository = journalRepository;
+    }
 
     @POST
     @Path("/foreldrepengesoknadxml/fnr/{fnr}/dokumenttypeid/{dokumenttypeid}")
@@ -42,7 +45,6 @@ public class JournalforingRestTjeneste {
 
         JournalpostModell journalpostModell = JournalpostModellGenerator.lagJournalpostStrukturertDokument(xml, fnr, dokumenttypeId);
         journalpostModell.setMottattDato(LocalDateTime.now());
-        JournalRepository journalRepository = JournalRepositoryImpl.getInstance();
         String journalpostId = journalRepository.leggTilJournalpost(journalpostModell);
 
         LOG.info("Oppretter journalpost for bruke: {}. JournalpostId: {}", fnr, journalpostId);
@@ -61,7 +63,6 @@ public class JournalforingRestTjeneste {
             journalpostModell.setJournalStatus(status);
         }
 
-        JournalRepository journalRepository = JournalRepositoryImpl.getInstance();
         String journalpostId = journalRepository.leggTilJournalpost(journalpostModell);
 
         LOG.info("Oppretter journalpost for bruker: {}. JournalpostId: {}", fnr, journalpostId);
@@ -79,7 +80,6 @@ public class JournalforingRestTjeneste {
 
         LOG.info("Knytter sak: {} til journalpost: {}", saksnummer, journalpostId);
 
-        JournalRepository journalRepository = JournalRepositoryImpl.getInstance();
         JournalpostModell journalpostModell = journalRepository.finnJournalpostMedJournalpostId(journalpostId).orElseThrow(()-> new NotFoundException("Kunne ikke finne journalpost"));
         journalpostModell.setSakId(saksnummer);
 

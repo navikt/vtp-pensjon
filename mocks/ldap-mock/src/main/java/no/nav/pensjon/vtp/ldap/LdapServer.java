@@ -16,8 +16,9 @@ import javax.net.ssl.SSLContext;
 
 import com.unboundid.ldap.sdk.Entry;
 import com.unboundid.ldif.LDIFAddChangeRecord;
+
+import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
-import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,12 +35,15 @@ public class LdapServer {
     private static final Logger LOG = LoggerFactory.getLogger(LdapServer.class);
     private static final String BASEDATA_USERS_LDIF = "basedata/ldap_setup.ldif";
 
-    private InMemoryDirectoryServer directoryServer;
+    private final InMemoryDirectoryServer directoryServer;
 
+    private final AnsatteIndeks ansatteIndeks;
     private final File keystoreFile;
     private final char[] password;
 
-    public LdapServer(File keystoreFile, char[] password, int listenerPortLdap, int listenerPortLdaps) throws Exception {
+
+    public LdapServer(AnsatteIndeks ansatteIndeks, File keystoreFile, char[] password, int listenerPortLdap, int listenerPortLdaps) throws Exception {
+        this.ansatteIndeks = ansatteIndeks;
         this.keystoreFile = keystoreFile;
         this.password = password;
         InMemoryDirectoryServerConfig cfg = new InMemoryDirectoryServerConfig("DC=local");
@@ -65,7 +69,7 @@ public class LdapServer {
 
 
     private void readNAVAnsatte(InMemoryDirectoryServer server) throws Exception {
-        List<NAVAnsatt> ansatte = BasisdataProviderFileImpl.getInstance().getAnsatteIndeks().hentAlleAnsatte();
+        List<NAVAnsatt> ansatte = ansatteIndeks.hentAlleAnsatte();
         for (NAVAnsatt ansatt : ansatte) {
             Entry entry = new Entry("CN=" + ansatt.cn + "_xxx,OU=Users,OU=NAV,OU=BusinessUnits,DC=test,DC=local");
             entry.addAttribute("objectClass", "user", "organizationalPerson", "person", "top");
@@ -90,7 +94,7 @@ public class LdapServer {
             URL ldif = ldifs.nextElement();
             try(InputStream is = ldif.openStream()){
                 LDIFReader r = new LDIFReader(is);
-                LDIFChangeRecord readEntry = null;
+                LDIFChangeRecord readEntry;
                 while ((readEntry = r.readChangeRecord()) != null) {
 
                     LOG.info("Read entry from path {} LDIF: {}", ldif.getPath(), Arrays.toString(readEntry.toLDIF()));
@@ -117,9 +121,4 @@ public class LdapServer {
             throw new IllegalStateException("Kunne ikke starte LdapServer", e);
         }
     }
-
-    public InMemoryDirectoryServer getDirectoryServer() {
-        return directoryServer;
-    }
-
 }
