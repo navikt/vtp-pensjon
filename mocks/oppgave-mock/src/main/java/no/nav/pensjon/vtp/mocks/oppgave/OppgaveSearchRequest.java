@@ -2,7 +2,6 @@ package no.nav.pensjon.vtp.mocks.oppgave;
 
 import io.swagger.annotations.ApiParam;
 import no.nav.pensjon.vtp.mocks.oppgave.infrastruktur.validering.*;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.validation.constraints.Max;
 import javax.ws.rs.DefaultValue;
@@ -10,7 +9,6 @@ import javax.ws.rs.QueryParam;
 
 import java.util.List;
 
-import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
 @AtleastOneOf(fields = {"statuskategori", "statuser", "aktoerId", "orgnr", "bnr", "samhandlernr"})
 public class OppgaveSearchRequest {
@@ -179,42 +177,43 @@ public class OppgaveSearchRequest {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, SHORT_PREFIX_STYLE)
-                .append("aktoerId", aktoerId)
-                .append("orgnr", orgnr)
-                .append("bnr", bnr)
-                .append("tildeltEnhetsnr", tildeltEnhetsnr)
-                .append("aktivDatoFom", aktivDatoFom)
-                .append("aktivDatoTom", aktivDatoTom)
-                .append("fristFom", fristFom)
-                .append("fristTom", fristTom)
-                .append("opprettetFom", opprettetFom)
-                .append("opprettetTom", opprettetTom)
-                .append("ferdigstiltFom", ferdigstiltFom)
-                .append("ferdigstiltTom", ferdigstiltTom)
-                .append("tema", temaer)
-                //.append("metadatanokkel", metadatanokkel)
-                .append("metadataverdier", metadataverdier)
-                .append("oppgavetype", oppgavetyper)
-                .append("behandlingstema", behandlingstema)
-                .append("behandlingstype", behandlingstype)
-                .append("sorteringsfelt", sorteringsfelt)
-                .append("sorteringsrekkefolge", sorteringsrekkefolge)
-                .append("statuser", statuser)
-                .append("statuskategori", statuskategori)
-                .append("opprettetAv", opprettetAv)
-                .append("tildeltRessurs", tildeltRessurs)
-                .append("erUtenMappe", erUtenMappe)
-                .append("tilordnetRessurs", tilordnetRessurs)
-                .append("ikkeTidligereTilordnetRessurs", ikkeTidligereTilordnetRessurs)
-                .append("journalpostIds", journalpostIds)
-                .append("saksreferanser", saksreferanser)
-                .append("mappeIds", mappeIds)
-                .append("behandlesAvApplikasjon", behandlesAvApplikasjon)
-                .append("opprettetAvEnhetsnr", opprettetAvEnhetsnr)
-                .append("offset", offset)
-                .append("limit", limit)
-                .toString();
+        return "OppgaveSearchRequest{" +
+                "erUtenMappe=" + erUtenMappe +
+                ", opprettetAv='" + opprettetAv + '\'' +
+                ", tildeltRessurs=" + tildeltRessurs +
+                ", ikkeTidligereTilordnetRessurs='" + ikkeTidligereTilordnetRessurs + '\'' +
+                ", tilordnetRessurs='" + tilordnetRessurs + '\'' +
+                ", behandlesAvApplikasjon='" + behandlesAvApplikasjon + '\'' +
+                ", ferdigstiltFom='" + ferdigstiltFom + '\'' +
+                ", ferdigstiltTom='" + ferdigstiltTom + '\'' +
+                ", opprettetFom='" + opprettetFom + '\'' +
+                ", opprettetTom='" + opprettetTom + '\'' +
+                ", fristFom='" + fristFom + '\'' +
+                ", fristTom='" + fristTom + '\'' +
+                ", aktivDatoFom='" + aktivDatoFom + '\'' +
+                ", aktivDatoTom='" + aktivDatoTom + '\'' +
+                ", aktoerId='" + aktoerId + '\'' +
+                ", orgnr='" + orgnr + '\'' +
+                ", bnr='" + bnr + '\'' +
+                ", samhandlernr='" + samhandlernr + '\'' +
+                ", temaer=" + temaer +
+                ", oppgavetyper=" + oppgavetyper +
+                ", behandlingstema='" + behandlingstema + '\'' +
+                ", behandlingstype='" + behandlingstype + '\'' +
+                ", tildeltEnhetsnr='" + tildeltEnhetsnr + '\'' +
+                ", opprettetAvEnhetsnr='" + opprettetAvEnhetsnr + '\'' +
+                ", metadatanokkel=" + metadatanokkel +
+                ", metadataverdier=" + metadataverdier +
+                ", journalpostIds=" + journalpostIds +
+                ", saksreferanser=" + saksreferanser +
+                ", mappeIds=" + mappeIds +
+                ", statuser=" + statuser +
+                ", statuskategori='" + statuskategori + '\'' +
+                ", sorteringsrekkefolge='" + sorteringsrekkefolge + '\'' +
+                ", sorteringsfelt='" + sorteringsfelt + '\'' +
+                ", offset=" + offset +
+                ", limit=" + limit +
+                '}';
     }
 
     public String getIkkeTidligereTilordnetRessurs() {

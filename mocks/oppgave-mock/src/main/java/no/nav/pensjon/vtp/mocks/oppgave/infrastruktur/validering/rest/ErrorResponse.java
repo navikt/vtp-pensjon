@@ -1,9 +1,5 @@
 package no.nav.pensjon.vtp.mocks.oppgave.infrastruktur.validering.rest;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
-
 public class ErrorResponse {
     private final String uuid;
     private final String feilmelding;
@@ -23,9 +19,9 @@ public class ErrorResponse {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, SHORT_PREFIX_STYLE)
-            .append("uuid", uuid)
-            .append("feilmelding", feilmelding)
-            .toString();
+        return "ErrorResponse{" +
+                "uuid='" + uuid + '\'' +
+                ", feilmelding='" + feilmelding + '\'' +
+                '}';
     }
 }

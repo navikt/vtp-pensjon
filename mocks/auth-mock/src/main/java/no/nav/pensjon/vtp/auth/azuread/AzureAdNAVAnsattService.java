@@ -12,7 +12,6 @@ import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse;
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -159,7 +158,7 @@ public class AzureAdNAVAnsattService {
         String[] scopes = scope.split("\\s+");
         for (String s : scopes) {
             if (!validScopes.contains(s)) {
-                throw new IllegalArgumentException("Unsupported scope [" + s + "], supported scopes are: " + StringUtils.joinWith(", ", validScopes));
+                throw new IllegalArgumentException("Unsupported scope [" + s + "], supported scopes are: " + String.join(", ", validScopes));
             }
         }
 
