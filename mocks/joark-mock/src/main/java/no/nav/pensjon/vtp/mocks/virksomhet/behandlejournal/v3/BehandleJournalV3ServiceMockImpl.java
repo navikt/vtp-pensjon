@@ -42,9 +42,7 @@ import no.nav.tjeneste.virksomhet.behandlejournal.v3.meldinger.LagreVedleggPaaJo
         name = "behandleJournal_v3"
 )
 public class BehandleJournalV3ServiceMockImpl implements BehandleJournalV3 {
-    Logger LOG = LoggerFactory.getLogger(BehandleJournalV3ServiceMockImpl.class);
-
-
+    private final Logger LOG = LoggerFactory.getLogger(BehandleJournalV3ServiceMockImpl.class);
 
     @WebMethod(
             action = "http://nav.no/tjeneste/virksomhet/behandleJournal/v3/behandleJournal_v3/ferdigstillDokumentopplastingRequest"

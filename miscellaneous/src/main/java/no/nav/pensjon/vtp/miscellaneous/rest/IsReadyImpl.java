@@ -14,7 +14,6 @@ import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 @Api(tags = { "isReady" })
 @Path("/isReady")
 public class IsReadyImpl {
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @ApiOperation(value = "isReady", notes = ("Sjekker om systemet er ready for NAIS"))

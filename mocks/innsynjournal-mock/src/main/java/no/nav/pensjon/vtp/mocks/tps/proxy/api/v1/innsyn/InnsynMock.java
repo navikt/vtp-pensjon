@@ -20,7 +20,6 @@ import no.nav.pensjon.vtp.mocks.tps.proxy.api.v1.innsyn.dto.Relasjon;
 @Produces(MediaType.APPLICATION_JSON)
 @Api(tags = {"innsyn-controller"})
 public class InnsynMock {
-
     @GET
     @Path("/person")
     public Personinfo hentPersoninfoForIdent(@NotNull @HeaderParam("Authorization") String authToken,
@@ -50,5 +49,4 @@ public class InnsynMock {
 
         return List.of(Relasjon.builder().build());
     }
-
 }

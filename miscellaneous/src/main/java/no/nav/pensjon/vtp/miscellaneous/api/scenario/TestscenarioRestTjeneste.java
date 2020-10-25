@@ -37,15 +37,15 @@ public class TestscenarioRestTjeneste {
     private static final String TEMPLATE_KEY = "key";
     private static final String SCENARIO_ID = "id";
 
-    @Context
-    private TestscenarioTemplateRepository templateRepository;
+    private final TestscenarioTemplateRepository templateRepository;
+    private final TestscenarioRepository testscenarioRepository;
+    private final PensjonTestdataService pensjonTestdataService;
 
-    @Context
-    private TestscenarioRepository testscenarioRepository;
-
-    @Context
-    private PensjonTestdataService pensjonTestdataService;
-
+    public TestscenarioRestTjeneste(TestscenarioTemplateRepository templateRepository, TestscenarioRepository testscenarioRepository, PensjonTestdataService pensjonTestdataService) {
+        this.templateRepository = templateRepository;
+        this.testscenarioRepository = testscenarioRepository;
+        this.pensjonTestdataService = pensjonTestdataService;
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

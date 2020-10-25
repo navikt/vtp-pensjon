@@ -22,14 +22,9 @@ import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentModell;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import no.nav.tjeneste.virksomhet.journal.v3.HentDokumentDokumentIkkeFunnet;
-import no.nav.tjeneste.virksomhet.journal.v3.HentDokumentJournalpostIkkeFunnet;
-import no.nav.tjeneste.virksomhet.journal.v3.HentDokumentSikkerhetsbegrensning;
-import no.nav.tjeneste.virksomhet.journal.v3.HentDokumentURLDokumentIkkeFunnet;
-import no.nav.tjeneste.virksomhet.journal.v3.HentDokumentURLSikkerhetsbegrensning;
-import no.nav.tjeneste.virksomhet.journal.v3.HentKjerneJournalpostListeSikkerhetsbegrensning;
-import no.nav.tjeneste.virksomhet.journal.v3.HentKjerneJournalpostListeUgyldigInput;
 import no.nav.tjeneste.virksomhet.journal.v3.JournalV3;
 import no.nav.tjeneste.virksomhet.journal.v3.feil.DokumentIkkeFunnet;
+import no.nav.tjeneste.virksomhet.journal.v3.informasjon.hentkjernejournalpostliste.ArkivSak;
 import no.nav.tjeneste.virksomhet.journal.v3.meldinger.HentDokumentRequest;
 import no.nav.tjeneste.virksomhet.journal.v3.meldinger.HentDokumentResponse;
 import no.nav.tjeneste.virksomhet.journal.v3.meldinger.HentDokumentURLRequest;
@@ -42,12 +37,9 @@ import no.nav.tjeneste.virksomhet.journal.v3.meldinger.HentKjerneJournalpostList
 @WebService(name = "Journal_v3", targetNamespace = "http://nav.no/tjeneste/virksomhet/journal/v3")
 @HandlerChain(file="/Handler-chain.xml")
 public class JournalV3ServiceMockImpl implements JournalV3 {
-
     private static final Logger LOG = LoggerFactory.getLogger(JournalV3ServiceMockImpl.class);
 
-    private JournalRepository journalRepository;
-
-    public JournalV3ServiceMockImpl() {}
+    private final JournalRepository journalRepository;
 
     public JournalV3ServiceMockImpl(JournalRepository journalRepository) {
         this.journalRepository = journalRepository;
@@ -59,22 +51,21 @@ public class JournalV3ServiceMockImpl implements JournalV3 {
     }
 
     @Override
-    public HentDokumentURLResponse hentDokumentURL(HentDokumentURLRequest hentDokumentURLRequest) throws HentDokumentURLDokumentIkkeFunnet, HentDokumentURLSikkerhetsbegrensning {
+    public HentDokumentURLResponse hentDokumentURL(HentDokumentURLRequest hentDokumentURLRequest) {
         throw new UnsupportedOperationException("Ikke implementert.");
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/journal/v3/Journal_v3/hentKjerneJournalpostListeRequest")
-    @WebResult(name = "response", targetNamespace = "")
+    @WebResult(name = "response")
     @RequestWrapper(localName = "hentKjerneJournalpostListe", targetNamespace = "http://nav.no/tjeneste/virksomhet/journal/v3", className = "no.nav.tjeneste.virksomhet.journal.v3.HentKjerneJournalpostListe")
     @ResponseWrapper(localName = "hentKjerneJournalpostListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/journal/v3", className = "no.nav.tjeneste.virksomhet.journal.v3.HentKjerneJournalpostListeResponse")
     @Override
-    public HentKjerneJournalpostListeResponse hentKjerneJournalpostListe(@WebParam(name = "request", targetNamespace = "") HentKjerneJournalpostListeRequest request) throws
-            HentKjerneJournalpostListeSikkerhetsbegrensning, HentKjerneJournalpostListeUgyldigInput {
+    public HentKjerneJournalpostListeResponse hentKjerneJournalpostListe(@WebParam(name = "request") HentKjerneJournalpostListeRequest request) {
         LOG.info("JournalV3. hentKjerneJournalpostListe.");
 
         HentKjerneJournalpostListeResponse response = new HentKjerneJournalpostListeResponse();
-        List<String> saker = request.getArkivSakListe().stream().map(t -> t.getArkivSakId()).collect(Collectors.toList());
-        LOG.info("Henter journalpost for følgende saker: "+ saker.stream().collect(Collectors.joining(",")));
+        List<String> saker = request.getArkivSakListe().stream().map(ArkivSak::getArkivSakId).collect(Collectors.toList());
+        LOG.info("Henter journalpost for følgende saker: "+ String.join(",", saker));
 
         for(String sak : saker){
             for(JournalpostModell modell : journalRepository.finnJournalposterMedSakId(sak)){
@@ -92,9 +83,9 @@ public class JournalV3ServiceMockImpl implements JournalV3 {
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/journal/v3/Journal_v3/hentDokumentRequest")
     @RequestWrapper(localName = "hentDokument", targetNamespace = "http://nav.no/tjeneste/virksomhet/journal/v3", className = "no.nav.tjeneste.virksomhet.journal.v3.HentDokument")
     @ResponseWrapper(localName = "hentDokumentResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/journal/v3", className = "no.nav.tjeneste.virksomhet.journal.v3.HentDokumentResponse")
-    @WebResult(name = "response", targetNamespace = "")
-    public HentDokumentResponse hentDokument(@WebParam(name="request", targetNamespace="") HentDokumentRequest request) throws HentDokumentSikkerhetsbegrensning,
-            HentDokumentDokumentIkkeFunnet, HentDokumentJournalpostIkkeFunnet {
+    @WebResult(name = "response")
+    public HentDokumentResponse hentDokument(@WebParam(name="request") HentDokumentRequest request) throws
+            HentDokumentDokumentIkkeFunnet {
         LOG.info("JournalV3. hentDokument");
         HentDokumentResponse response = new HentDokumentResponse();
         Optional<DokumentModell> dokumentModell = journalRepository.finnDokumentMedDokumentId(request.getDokumentId());

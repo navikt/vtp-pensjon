@@ -7,25 +7,19 @@ import javax.annotation.PostConstruct;
 
 import org.apache.cxf.Bus;
 import org.apache.cxf.jaxws.EndpointImpl;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
 
 @Configuration
-public class SoapWebServiceConfig implements ApplicationContextAware {
+public class SoapWebServiceConfig {
+    private final ApplicationContext applicationContext;
     private final Bus bus;
-    private ApplicationContext applicationContext;
 
-    public SoapWebServiceConfig(Bus bus) {
-        this.bus = bus;
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public SoapWebServiceConfig(ApplicationContext applicationContext, Bus bus) {
         this.applicationContext = applicationContext;
+        this.bus = bus;
     }
 
     @PostConstruct

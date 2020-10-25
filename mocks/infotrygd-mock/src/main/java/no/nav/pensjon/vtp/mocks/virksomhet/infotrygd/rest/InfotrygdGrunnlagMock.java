@@ -25,7 +25,6 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.trex.TRexModell;
 @Api(tags = {"Infotrygdmock/grunnlag"})
 @Path("/infotrygd/grunnlag")
 public class InfotrygdGrunnlagMock {
-
     private static final Logger LOG = LoggerFactory.getLogger(InfotrygdGrunnlagMock.class);
     private static final String LOG_PREFIX = "InfotrygdGrunnlag Rest kall til {}";
 

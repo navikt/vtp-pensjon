@@ -1,37 +1,50 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3;
 
-
-import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3.modell.HentInntektlistBolkMapper;
-import no.nav.pensjon.vtp.felles.ConversionUtils;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
-import no.nav.tjeneste.virksomhet.inntekt.v3.ObjectFactory;
-import no.nav.tjeneste.virksomhet.inntekt.v3.binding.*;
-import no.nav.tjeneste.virksomhet.inntekt.v3.feil.UgyldigInput;
-import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.*;
-import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentAbonnerteInntekterBolkResponse;
-import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentDetaljerteAbonnerteInntekterResponse;
-import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentForventetInntektResponse;
-import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentInntektListeBolkResponse;
-import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentInntektListeForOpplysningspliktigResponse;
-import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentInntektListeResponse;
-import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.jws.*;
-import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.ws.RequestWrapper;
-import javax.xml.ws.ResponseWrapper;
-import javax.xml.ws.soap.Addressing;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.jws.HandlerChain;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
+import javax.jws.WebService;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.ws.RequestWrapper;
+import javax.xml.ws.ResponseWrapper;
+import javax.xml.ws.soap.Addressing;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.pensjon.vtp.felles.ConversionUtils;
+import no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3.modell.HentInntektlistBolkMapper;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
+import no.nav.tjeneste.virksomhet.inntekt.v3.binding.HentInntektListeBolkUgyldigInput;
+import no.nav.tjeneste.virksomhet.inntekt.v3.binding.InntektV3;
+import no.nav.tjeneste.virksomhet.inntekt.v3.feil.UgyldigInput;
+import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.Aktoer;
+import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.AktoerId;
+import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.ArbeidsInntektIdent;
+import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.ArbeidsInntektMaaned;
+import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.PersonIdent;
+import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentAbonnerteInntekterBolkRequest;
+import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentAbonnerteInntekterBolkResponse;
+import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentDetaljerteAbonnerteInntekterRequest;
+import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentDetaljerteAbonnerteInntekterResponse;
+import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentForventetInntektRequest;
+import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentForventetInntektResponse;
+import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentInntektListeBolkRequest;
+import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentInntektListeBolkResponse;
+import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentInntektListeForOpplysningspliktigRequest;
+import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentInntektListeForOpplysningspliktigResponse;
+import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentInntektListeRequest;
+import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.HentInntektListeResponse;
 
 @SoapService(path = "/inntektskomponenten-ws/inntekt/v3/Inntekt")
 @Addressing
@@ -41,9 +54,6 @@ public class InntektMockImpl implements InntektV3 {
 
     private static final Logger LOG = LoggerFactory.getLogger(InntektMockImpl.class);
 
-    private static ObjectFactory of = new ObjectFactory();
-    private static HentInntektlistBolkMapper hentInntektlistBolkMapper = new HentInntektlistBolkMapper();
-
     private final InntektYtelseIndeks inntektYtelseIndeks;
 
     public InntektMockImpl(InntektYtelseIndeks inntektYtelseIndeks) {
@@ -52,14 +62,14 @@ public class InntektMockImpl implements InntektV3 {
 
     @Override
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/inntekt/v3/Inntekt_v3/hentInntektListeBolkRequest")
-    @WebResult(name = "response", targetNamespace = "")
+    @WebResult(name = "response")
     @RequestWrapper(localName = "hentInntektListeBolk", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3",
             className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentInntektListeBolk")
     @ResponseWrapper(localName = "hentInntektListeBolkResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3",
             className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentInntektListeBolkResponse")
-    public HentInntektListeBolkResponse hentInntektListeBolk(@WebParam(name = "request", targetNamespace = "") HentInntektListeBolkRequest request) throws HentInntektListeBolkHarIkkeTilgangTilOensketAInntektsfilter, HentInntektListeBolkUgyldigInput {
+    public HentInntektListeBolkResponse hentInntektListeBolk(@WebParam(name = "request") HentInntektListeBolkRequest request) throws HentInntektListeBolkUgyldigInput {
 
-        LOG.info("hentInntektListeBolk. AktoerIdentListe: {}", request.getIdentListe().stream().map(t -> getIdentFromAktoer(t)).collect(Collectors.joining(",")));
+        LOG.info("hentInntektListeBolk. AktoerIdentListe: {}", request.getIdentListe().stream().map(this::getIdentFromAktoer).collect(Collectors.joining(",")));
 
         if(request.getFormaal() == null || request.getAinntektsfilter() == null){
             LOG.warn("Request ugyldig. Mangler Formål eller A-inntektsfilter. ");
@@ -115,12 +125,12 @@ public class InntektMockImpl implements InntektV3 {
 
     @Override
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/inntekt/v3/Inntekt_v3/hentForventetInntektRequest")
-    @WebResult(name = "response", targetNamespace = "")
+    @WebResult(name = "response")
     @RequestWrapper(localName = "hentForventetInntekt", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3",
             className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentForventetInntekt")
     @ResponseWrapper(localName = "hentForventetInntektResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3",
             className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentForventetInntektResponse")
-    public HentForventetInntektResponse hentForventetInntekt(@WebParam(name = "request", targetNamespace = "") HentForventetInntektRequest hentForventetInntektRequest) throws HentForventetInntektPersonIkkeFunnet, HentForventetInntektSikkerhetsbegrensning, HentForventetInntektUgyldigInput {
+    public HentForventetInntektResponse hentForventetInntekt(@WebParam(name = "request") HentForventetInntektRequest hentForventetInntektRequest) {
         HentForventetInntektResponse hentForventetInntektResponse = new HentForventetInntektResponse();
         hentForventetInntektResponse.setIdent(hentForventetInntektRequest.getIdent());
         return hentForventetInntektResponse;
@@ -136,45 +146,45 @@ public class InntektMockImpl implements InntektV3 {
 
     @Override
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/inntekt/v3/Inntekt_v3/hentInntektListeRequest")
-    @WebResult(name = "response", targetNamespace = "")
+    @WebResult(name = "response")
     @RequestWrapper(localName = "hentInntektListe", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3",
             className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentInntektListe")
     @ResponseWrapper(localName = "hentInntektListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3",
             className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentInntektListeResponse")
-    public HentInntektListeResponse hentInntektListe(@WebParam(name = "request", targetNamespace = "") HentInntektListeRequest hentInntektListeRequest) throws HentInntektListeHarIkkeTilgangTilOensketAInntektsfilter, HentInntektListeSikkerhetsbegrensning, HentInntektListeUgyldigInput {
+    public HentInntektListeResponse hentInntektListe(@WebParam(name = "request") HentInntektListeRequest hentInntektListeRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/inntekt/v3/Inntekt_v3/hentInntektListeForOpplysningspliktigRequest")
-    @WebResult(name = "response", targetNamespace = "")
+    @WebResult(name = "response")
     @RequestWrapper(localName = "hentInntektListeForOpplysningspliktig", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3",
             className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentInntektListeForOpplysningspliktig")
     @ResponseWrapper(localName = "hentInntektListeForOpplysningspliktigResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3",
             className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentInntektListeForOpplysningspliktigResponse")
-    public HentInntektListeForOpplysningspliktigResponse hentInntektListeForOpplysningspliktig(@WebParam(name = "request", targetNamespace = "") HentInntektListeForOpplysningspliktigRequest hentInntektListeForOpplysningspliktigRequest) throws HentInntektListeForOpplysningspliktigHarIkkeTilgangTilOensketAInntektsfilter, HentInntektListeForOpplysningspliktigUgyldigInput {
+    public HentInntektListeForOpplysningspliktigResponse hentInntektListeForOpplysningspliktig(@WebParam(name = "request") HentInntektListeForOpplysningspliktigRequest hentInntektListeForOpplysningspliktigRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/inntekt/v3/Inntekt_v3/hentAbonnerteInntekterBolkRequest")
-    @WebResult(name = "response", targetNamespace = "")
+    @WebResult(name = "response")
     @RequestWrapper(localName = "hentAbonnerteInntekterBolk", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3",
             className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentAbonnerteInntekterBolk")
     @ResponseWrapper(localName = "hentAbonnerteInntekterBolkResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3",
             className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentAbonnerteInntekterBolkResponse")
-    public HentAbonnerteInntekterBolkResponse hentAbonnerteInntekterBolk(@WebParam(name = "request", targetNamespace = "") HentAbonnerteInntekterBolkRequest hentAbonnerteInntekterBolkRequest) throws HentAbonnerteInntekterBolkHarIkkeTilgangTilOensketAInntektsfilter, HentAbonnerteInntekterBolkUgyldigInput {
+    public HentAbonnerteInntekterBolkResponse hentAbonnerteInntekterBolk(@WebParam(name = "request") HentAbonnerteInntekterBolkRequest hentAbonnerteInntekterBolkRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/inntekt/v3/Inntekt_v3/hentDetaljerteAbonnerteInntekterRequest")
-    @WebResult(name = "response", targetNamespace = "")
+    @WebResult(name = "response")
     @RequestWrapper(localName = "hentDetaljerteAbonnerteInntekter", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3",
             className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentDetaljerteAbonnerteInntekter")
     @ResponseWrapper(localName = "hentDetaljerteAbonnerteInntekterResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3",
             className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentDetaljerteAbonnerteInntekterResponse")
-    public HentDetaljerteAbonnerteInntekterResponse hentDetaljerteAbonnerteInntekter(@WebParam(name = "request", targetNamespace = "") HentDetaljerteAbonnerteInntekterRequest hentDetaljerteAbonnerteInntekterRequest) throws HentDetaljerteAbonnerteInntekterHarIkkeTilgangTilOensketAInntektsfilter, HentDetaljerteAbonnerteInntekterManglendeAbonnent, HentDetaljerteAbonnerteInntekterPersonIkkeFunnet, HentDetaljerteAbonnerteInntekterSikkerhetsbegrensning, HentDetaljerteAbonnerteInntekterUgyldigInput {
+    public HentDetaljerteAbonnerteInntekterResponse hentDetaljerteAbonnerteInntekter(@WebParam(name = "request") HentDetaljerteAbonnerteInntekterRequest hentDetaljerteAbonnerteInntekterRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 

@@ -11,6 +11,9 @@ public class TomcatAccessLogCustomizer implements WebServerFactoryCustomizer<Tom
  
     @Override
     public void customize(TomcatServletWebServerFactory factory) {
-        factory.addEngineValves(new LogbackValve());
+        LogbackValve logbackValve = new LogbackValve();
+        logbackValve.setName("Logback Access");
+        logbackValve.setFilename("logback-access.xml");
+        factory.addEngineValves(logbackValve);
     }
 }

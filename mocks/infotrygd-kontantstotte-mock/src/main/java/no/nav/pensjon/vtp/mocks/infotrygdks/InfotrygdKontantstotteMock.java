@@ -23,7 +23,7 @@ public class InfotrygdKontantstotteMock {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "infotrygd-kontantstotte", notes = (""))
+    @ApiOperation(value = "infotrygd-kontantstotte")
     public Response harBarnAktivKontantstøtte(@HeaderParam("fnr") String fnr) {
         LOG.info("infotrygd-kontantstotte. fnr: {}", fnr);
 

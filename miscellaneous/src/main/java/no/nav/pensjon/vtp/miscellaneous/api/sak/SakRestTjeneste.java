@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -28,9 +27,11 @@ import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sak;
 public class SakRestTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(SakRestTjeneste.class);
 
+    private final GsakRepo gsakRepo;
 
-    @Context
-    private GsakRepo gsakRepo;
+    public SakRestTjeneste(GsakRepo gsakRepo) {
+        this.gsakRepo = gsakRepo;
+    }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)

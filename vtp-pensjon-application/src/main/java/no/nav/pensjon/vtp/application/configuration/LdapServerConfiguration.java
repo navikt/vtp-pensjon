@@ -11,10 +11,8 @@ import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 
 @Configuration
 public class LdapServerConfiguration {
-    @Bean
+    @Bean(initMethod = "start")
     public LdapServer ldapServer(AnsatteIndeks ansatteIndeks) throws Exception {
-        LdapServer ldapServer = new LdapServer(ansatteIndeks, new File(KeystoreUtils.getKeystoreFilePath()), KeystoreUtils.getKeyStorePassword().toCharArray(), 8389, 8636);
-        ldapServer.start();
-        return ldapServer;
+        return new LdapServer(ansatteIndeks, new File(KeystoreUtils.getKeystoreFilePath()), KeystoreUtils.getKeyStorePassword().toCharArray(), 8389, 8636);
     }
 }

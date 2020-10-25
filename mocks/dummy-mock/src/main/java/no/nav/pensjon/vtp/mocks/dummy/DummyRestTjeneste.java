@@ -14,12 +14,7 @@ import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 @Api(tags = {"Utilities"})
 @Path("/dummy/{var:.+}")
 public class DummyRestTjeneste {
-
     private static final Logger LOG = LoggerFactory.getLogger(DummyRestTjeneste.class);
-
-    public DummyRestTjeneste() {
-
-    }
 
     @GET
     @ApiOperation(value = "get", notes = ("Returnerer ett blankt resultat"))

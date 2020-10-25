@@ -14,7 +14,6 @@ import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 @Api(tags = { "isAlive" })
 @Path("/isAlive")
 public class IsAliveImpl {
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @ApiOperation(value = "isAlive", notes = ("Sjekker om systemet er alive for NAIS"))

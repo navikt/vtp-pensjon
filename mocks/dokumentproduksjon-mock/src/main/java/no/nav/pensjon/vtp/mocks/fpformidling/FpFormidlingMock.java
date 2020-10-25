@@ -22,12 +22,8 @@ import no.nav.pensjon.vtp.mocks.fpformidling.dto.TekstFraSaksbehandlerDto;
 @Api("/fpformidling")
 @Path("/fpformidling")
 public class FpFormidlingMock {
-
     private final Map<UUID, List<String>> dokumentProduksjon = new HashMap<>();
     private final Map<UUID, TekstFraSaksbehandlerDto> saksbehandlerTekst = new HashMap<>();
-
-    public FpFormidlingMock() {
-    }
 
     @POST
     @Path("/hent-dokumentmaler")

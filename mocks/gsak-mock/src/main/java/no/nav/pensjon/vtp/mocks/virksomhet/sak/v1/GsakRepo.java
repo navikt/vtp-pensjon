@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.springframework.stereotype.Component;
+
 import no.nav.pensjon.vtp.felles.ConversionUtils;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.tjeneste.virksomhet.sak.v1.binding.HentSakSakIkkeFunnet;
@@ -20,13 +22,13 @@ import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Person;
 import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sak;
 import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sakstyper;
 
+@Component
 public class GsakRepo {
-
     private static final String SAKSBEHANDLER_IDENT = "MinSaksbehandler";
 
-    private Map<String, Sak> bySakId;
-    private AtomicInteger sakIder;
-    private AtomicInteger oppgaveIder;
+    private final Map<String, Sak> bySakId;
+    private final AtomicInteger sakIder;
+    private final AtomicInteger oppgaveIder;
 
     public GsakRepo() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("Mdkm");
@@ -66,7 +68,7 @@ public class GsakRepo {
         sak.setFagsystem(fagsystemer);
 
         Aktoer aktoer = new Person();
-        person.stream().forEach(p -> {
+        person.forEach(p -> {
             aktoer.setIdent(p.getAktørIdent());
             sak.getGjelderBrukerListe().add(aktoer);
         });
@@ -89,8 +91,6 @@ public class GsakRepo {
     }
 
     public String opprettOppgave(String sakId) {
-
-        String oppgaveId =  sakId + String.valueOf(oppgaveIder.incrementAndGet());
-        return oppgaveId;
+        return sakId + oppgaveIder.incrementAndGet();
     }
 }

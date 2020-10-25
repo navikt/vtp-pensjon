@@ -1,5 +1,11 @@
 package no.nav.pensjon.vtp.application.configuration;
 
+import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadAdresser;
+import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadAnsatte;
+import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadEnheter;
+import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadOrganisasjoner;
+import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadVirksomheter;
+
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -8,34 +14,30 @@ import org.springframework.context.annotation.Configuration;
 
 import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataService;
 import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataServiceImpl;
-import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
-import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
-import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.JournalRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateLoader;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
 @Configuration
-public class UserRepositoryConfiguration {
+public class RepositoryConfiguration {
     @Bean
     public AdresseIndeks adresseIndeks() throws IOException {
-        return BasisdataProviderFileImpl.loadAdresser();
+        return loadAdresser();
     }
 
     @Bean
     public AnsatteIndeks ansatteIndeks() {
-        return BasisdataProviderFileImpl.loadAnsatte();
+        return loadAnsatte();
     }
 
     @Bean
     public OrganisasjonIndeks organisasjonIndeks() throws IOException {
-        return BasisdataProviderFileImpl.loadOrganisasjoner();
+        return loadOrganisasjoner();
     }
 
     @Bean
@@ -49,22 +51,12 @@ public class UserRepositoryConfiguration {
     }
 
     @Bean
-    public JournalRepository journalRepository() {
-        return new JournalRepositoryImpl();
-    }
-
-    @Bean
     public EnheterIndeks enheterIndeks() throws IOException {
-        return BasisdataProviderFileImpl.loadEnheter();
-    }
-
-    @Bean
-    public GsakRepo gsakRepo() {
-        return new GsakRepo();
+        return loadEnheter();
     }
 
     @Bean
     public VirksomhetIndeks virksomhetIndeks() throws IOException {
-        return BasisdataProviderFileImpl.loadVirksomheter();
+        return loadVirksomheter();
     }
 }
