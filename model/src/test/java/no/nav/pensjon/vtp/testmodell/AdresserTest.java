@@ -6,9 +6,9 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
-
 import com.fasterxml.jackson.core.type.TypeReference;
+
+import org.junit.Test;
 
 import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
@@ -22,11 +22,11 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.UstrukturertAdresseModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioBuilderRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateLoader;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
 import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
@@ -44,12 +44,11 @@ public class AdresserTest {
         TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks(), virksomhetIndeks);
         TestscenarioBuilderRepository testscenarioBuilderRepository = new TestscenarioBuilderRepositoryImpl(personIndeks, inntektYtelseIndeks, organisasjonIndeks);
         TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(testscenarioFraTemplateMapper, testscenarioBuilderRepository);
-        TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl();
-        templateRepository.load();
-        for (TestscenarioTemplate testScenarioTemplate : templateRepository.getTemplates()) {
-            Testscenario testScenario = testScenarioRepository.opprettTestscenario(testScenarioTemplate);
-            sjekkAdresseIndeks(testScenario);
-        }
+        TestscenarioTemplateLoader loader = new TestscenarioTemplateLoader();
+        TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl(loader.load());
+        templateRepository.getTemplates().forEach(testscenarioTemplate ->
+            sjekkAdresseIndeks(testScenarioRepository.opprettTestscenario(testscenarioTemplate))
+        );
     }
 
     @Test

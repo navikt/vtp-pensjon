@@ -23,7 +23,8 @@ public interface TestscenarioTemplate {
 
     /** default avleder id fra navn for enkelthets skyld. */
     default String getTemplateKey() {
-        return getTemplateNavn().replaceFirst("[-_].+$", "");
+        String templateNavn = getTemplateNavn();
+        return templateNavn.replaceFirst("[-_].+$", "");
     }
 
 }

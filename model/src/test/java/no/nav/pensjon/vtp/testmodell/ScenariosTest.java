@@ -1,5 +1,9 @@
 package no.nav.pensjon.vtp.testmodell;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Test;
+
 import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
@@ -9,28 +13,20 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioBuilderRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateLoader;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
-
-import org.junit.Test;
-
-import java.util.Collection;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class ScenariosTest {
 
     @Test
     public void skal_laste_scenarios() throws Exception {
-        TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl();
-        templateRepository.load();
-
-        Collection<TestscenarioTemplate> scenarioTemplates = templateRepository.getTemplates();
+        final TestscenarioTemplateLoader loader = new TestscenarioTemplateLoader();
+        TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl(loader.load());
 
         AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
         VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
@@ -42,7 +38,7 @@ public class ScenariosTest {
         TestscenarioBuilderRepository testscenarioBuilderRepository = new TestscenarioBuilderRepositoryImpl(personIndeks, inntektYtelseIndeks, organisasjonIndeks);
         TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(testscenarioFraTemplateMapper, testscenarioBuilderRepository);
 
-        for (TestscenarioTemplate sc : scenarioTemplates) {
+        templateRepository.getTemplates().forEach(sc -> {
             Testscenario testScenario = testScenarioRepository.opprettTestscenario(sc);
             sjekkIdenterErInjisert(testScenario);
             Personopplysninger pers = testScenario.getPersonopplysninger();
@@ -50,7 +46,7 @@ public class ScenariosTest {
             SøkerModell søker = pers.getSøker();
             assertThat(pers.getFamilierelasjoner()).isNotEmpty();
             assertThat(søker.getGeografiskTilknytning()).isNotNull();
-        }
+        });
     }
 
     private void sjekkIdenterErInjisert(Testscenario sc) {

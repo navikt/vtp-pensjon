@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsfordeling.v3;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.junit.Before;
@@ -21,6 +20,7 @@ import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioBuilderRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateLoader;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidstakerUgyldigInput;
@@ -52,15 +52,16 @@ public class ArbeidsforholdMockTest {
 
     @Before
     public void setup() {
-        TestscenarioTemplateRepositoryImpl templateRepositoryImpl = new TestscenarioTemplateRepositoryImpl(new File("../../model/scenarios"));
-        templateRepositoryImpl.load();
+        TestscenarioTemplateLoader loader = new TestscenarioTemplateLoader();
+        TestscenarioTemplateRepositoryImpl templateRepositoryImpl = new TestscenarioTemplateRepositoryImpl(loader.load());
 
         templateRepository = templateRepositoryImpl;
     }
 
     @Test
     public void finnArbeidsforholdPrArbeidstakerTest(){
-        TestscenarioTemplate template = templateRepository.finn("50");
+        TestscenarioTemplate template = templateRepository.finn("50")
+                .orElseThrow(() -> new RuntimeException("Unable to find template using key"));
 
         Testscenario testscenario = testRepo.opprettTestscenario(template);
 
