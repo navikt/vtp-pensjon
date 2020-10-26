@@ -580,12 +580,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.javassist</groupId>
-                <artifactId>javassist</artifactId>
-                <version>3.27.0-GA</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.jvnet.jaxb2_commons</groupId>
                 <artifactId>jaxb2-basics-runtime</artifactId>
                 <version>1.11.1</version>
