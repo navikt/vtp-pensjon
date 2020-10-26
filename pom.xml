@@ -83,11 +83,6 @@
                 <version>0.1.6-10dd8386f529</version>
             </dependency>
             <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-access</artifactId>
-                <version>1.2.3</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
                 <version>3.4.0</version>
