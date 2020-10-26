@@ -10,7 +10,6 @@ import io.swagger.annotations.ApiModelProperty;
 import no.nav.pensjon.vtp.mocks.oppgave.infrastruktur.validering.AtMostOneOf;
 import no.nav.pensjon.vtp.mocks.oppgave.infrastruktur.validering.AtleastOneOf;
 import no.nav.pensjon.vtp.mocks.oppgave.infrastruktur.validering.Organisasjonsnummer;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -24,7 +23,6 @@ import java.util.Map;
 
 import static no.nav.pensjon.vtp.mocks.oppgave.Oppgavestatus.FEILREGISTRERT;
 import static no.nav.pensjon.vtp.mocks.oppgave.Oppgavestatus.FERDIGSTILT;
-import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
 @SuppressWarnings("WeakerAccess")
 @AtleastOneOf(fields = {"temagruppe", "tema"})
@@ -460,37 +458,38 @@ public class OppgaveJson {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, SHORT_PREFIX_STYLE)
-            .append("id", id)
-            .append("tildeltEnhetsnr", tildeltEnhetsnr)
-            .append("endretAvEnhetsnr", endretAvEnhetsnr)
-            .append("journalpostId", journalpostId)
-            .append("journalpostkilde", journalpostkilde)
-            .append("behandlesAvApplikasjon", behandlesAvApplikasjon)
-            .append("saksreferanse", saksreferanse)
-            .append("aktoerId", aktoerId)
-            .append("orgnr", orgnr)
-            .append("bnr", bnr)
-            .append("samhandlernr", samhandlernr)
-            .append("tilordnetRessurs", tilordnetRessurs)
-            .append("temagruppe", temagruppe)
-            .append("tema", tema)
-            .append("behandlingstema", behandlingstema)
-            .append("oppgavetype", oppgavetype)
-            .append("behandlingstype", behandlingstype)
-            .append("versjon", versjon)
-            .append("mappeId", mappeId)
-            .append("fristFerdigstillelse", fristFerdigstillelse)
-            .append("aktivDato", aktivDato)
-            .append("opprettetTidspunkt", opprettetTidspunkt)
-            .append("ferdigstiltTidspunkt", ferdigstiltTidspunkt)
-            .append("endretTidspunkt", endretTidspunkt)
-            .append("prioritet", prioritet)
-            .append("status", status)
-            .append("opprettetAv", opprettetAv)
-            .append("endretAv", endretAv)
-            .append("metadata", metadata)
-            .append("beskrivelse", "*****")
-            .toString();
+        return "OppgaveJson{" +
+                "id=" + id +
+                ", tildeltEnhetsnr='" + tildeltEnhetsnr + '\'' +
+                ", endretAvEnhetsnr='" + endretAvEnhetsnr + '\'' +
+                ", opprettetAvEnhetsnr='" + opprettetAvEnhetsnr + '\'' +
+                ", journalpostId='" + journalpostId + '\'' +
+                ", journalpostkilde='" + journalpostkilde + '\'' +
+                ", behandlesAvApplikasjon='" + behandlesAvApplikasjon + '\'' +
+                ", saksreferanse='" + saksreferanse + '\'' +
+                ", bnr='" + bnr + '\'' +
+                ", samhandlernr='" + samhandlernr + '\'' +
+                ", aktoerId='" + aktoerId + '\'' +
+                ", orgnr='" + orgnr + '\'' +
+                ", tilordnetRessurs='" + tilordnetRessurs + '\'' +
+                ", beskrivelse='" + beskrivelse + '\'' +
+                ", temagruppe='" + temagruppe + '\'' +
+                ", tema='" + tema + '\'' +
+                ", behandlingstema='" + behandlingstema + '\'' +
+                ", oppgavetype='" + oppgavetype + '\'' +
+                ", behandlingstype='" + behandlingstype + '\'' +
+                ", versjon=" + versjon +
+                ", mappeId=" + mappeId +
+                ", fristFerdigstillelse=" + fristFerdigstillelse +
+                ", aktivDato=" + aktivDato +
+                ", opprettetTidspunkt=" + opprettetTidspunkt +
+                ", opprettetAv='" + opprettetAv + '\'' +
+                ", endretAv='" + endretAv + '\'' +
+                ", ferdigstiltTidspunkt=" + ferdigstiltTidspunkt +
+                ", endretTidspunkt=" + endretTidspunkt +
+                ", prioritet=" + prioritet +
+                ", status=" + status +
+                ", metadata=" + metadata +
+                '}';
     }
 }

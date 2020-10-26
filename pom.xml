@@ -3,6 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.4.RELEASE</version>
+        <relativePath/>
+    </parent>
 
     <groupId>no.nav.pensjon.vtp</groupId>
     <artifactId>vtp-pensjon</artifactId>
@@ -21,15 +27,11 @@
         <module>core</module>
         <module>model</module>
         <module>mocks</module>
-        <module>server</module>
         <module>vtp-pensjon-application</module>
         <module>miscellaneous</module>
     </modules>
 
     <properties>
-        <revision>1.0</revision>
-        <sha1></sha1>
-        <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -39,48 +41,57 @@
         <cxf.version>3.4.0</cxf.version>
         <tjenestespesifikasjoner.version>1.2020.07.17-17.06-31e5aa824db7</tjenestespesifikasjoner.version>
         <swagger.version>1.6.2</swagger.version>
+        <ks-tjenestespesifikasjoner.version>1.2019.12.18-12.22-ce897c4eb2c1</ks-tjenestespesifikasjoner.version>
 
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <!-- BOMs - vil overstyre alle senere avhengigheter -->
             <dependency>
-                <!-- NB jetty avhengigher før resteasy -->
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-bom</artifactId>
-                <version>9.4.32.v20200930</version>
-                <scope>import</scope>
-                <type>pom</type>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk15on</artifactId>
+                <version>1.66</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson</groupId>
-                <artifactId>jackson-bom</artifactId>
-                <version>2.11.3</version>
-                <scope>import</scope>
-                <type>pom</type>
+                <groupId>no.nav.tjenestespesifikasjoner</groupId>
+                <artifactId>egenansatt-v1-tjenestespesifikasjon</artifactId>
+                <version>${ks-tjenestespesifikasjoner.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-bom</artifactId>
-                <version>4.5.8.Final</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>no.nav.tjenestespesifikasjoner</groupId>
+                <artifactId>nav-innsynJournal-v2-tjenestespesifikasjon</artifactId>
+                <version>${ks-tjenestespesifikasjoner.version}</version>
             </dependency>
-
-            <!-- fjernet fra SE i Java11 -->
             <dependency>
-                <groupId>com.sun.xml.ws</groupId>
-                <artifactId>jaxws-rt</artifactId>
-                <version>2.3.3</version>
+                <groupId>no.nav.tjenestespesifikasjoner</groupId>
+                <artifactId>getapplicationversion</artifactId>
+                <version>${tjenestespesifikasjoner.version}</version>
             </dependency>
-           <!-- Prosjektavhengigheter -->
             <dependency>
-                <groupId>jakarta.ws.rs</groupId>
-                <artifactId>jakarta.ws.rs-api</artifactId>
-                <version>2.1.6</version>
+                <groupId>no.nav.pensjon</groupId>
+                <artifactId>psak-esb-wsclient-legacy</artifactId>
+                <version>0.1.6-10dd8386f529</version>
             </dependency>
-
+            <dependency>
+                <groupId>no.nav.pensjon</groupId>
+                <artifactId>pen-esb-wsclient-legacy</artifactId>
+                <version>0.1.6-10dd8386f529</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.pensjon</groupId>
+                <artifactId>pselv-esb-wsclient-legacy</artifactId>
+                <version>0.1.6-10dd8386f529</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-access</artifactId>
+                <version>1.2.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+                <version>3.4.0</version>
+            </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>core</artifactId>
@@ -273,11 +284,6 @@
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>miscellaneous</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>kafka</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -536,12 +542,6 @@
 
             <!-- Eksterne bibliotek -->
             <dependency>
-                <groupId>org.jboss</groupId>
-                <artifactId>jandex</artifactId>
-                <version>2.2.1.Final</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.modelmapper</groupId>
                 <artifactId>modelmapper</artifactId>
                 <version>2.3.8</version>
@@ -572,41 +572,8 @@
             </dependency>
             <dependency>
                 <groupId>io.swagger</groupId>
-                <artifactId>swagger-jaxrs</artifactId>
-                <version>${swagger.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <!-- gammel 1.1 versjon eksluderes -->
-                        <groupId>javax.ws.rs</groupId>
-                        <artifactId>jsr311-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>io.swagger</groupId>
                 <artifactId>swagger-annotations</artifactId>
                 <version>${swagger.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-core</artifactId>
-                <version>${swagger.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-core</artifactId>
-                <version>1.2.3</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>1.2.3</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>1.7.30</version>
             </dependency>
 
             <dependency>
@@ -622,34 +589,7 @@
             </dependency>
 
             <!-- Testavhengigheter -->
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter</artifactId>
-                <version>5.7.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.vintage</groupId>
-                <artifactId>junit-vintage-engine</artifactId>
-                <version>5.7.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.platform</groupId>
-                <artifactId>junit-platform-launcher</artifactId>
-                <version>1.7.0</version>
-            </dependency>
 
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>3.17.2</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>3.5.15</version>
-                <scope>test</scope>
-            </dependency>
             <dependency>
                 <groupId>org.apache.pdfbox</groupId>
                 <artifactId>pdfbox</artifactId>
@@ -680,12 +620,6 @@
                 </exclusions>
             </dependency>
 
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.11</version>
-            </dependency>
-
             <!-- Ensure that com.nimbusds:oauth2-oidc-sdk doesn't pick up a SNAPSHOT version of net.minidev:json-smart -->
             <dependency>
                 <groupId>net.minidev</groupId>
@@ -703,12 +637,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- fjernet fra SE i Java11. legger derfor til -->
-        <dependency>
-            <groupId>com.sun.xml.ws</groupId>
-            <artifactId>jaxws-rt</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
@@ -745,18 +673,14 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.8.2</version>
+                    <groupId>io.swagger</groupId>
+                    <artifactId>swagger-codegen-maven-plugin</artifactId>
+                    <version>2.4.16</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.2.0</version>
-                </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
@@ -766,72 +690,15 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.2.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M5</version>
                     <configuration>
                         <argLine>-Xms256m -Dfile.encoding=UTF-8 -Dlog.level.no.nav=WARN</argLine>
                     </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.0.0-M3</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>2.22.2</version>
-                    <executions>
-                        <execution>
-                            <id>failsafe-integration-test</id>
-                            <goals>
-                                <goal>integration-test</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>failsafe-verify</id>
-                            <goals>
-                                <goal>verify</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <reuseForks>true</reuseForks>
-                        <useFile>true</useFile>
-                        <argLine>-Xms256m -Dfile.encoding=UTF-8 -Dsurefire.forkNumber=${surefire.forkNumber}
-                            -Dlog.level.no.nav=WARN
-                        </argLine>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.jboss.jandex</groupId>
-                    <artifactId>jandex-maven-plugin</artifactId>
-                    <version>1.0.8</version>
-                    <executions>
-                        <execution>
-                            <id>make-index</id>
-                            <goals>
-                                <goal>jandex</goal>
-                            </goals>
-                            <configuration>
-                                <!-- Nothing needed here for simple cases -->
-                            </configuration>
-                        </execution>
-                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
 
         <plugins>
-            <plugin>
-                <groupId>org.jboss.jandex</groupId>
-                <artifactId>jandex-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

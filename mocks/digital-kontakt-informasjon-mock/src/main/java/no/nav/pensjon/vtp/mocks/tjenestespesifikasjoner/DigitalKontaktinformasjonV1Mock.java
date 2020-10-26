@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.tjenestespesifikasjoner;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.ObjectFactory;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.*;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.WSEpostadresse;
@@ -12,6 +13,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+@SoapService(path = "/ws/DigitalKontaktinformasjon/v1")
 @WebService(targetNamespace = "http://nav.no/tjeneste/virksomhet/digitalKontaktinformasjon/v1", name = "DigitalKontaktinformasjon_v1")
 @XmlSeeAlso({ObjectFactory.class, no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.ObjectFactory.class, no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.feil.ObjectFactory.class, no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")

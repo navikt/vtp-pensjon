@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
@@ -18,9 +17,10 @@ import javax.xml.ws.soap.Addressing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.felles.ConversionUtils;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIkkeFunnet;
@@ -37,28 +37,29 @@ import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdReques
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdResponse;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.IdentDetaljer;
 
+@SoapService(path="erregister/ws/Aktoer/v2")
 @Addressing
 @WebService(name = "Aktoer_v2", targetNamespace = "http://nav.no/tjeneste/virksomhet/aktoer/v2")
 @HandlerChain(file = "/Handler-chain.xml")
 public class AktoerServiceMockImpl implements AktoerV2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(AktoerServiceMockImpl.class);
-    private TestscenarioBuilderRepository repo;
+    private final PersonIndeks personIndeks;
 
-    public AktoerServiceMockImpl(TestscenarioBuilderRepository repo) {
-        this.repo = repo;
+    public AktoerServiceMockImpl(PersonIndeks personIndeks) {
+        this.personIndeks = personIndeks;
     }
 
     @Override
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/aktoer/v2/Aktoer_v2/hentIdentForAktoerIdRequest")
-    @WebResult(name = "hentIdentForAktoerIdResponse", targetNamespace = "")
+    @WebResult(name = "hentIdentForAktoerIdResponse")
     @RequestWrapper(localName = "hentIdentForAktoerId", targetNamespace = "http://nav.no/tjeneste/virksomhet/aktoer/v2", className = "no.nav.tjeneste.virksomhet.aktoer.v2.HentIdentForAktoerId")
     @ResponseWrapper(localName = "hentIdentForAktoerIdResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/aktoer/v2", className = "no.nav.tjeneste.virksomhet.aktoer.v2.HentIdentForAktoerIdResponse")
     public HentIdentForAktoerIdResponse hentIdentForAktoerId(
-                                                             @WebParam(name = "hentIdentForAktoerIdRequest", targetNamespace = "") HentIdentForAktoerIdRequest request)
+                                                             @WebParam(name = "hentIdentForAktoerIdRequest") HentIdentForAktoerIdRequest request)
             throws HentIdentForAktoerIdPersonIkkeFunnet {
         LOG.info("hentIdentForAktoerId: " + request.getAktoerId());
-        BrukerModell brukerModell = repo.getPersonIndeks().finnByAktørIdent(request.getAktoerId());
+        BrukerModell brukerModell = personIndeks.finnByAktørIdent(request.getAktoerId());
 
         if (brukerModell == null) {
             throw new HentIdentForAktoerIdPersonIkkeFunnet("Fant ingen ident for aktoerid: " + request.getAktoerId(), new PersonIkkeFunnet());
@@ -71,15 +72,15 @@ public class AktoerServiceMockImpl implements AktoerV2 {
 
     @Override
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/aktoer/v2/Aktoer_v2/hentAktoerIdForIdentRequest")
-    @WebResult(name = "hentAktoerIdForIdentResponse", targetNamespace = "")
+    @WebResult(name = "hentAktoerIdForIdentResponse")
     @RequestWrapper(localName = "hentAktoerIdForIdent", targetNamespace = "http://nav.no/tjeneste/virksomhet/aktoer/v2", className = "no.nav.tjeneste.virksomhet.aktoer.v2.HentAktoerIdForIdent")
     @ResponseWrapper(localName = "hentAktoerIdForIdentResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/aktoer/v2", className = "no.nav.tjeneste.virksomhet.aktoer.v2.HentAktoerIdForIdentResponse")
     public HentAktoerIdForIdentResponse hentAktoerIdForIdent(
-                                                             @WebParam(name = "hentAktoerIdForIdentRequest", targetNamespace = "") HentAktoerIdForIdentRequest request)
+                                                             @WebParam(name = "hentAktoerIdForIdentRequest") HentAktoerIdForIdentRequest request)
             throws HentAktoerIdForIdentPersonIkkeFunnet {
         LOG.info("hentIdentForAktoerId: " + request.getIdent());
 
-        BrukerModell brukerModell = repo.getPersonIndeks().finnByIdent(request.getIdent());
+        BrukerModell brukerModell = personIndeks.finnByIdent(request.getIdent());
 
         if (brukerModell == null) {
             throw new HentAktoerIdForIdentPersonIkkeFunnet("Fant ingen aktoerid for ident: " + request.getIdent(), new PersonIkkeFunnet());
@@ -92,19 +93,19 @@ public class AktoerServiceMockImpl implements AktoerV2 {
 
     @Override
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/aktoer/v2/Aktoer_v2/hentAktoerIdForIdentListeRequest")
-    @WebResult(name = "hentAktoerIdForIdentListeResponse", targetNamespace = "")
+    @WebResult(name = "hentAktoerIdForIdentListeResponse")
     @RequestWrapper(localName = "hentAktoerIdForIdentListe", targetNamespace = "http://nav.no/tjeneste/virksomhet/aktoer/v2", className = "no.nav.tjeneste.virksomhet.aktoer.v2.HentAktoerIdForIdentListe")
     @ResponseWrapper(localName = "hentAktoerIdForIdentListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/aktoer/v2", className = "no.nav.tjeneste.virksomhet.aktoer.v2.HentAktoerIdForIdentListeResponse")
     public HentAktoerIdForIdentListeResponse hentAktoerIdForIdentListe(
-                                                                       @WebParam(name = "hentAktoerIdForIdentListeRequest", targetNamespace = "") HentAktoerIdForIdentListeRequest hentAktoerIdForIdentListeRequest) {
+                                                                       @WebParam(name = "hentAktoerIdForIdentListeRequest") HentAktoerIdForIdentListeRequest hentAktoerIdForIdentListeRequest) {
 
-        LOG.info("hentAktoerIdForIdentListe: " + hentAktoerIdForIdentListeRequest.getIdentListe().stream().collect(Collectors.joining(",")));
+        LOG.info("hentAktoerIdForIdentListe: " + String.join(",", hentAktoerIdForIdentListeRequest.getIdentListe()));
 
         Map<String, String> identTilAktørId = new LinkedHashMap<>();
 
-        hentAktoerIdForIdentListeRequest.getIdentListe().stream()
+        hentAktoerIdForIdentListeRequest.getIdentListe()
             .forEach(ident -> {
-                BrukerModell bruker = repo.getPersonIndeks().finnByIdent(ident);
+                BrukerModell bruker = personIndeks.finnByIdent(ident);
                 identTilAktørId.put(ident, bruker == null ? null : bruker.getAktørIdent());
             });
 
@@ -138,11 +139,11 @@ public class AktoerServiceMockImpl implements AktoerV2 {
 
     @Override
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/aktoer/v2/Aktoer_v2/hentIdentForAktoerIdListeRequest")
-    @WebResult(name = "hentIdentForAktoerIdListeResponse", targetNamespace = "")
+    @WebResult(name = "hentIdentForAktoerIdListeResponse")
     @RequestWrapper(localName = "hentIdentForAktoerIdListe", targetNamespace = "http://nav.no/tjeneste/virksomhet/aktoer/v2", className = "no.nav.tjeneste.virksomhet.aktoer.v2.HentIdentForAktoerIdListe")
     @ResponseWrapper(localName = "hentIdentForAktoerIdListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/aktoer/v2", className = "no.nav.tjeneste.virksomhet.aktoer.v2.HentIdentForAktoerIdListeResponse")
     public HentIdentForAktoerIdListeResponse hentIdentForAktoerIdListe(
-                                                                       @WebParam(name = "hentIdentForAktoerIdListeRequest", targetNamespace = "") HentIdentForAktoerIdListeRequest hentIdentForAktoerIdListeRequest) {
+                                                                       @WebParam(name = "hentIdentForAktoerIdListeRequest") HentIdentForAktoerIdListeRequest hentIdentForAktoerIdListeRequest) {
 
         throw new UnsupportedOperationException("Ikke implementert");
     }

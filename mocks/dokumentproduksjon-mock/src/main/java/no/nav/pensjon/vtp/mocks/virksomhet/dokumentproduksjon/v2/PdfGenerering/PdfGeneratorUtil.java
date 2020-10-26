@@ -1,15 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2.PdfGenerering;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.awt.Color;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,10 +10,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
+
 public class PdfGeneratorUtil {
-
-    private static final Logger LOG = LoggerFactory.getLogger(PdfGeneratorUtil.class);
-
     private final ClassLoader classLoader = PdfGeneratorUtil.class.getClassLoader();
     private static final String FONT_FILE = "fonts/OpenSans-Regular.ttf";
     private static final String OUTPUT_PDF = "statiskBrev.pdf";

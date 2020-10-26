@@ -2,10 +2,10 @@ package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsfordeling.rest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
+
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
-import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.norg2.model.Norg2RsEnhet;
 import no.nav.norg2.model.Norg2RsOrganisering;
 import no.nav.norg2.model.Norg2RsSimpleEnhet;
@@ -16,7 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import java.io.IOException;
+
 import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -26,13 +26,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@JaxrsResource
 @Api(tags = {"Norg2 enheter"})
 @Path("/norg2/api/v1")
 public class EnhetRestMock {
     private static final Logger LOG = LoggerFactory.getLogger(EnhetRestMock.class);
-    private TestscenarioBuilderRepository scenarioRepository = TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance());
+    private final EnheterIndeks enheterIndeks;
 
-    public EnhetRestMock() throws IOException {
+    public EnhetRestMock(EnheterIndeks enheterIndeks) {
+        this.enheterIndeks = enheterIndeks;
     }
 
     @POST
@@ -66,7 +68,7 @@ public class EnhetRestMock {
             throws NotFoundException {
         LOG.info("kall på /norg2/api/v1/enhet med enhetIDs:" + enhetsnummerListe.parallelStream().collect(Collectors.joining(",")));
 
-        List<Norg2RsEnhet> norg2RsEnheter = norg2RsEnheter(scenarioRepository.getEnheterIndeks().getAlleEnheter()).stream()
+        List<Norg2RsEnhet> norg2RsEnheter = norg2RsEnheter(enheterIndeks.getAlleEnheter()).stream()
                 .filter(e -> enhetsnummerListe.isEmpty() || enhetsnummerListe.contains(e.getEnhetNr()))
                 .filter(e -> enhetStatusListe.isEmpty() || enhetStatusListe.contains(e.getStatus()))
                 .collect(Collectors.toList());
@@ -102,7 +104,7 @@ public class EnhetRestMock {
                                      @Context SecurityContext securityContext) throws NotFoundException {
             LOG.info("kall på /norg2/api/v1/enhet/" + enhetsnummer);
 
-            Norg2RsEnhet norg2RsEnhet = norg2RsEnheter(scenarioRepository.getEnheterIndeks().getAlleEnheter()).stream()
+            Norg2RsEnhet norg2RsEnhet = norg2RsEnheter(enheterIndeks.getAlleEnheter()).stream()
                     .filter(e -> e.getEnhetNr().equalsIgnoreCase(enhetsnummer))
                     .findAny().orElseThrow(() -> new InvalidParameterException("Could not find enhet with id " + enhetsnummer));
             return Response.ok(norg2RsEnhet).build();
@@ -120,7 +122,7 @@ public class EnhetRestMock {
                                      @Context SecurityContext securityContext) throws NotFoundException {
         LOG.info(String.format("kall på /norg2/api/v1/enhet/%s/organisering", enhetsnummer));
 
-        Norg2RsEnhet norg2RsEnhet = norg2RsEnheter(scenarioRepository.getEnheterIndeks().getAlleEnheter()).stream()
+        Norg2RsEnhet norg2RsEnhet = norg2RsEnheter(enheterIndeks.getAlleEnheter()).stream()
                 .filter(e -> e.getEnhetNr().equalsIgnoreCase(enhetsnummer))
                 .findAny().orElseThrow(() -> new InvalidParameterException("Could not find enhet with id " + enhetsnummer));
 

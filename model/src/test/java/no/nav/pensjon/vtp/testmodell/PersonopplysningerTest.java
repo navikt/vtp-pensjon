@@ -1,22 +1,30 @@
 package no.nav.pensjon.vtp.testmodell;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapperiodeModell;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BarnModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell.Kjønn;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Landkode;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell.Diskresjonskoder;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SivilstandModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.StatsborgerskapModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.StringTestscenarioTemplate;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioBuilderRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTilTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
+import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,11 +41,17 @@ public class PersonopplysningerTest {
 
     @Test
     public void skal_skrive_scenario_til_personopplysninger_json() throws Exception {
-        TestscenarioRepositoryImpl testScenarioRepository = TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance());
+        PersonIndeks personIndeks = new PersonIndeks();
+        VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
+        AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
+        IdenterIndeks identerIndeks = new IdenterIndeks();
+        OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
+        InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
+        TestscenarioBuilderRepository testscenarioBuilderRepository = new TestscenarioBuilderRepositoryImpl(personIndeks, inntektYtelseIndeks, organisasjonIndeks);
 
         TestscenarioTilTemplateMapper mapper = new TestscenarioTilTemplateMapper();
 
-        TestscenarioImpl scenario = new TestscenarioImpl("test", "test-1", testScenarioRepository);
+        Testscenario scenario = new Testscenario("test", "test-1", identerIndeks, virksomhetIndeks);
         JsonMapper jsonMapper =  new JsonMapper(scenario.getVariabelContainer());
         String lokalIdent = "#id1#";
         SøkerModell søker = new SøkerModell(lokalIdent, "Donald", LocalDate.now().minusYears(20), Kjønn.M);
@@ -61,15 +75,16 @@ public class PersonopplysningerTest {
 
         // Act - readback
 
-        TestscenarioFraTemplateMapper readMapper = new TestscenarioFraTemplateMapper(testScenarioRepository);
+        TestscenarioFraTemplateMapper readMapper = new TestscenarioFraTemplateMapper(adresseIndeks, identerIndeks, virksomhetIndeks);
         Testscenario scenario2 = readMapper.lagTestscenario(new StringTestscenarioTemplate("my-template", json, null, null));
+        testscenarioBuilderRepository.indekser(scenario2);
 
         // Assert
         SøkerModell søker2 = scenario2.getPersonopplysninger().getSøker();
         assertThat(søker2).isNotNull();
         assertThat(søker2.getEtternavn()).isNotEmpty();
 
-        SøkerModell søkerFraIndeks = testScenarioRepository.getPersonIndeks().finnByIdent(søker2.getIdent());
+        SøkerModell søkerFraIndeks = personIndeks.finnByIdent(søker2.getIdent());
         assertThat(søkerFraIndeks).isEqualTo(søker2);
     }
 
@@ -78,6 +93,6 @@ public class PersonopplysningerTest {
         BufferedOutputStream buf = new BufferedOutputStream(baos);
         mapper.skrivPersonopplysninger(jsonMapper.canonicalMapper(), buf, scenario);
         buf.flush();
-        return baos.toString("UTF8");
+        return baos.toString(UTF_8);
     }
 }

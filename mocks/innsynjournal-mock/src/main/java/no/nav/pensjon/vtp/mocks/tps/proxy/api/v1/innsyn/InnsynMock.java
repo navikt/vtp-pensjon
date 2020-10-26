@@ -10,14 +10,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import io.swagger.annotations.Api;
+
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.mocks.tps.proxy.api.v1.innsyn.dto.Personinfo;
 import no.nav.pensjon.vtp.mocks.tps.proxy.api.v1.innsyn.dto.Relasjon;
 
+@JaxrsResource
 @Path("/api/v1/innsyn")
 @Produces(MediaType.APPLICATION_JSON)
 @Api(tags = {"innsyn-controller"})
 public class InnsynMock {
-
     @GET
     @Path("/person")
     public Personinfo hentPersoninfoForIdent(@NotNull @HeaderParam("Authorization") String authToken,
@@ -47,5 +49,4 @@ public class InnsynMock {
 
         return List.of(Relasjon.builder().build());
     }
-
 }

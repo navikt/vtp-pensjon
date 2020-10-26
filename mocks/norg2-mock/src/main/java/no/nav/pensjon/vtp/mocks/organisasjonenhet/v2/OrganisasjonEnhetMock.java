@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.organisasjonenhet.v2;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.FinnNAVKontorUgyldigInput;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.HentOverordnetEnhetListeEnhetIkkeFunnet;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.OrganisasjonEnhetV2;
@@ -16,6 +17,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+@SoapService(path = "/norg2/ws/OrganisasjonEnhet/v2")
 @WebService(name = "OrganisasjonEnhet_v2", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjonEnhet/v2/")
 @XmlSeeAlso({
         no.nav.tjeneste.virksomhet.organisasjonenhet.v2.ObjectFactory.class,

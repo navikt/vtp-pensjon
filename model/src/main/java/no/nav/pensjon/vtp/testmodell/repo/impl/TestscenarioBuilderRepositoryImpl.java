@@ -1,50 +1,43 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import no.nav.pensjon.vtp.testmodell.util.TestdataUtil;
-import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
-import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModeller;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import no.nav.pensjon.vtp.testmodell.repo.BasisdataProvider;
-import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AnnenPartModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonNavn;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
+import no.nav.pensjon.vtp.testmodell.util.TestdataUtil;
 
-public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioBuilderRepository {
+@Component
+public class TestscenarioBuilderRepositoryImpl implements TestscenarioBuilderRepository {
 
     private static final Logger log = LoggerFactory.getLogger(TestscenarioBuilderRepositoryImpl.class);
 
-    private final BasisdataProvider basisdata;
     private final Map<String, Testscenario> scenarios = new ConcurrentHashMap<>(); // not ordered for front-end
-    private final Map<String, LokalIdentIndeks> identer = new ConcurrentHashMap<>();
-    private PersonIndeks personIndeks = new PersonIndeks();
-    private InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
-    private OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
 
-    @Override
-    public Optional<OrganisasjonModell> getOrganisasjon(String orgnr) {
-        return organisasjonIndeks.getModellForIdent(orgnr);
+    private final PersonIndeks personIndeks;
+    private final InntektYtelseIndeks inntektYtelseIndeks;
+    private final OrganisasjonIndeks organisasjonIndeks;
+
+    public TestscenarioBuilderRepositoryImpl(PersonIndeks personIndeks,
+            InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonIndeks organisasjonIndeks) {
+        this.personIndeks = personIndeks;
+        this.inntektYtelseIndeks = inntektYtelseIndeks;
+        this.organisasjonIndeks = organisasjonIndeks;
     }
-
-
-    protected TestscenarioBuilderRepositoryImpl(BasisdataProvider basisdata) {
-        this.basisdata = basisdata;
-    }
-
 
     @Override
     public Map<String, Testscenario> getTestscenarios() {
@@ -56,17 +49,7 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
         return scenarios.get(id);
     }
 
-    @Override
-    public BasisdataProvider getBasisdata() {
-        return basisdata;
-    }
-
-    @Override
-    public EnheterIndeks getEnheterIndeks() {
-        return getBasisdata().getEnheterIndeks();
-    }
-
-    public void indekser(TestscenarioImpl testScenario) {
+    public void indekser(Testscenario testScenario) {
         scenarios.put(testScenario.getId(), testScenario);
         Personopplysninger personopplysninger = testScenario.getPersonopplysninger();
         if (personopplysninger == null) {
@@ -88,7 +71,7 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
             personIndeks.indekserFamilierelasjonBrukere(personopplysninger.getFamilierelasjoner());
 
             personIndeks.indekserPersonopplysningerByIdent(personopplysninger);
-            testScenario.getPersonligArbeidsgivere().forEach(p -> personIndeks.leggTil(p));
+            testScenario.getPersonligArbeidsgivere().forEach(personIndeks::leggTil);
 
             inntektYtelseIndeks.leggTil(personopplysninger.getSøker().getIdent(), testScenario.getSøkerInntektYtelse());
             if (personopplysninger.getAnnenPart() != null) {
@@ -104,33 +87,7 @@ public abstract class TestscenarioBuilderRepositoryImpl implements TestscenarioB
     }
 
     @Override
-    public LokalIdentIndeks getIdenter(String unikScenarioId) {
-        return identer.computeIfAbsent(unikScenarioId, n -> new LokalIdentIndeks(n, basisdata.getIdentGenerator()));
-    }
-
-    @Override
-    public PersonIndeks getPersonIndeks() {
-        return personIndeks;
-    }
-
-    @Override
-    public Optional<InntektYtelseModell> getInntektYtelseModell(String ident) {
-        return inntektYtelseIndeks.getModellForIdent(ident);
-    }
-
-    @Override
-    public Optional<InntektYtelseModell> getInntektYtelseModellFraAktørId(String aktørId) {
-        return inntektYtelseIndeks.getModellForIdent(aktørId.substring(aktørId.length() - 11));
-    }
-
-    @Override
     public Boolean slettScenario(String id) {
         return scenarios.remove(id) != null;
     }
-
-    @Override
-    public Boolean endreTestscenario(Testscenario testscenario) {
-        return null;
-    }
-
 }

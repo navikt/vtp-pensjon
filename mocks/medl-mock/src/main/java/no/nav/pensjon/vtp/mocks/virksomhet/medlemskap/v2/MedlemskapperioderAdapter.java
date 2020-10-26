@@ -6,8 +6,8 @@ import java.util.List;
 import no.nav.pensjon.vtp.felles.ConversionUtils;
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapperiodeModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.Medlemsperiode;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.kodeverk.KildeMedTerm;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.kodeverk.LandkodeMedTerm;
@@ -18,15 +18,15 @@ import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.kodeverk.Trygdedekni
 
 public class MedlemskapperioderAdapter {
 
-    private TestscenarioBuilderRepository scenarioRepository;
+    private final PersonIndeks personIndeks;
 
-    public MedlemskapperioderAdapter(TestscenarioBuilderRepository scenarioRepository) {
-        this.scenarioRepository = scenarioRepository;
+    public MedlemskapperioderAdapter(PersonIndeks personIndeks) {
+        this.personIndeks = personIndeks;
     }
 
     public List<Medlemsperiode> finnMedlemsperioder(String personIdent) {
         if (personIdent != null) {
-            BrukerModell brukerModell = scenarioRepository.getPersonIndeks().finnByIdent(personIdent);
+            BrukerModell brukerModell = personIndeks.finnByIdent(personIdent);
             if (brukerModell!=null && brukerModell instanceof PersonModell) {
                 PersonModell pm = (PersonModell)brukerModell;
 

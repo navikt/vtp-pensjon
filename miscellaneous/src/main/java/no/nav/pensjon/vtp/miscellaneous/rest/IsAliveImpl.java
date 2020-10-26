@@ -8,10 +8,12 @@ import javax.ws.rs.core.MediaType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Api(tags = { "isAlive" })
 @Path("/isAlive")
 public class IsAliveImpl {
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @ApiOperation(value = "isAlive", notes = ("Sjekker om systemet er alive for NAIS"))

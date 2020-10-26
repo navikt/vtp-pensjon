@@ -5,49 +5,67 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
+import no.nav.pensjon.vtp.mocks.virksomhet.arbeidsforhold.v3.ArbeidsforholdMockImpl;
+import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.DelegatingTestscenarioRepository;
-import no.nav.pensjon.vtp.testmodell.repo.impl.DelegatingTestscenarioTemplateRepository;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioBuilderRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateLoader;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
-import no.nav.pensjon.vtp.mocks.virksomhet.arbeidsforhold.v3.ArbeidsforholdMockImpl;
-import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning;
+import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidstakerUgyldigInput;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.NorskIdent;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Regelverker;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerRequest;
-import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerResponse;
 
 public class ArbeidsforholdMockTest {
+    private final PersonIndeks personIndeks = new PersonIndeks();
+    private final InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
+    private final OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
 
-    private TestscenarioRepository testRepo;
+    private final TestscenarioBuilderRepository testscenarioBuilderRepository = new TestscenarioBuilderRepositoryImpl(personIndeks, inntektYtelseIndeks, organisasjonIndeks);
+    private final TestscenarioRepository testRepo = getTestscenarioRepository();
+
+    private TestscenarioRepositoryImpl getTestscenarioRepository() {
+        try {
+            AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
+            VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
+            TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks(), virksomhetIndeks);
+            return new TestscenarioRepositoryImpl(
+                    testscenarioFraTemplateMapper, testscenarioBuilderRepository);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private TestscenarioTemplateRepository templateRepository;
 
     @Before
-    public void setup() throws IOException {
-        System.setProperty("scenarios.dir", "../../model/scenarios");
-        TestscenarioTemplateRepositoryImpl templateRepositoryImpl = TestscenarioTemplateRepositoryImpl.getInstance();
-        templateRepositoryImpl.load();
+    public void setup() {
+        TestscenarioTemplateLoader loader = new TestscenarioTemplateLoader();
+        TestscenarioTemplateRepositoryImpl templateRepositoryImpl = new TestscenarioTemplateRepositoryImpl(loader.load());
 
-        templateRepository = new DelegatingTestscenarioTemplateRepository(templateRepositoryImpl);
-        DelegatingTestscenarioRepository testScenarioRepository = new DelegatingTestscenarioRepository(TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance()));
-        testRepo = testScenarioRepository;
-
+        templateRepository = templateRepositoryImpl;
     }
 
     @Test
     public void finnArbeidsforholdPrArbeidstakerTest(){
-        TestscenarioTemplate template = templateRepository.finn("50");
+        TestscenarioTemplate template = templateRepository.finn("50")
+                .orElseThrow(() -> new RuntimeException("Unable to find template using key"));
 
         Testscenario testscenario = testRepo.opprettTestscenario(template);
 
-        ArbeidsforholdMockImpl arbeidsforholdMock = new ArbeidsforholdMockImpl(testRepo);
+        ArbeidsforholdMockImpl arbeidsforholdMock = new ArbeidsforholdMockImpl(inntektYtelseIndeks, personIndeks);
 
         FinnArbeidsforholdPrArbeidstakerRequest finnArbeidsforholdPrArbeidstakerRequest = new FinnArbeidsforholdPrArbeidstakerRequest();
 
@@ -59,17 +77,12 @@ public class ArbeidsforholdMockTest {
         regelverk.setKodeverksRef("A_ORDNINGEN");
         finnArbeidsforholdPrArbeidstakerRequest.setRapportertSomRegelverk(regelverk);
 
-        InntektYtelseModell søkerInntektYtelse = testscenario.getSøkerInntektYtelse();
-
+        testscenario.getSøkerInntektYtelse();
 
         try {
-            FinnArbeidsforholdPrArbeidstakerResponse finnArbeidsforholdPrArbeidstakerResponse = arbeidsforholdMock.finnArbeidsforholdPrArbeidstaker(finnArbeidsforholdPrArbeidstakerRequest);
-
-            String s = "";
-        } catch (FinnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning finnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning) {
+            arbeidsforholdMock.finnArbeidsforholdPrArbeidstaker(finnArbeidsforholdPrArbeidstakerRequest);
+        } catch (FinnArbeidsforholdPrArbeidstakerUgyldigInput finnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning) {
             finnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning.printStackTrace();
-        } catch (FinnArbeidsforholdPrArbeidstakerUgyldigInput finnArbeidsforholdPrArbeidstakerUgyldigInput) {
-            finnArbeidsforholdPrArbeidstakerUgyldigInput.printStackTrace();
         }
     }
 }

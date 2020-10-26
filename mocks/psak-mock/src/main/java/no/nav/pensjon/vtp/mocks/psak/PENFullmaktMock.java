@@ -4,13 +4,14 @@ import no.nav.inf.pen.fullmakt.FinnFullmaktmottagereFaultPenGeneriskMsg;
 import no.nav.inf.pen.fullmakt.ObjectFactory;
 import no.nav.inf.pen.fullmakt.PENFullmakt;
 import no.nav.lib.pen.psakpselv.asbo.fullmakt.ASBOPenFullmaktListe;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 
 import javax.jws.*;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
-
+@SoapService(path = "/esb/nav-cons-pen-pen-fullmaktWeb/sca/PENFullmaktWSEXP")
 @WebService(targetNamespace = "http://nav-cons-pen-pen-fullmakt/no/nav/inf", name = "PENFullmakt")
 @XmlSeeAlso({no.nav.lib.pen.psakpselv.fault.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.fullmakt.ObjectFactory.class, ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")

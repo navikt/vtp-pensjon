@@ -1,13 +1,11 @@
 package no.nav.pensjon.vtp.testmodell.repo;
 
-import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public interface TestscenarioTemplateRepository {
 
-    Collection<TestscenarioTemplate> getTemplates();
+    Stream<TestscenarioTemplate> getTemplates();
 
-    TestscenarioTemplate finn(String templateKey);
-
-    TestscenarioTemplate finnMedTemplatenavn(String templateNavn);
-
+    Optional<TestscenarioTemplate> finn(String templateKey);
 }

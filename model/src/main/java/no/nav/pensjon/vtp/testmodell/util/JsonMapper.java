@@ -78,7 +78,6 @@ public class JsonMapper {
                     .appendPattern("uuuu-MM-dd")
                     .toFormatter());
         }
-        LOG.debug("parsed <" + date + "> as null:(");
         return null;
     }
 

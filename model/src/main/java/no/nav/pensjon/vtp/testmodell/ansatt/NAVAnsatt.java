@@ -19,4 +19,8 @@ public class NAVAnsatt {
     public List<String> groups;
     @JsonProperty
     public List<String> enheter;
+
+    public String getDisplayName() {
+        return displayName;
+    }
 }

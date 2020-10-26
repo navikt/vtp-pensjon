@@ -10,17 +10,14 @@ import java.util.regex.Matcher;
 
 public class VariabelContainer {
 
-    private NavigableMap<String, String> vars = new TreeMap<>();
+    private final NavigableMap<String, String> vars;
 
     public VariabelContainer() {
+        this.vars = new TreeMap<>();
     }
 
     public VariabelContainer(Map<String, String> variable) {
-        this.putAll(variable);
-    }
-
-    public void putVar(String key, String value) {
-        vars.put(cleanKey(key), value);
+        this.vars = new TreeMap<>(variable);
     }
 
     public String getVar(String key) {
@@ -36,7 +33,7 @@ public class VariabelContainer {
     }
 
     public void putAll(Map<String, String> vars2) {
-        vars2.entrySet().forEach(e -> this.vars.put(cleanKey(e.getKey()), e.getValue()));
+        vars2.forEach((key, value) -> this.vars.put(cleanKey(key), value));
     }
 
     public void forEach(BiConsumer<String, String> action) {

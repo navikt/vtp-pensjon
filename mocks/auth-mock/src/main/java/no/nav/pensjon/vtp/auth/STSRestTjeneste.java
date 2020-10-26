@@ -2,6 +2,7 @@ package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.felles.OidcTokenGenerator;
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType;
 import org.jose4j.lang.JoseException;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 
+@JaxrsResource
 @Api(tags = {"Security Token Service"})
 @Path("/v1/sts")
 public class STSRestTjeneste {

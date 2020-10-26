@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.oppgave.infrastruktur.validering;
 
-import org.apache.commons.lang3.StringUtils;
+import static org.springframework.util.StringUtils.isEmpty;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -20,7 +20,7 @@ public class OrganisasjonsnummerValidator implements ConstraintValidator<Organis
     }
 
     public static boolean isValid(String orgnr) {
-        if (StringUtils.isEmpty(orgnr)) {
+        if (isEmpty(orgnr)) {
             return true;
         } else if (!orgnr.matches("\\A[89]\\d{8}\\Z")) {
             return false;

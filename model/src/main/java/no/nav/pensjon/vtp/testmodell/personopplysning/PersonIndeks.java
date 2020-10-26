@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PersonIndeks {
 
     private Map<String, BrukerModell> byIdent = new HashMap<>();

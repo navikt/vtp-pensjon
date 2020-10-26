@@ -2,6 +2,8 @@ package no.nav.pensjon.vtp.mocks.psak;
 
 import no.nav.inf.psak.samhandler.*;
 import no.nav.lib.pen.psakpselv.asbo.samhandler.*;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +12,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+@SoapService(path = "/esb/nav-cons-pen-psak-samhandlerWeb/sca/PSAKSamhandlerWSEXP")
 @WebService(
         targetNamespace = "http://nav-cons-pen-psak-samhandler/no/nav/inf",
         name = "PSAKSamhandler"

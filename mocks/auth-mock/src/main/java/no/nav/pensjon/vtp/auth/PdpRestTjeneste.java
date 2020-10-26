@@ -15,6 +15,9 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.List;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Api(tags = { "ABAC-PDP-Mock" })
 @Path("/asm-pdp/authorize")
 public class PdpRestTjeneste {

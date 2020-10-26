@@ -3,29 +3,33 @@ package no.nav.pensjon.vtp.mocks.journalpost.dokarkiv;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import no.nav.dokarkiv.generated.model.*;
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@JaxrsResource
 @Api(tags = {"Dokarkiv"})
 @Path("/dokarkiv/rest/journalpostapi/v1")
 public class JournalpostMock {
     private static final Logger LOG = LoggerFactory.getLogger(JournalpostMock.class);
 
-    @Context
-    JournalRepository journalRepository;
+    private final JournalRepository journalRepository;
+
+    public JournalpostMock(JournalRepository journalRepository) {
+        this.journalRepository = journalRepository;
+    }
 
     @POST
     @Path("/journalpost")
-    @ApiOperation(value = "lag journalpost", notes = (""))
+    @ApiOperation(value = "lag journalpost")
     public Response lagJournalpost(OpprettJournalpostRequest opprettJournalpostRequest, @QueryParam("forsoekFerdigstill") Boolean forsoekFerdigstill) {
         LOG.info("Dokarkiv. Lag journalpost. foersoekFerdigstill: {}", forsoekFerdigstill);
 

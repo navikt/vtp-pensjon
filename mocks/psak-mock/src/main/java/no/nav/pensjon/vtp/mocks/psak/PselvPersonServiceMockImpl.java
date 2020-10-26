@@ -14,7 +14,8 @@ import javax.xml.ws.ResponseWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.inf.pselv.person.HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg;
 import no.nav.inf.pselv.person.HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg;
 import no.nav.inf.pselv.person.HentKontoinformasjonFaultPenPersonIkkeFunnetMsg;
@@ -34,6 +35,7 @@ import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPersonListe;
 import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenSlettAdresseRequest;
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory;
 
+@SoapService(path = "/esb/nav-cons-pen-pselv-personWeb/sca/PSELVPersonWSEXP")
 @SuppressWarnings("ValidExternallyBoundObject")
 @WebService(targetNamespace = "http://nav-cons-pen-pselv-person/no/nav/inf", name = "PSELVPerson")
 @XmlSeeAlso({ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory.class, no.nav.inf.pselv.person.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.tjenestepensjon.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.person.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.person.ObjectFactory.class})
@@ -41,10 +43,10 @@ import no.nav.lib.pen.psakpselv.fault.ObjectFactory;
 public class PselvPersonServiceMockImpl implements PSELVPerson {
     private static final Logger logger = LoggerFactory.getLogger(PsakPersonServiceMockImpl.class);
 
-    private final TestscenarioBuilderRepository repo;
+    private final PersonIndeks personIndeks;
 
-    public PselvPersonServiceMockImpl(TestscenarioBuilderRepository repo) {
-        this.repo = repo;
+    public PselvPersonServiceMockImpl(PersonIndeks personIndeks) {
+        this.personIndeks = personIndeks;
     }
 
     private Optional<ASBOPenPerson> getASBOPerson(String fodselsnummer) {
@@ -54,7 +56,7 @@ public class PselvPersonServiceMockImpl implements PSELVPerson {
     }
 
     private Optional<ASBOPenPerson> hentFraRepo(String fodselsnummer) {
-        return repo.getPersonIndeks().getAlleSøkere().parallelStream()
+        return personIndeks.getAlleSøkere().parallelStream()
                 .filter(p -> p.getSøker().getIdent().equals(fodselsnummer))
                 .map(PsakpselvPersonAdapter::toASBOPerson)
                 .findFirst();

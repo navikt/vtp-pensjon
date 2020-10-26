@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.virksomhet.tjenester.sak.meldinger.v1.FinnGenerellSakListeResponse;
 import no.nav.virksomhet.tjenester.sak.v1.ObjectFactory;
 import no.nav.virksomhet.tjenester.sak.v1.Sak;
@@ -9,6 +10,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+@SoapService(path = "/esb/nav-tjeneste-sak_v1Web/sca/SakWSEXP")
 @WebService(targetNamespace = "http://nav.no/virksomhet/tjenester/sak/v1", name = "Sak")
 @XmlSeeAlso({ObjectFactory.class, no.nav.virksomhet.tjenester.sak.meldinger.v1.ObjectFactory.class, no.nav.virksomhet.gjennomforing.sak.v1.ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")

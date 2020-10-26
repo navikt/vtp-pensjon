@@ -25,7 +25,8 @@
         </dependency>
         <dependency>
             <groupId>io.swagger</groupId>
-            <artifactId>swagger-jaxrs</artifactId>
+            <artifactId>swagger-annotations</artifactId>
+            <scope>provided</scope>
         </dependency>
 		<dependency>
             <groupId>no.nav.pensjon.vtp</groupId>

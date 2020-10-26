@@ -9,12 +9,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Api(tags = {"Utilities"})
 @Path("/dummy/boolean")
 public class DummyRestTjenesteBoolean {
-
     private static final Logger LOG = LoggerFactory.getLogger(DummyRestTjenesteBoolean.class);
-    //TODO legge til logging av url request
 
     @GET
     @Path("/true/{var:.+}")

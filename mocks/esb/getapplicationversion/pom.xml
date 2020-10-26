@@ -10,11 +10,15 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>getapplicationversion</artifactId>
     <packaging>jar</packaging>
+
     <dependencies>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
         <dependency>
             <groupId>no.nav.tjenestespesifikasjoner</groupId>
             <artifactId>getapplicationversion</artifactId>
-            <version>${tjenestespesifikasjoner.version}</version>
         </dependency>
     </dependencies>
 </project>

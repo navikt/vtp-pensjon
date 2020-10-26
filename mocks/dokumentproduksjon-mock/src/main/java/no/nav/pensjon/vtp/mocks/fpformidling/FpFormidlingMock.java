@@ -11,21 +11,19 @@ import javax.ws.rs.core.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.mocks.fpformidling.dto.BehandlingUuidDto;
 import no.nav.pensjon.vtp.mocks.fpformidling.dto.DokumentProdusertDto;
 import no.nav.pensjon.vtp.mocks.fpformidling.dto.DokumentbestillingDto;
 import no.nav.pensjon.vtp.mocks.fpformidling.dto.HentBrevmalerDto;
 import no.nav.pensjon.vtp.mocks.fpformidling.dto.TekstFraSaksbehandlerDto;
 
+@JaxrsResource
 @Api("/fpformidling")
 @Path("/fpformidling")
 public class FpFormidlingMock {
-
     private final Map<UUID, List<String>> dokumentProduksjon = new HashMap<>();
     private final Map<UUID, TekstFraSaksbehandlerDto> saksbehandlerTekst = new HashMap<>();
-
-    public FpFormidlingMock() {
-    }
 
     @POST
     @Path("/hent-dokumentmaler")

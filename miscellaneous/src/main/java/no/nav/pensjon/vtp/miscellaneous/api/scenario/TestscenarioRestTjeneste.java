@@ -1,7 +1,13 @@
 package no.nav.pensjon.vtp.miscellaneous.api.scenario;
 
+import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.status;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.kontrakter.TestscenarioDto;
 import no.nav.pensjon.vtp.kontrakter.TestscenarioPersonopplysningDto;
 import no.nav.pensjon.vtp.kontrakter.TestscenariodataDto;
@@ -12,7 +18,6 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.BarnModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 
 import org.slf4j.Logger;
@@ -23,6 +28,7 @@ import javax.ws.rs.core.*;
 import java.time.LocalDate;
 import java.util.*;
 
+@JaxrsResource
 @Api(tags = {"Testscenario"})
 @Path("/api/testscenarios")
 public class TestscenarioRestTjeneste {
@@ -31,15 +37,15 @@ public class TestscenarioRestTjeneste {
     private static final String TEMPLATE_KEY = "key";
     private static final String SCENARIO_ID = "id";
 
-    @Context
-    private TestscenarioTemplateRepository templateRepository;
+    private final TestscenarioTemplateRepository templateRepository;
+    private final TestscenarioRepository testscenarioRepository;
+    private final PensjonTestdataService pensjonTestdataService;
 
-    @Context
-    private TestscenarioRepository testscenarioRepository;
-
-    @Context
-    private PensjonTestdataService pensjonTestdataService;
-
+    public TestscenarioRestTjeneste(TestscenarioTemplateRepository templateRepository, TestscenarioRepository testscenarioRepository, PensjonTestdataService pensjonTestdataService) {
+        this.templateRepository = templateRepository;
+        this.testscenarioRepository = testscenarioRepository;
+        this.pensjonTestdataService = pensjonTestdataService;
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -66,12 +72,11 @@ public class TestscenarioRestTjeneste {
     public Response hentScenario(@PathParam(SCENARIO_ID) String id){
         if (testscenarioRepository.getTestscenario(id) != null) {
             Testscenario testscenario = testscenarioRepository.getTestscenario(id);
-            return Response
-                    .status(Response.Status.OK)
+            return status(Response.Status.OK)
                     .entity(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()))
                     .build();
         } else {
-            return Response.status(Response.Status.NO_CONTENT).build();
+            return status(Response.Status.NO_CONTENT).build();
         }
 
     }
@@ -81,7 +86,7 @@ public class TestscenarioRestTjeneste {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value="", notes="Oppdaterer hele scenario som matcher id", response = TestscenarioDto.class)
     public Response oppdaterHeleScenario(@PathParam(SCENARIO_ID) String id, TestscenarioDto testscenarioDto){
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        return status(Response.Status.NOT_IMPLEMENTED).build();
     }
 
     @PATCH
@@ -89,7 +94,7 @@ public class TestscenarioRestTjeneste {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value="", notes="Oppdaterer deler av et scenario som matcher id", response = TestscenarioDto.class)
     public Response endreScenario(@PathParam(SCENARIO_ID) String id, String patchArray){
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        return status(Response.Status.NOT_IMPLEMENTED).build();
     }
 
     @POST
@@ -97,19 +102,19 @@ public class TestscenarioRestTjeneste {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "", notes = ("Initialiserer et test scenario basert på angitt template key i VTPs eksempel templates"), response = TestscenarioDto.class)
     public Response initialiserTestscenario(@PathParam(TEMPLATE_KEY) String templateKey, @Context UriInfo uriInfo) {
+        return templateRepository.finn(templateKey)
+                .map(template -> {
+                    final Map<String, String> userSuppliedVariables = getUserSuppliedVariables(uriInfo.getQueryParameters(), TEMPLATE_KEY);
+                    final Testscenario testscenario = testscenarioRepository.opprettTestscenario(template, userSuppliedVariables);
+                    logger.info("Initialiserer testscenario i VTP fra template: [{}] med id: [{}] ", templateKey, testscenario.getId());
 
+                    pensjonTestdataService.opprettData(testscenario);
 
-        TestscenarioTemplate template = templateRepository.finn(templateKey);
-        Map<String, String> userSuppliedVariables = getUserSuppliedVariables(uriInfo.getQueryParameters(), TEMPLATE_KEY);
-        Testscenario testscenario = testscenarioRepository.opprettTestscenario(template, userSuppliedVariables);
-        logger.info("Initialiserer testscenario i VTP fra template: [{}] med id: [{}] ", templateKey, testscenario.getId());
-
-        pensjonTestdataService.opprettData(testscenario);
-
-        return Response
-                .status(Response.Status.CREATED)
-                .entity(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()))
-                .build();
+                    return status(CREATED)
+                            .entity(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()))
+                            .build()     ;
+                })
+                .orElse(status(NOT_FOUND).build());
     }
 
     @POST
@@ -119,8 +124,7 @@ public class TestscenarioRestTjeneste {
         Map<String, String> userSuppliedVariables = getUserSuppliedVariables(uriInfo.getQueryParameters(), TEMPLATE_KEY);
         Testscenario testscenario = testscenarioRepository.opprettTestscenarioFraJsonString(testscenarioJson, userSuppliedVariables);
         logger.info("Initialiserer testscenario med ekstern testdatadefinisjon. Opprettet med id: [{}] ", testscenario.getId());
-        return Response
-                .status(Response.Status.CREATED)
+        return status(CREATED)
                 .entity(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()))
                 .build();
     }
@@ -129,11 +133,11 @@ public class TestscenarioRestTjeneste {
     @Path("/{id}")
     @ApiOperation(value = "", notes= "Sletter et initialisert testscenario som matcher id")
     public Response slettScenario(@PathParam(SCENARIO_ID) String id) {
-        logger.info("Sletter testscenario med id: [{}]");
+        logger.info("Sletter testscenario med id: [{}]", id);
         if(testscenarioRepository.slettScenario(id)){
             return Response.noContent().build();
         } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return status(Response.Status.BAD_REQUEST).build();
         }
     }
 
@@ -160,7 +164,7 @@ public class TestscenarioRestTjeneste {
 
         }
         String aktørIdSøker = testscenario.getPersonopplysninger().getSøker().getAktørIdent();
-        Optional<LocalDate> fødselsdato = fødselsdatoBarn(testscenario);
+        fødselsdatoBarn(testscenario);
         TestscenarioPersonopplysningDto scenarioPersonopplysninger = new TestscenarioPersonopplysningDto(
                 fnrSøker,
                 fnrAnnenPart,
@@ -209,7 +213,7 @@ public class TestscenarioRestTjeneste {
         for (Map.Entry<String, List<String>> e : queryParameters.entrySet()) {
             if (skipTheseKeys.contains(e.getKey())) {
                 continue; // tar inn som egen nøkkel, skipper her
-            } else if (e.getValue().size() > 1 || e.getValue().isEmpty()) {
+            } else if (e.getValue().size() != 1) {
                 continue; // støtter ikke multi-value eller tomme
             }
             result.put(e.getKey(), e.getValue().get(0));

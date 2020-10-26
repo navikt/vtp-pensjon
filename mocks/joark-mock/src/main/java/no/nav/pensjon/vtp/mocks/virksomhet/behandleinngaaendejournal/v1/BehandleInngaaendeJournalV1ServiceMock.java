@@ -1,13 +1,5 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.behandleinngaaendejournal.v1;
 
-
-import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
-import no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1.binding.*;
-import no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1.meldinger.FerdigstillJournalfoeringRequest;
-import no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1.meldinger.OppdaterJournalpostRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -16,6 +8,15 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.Addressing;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1.binding.BehandleInngaaendeJournalV1;
+import no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1.meldinger.FerdigstillJournalfoeringRequest;
+import no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1.meldinger.OppdaterJournalpostRequest;
+
+@SoapService(path = "/services/behandleinngaaendejournal/v1")
 @Addressing
 @HandlerChain(file="/Handler-chain.xml")
 @WebService(
@@ -24,14 +25,6 @@ import javax.xml.ws.soap.Addressing;
 )
 public class BehandleInngaaendeJournalV1ServiceMock implements BehandleInngaaendeJournalV1 {
     private static final Logger LOG = LoggerFactory.getLogger(BehandleInngaaendeJournalV1ServiceMock.class);
-
-    private JournalRepository journalRepository;
-
-    public BehandleInngaaendeJournalV1ServiceMock(JournalRepository journalRepository) {
-        this.journalRepository = journalRepository;
-    }
-
-
 
     @WebMethod(
             action = "http://nav.no/tjeneste/virksomhet/behandleInngaaendeJournal/v1/BehandleInngaaendeJournal_v1/pingRequest"
@@ -67,7 +60,7 @@ public class BehandleInngaaendeJournalV1ServiceMock implements BehandleInngaaend
             className = "no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1.FerdigstillJournalfoeringResponse"
     )
     @Override
-    public void ferdigstillJournalfoering(@WebParam(name = "request",targetNamespace = "") FerdigstillJournalfoeringRequest ferdigstillJournalfoeringRequest) throws FerdigstillJournalfoeringFerdigstillingIkkeMulig, FerdigstillJournalfoeringJournalpostIkkeInngaaende, FerdigstillJournalfoeringObjektIkkeFunnet, FerdigstillJournalfoeringSikkerhetsbegrensning, FerdigstillJournalfoeringUgyldigInput {
+    public void ferdigstillJournalfoering(@WebParam(name = "request") FerdigstillJournalfoeringRequest ferdigstillJournalfoeringRequest) {
         LOG.info("invoke: ferdigstillJournalfoering");
 
     }
@@ -86,7 +79,7 @@ public class BehandleInngaaendeJournalV1ServiceMock implements BehandleInngaaend
             className = "no.nav.tjeneste.virksomhet.behandleinngaaendejournal.v1.OppdaterJournalpostResponse"
     )
     @Override
-    public void oppdaterJournalpost(@WebParam(name = "request",targetNamespace = "") OppdaterJournalpostRequest oppdaterJournalpostRequest) throws OppdaterJournalpostJournalpostIkkeInngaaende, OppdaterJournalpostObjektIkkeFunnet, OppdaterJournalpostOppdateringIkkeMulig, OppdaterJournalpostSikkerhetsbegrensning, OppdaterJournalpostUgyldigInput {
+    public void oppdaterJournalpost(@WebParam(name = "request") OppdaterJournalpostRequest oppdaterJournalpostRequest) {
         LOG.info("invoke: oppdaterJournalpostRequest");
     }
 }

@@ -12,12 +12,10 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
-
 		<!-- Eksterne avhengigheter -->
 		<dependency>
 			<groupId>no.nav.pensjon</groupId>
 			<artifactId>pen-esb-wsclient-legacy</artifactId>
-			<version>0.1.5-e335081a6c7f</version>
 		</dependency>
 
 		<!-- 3dje parts biblioteker -->

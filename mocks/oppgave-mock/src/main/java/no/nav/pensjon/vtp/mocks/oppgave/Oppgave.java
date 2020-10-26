@@ -1,14 +1,13 @@
 package no.nav.pensjon.vtp.mocks.oppgave;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
+
+import javax.validation.constraints.NotNull;
+
+import org.springframework.util.StringUtils;
 
 public class Oppgave {
 
@@ -225,37 +224,36 @@ public class Oppgave {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("id", id)
-            .append("tildeltEnhetsnr", tildeltEnhetsnr)
-            .append("opprettetAvEnhetsnr", opprettetAvEnhetsnr)
-            .append("endretAvEnhetsnr", endretAvEnhetsnr)
-            .append("journalpostId", journalpostId)
-            .append("journalpostkilde", journalpostkilde)
-            .append("behandlesAvApplikasjon", behandlesAvApplikasjon)
-            .append("saksreferanse", saksreferanse)
-            //.append("ident", ident)
-            .append("tilordnetRessurs", tilordnetRessurs)
-            .append("beskrivelse", "*****")
-            .append("temagruppe", temagruppe)
-            .append("tema", tema)
-            .append("behandlingstema", behandlingstema)
-            .append("oppgavetype", oppgavetype)
-            .append("behandlingstype", behandlingstype)
-            .append("versjon", versjon)
-            .append("mappeId", mappeId)
-            .append("fristFerdigstillelse", fristFerdigstillelse)
-            .append("aktivDato", aktivDato)
-            .append("opprettetTidspunkt", opprettetTidspunkt)
-            .append("ferdigstiltTidspunkt", ferdigstiltTidspunkt)
-            .append("opprettetAv", opprettetAv)
-            .append("prioritet", prioritet)
-            .append("status", status)
-            .append("statuskategori", statuskategori)
-            .append("endretAv", endretAv)
-            .append("endretTidspunkt", endretTidspunkt)
-            .append("metadata", metadata)
-            .toString();
+        return "Oppgave{" +
+                "id=" + id +
+                ", tildeltEnhetsnr='" + tildeltEnhetsnr + '\'' +
+                ", opprettetAvEnhetsnr='" + opprettetAvEnhetsnr + '\'' +
+                ", endretAvEnhetsnr='" + endretAvEnhetsnr + '\'' +
+                ", journalpostId='" + journalpostId + '\'' +
+                ", journalpostkilde='" + journalpostkilde + '\'' +
+                ", behandlesAvApplikasjon='" + behandlesAvApplikasjon + '\'' +
+                ", tilordnetRessurs='" + tilordnetRessurs + '\'' +
+                ", saksreferanse='" + saksreferanse + '\'' +
+                ", temagruppe='" + temagruppe + '\'' +
+                ", beskrivelse='" + beskrivelse + '\'' +
+                ", tema='" + tema + '\'' +
+                ", behandlingstema='" + behandlingstema + '\'' +
+                ", oppgavetype='" + oppgavetype + '\'' +
+                ", behandlingstype='" + behandlingstype + '\'' +
+                ", versjon=" + versjon +
+                ", mappeId=" + mappeId +
+                ", fristFerdigstillelse=" + fristFerdigstillelse +
+                ", aktivDato=" + aktivDato +
+                ", opprettetTidspunkt=" + opprettetTidspunkt +
+                ", endretTidspunkt=" + endretTidspunkt +
+                ", ferdigstiltTidspunkt=" + ferdigstiltTidspunkt +
+                ", opprettetAv='" + opprettetAv + '\'' +
+                ", endretAv='" + endretAv + '\'' +
+                ", prioritet=" + prioritet +
+                ", status=" + status +
+                ", statuskategori=" + statuskategori +
+                ", metadata=" + metadata +
+                '}';
     }
 
     void fordelTilEnhet(String enhetsnr) {
@@ -286,6 +284,7 @@ public class Oppgave {
         private String behandlingstema;
         private String oppgavetype;
         private String behandlingstype;
+        @NotNull
         private Integer versjon;
         private Long mappeId;
         private LocalDate fristFerdigstillelse;
@@ -293,6 +292,7 @@ public class Oppgave {
         private LocalDateTime opprettetTidspunkt;
         private LocalDateTime endretTidspunkt;
         private LocalDateTime ferdigstiltTidspunkt;
+        @NotNull
         private Prioritet prioritet;
         private String opprettetAv;
         private String endretAv;
@@ -448,12 +448,17 @@ public class Oppgave {
         }
 
         public Oppgave build() {
-            Validate.validState(!StringUtils.isAllBlank(temagruppe, tema), "temagruppe eller tema må være angitt");
-            Validate.notNull(versjon, "versjon må være angitt");
-            Validate.notNull(aktivDato, "aktivDato må være angitt");
-            Validate.notNull(status, "status må være angitt");
-            Validate.notNull(prioritet, "prioritet må være angitt");
-            Validate.notBlank(oppgavetype, "oppgavetype må være angitt");
+            if (StringUtils.isEmpty(temagruppe) && StringUtils.isEmpty(tema)) {
+                throw new IllegalArgumentException("temagruppe eller tema må være angitt");
+            }
+
+            Objects.requireNonNull(versjon, "versjon må være angitt");
+            Objects.requireNonNull(aktivDato, "aktivDato må være angitt");
+            Objects.requireNonNull(status, "status må være angitt");
+            Objects.requireNonNull(prioritet, "prioritet må være angitt");
+            if (StringUtils.isEmpty(oppgavetype)) {
+                throw new IllegalArgumentException("oppgavetype må være angitt");
+            }
 
             return new Oppgave(this);
         }

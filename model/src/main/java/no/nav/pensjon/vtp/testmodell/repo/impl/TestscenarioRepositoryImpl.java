@@ -4,47 +4,58 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
-import no.nav.pensjon.vtp.testmodell.repo.BasisdataProvider;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioImpl;
+import org.springframework.stereotype.Component;
+
+import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 
-/** Indeks av alle testdata instanser. */
-public class TestscenarioRepositoryImpl extends TestscenarioBuilderRepositoryImpl implements TestscenarioRepository {
+@Component
+public class TestscenarioRepositoryImpl implements TestscenarioRepository {
 
-    private static TestscenarioRepositoryImpl instance;
+    private final TestscenarioFraTemplateMapper mapper;
+    private final TestscenarioBuilderRepository testscenarioBuilderRepository;
 
-
-    public static synchronized TestscenarioRepositoryImpl getInstance(BasisdataProvider basisdata) {
-        if(instance == null){
-            instance = new TestscenarioRepositoryImpl(basisdata);
-        }
-        return instance;
-    }
-
-    private TestscenarioRepositoryImpl(BasisdataProvider basisdata) {
-        super(basisdata);
+    public TestscenarioRepositoryImpl(TestscenarioFraTemplateMapper mapper, TestscenarioBuilderRepository testscenarioBuilderRepository) {
+        this.mapper = mapper;
+        this.testscenarioBuilderRepository = testscenarioBuilderRepository;
     }
 
 
     @Override
-    public TestscenarioImpl opprettTestscenario(TestscenarioTemplate template) {
+    public Testscenario opprettTestscenario(TestscenarioTemplate template) {
         return opprettTestscenario(template, Collections.emptyMap());
     }
 
     @Override
-    public TestscenarioImpl opprettTestscenario(TestscenarioTemplate template, Map<String, String> variables) {
+    public Testscenario opprettTestscenario(TestscenarioTemplate template, Map<String, String> variables) {
         String unikTestscenarioId = UUID.randomUUID().toString();
-        TestscenarioFraTemplateMapper mapper = new TestscenarioFraTemplateMapper(this);
-        return mapper.lagTestscenario(template, unikTestscenarioId, variables);
+        Testscenario testscenario = mapper.lagTestscenario(template, unikTestscenarioId, variables);
+        testscenarioBuilderRepository.indekser(testscenario);
+        return testscenario;
     }
 
     @Override
-    public TestscenarioImpl opprettTestscenarioFraJsonString(String testscenarioJson, Map<String, String> variables) {
+    public Testscenario opprettTestscenarioFraJsonString(String testscenarioJson, Map<String, String> variables) {
         String unikTestscenarioId = UUID.randomUUID().toString();
-        TestscenarioFraTemplateMapper mapper = new TestscenarioFraTemplateMapper(this);
-        return mapper.lagTestscenarioFraJsonString(testscenarioJson, unikTestscenarioId, variables);
+        Testscenario testscenario = mapper.lagTestscenarioFraJsonString(testscenarioJson, unikTestscenarioId, variables);
+        testscenarioBuilderRepository.indekser(testscenario);
+        return testscenario;
     }
 
+    @Override
+    public Map<String, Testscenario> getTestscenarios() {
+        return testscenarioBuilderRepository.getTestscenarios();
+    }
 
+    @Override
+    public Testscenario getTestscenario(String id) {
+        return testscenarioBuilderRepository.getTestscenario(id);
+    }
+
+    @Override
+    public Boolean slettScenario(String id) {
+        return testscenarioBuilderRepository.slettScenario(id);
+    }
 }

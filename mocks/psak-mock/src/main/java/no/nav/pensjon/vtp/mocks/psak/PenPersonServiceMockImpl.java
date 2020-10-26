@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.inf.pen.person.*;
 import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenFinnAdresseListeRequest;
 import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenFinnAdresseListeResponse;
@@ -15,16 +16,17 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import java.util.Optional;
 
-
+@SoapService(path = "/esb/nav-cons-pen-pen-personWeb/sca/PENPersonWSEXP")
 @WebService(targetNamespace = "http://nav-cons-pen-pen-person/no/nav/inf/PENPerson", name = "PENPerson")
 @XmlSeeAlso({no.nav.lib.pen.psakpselv.fault.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.person.ObjectFactory.class, ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")
 public class PenPersonServiceMockImpl implements PENPerson {
     private static final Logger LOG = LoggerFactory.getLogger(PenPersonServiceMockImpl.class);
-    private final TestscenarioBuilderRepository repo;
 
-    public PenPersonServiceMockImpl(TestscenarioBuilderRepository repo) {
-        this.repo = repo;
+    private final PersonIndeks personIndeks;
+
+    public PenPersonServiceMockImpl(PersonIndeks personIndeks) {
+        this.personIndeks = personIndeks;
     }
 
     @Override
@@ -101,7 +103,7 @@ public class PenPersonServiceMockImpl implements PENPerson {
     }
 
     private Optional<ASBOPenPerson> getASBOPenPerson(String fodselsnummer) {
-        return repo.getPersonIndeks().getAlleSøkere().parallelStream()
+        return personIndeks.getAlleSøkere().parallelStream()
                         .filter(p -> p.getSøker().getIdent().equals(fodselsnummer))
                         .map(PsakpselvPersonAdapter::toASBOPerson)
                         .findFirst()

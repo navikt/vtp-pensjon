@@ -8,15 +8,13 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Api(tags = {"Utilities"})
 @Path("/dummy/{var:.+}")
 public class DummyRestTjeneste {
-
     private static final Logger LOG = LoggerFactory.getLogger(DummyRestTjeneste.class);
-
-    public DummyRestTjeneste() {
-
-    }
 
     @GET
     @ApiOperation(value = "get", notes = ("Returnerer ett blankt resultat"))

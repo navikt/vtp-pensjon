@@ -13,6 +13,9 @@ import org.slf4j.LoggerFactory;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Api(tags = {"infotrygd-kontantstotte"})
 @Path("/infotrygd-kontantstotte/v1/harBarnAktivKontantstotte")
 public class InfotrygdKontantstotteMock {
@@ -20,7 +23,7 @@ public class InfotrygdKontantstotteMock {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "infotrygd-kontantstotte", notes = (""))
+    @ApiOperation(value = "infotrygd-kontantstotte")
     public Response harBarnAktivKontantstøtte(@HeaderParam("fnr") String fnr) {
         LOG.info("infotrygd-kontantstotte. fnr: {}", fnr);
 

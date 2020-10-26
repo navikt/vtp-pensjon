@@ -12,10 +12,12 @@ import javax.xml.ws.soap.Addressing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.tjeneste.pip.egen.ansatt.v1.EgenAnsattV1;
 import no.nav.tjeneste.pip.egen.ansatt.v1.WSHentErEgenAnsattEllerIFamilieMedEgenAnsattRequest;
 import no.nav.tjeneste.pip.egen.ansatt.v1.WSHentErEgenAnsattEllerIFamilieMedEgenAnsattResponse;
 
+@SoapService(path = "soap/tpsws/EgenAnsatt_v1")
 @Addressing
 @WebService(name = "EgenAnsatt_v1", targetNamespace = "http://nav.no/tjeneste/pip/egenAnsatt/v1/")
 @HandlerChain(file="/Handler-chain.xml")

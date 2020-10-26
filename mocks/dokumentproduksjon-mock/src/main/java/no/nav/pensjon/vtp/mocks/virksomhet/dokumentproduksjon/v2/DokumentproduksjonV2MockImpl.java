@@ -1,47 +1,20 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2;
 
+import java.util.Objects;
+
+import javax.jws.HandlerChain;
+import javax.jws.WebService;
+import javax.xml.ws.soap.Addressing;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2.PdfGenerering.PdfGeneratorUtil;
 import no.nav.pensjon.vtp.testmodell.dokument.JournalpostModellGenerator;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
-import no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2.PdfGenerering.PdfGeneratorUtil;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.AvbrytForsendelseAvbrytelseIkkeTillatt;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.AvbrytForsendelseJournalpostAlleredeAvbrutt;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.AvbrytForsendelseJournalpostIkkeFunnet;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.AvbrytForsendelseJournalpostIkkeUnderArbeid;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.AvbrytVedleggDokumentAlleredeAvbrutt;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.AvbrytVedleggDokumentIkkeFunnet;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.AvbrytVedleggDokumentIkkeVedlegg;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.AvbrytVedleggJournalpostIkkeFunnet;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.AvbrytVedleggJournalpostIkkeUnderArbeid;
 import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.DokumentproduksjonV2;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.EndreDokumentTilRedigerbartDokumentAlleredeRedigerbart;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.EndreDokumentTilRedigerbartDokumentErAvbrutt;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.EndreDokumentTilRedigerbartDokumentIkkeFunnet;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.EndreDokumentTilRedigerbartDokumentIkkeRedigerbart;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.EndreDokumentTilRedigerbartJournalpostIkkeFunnet;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.EndreDokumentTilRedigerbartJournalpostIkkeUnderArbeid;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.FerdigstillForsendelseDokumentUnderRedigering;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.FerdigstillForsendelseJournalpostIkkeFunnet;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.FerdigstillForsendelseJournalpostIkkeUnderArbeid;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.KnyttVedleggTilForsendelseDokumentIkkeFunnet;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.KnyttVedleggTilForsendelseDokumentTillatesIkkeGjenbrukt;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.KnyttVedleggTilForsendelseEksterntVedleggIkkeTillatt;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.KnyttVedleggTilForsendelseJournalpostIkkeFerdigstilt;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.KnyttVedleggTilForsendelseJournalpostIkkeFunnet;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.KnyttVedleggTilForsendelseJournalpostIkkeUnderArbeid;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.KnyttVedleggTilForsendelseUlikeFagomraader;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.ProduserIkkeredigerbartDokumentDokumentErRedigerbart;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.ProduserIkkeredigerbartDokumentDokumentErVedlegg;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.ProduserIkkeredigerbartVedleggDokumentErRedigerbart;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.ProduserIkkeredigerbartVedleggForsendelseIkkeFunnet;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.ProduserIkkeredigerbartVedleggJournalpostIkkeFunnet;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.ProduserIkkeredigerbartVedleggJournalpostIkkeUnderArbeid;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.ProduserIkkeredigerbartVedleggVedleggIkkeTillatt;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.ProduserRedigerbartDokumentDokumentErVedlegg;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.ProduserRedigerbartDokumentDokumentIkkeRedigerbart;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.RedigerDokumentDokumentIkkeFunnet;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.RedigerDokumentPessimistiskLaasing;
-import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.RedigerDokumentRedigeringIkkeTillatt;
 import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.informasjon.Aktoer;
 import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.informasjon.Person;
 import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.meldinger.AvbrytForsendelseRequest;
@@ -59,40 +32,19 @@ import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.meldinger.ProduserRedige
 import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.meldinger.ProduserRedigerbartDokumentResponse;
 import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.meldinger.RedigerDokumentRequest;
 import no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.meldinger.RedigerDokumentResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
 
-import javax.jws.HandlerChain;
-import javax.jws.WebService;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.ws.soap.Addressing;
-import java.io.StringWriter;
-import java.util.Objects;
-
-
+@SoapService(path = "/dokprod/ws/dokumentproduksjon/v2")
 @Addressing
 @WebService(endpointInterface = "no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.DokumentproduksjonV2")
 @HandlerChain(file = "/Handler-chain.xml")
 public class DokumentproduksjonV2MockImpl implements DokumentproduksjonV2 {
-
     private static final Logger LOG = LoggerFactory.getLogger(DokumentproduksjonV2MockImpl.class);
 
-
-    private JournalRepository journalRepository;
-
-    private PdfGeneratorUtil pdfGeneratorUtil = new PdfGeneratorUtil();
-
-    public DokumentproduksjonV2MockImpl(){}
+    private final JournalRepository journalRepository;
 
     public DokumentproduksjonV2MockImpl(JournalRepository journalRepository) {
         this.journalRepository = journalRepository;
     }
-
 
     @Override
     public void ping() {
@@ -105,7 +57,7 @@ public class DokumentproduksjonV2MockImpl implements DokumentproduksjonV2 {
         String data = Objects.toString(request.getAny());
         String dokumenttypeId =  request.getDokumenttypeId();
 
-        byte[] bytes = pdfGeneratorUtil.genererPdfByteArrayFraString(data);
+        byte[] bytes = new PdfGeneratorUtil().genererPdfByteArrayFraString(data);
 
         ProduserDokumentutkastResponse response = new ProduserDokumentutkastResponse();
         response.setDokumentutkast(bytes);
@@ -115,12 +67,12 @@ public class DokumentproduksjonV2MockImpl implements DokumentproduksjonV2 {
     }
 
     @Override
-    public void avbrytVedlegg(AvbrytVedleggRequest avbrytVedleggRequest) throws AvbrytVedleggJournalpostIkkeUnderArbeid, AvbrytVedleggDokumentAlleredeAvbrutt, AvbrytVedleggJournalpostIkkeFunnet, AvbrytVedleggDokumentIkkeVedlegg, AvbrytVedleggDokumentIkkeFunnet {
+    public void avbrytVedlegg(AvbrytVedleggRequest avbrytVedleggRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public ProduserIkkeredigerbartDokumentResponse produserIkkeredigerbartDokument(ProduserIkkeredigerbartDokumentRequest request) throws ProduserIkkeredigerbartDokumentDokumentErRedigerbart, ProduserIkkeredigerbartDokumentDokumentErVedlegg {
+    public ProduserIkkeredigerbartDokumentResponse produserIkkeredigerbartDokument(ProduserIkkeredigerbartDokumentRequest request) {
         Aktoer bruker = request.getDokumentbestillingsinformasjon().getBruker();
 
         // String data = xmlToString(((Element) request.getBrevdata()).getOwnerDocument());
@@ -128,8 +80,6 @@ public class DokumentproduksjonV2MockImpl implements DokumentproduksjonV2 {
         LOG.info("Dokument produsert: " + data);
 
         String dokumenttypeId = request.getDokumentbestillingsinformasjon().getDokumenttypeId();
-
-
 
         LOG.info("produsererIkkeredigerbartDokument med dokumenttypeId {} bestilt for bruker {}({})", dokumenttypeId, ((Person) bruker).getIdent(), ((Person) bruker).getNavn());
         ProduserIkkeredigerbartDokumentResponse response = new ProduserIkkeredigerbartDokumentResponse();
@@ -144,56 +94,37 @@ public class DokumentproduksjonV2MockImpl implements DokumentproduksjonV2 {
     }
 
     @Override
-    public void knyttVedleggTilForsendelse(KnyttVedleggTilForsendelseRequest knyttVedleggTilForsendelseRequest) throws KnyttVedleggTilForsendelseJournalpostIkkeFerdigstilt, KnyttVedleggTilForsendelseUlikeFagomraader, KnyttVedleggTilForsendelseJournalpostIkkeUnderArbeid, KnyttVedleggTilForsendelseJournalpostIkkeFunnet, KnyttVedleggTilForsendelseDokumentIkkeFunnet, KnyttVedleggTilForsendelseEksterntVedleggIkkeTillatt, KnyttVedleggTilForsendelseDokumentTillatesIkkeGjenbrukt {
+    public void knyttVedleggTilForsendelse(KnyttVedleggTilForsendelseRequest knyttVedleggTilForsendelseRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public ProduserRedigerbartDokumentResponse produserRedigerbartDokument(ProduserRedigerbartDokumentRequest produserRedigerbartDokumentRequest) throws ProduserRedigerbartDokumentDokumentIkkeRedigerbart, ProduserRedigerbartDokumentDokumentErVedlegg {
+    public ProduserRedigerbartDokumentResponse produserRedigerbartDokument(ProduserRedigerbartDokumentRequest produserRedigerbartDokumentRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public void avbrytForsendelse(AvbrytForsendelseRequest avbrytForsendelseRequest) throws AvbrytForsendelseAvbrytelseIkkeTillatt, AvbrytForsendelseJournalpostIkkeUnderArbeid, AvbrytForsendelseJournalpostIkkeFunnet, AvbrytForsendelseJournalpostAlleredeAvbrutt {
+    public void avbrytForsendelse(AvbrytForsendelseRequest avbrytForsendelseRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public void ferdigstillForsendelse(FerdigstillForsendelseRequest request) throws FerdigstillForsendelseDokumentUnderRedigering, FerdigstillForsendelseJournalpostIkkeUnderArbeid, FerdigstillForsendelseJournalpostIkkeFunnet {
+    public void ferdigstillForsendelse(FerdigstillForsendelseRequest request) {
         LOG.info("ferdigstillForsendelse ferdigstiller journalpost: {}", request.getJournalpostId());
     }
 
     @Override
-    public RedigerDokumentResponse redigerDokument(RedigerDokumentRequest redigerDokumentRequest) throws RedigerDokumentPessimistiskLaasing, RedigerDokumentRedigeringIkkeTillatt, RedigerDokumentDokumentIkkeFunnet {
+    public RedigerDokumentResponse redigerDokument(RedigerDokumentRequest redigerDokumentRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public ProduserIkkeredigerbartVedleggResponse produserIkkeredigerbartVedlegg(ProduserIkkeredigerbartVedleggRequest produserIkkeredigerbartVedleggRequest) throws ProduserIkkeredigerbartVedleggVedleggIkkeTillatt, ProduserIkkeredigerbartVedleggJournalpostIkkeUnderArbeid, ProduserIkkeredigerbartVedleggForsendelseIkkeFunnet, ProduserIkkeredigerbartVedleggJournalpostIkkeFunnet, ProduserIkkeredigerbartVedleggDokumentErRedigerbart {
+    public ProduserIkkeredigerbartVedleggResponse produserIkkeredigerbartVedlegg(ProduserIkkeredigerbartVedleggRequest produserIkkeredigerbartVedleggRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public void endreDokumentTilRedigerbart(EndreDokumentTilRedigerbartRequest endreDokumentTilRedigerbartRequest) throws EndreDokumentTilRedigerbartJournalpostIkkeUnderArbeid, EndreDokumentTilRedigerbartJournalpostIkkeFunnet, EndreDokumentTilRedigerbartDokumentIkkeRedigerbart, EndreDokumentTilRedigerbartDokumentIkkeFunnet, EndreDokumentTilRedigerbartDokumentAlleredeRedigerbart, EndreDokumentTilRedigerbartDokumentErAvbrutt {
+    public void endreDokumentTilRedigerbart(EndreDokumentTilRedigerbartRequest endreDokumentTilRedigerbartRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
-
-    private String xmlToString(final Document document) {
-        try {
-            StringWriter writer = new StringWriter();
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-
-            transformer.transform(new DOMSource(document), new StreamResult(writer));
-            return writer.toString();
-        } catch (Exception e) {
-            String message = "Kunne ikke produsere text fra xml: " + e.getMessage();
-            LOG.warn(message);
-            return message;
-        }
-    }
-
 }

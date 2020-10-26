@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Collections;
@@ -21,7 +20,7 @@ public class StringTestscenarioTemplate implements TestscenarioTemplate {
     private final String søkerInntektYtelseTemplate;
     private final String organisasjonTemplate;
     private final String templateNavn;
-    private String annenpartInntektYtelseTemplate;
+    private final String annenpartInntektYtelseTemplate;
 
     public StringTestscenarioTemplate(String templateNavn, String personopplysningTemplate, String søkerInntektYtelseTemplate, String organisasjonTemplate) {
         this(templateNavn, personopplysningTemplate, søkerInntektYtelseTemplate, null, organisasjonTemplate, Collections.emptyMap());
@@ -70,7 +69,7 @@ public class StringTestscenarioTemplate implements TestscenarioTemplate {
     }
 
     @Override
-    public Reader organisasjonReader() throws IOException {
+    public Reader organisasjonReader() {
         return null == organisasjonTemplate ? null : new StringReader(organisasjonTemplate);
     }
 

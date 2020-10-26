@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson;
 import no.nav.virksomhet.part.person.v2.*;
 import no.nav.virksomhet.tjenester.person.meldinger.v2.*;
@@ -16,6 +17,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+@SoapService(path = "/esb/nav-tjeneste-person_v2Web/sca/PersonWSEXP")
 @WebService(
         targetNamespace = "http://nav.no/virksomhet/tjenester/person/v2",
         name = "Person"
@@ -25,10 +27,11 @@ import javax.xml.ws.ResponseWrapper;
 public class PersonV2ServiceMockImpl implements no.nav.virksomhet.tjenester.person.v2.Person {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonV2ServiceMockImpl.class);
-    private final TestscenarioBuilderRepository repo;
 
-    public PersonV2ServiceMockImpl(TestscenarioBuilderRepository repo) {
-        this.repo = repo;
+    private final PersonIndeks personIndeks;
+
+    public PersonV2ServiceMockImpl(PersonIndeks personIndeks) {
+        this.personIndeks = personIndeks;
     }
 
     @Override
@@ -67,7 +70,7 @@ public class PersonV2ServiceMockImpl implements no.nav.virksomhet.tjenester.pers
         String ident = hentPersonRequest.getIdent();
         LOG.info("Kall mot PersonV2ServiceMockImpl hentPerson med ident " + ident);
 
-        Person person = repo.getPersonIndeks().getAlleSøkere().parallelStream().filter(s -> ident.equalsIgnoreCase(s.getSøker().getIdent()))
+        Person person = personIndeks.getAlleSøkere().parallelStream().filter(s -> ident.equalsIgnoreCase(s.getSøker().getIdent()))
                 .map(PsakpselvPersonAdapter::toASBOPerson).map(this::convertASBOPersonToPersonV2).findFirst().orElseThrow(HentPersonPersonIkkeFunnet::new);
 
         HentPersonResponse hentPersonResponse = new HentPersonResponse();

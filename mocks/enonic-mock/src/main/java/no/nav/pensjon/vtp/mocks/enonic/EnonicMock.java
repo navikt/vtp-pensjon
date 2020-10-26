@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Path("/enonic")
 public class EnonicMock {
     private static final Logger logger = LoggerFactory.getLogger(EnonicMock.class);

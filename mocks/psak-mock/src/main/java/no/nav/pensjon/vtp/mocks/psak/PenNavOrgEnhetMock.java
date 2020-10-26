@@ -2,10 +2,8 @@ package no.nav.pensjon.vtp.mocks.psak;
 
 import static java.util.Optional.ofNullable;
 
-import static no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl.getInstance;
-
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
-import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.inf.pen.navorgenhet.*;
 import no.nav.lib.pen.psakpselv.asbo.navorgenhet.*;
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory;
@@ -17,8 +15,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
-import java.io.IOException;
-
+@SoapService(path = "/esb/nav-cons-pen-pen-navorgenhetWeb/sca/PENNAVOrgEnhetWSEXP")
 @WebService(
         targetNamespace = "http://nav-cons-pen-pen-navorgenhet/no/nav/inf/PENNAVOrgEnhet",
         name = "PENNAVOrgEnhet"
@@ -30,12 +27,8 @@ public class PenNavOrgEnhetMock implements PENNAVOrgEnhet {
 
     private final EnheterIndeks enheterIndeks;
 
-    public PenNavOrgEnhetMock() {
-        try {
-            this.enheterIndeks = getInstance(BasisdataProviderFileImpl.getInstance()).getEnheterIndeks();
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
+    public PenNavOrgEnhetMock(EnheterIndeks enheterIndeks) {
+        this.enheterIndeks = enheterIndeks;
     }
 
     @Override

@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -25,10 +24,13 @@ import no.nav.pensjon.vtp.kafkaembedded.LocalKafkaProducer;
 public class KafkaRestTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(KafkaRestTjeneste.class);
 
-    @Context
-    private LocalKafkaProducer localKafkaProducer;
-    @Context
-    private AdminClient kafkaAdminClient;
+    private final LocalKafkaProducer localKafkaProducer;
+    private final AdminClient kafkaAdminClient;
+
+    public KafkaRestTjeneste(LocalKafkaProducer localKafkaProducer, AdminClient kafkaAdminClient) {
+        this.localKafkaProducer = localKafkaProducer;
+        this.kafkaAdminClient = kafkaAdminClient;
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

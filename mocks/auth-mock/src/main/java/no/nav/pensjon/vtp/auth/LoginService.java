@@ -1,21 +1,22 @@
 package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
-import no.nav.pensjon.vtp.felles.KeyStoreTool;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+import no.nav.pensjon.vtp.felles.KeyStoreTool;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
+
 import org.jose4j.jwk.RsaJsonWebKey;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.NumericDate;
 import org.jose4j.lang.JoseException;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -26,16 +27,20 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@JaxrsResource
 @Api(tags = {"LoginService"})
 @Path("/loginservice")
 public class LoginService {
-    @Context
-    private TestscenarioRepository repo;
+    private final PersonIndeks personIndeks;
+
+    public LoginService(PersonIndeks personIndeks) {
+        this.personIndeks = personIndeks;
+    }
 
     @GET
     @Path("/login")
     public Response login(@QueryParam("redirect") String redirect) {
-        List<String> rows = repo.getPersonIndeks().getAlleSøkere().parallelStream()
+        List<String> rows = personIndeks.getAlleSøkere().parallelStream()
                 .map(p -> {
                     String fnr = p.getSøker().getIdent();
                     String navn = p.getSøker().getFornavn() + " " + p.getSøker().getEtternavn();
@@ -53,7 +58,7 @@ public class LoginService {
                 String.join("", rows) +
                 (rows.isEmpty() ? "Det finnes visst ingen personer i VTP akkurat nå. Prøv å <a href=\"/#/\">laste inn et scenario</a>!" : "") +
                 "<form method=\"get\" action=\"login-redirect-with-cookie\">" +
-                "<input type=\"hidden\" name=\"redirect\" value=\""+ StringEscapeUtils.escapeHtml4(redirect) +"\">" +
+                "<input type=\"hidden\" name=\"redirect\" value=\""+ HtmlUtils.htmlEscape(redirect) +"\">" +
                 "<input name=\"fnr\" placeholder=\"Fyll inn et annet fødselsnummer\" style=\"width: 200px\"><input type=\"submit\"></form>" +
                 "</div>" +
                 "</body>" +

@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.BestillOppgaveResponse;
 import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.FerdigstillOppgaveBolkResponse;
 import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.LagreOppgaveBolkResponse;
@@ -16,6 +17,7 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import java.util.UUID;
 
+@SoapService(path = "/esb/nav-tjeneste-oppgavebehandling_v2Web/sca/OppgavebehandlingWSEXP")
 @WebService(targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2", name = "Oppgavebehandling")
 @XmlSeeAlso({no.nav.virksomhet.tjenester.oppgavebehandling.feil.v2.ObjectFactory.class, ObjectFactory.class, no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")

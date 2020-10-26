@@ -16,7 +16,8 @@ import javax.xml.ws.soap.Addressing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.MedlemskapV2;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.PersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.Sikkerhetsbegrensning;
@@ -26,20 +27,17 @@ import no.nav.tjeneste.virksomhet.medlemskap.v2.meldinger.HentPeriodeListeRespon
 import no.nav.tjeneste.virksomhet.medlemskap.v2.meldinger.HentPeriodeRequest;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.meldinger.HentPeriodeResponse;
 
+@SoapService(path = "/medl2/ws/Medlemskap/v2")
 @Addressing
 @WebService(name = "Medlemskap_v2", targetNamespace = "http://nav.no/tjeneste/virksomhet/medlemskap/v2")
 @HandlerChain(file="/Handler-chain.xml")
 public class MedlemServiceMockImpl implements MedlemskapV2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(MedlemServiceMockImpl.class);
-    private TestscenarioBuilderRepository scenarioRepository;
+    private final PersonIndeks personIndeks;
 
-    public MedlemServiceMockImpl(TestscenarioBuilderRepository scenarioRepository){
-        this.scenarioRepository = scenarioRepository;
-    }
-
-    public MedlemServiceMockImpl(){
-
+    public MedlemServiceMockImpl(PersonIndeks personIndeks){
+        this.personIndeks = personIndeks;
     }
 
     @WebMethod
@@ -75,7 +73,7 @@ public class MedlemServiceMockImpl implements MedlemskapV2 {
         LOG.info("hentPeriodeListe. IdentFNR: {}", request.getIdent().getValue());
         if (request.getIdent() != null) {
             String fnr = request.getIdent().getValue();
-            List<Medlemsperiode> medlemsperiodeListe = new MedlemskapperioderAdapter(scenarioRepository).finnMedlemsperioder(fnr);
+            List<Medlemsperiode> medlemsperiodeListe = new MedlemskapperioderAdapter(personIndeks).finnMedlemsperioder(fnr);
             HentPeriodeListeResponse response = new HentPeriodeListeResponse().withPeriodeListe(medlemsperiodeListe);
             return response;
         }

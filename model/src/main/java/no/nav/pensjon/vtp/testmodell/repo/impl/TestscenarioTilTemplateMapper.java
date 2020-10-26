@@ -9,10 +9,6 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 
 public class TestscenarioTilTemplateMapper {
-
-    public TestscenarioTilTemplateMapper() {
-    }
-
     public void skrivInntektYtelse(ObjectMapper objectMapper, OutputStream out, Testscenario scenario, InntektYtelseModell inntektYtelse) {
         try {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(out, inntektYtelse);

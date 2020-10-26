@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Api(tags = {"aktoerregister"})
 @Path("/aktoerregister/api/v1/identer")
 public class AktoerIdentMock {

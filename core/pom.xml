@@ -20,7 +20,8 @@
 		</dependency>
         <dependency>
             <groupId>io.swagger</groupId>
-            <artifactId>swagger-jaxrs</artifactId>
+            <artifactId>swagger-annotations</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.bitbucket.b_c</groupId>
@@ -34,11 +35,6 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk15on</artifactId>
-            <version>1.66</version>
-        </dependency>
-        <dependency>
-        	<groupId>com.sun.xml.ws</groupId>
-        	<artifactId>jaxws-rt</artifactId>
         </dependency>
         <dependency>
 		    <groupId>org.junit.vintage</groupId>
@@ -48,6 +44,11 @@
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>oauth2-oidc-sdk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

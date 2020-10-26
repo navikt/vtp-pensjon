@@ -9,6 +9,9 @@ import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
+@JaxrsResource
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Api(tags = "Oppgave Mock")

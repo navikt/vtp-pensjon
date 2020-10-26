@@ -4,8 +4,6 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
 @SuppressWarnings("WeakerAccess")
 public class OneOfValidator implements ConstraintValidator<OneOf, String> {
     private String[] legalValues;
@@ -22,5 +20,9 @@ public class OneOfValidator implements ConstraintValidator<OneOf, String> {
         }
 
         return Arrays.stream(legalValues).anyMatch(legalEntry -> legalEntry.equals(oneOf));
+    }
+
+    public static boolean isBlank(final String string) {
+        return string.chars().allMatch(Character::isWhitespace);
     }
 }

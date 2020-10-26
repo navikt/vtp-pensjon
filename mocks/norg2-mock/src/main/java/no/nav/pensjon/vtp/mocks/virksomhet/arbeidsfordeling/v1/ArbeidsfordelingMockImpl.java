@@ -1,10 +1,9 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsfordeling.v1;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.tjeneste.virksomhet.arbeidsfordeling.v1.binding.ArbeidsfordelingV1;
-import no.nav.tjeneste.virksomhet.arbeidsfordeling.v1.binding.FinnAlleBehandlendeEnheterListeUgyldigInput;
-import no.nav.tjeneste.virksomhet.arbeidsfordeling.v1.binding.FinnBehandlendeEnhetListeUgyldigInput;
 import no.nav.tjeneste.virksomhet.arbeidsfordeling.v1.informasjon.*;
 import no.nav.tjeneste.virksomhet.arbeidsfordeling.v1.meldinger.FinnAlleBehandlendeEnheterListeRequest;
 import no.nav.tjeneste.virksomhet.arbeidsfordeling.v1.meldinger.FinnAlleBehandlendeEnheterListeResponse;
@@ -21,26 +20,26 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+@SoapService(path = "/norg2/ws/Arbeidsfordeling/v1")
 @Addressing
 @WebService(name = "Arbeidsfordeling_v1", targetNamespace = "http://nav.no/tjeneste/virksomhet/arbeidsfordeling/v1/")
 @HandlerChain(file = "/Handler-chain.xml")
 public class ArbeidsfordelingMockImpl implements ArbeidsfordelingV1 {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArbeidsfordelingMockImpl.class);
-    private TestscenarioBuilderRepository repo;
+    private final EnheterIndeks enheterIndeks;
 
-    public ArbeidsfordelingMockImpl(TestscenarioBuilderRepository repo) {
-        this.repo = repo;
+    public ArbeidsfordelingMockImpl(EnheterIndeks enheterIndeks) {
+        this.enheterIndeks = enheterIndeks;
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/arbeidsfordeling/v1/Arbeidsfordeling_v1/finnBehandlendeEnhetListeRequest")
-    @WebResult(name = "response", targetNamespace = "")
+    @WebResult(name = "response")
     @RequestWrapper(localName = "finnBehandlendeEnhetListe", targetNamespace = "http://nav.no/tjeneste/virksomhet/arbeidsfordeling/v1/", className = "no.nav.tjeneste.virksomhet.arbeidsfordeling.v1.FinnBehandlendeEnhetListe")
     @ResponseWrapper(localName = "finnBehandlendeEnhetListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/arbeidsfordeling/v1/", className = "no.nav.tjeneste.virksomhet.arbeidsfordeling.v1.FinnBehandlendeEnhetListeResponse")
     @Override
     public FinnBehandlendeEnhetListeResponse finnBehandlendeEnhetListe(
-                                                                       @WebParam(name = "request", targetNamespace = "") FinnBehandlendeEnhetListeRequest request)
-            throws FinnBehandlendeEnhetListeUgyldigInput {
+                                                                       @WebParam(name = "request") FinnBehandlendeEnhetListeRequest request) {
         LOG.info("finnBehandlendeEnhetListe. Diskresjonskode: {}, tema: {}", getKodeverdi(request.getArbeidsfordelingKriterier().getDiskresjonskode()),
                 getKodeverdi(request.getArbeidsfordelingKriterier().getTema()));
         Diskresjonskoder diskrKode = request.getArbeidsfordelingKriterier().getDiskresjonskode();
@@ -64,20 +63,19 @@ public class ArbeidsfordelingMockImpl implements ArbeidsfordelingV1 {
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/arbeidsfordeling/v1/Arbeidsfordeling_v1/finnAlleBehandlendeEnheterListeRequest")
-    @WebResult(name = "response", targetNamespace = "")
+    @WebResult(name = "response")
     @RequestWrapper(localName = "finnAlleBehandlendeEnheterListe", targetNamespace = "http://nav.no/tjeneste/virksomhet/arbeidsfordeling/v1/", className = "no.nav.tjeneste.virksomhet.arbeidsfordeling.v1.FinnAlleBehandlendeEnheterListe")
     @ResponseWrapper(localName = "finnAlleBehandlendeEnheterListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/arbeidsfordeling/v1/", className = "no.nav.tjeneste.virksomhet.arbeidsfordeling.v1.FinnAlleBehandlendeEnheterListeResponse")
     @Override
     public FinnAlleBehandlendeEnheterListeResponse finnAlleBehandlendeEnheterListe(
-                                                                                   @WebParam(name = "request", targetNamespace = "") FinnAlleBehandlendeEnheterListeRequest request)
-            throws FinnAlleBehandlendeEnheterListeUgyldigInput {
+                                                                                   @WebParam(name = "request") FinnAlleBehandlendeEnheterListeRequest request) {
 
         LOG.info("finnAlleBehandlendeEnheterListe. Diskresjonskode: {}, tema: {}", getKodeverdi(request.getArbeidsfordelingKriterier().getDiskresjonskode()),
                 getKodeverdi(request.getArbeidsfordelingKriterier().getTema()));
         Tema tema = request.getArbeidsfordelingKriterier().getTema();
         String temaStr = tema == null ? null : tema.getValue();
         FinnAlleBehandlendeEnheterListeResponse response = new FinnAlleBehandlendeEnheterListeResponse();
-        repo.getEnheterIndeks().getAlleEnheter().stream().filter(e -> skalEnhetMed(e, temaStr)).forEach(e -> response.getBehandlendeEnhetListe().add(lagEnhet(e)));
+        enheterIndeks.getAlleEnheter().stream().filter(e -> skalEnhetMed(e, temaStr)).forEach(e -> response.getBehandlendeEnhetListe().add(lagEnhet(e)));
         return response;
     }
 
@@ -94,11 +92,11 @@ public class ArbeidsfordelingMockImpl implements ArbeidsfordelingV1 {
 
         Norg2Modell modell;
         if (diskrKode != null && spesielleDiskrKoder.contains(diskrKode)) {
-            modell = repo.getEnheterIndeks().finnByDiskresjonskode(diskrKode);
+            modell = enheterIndeks.finnByDiskresjonskode(diskrKode);
         }
         else {
-            modell = Optional.ofNullable(repo.getEnheterIndeks().finnByDiskresjonskode(tema))
-                    .orElseGet(() -> repo.getEnheterIndeks().finnByDiskresjonskode("NORMAL-"+tema));
+            modell = Optional.ofNullable(enheterIndeks.finnByDiskresjonskode(tema))
+                    .orElseGet(() -> enheterIndeks.finnByDiskresjonskode("NORMAL-"+tema));
         }
 
         return lagEnhet(modell);

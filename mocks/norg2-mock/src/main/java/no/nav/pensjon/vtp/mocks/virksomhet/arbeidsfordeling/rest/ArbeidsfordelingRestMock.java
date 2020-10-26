@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsfordeling.rest;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,25 +14,22 @@ import org.slf4j.LoggerFactory;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
-import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
+import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
+
+@JaxrsResource
 @Api(tags = {"ArbeidsfordelingMock"})
 @Path("/norg2/api/v1/arbeidsfordeling")
 public class ArbeidsfordelingRestMock {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArbeidsfordelingRestMock.class);
     private static final String LOG_PREFIX = "Arbeidsfordeling Rest kall til {}";
-    private TestscenarioBuilderRepository scenarioRepository;
+    private final EnheterIndeks enheterIndeks;
 
-    public ArbeidsfordelingRestMock() {
-        try {
-            this.scenarioRepository = TestscenarioRepositoryImpl.getInstance(BasisdataProviderFileImpl.getInstance());
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+    public ArbeidsfordelingRestMock(EnheterIndeks enheterIndeks) {
+        this.enheterIndeks = enheterIndeks;
     }
 
     @POST
@@ -43,7 +39,7 @@ public class ArbeidsfordelingRestMock {
     @ApiOperation(value = "allenheter", notes = ("Returnerer enheter fra NORG2"))
     public ArbeidsfordelingResponse[] hentAlleEnheter(ArbeidsfordelingRequest request) {
         LOG.info(LOG_PREFIX, "allenheter");
-        return scenarioRepository.getEnheterIndeks().getAlleEnheter().stream()
+        return enheterIndeks.getAlleEnheter().stream()
                 .filter(e -> skalEnhetMed(e, request.getTema()))
                 .map(e -> new ArbeidsfordelingResponse(e.getEnhetId(), e.getNavn(), e.getStatus(), e.getType()))
                 .toArray(ArbeidsfordelingResponse[]::new);
@@ -66,9 +62,9 @@ public class ArbeidsfordelingRestMock {
         List<String> spesielleDiskrKoder = List.of("UFB", "SPSF", "SPFO");
         List<Norg2Modell> resultat = new ArrayList<>();
         if (request.getDiskresjonskode() != null && spesielleDiskrKoder.contains(request.getDiskresjonskode())) {
-            resultat.add(scenarioRepository.getEnheterIndeks().finnByDiskresjonskode(request.getDiskresjonskode()));
+            resultat.add(enheterIndeks.finnByDiskresjonskode(request.getDiskresjonskode()));
         } else {
-            resultat.add(scenarioRepository.getEnheterIndeks().finnByDiskresjonskode("NORMAL-"+request.getTema()));
+            resultat.add(enheterIndeks.finnByDiskresjonskode("NORMAL-"+request.getTema()));
         }
         return resultat.stream()
                 .map(e -> new ArbeidsfordelingResponse(e.getEnhetId(), e.getNavn(), e.getStatus(), e.getType()))

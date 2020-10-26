@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.virksomhet.tjenester.medlemskap.meldinger.v1.HentPeriodeListeResponse;
 import no.nav.virksomhet.tjenester.medlemskap.meldinger.v1.HentPeriodeRequest;
 import no.nav.virksomhet.tjenester.medlemskap.meldinger.v1.HentPeriodeResponse;
@@ -12,6 +13,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+@SoapService(path = "/esb/nav-tjeneste-medlemskap_v1Web/sca/MedlemskapWSEXP")
 @WebService(targetNamespace = "http://nav.no/virksomhet/tjenester/medlemskap/v1", name = "Medlemskap")
 @XmlSeeAlso({ObjectFactory.class, no.nav.virksomhet.tjenester.medlemskap.feil.v1.ObjectFactory.class, no.nav.virksomhet.tjenester.medlemskap.meldinger.v1.ObjectFactory.class, no.nav.virksomhet.tjenester.felles.v1.ObjectFactory.class, no.nav.virksomhet.grunnlag.medlemskap.v1.ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")

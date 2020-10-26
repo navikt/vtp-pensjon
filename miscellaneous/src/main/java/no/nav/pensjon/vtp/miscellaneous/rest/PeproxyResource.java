@@ -7,9 +7,12 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.client.Client;
 
+import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+
 /**
  * Mock of https://github.com/navikt/peproxy
  */
+@JaxrsResource
 @Path("/peproxy")
 public class PeproxyResource {
     private final Client client = newClient();

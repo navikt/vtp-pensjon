@@ -12,6 +12,7 @@ import javax.xml.ws.soap.Addressing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.tjeneste.virksomhet.innsynjournal.v2.binding.HentDokumentDokumentIkkeFunnet;
 import no.nav.tjeneste.virksomhet.innsynjournal.v2.binding.HentDokumentSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.innsynjournal.v2.binding.HentTilgjengeligJournalpostListeSikkerhetsbegrensning;
@@ -27,6 +28,7 @@ import no.nav.tjeneste.virksomhet.innsynjournal.v2.meldinger.HentTilgjengeligJou
 import no.nav.tjeneste.virksomhet.innsynjournal.v2.meldinger.IdentifiserJournalpostRequest;
 import no.nav.tjeneste.virksomhet.innsynjournal.v2.meldinger.IdentifiserJournalpostResponse;
 
+@SoapService(path = "soap/joark/InnsynJournal/v2")
 @Addressing
 @WebService(name = "InnsynJournal_v2", targetNamespace = "http://nav.no/tjeneste/virksomhet/innsynJournal/v2")
 @HandlerChain(file="/Handler-chain.xml")

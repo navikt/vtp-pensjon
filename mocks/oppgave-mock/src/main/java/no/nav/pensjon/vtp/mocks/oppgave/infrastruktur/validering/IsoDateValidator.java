@@ -1,11 +1,11 @@
 package no.nav.pensjon.vtp.mocks.oppgave.infrastruktur.validering;
 
+import static org.springframework.util.StringUtils.isEmpty;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @SuppressWarnings("WeakerAccess")
 public class IsoDateValidator implements ConstraintValidator<IsoDate, String> {
@@ -17,7 +17,7 @@ public class IsoDateValidator implements ConstraintValidator<IsoDate, String> {
 
     @Override
     public boolean isValid(String date, ConstraintValidatorContext constraintValidatorContext) {
-        if (isNotEmpty(date)) {
+        if (!isEmpty(date)) {
             try {
                 LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
             } catch (Exception e) {
