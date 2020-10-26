@@ -1,7 +1,6 @@
 package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
-
 import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.felles.OidcTokenGenerator;
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType;
@@ -13,6 +12,8 @@ import javax.xml.bind.JAXB;
 import java.io.StringWriter;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Optional;
 
@@ -41,7 +42,7 @@ public class STSRestTjeneste {
         response.setDecodedToken(xmlString);
         response.setToken_type("Bearer");
         response.setIssued_token_type(issuedTokenType);
-        response.setExpires_in(LocalDateTime.MAX);
+        response.setExpires_in(ZonedDateTime.of(LocalDateTime.MAX, ZoneId.systemDefault()));
 
         return response;
     }
@@ -52,7 +53,7 @@ public class STSRestTjeneste {
     public UserTokenResponse dummyToken(@QueryParam("grant_type") String grant_type,
                                         @QueryParam("scope") String scope) throws JoseException {
         String token = new OidcTokenGenerator("dummyBruker", "").withIssuer(Oauth2RestService.getIssuer()).create();
-        return new UserTokenResponse(token, 600000L, "Bearer");
+        return new UserTokenResponse(token, 600000 * 1000L, "Bearer");
     }
 
     @GET
@@ -70,7 +71,7 @@ public class STSRestTjeneste {
         samlResponse.setDecodedToken(samlToken);
         samlResponse.setToken_type("Bearer");
         samlResponse.setIssued_token_type("urn:ietf:params:oauth:token-type:saml2");
-        samlResponse.setExpires_in(LocalDateTime.MAX);
+        samlResponse.setExpires_in(ZonedDateTime.of(LocalDateTime.MAX, ZoneId.systemDefault()));
 
         return Response.status(Response.Status.OK).entity(samlResponse).header("Cache-Control", "no-store").header("Pragma", "no-cache").build();
     }
@@ -81,7 +82,7 @@ public class STSRestTjeneste {
         private String issued_token_type;
         private String token_type;
         private String decodedToken;
-        private LocalDateTime expires_in;
+        private ZonedDateTime expires_in;
 
         public String getAccess_token() {
             return access_token;
@@ -115,11 +116,11 @@ public class STSRestTjeneste {
             this.decodedToken = decodedToken;
         }
 
-        public LocalDateTime getExpires_in() {
+        public ZonedDateTime getExpires_in() {
             return expires_in;
         }
 
-        public void setExpires_in(LocalDateTime expires_in) {
+        public void setExpires_in(ZonedDateTime expires_in) {
             this.expires_in = expires_in;
         }
     }
