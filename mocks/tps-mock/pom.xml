@@ -26,11 +26,13 @@
 
 		<!-- Eksterne avhengigheter -->
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<scope>provided</scope>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>jakarta.ws.rs</groupId>
+			<artifactId>jakarta.ws.rs-api</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>no.nav.pensjon.vtp</groupId>
 			<artifactId>core</artifactId>

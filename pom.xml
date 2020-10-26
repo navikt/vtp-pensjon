@@ -299,17 +299,6 @@
                 <version>${tjenestespesifikasjoner.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>javax.ws.rs</groupId>
-                <artifactId>javax.ws.rs-api</artifactId>
-                <version>2.1.1</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>3.1.0</version>
-            </dependency>
-
             <!-- CXF - for å kunne stubbe WS-trust -->
             <dependency>
                 <groupId>org.apache.cxf</groupId>
@@ -545,12 +534,6 @@
                 <groupId>org.modelmapper</groupId>
                 <artifactId>modelmapper</artifactId>
                 <version>2.3.8</version>
-            </dependency>
-
-            <dependency>
-                <groupId>javax</groupId>
-                <artifactId>javaee-api</artifactId>
-                <version>8.0.1</version>
             </dependency>
 
             <dependency>
