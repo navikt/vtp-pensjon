@@ -9,3 +9,5 @@ spring:
 pensjon:
   testdata:
     url: http://localhost:3000
+
+verbose: false
