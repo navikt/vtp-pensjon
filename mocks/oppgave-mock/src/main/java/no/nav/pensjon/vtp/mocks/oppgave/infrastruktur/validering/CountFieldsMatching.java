@@ -1,29 +1,26 @@
 package no.nav.pensjon.vtp.mocks.oppgave.infrastruktur.validering;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.util.StringUtils;
+import static java.util.Arrays.stream;
 
-import java.util.Arrays;
+import static org.springframework.beans.PropertyAccessorFactory.forBeanPropertyAccess;
+
+import org.springframework.beans.BeanWrapper;
 
 class CountFieldsMatching {
-    private CountFieldsMatching() {
-    } //No instantiation
+    public static Long count(Object o, String[] fields) {
+        final BeanWrapper beanWrapper = forBeanPropertyAccess(o);
 
-    static Long count(Object o, String[] fields) {
-        return Arrays.stream(fields).filter(field -> {
-            try {
-                return isNotBlank(BeanUtils.getProperty(o, field));
-            } catch (Exception e) {
-                throw new IllegalStateException("Kunne ikke telle antall felter");
-            }
-        }).count();
+        return stream(fields)
+                .map(beanWrapper::getPropertyValue)
+                .filter(CountFieldsMatching::isNotBlank)
+                .count();
     }
 
-    public static boolean isNotBlank(final String string) {
-        return !isBlank(string);
+    static boolean isNotBlank(final Object object) {
+        return !isBlank(object);
     }
 
-    public static boolean isBlank(final String string) {
-        return string.chars().allMatch(Character::isWhitespace);
+    static boolean isBlank(final Object object) {
+        return object == null || object.toString().chars().allMatch(Character::isWhitespace);
     }
 }

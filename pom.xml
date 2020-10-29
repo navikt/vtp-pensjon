@@ -540,18 +540,6 @@
                 <version>1.11.1</version>
             </dependency>
 
-            <dependency>
-                <groupId>commons-beanutils</groupId>
-                <artifactId>commons-beanutils</artifactId>
-                <version>1.9.4</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
             <!-- Ensure that com.nimbusds:oauth2-oidc-sdk doesn't pick up a SNAPSHOT version of net.minidev:json-smart -->
             <dependency>
                 <groupId>net.minidev</groupId>
