@@ -8,10 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.ws.rs.BeanParam;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -40,7 +36,7 @@ public class OppgaveKontantstotteMockImpl {
             @ApiResponse(code = 409, message = "Konflikt"),
             @ApiResponse(code = 500, message = "Ukjent feilsituasjon har oppstått i Oppgave")
     })
-    public ResponseEntity hentOppgave(@PathVariable("id") Long id, @Context ContainerRequestContext ctx) {
+    public ResponseEntity hentOppgave(@PathVariable("id") Long id) {
         return ResponseEntity.ok(new OppgaveJson(oppgaveMock.medId(id).build()));
     }
 
@@ -55,9 +51,7 @@ public class OppgaveKontantstotteMockImpl {
             @ApiResponse(code = 403, message = "Bruker er ikke autorisert for denne operasjonen"),
             @ApiResponse(code = 500, message = "Ukjent feilsituasjon har oppstått i Oppgave")
     })
-    public ResponseEntity finnOppgaver(@Valid @BeanParam OppgaveSearchRequest searchRequest, @Context ContainerRequestContext ctx) {
-        LOG.info("Søker etter oppgaver for: {}", searchRequest);
-
+    public ResponseEntity finnOppgaver() {
         return ResponseEntity.ok()
                 .body(new FinnOppgaveResponse(
                         List.of(new OppgaveJson(oppgaveMock.medId(123456789L).build())),
@@ -77,10 +71,8 @@ public class OppgaveKontantstotteMockImpl {
             @ApiResponse(code = 500, message = "Ukjent feilsituasjon har oppstått i Oppgave")
     })
     public ResponseEntity endreOppgave(@Valid @ApiParam(value = "Oppgaven som skal endres", required = true) OppgaveJson oppgaveJson,
-                                 @Context UriInfo uriInfo,
                                  @PathVariable("id") Long id,
-                                 @RequestParam("brukerId") @ApiParam(hidden = true) String brukerId,
-                                 @Context ContainerRequestContext ctx) {
+                                 @RequestParam("brukerId") @ApiParam(hidden = true) String brukerId) {
 
         LOG.info("Mottatt endringsrequest: {}", oppgaveJson);
         return ResponseEntity.ok(oppgaveJson);

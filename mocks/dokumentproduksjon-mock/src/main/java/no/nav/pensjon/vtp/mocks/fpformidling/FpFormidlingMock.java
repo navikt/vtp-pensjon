@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.ws.rs.Produces;
 import java.util.*;
 
 @RestController
@@ -25,33 +24,28 @@ public class FpFormidlingMock {
         return ResponseEntity.ok(new HentBrevmalerDto(Collections.emptyList()));
     }
 
-    @PostMapping(value = "brev/maler")
-    @Produces("application/json")
+    @PostMapping(value = "brev/maler", produces = MediaType.APPLICATION_JSON_VALUE)
     public HentBrevmalerDto hentBrevmaler(BehandlingUuidDto uuidDto) {
         return new HentBrevmalerDto(Collections.emptyList());
     }
 
-    @PostMapping(value = "brev/dokument-sendt")
-    @Produces("application/json")
+    @PostMapping(value = "brev/dokument-sendt", produces = MediaType.APPLICATION_JSON_VALUE)
     public Boolean erDokumentSendt(DokumentProdusertDto request) {
         return dokumentProduksjon.getOrDefault(request.getBehandlingUuid(), List.of()).contains(request.getDokumentMal());
     }
 
-    @PostMapping(value = "brev/bestill")
-    @Produces("application/json")
+    @PostMapping(value = "brev/bestill", produces = MediaType.APPLICATION_JSON_VALUE)
     public void bestillDokument(DokumentbestillingDto request) {
         dokumentProduksjon.putIfAbsent(request.getBehandlingUuid(), new ArrayList<>());
         dokumentProduksjon.get(request.getBehandlingUuid()).add(request.getDokumentMal());
     }
 
-    @PostMapping(value = "saksbehandlertekst/hent")
-    @Produces("application/json")
+    @PostMapping(value = "saksbehandlertekst/hent", produces = MediaType.APPLICATION_JSON_VALUE)
     public TekstFraSaksbehandlerDto hentSaksbehandlersTekst(BehandlingUuidDto uuidDto) {
         return saksbehandlerTekst.getOrDefault(uuidDto.getBehandlingUuid(), null);
     }
 
-    @PostMapping(value = "saksbehandlertekst/lagre")
-    @Produces("application/json")
+    @PostMapping(value = "saksbehandlertekst/lagre", produces = MediaType.APPLICATION_JSON_VALUE)
     public void lagreSaksbehandlersTekst(TekstFraSaksbehandlerDto request) {
         saksbehandlerTekst.put(request.getBehandlingUuid(), request);
     }

@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.PATCH;
-import javax.ws.rs.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,8 +67,7 @@ public class JournalpostMock {
         return ResponseEntity.accepted().body(oppdaterJournalpostResponse);
     }
 
-    @PATCH
-    @Path("/journalpost/{journalpostid}/ferdigstill")
+    @PatchMapping("/journalpost/{journalpostid}/ferdigstill")
     @ApiOperation(value = "Ferdigstill journalpost")
     public ResponseEntity ferdigstillJournalpost(FerdigstillJournalpostRequest ferdigstillJournalpostRequest){
 

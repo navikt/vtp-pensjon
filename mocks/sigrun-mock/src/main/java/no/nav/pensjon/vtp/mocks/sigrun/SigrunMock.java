@@ -13,12 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.UriInfo;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,22 +37,9 @@ public class SigrunMock {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "beregnetskatt", notes = ("Returnerer beregnetskatt fra Sigrun"))
-    public ResponseEntity buildPermitResponse(@Context UriInfo ui, @Context HttpHeaders httpHeaders) {
-
-        String brukerFnr = null;
-        String inntektsAar = null;
-        String aktørId = null;
-
-        if (httpHeaders.getRequestHeader("x-naturligident").size() > 0) {
-            brukerFnr = httpHeaders.getRequestHeader("x-naturligident").get(0);
-        }
-        if (httpHeaders.getRequestHeader("x-inntektsaar").size() > 0) {
-            inntektsAar = httpHeaders.getRequestHeader("x-inntektsaar").get(0);
-        }
-        if (httpHeaders.getRequestHeader("x-aktoerid").size() > 0) {
-            aktørId = httpHeaders.getRequestHeader("x-aktoerid").get(0);
-        }
-
+    public ResponseEntity buildPermitResponse(@RequestHeader(value = "x-naturligident", required = false) String brukerFnr,
+                                              @RequestHeader(value = "x-inntektsaar", required = false) String inntektsAar,
+                                              @RequestHeader(value = "x-aktoerid", required = false) String aktørId) {
         LOG.info("Sigrun for aktørId: {} ", aktørId);
 
         if (brukerFnr == null && aktørId != null) {

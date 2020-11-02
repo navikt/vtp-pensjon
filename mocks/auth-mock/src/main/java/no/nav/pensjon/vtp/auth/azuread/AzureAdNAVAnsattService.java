@@ -17,9 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.core.Context;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -48,7 +45,7 @@ public class AzureAdNAVAnsattService {
 
     @GetMapping(value = "/{tenant}/v2.0/.well-known/openid-configuration", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Azure AD Discovery url", notes = ("Mock impl av Azure AD discovery urlen. "))
-    public ResponseEntity wellKnown(@Context HttpServletRequest req, @PathVariable("tenant") String tenant, @RequestParam("p") String profile) {
+    public ResponseEntity wellKnown(HttpServletRequest req, @PathVariable("tenant") String tenant, @RequestParam("p") String profile) {
         String baseUrl = getBaseUrl(req);
         String graphUrl = getGraphUrl(req);
         WellKnownResponse wellKnownResponse = new WellKnownResponse(baseUrl, graphUrl, tenant, profile);
@@ -57,7 +54,7 @@ public class AzureAdNAVAnsattService {
 
     @GetMapping(value = "/{tenant}/discovery/v2.0/keys", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "azureAd/discovery/keys", notes = ("Mock impl av Azure AD jwk_uri"))
-    public ResponseEntity authorize(@Context HttpServletRequest req) {
+    public ResponseEntity authorize(HttpServletRequest req) {
         LOG.info("kall på /oauth2/connect/jwk_uri");
         String jwks = KeyStoreTool.getJwks();
         LOG.info("JWKS: " + jwks);
@@ -67,14 +64,14 @@ public class AzureAdNAVAnsattService {
     @PostMapping(value = "/{tenant}/oauth2/v2.0/token", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "azureAd/access_token", notes = ("Mock impl av Azure AD access_token"))
     public ResponseEntity accessToken(
-            @Context HttpServletRequest req,
+            HttpServletRequest req,
             @PathVariable("tenant") String tenant,
-            @FormParam("grant_type") String grantType,
-            @FormParam("client_id") String clientId,
-            @FormParam("realm") String realm,
-            @FormParam("code") String code,
-            @FormParam("refresh_token") String refreshToken,
-            @FormParam("redirect_uri") String redirectUri) {
+            @RequestParam("grant_type") String grantType,
+            @RequestParam("client_id") String clientId,
+            @RequestParam("realm") String realm,
+            @RequestParam("code") String code,
+            @RequestParam("refresh_token") String refreshToken,
+            @RequestParam("redirect_uri") String redirectUri) {
         if ("authorization_code".equals(grantType)) {
             String token = createIdToken(code, tenant, clientId);
             String generatedRefreshToken = "refresh:" + code;
@@ -133,11 +130,11 @@ public class AzureAdNAVAnsattService {
     @GetMapping(value = "/{tenant}/v2.0/authorize", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE})
     @ApiOperation(value = "AzureAD/v2.0/authorize", notes = ("Mock impl av Azure AD authorize"))
     public ResponseEntity authorize(
-            @Context HttpServletRequest req,
-            @Context HttpServletResponse resp,
+            HttpServletRequest req,
+            HttpServletResponse resp,
             @PathVariable("tenant") String tenant,
-            @RequestParam("response_type") @DefaultValue("code") String responseType,
-            @RequestParam("scope") @DefaultValue("openid") String scope,
+            @RequestParam(value = "response_type", defaultValue = "code") String responseType,
+            @RequestParam(value = "scope", defaultValue = "openid") String scope,
             @RequestParam("client_id") String clientId,
             @RequestParam("state") String state,
             @RequestParam("nonce") String nonce,
@@ -200,11 +197,11 @@ public class AzureAdNAVAnsattService {
         return ResponseEntity.ok(html);
     }
 
-    private String getBaseUrl(@Context HttpServletRequest req) {
+    private String getBaseUrl(HttpServletRequest req) {
         return req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/rest/AzureAd";
     }
 
-    private String getGraphUrl(@Context HttpServletRequest req) {
+    private String getGraphUrl(HttpServletRequest req) {
         return req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/rest/MicrosoftGraphApi";
     }
 

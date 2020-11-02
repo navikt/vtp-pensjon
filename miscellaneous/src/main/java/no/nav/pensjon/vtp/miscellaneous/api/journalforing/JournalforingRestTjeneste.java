@@ -11,9 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import javax.ws.rs.NotFoundException;
 import java.time.LocalDateTime;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @Api(tags = "Journalføringsmock")
@@ -74,7 +76,7 @@ public class JournalforingRestTjeneste {
 
         LOG.info("Knytter sak: {} til journalpost: {}", saksnummer, journalpostId);
 
-        JournalpostModell journalpostModell = journalRepository.finnJournalpostMedJournalpostId(journalpostId).orElseThrow(()-> new NotFoundException("Kunne ikke finne journalpost"));
+        JournalpostModell journalpostModell = journalRepository.finnJournalpostMedJournalpostId(journalpostId).orElseThrow(()-> new ResponseStatusException(NOT_FOUND, "Kunne ikke finne journalpost"));
         journalpostModell.setSakId(saksnummer);
 
         JournalforingResultatDto res = new JournalforingResultatDto();

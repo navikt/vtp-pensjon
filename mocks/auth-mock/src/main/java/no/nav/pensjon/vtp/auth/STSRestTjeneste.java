@@ -3,12 +3,12 @@ package no.nav.pensjon.vtp.auth;
 import io.swagger.annotations.Api;
 import no.nav.pensjon.vtp.felles.OidcTokenGenerator;
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.core.HttpHeaders;
 import javax.xml.bind.JAXB;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
