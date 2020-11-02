@@ -86,10 +86,6 @@
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>dummy-mock</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>dokdist-mock</artifactId>
         </dependency>
         <dependency>
