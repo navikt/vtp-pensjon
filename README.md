@@ -52,7 +52,7 @@ docker pull docker.pkg.github.com/navikt/vtp-pensjon/vtp-pensjon
 
 ## Opprette testdata 
 * Opprett testdata ved å legge scenario i /model/scenarios. Innledende tall brukes som referanse for å få instansiert scenario.
-* Tjenester for å opprette testdata finnes på [Swagger UI](https://localhost:8063/swagger/)  (Bruk HTTP for kall)
+* REST API dokumentasjon ligger på [Swagger UI](http://localhost:8060/rest/swagger-ui/index.html)  (Bruk HTTP for kall)
 
 
 ## Sertifiakter for SSL/TLS
