@@ -20,11 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.UriInfo;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -90,11 +85,10 @@ public class TestscenarioRestTjeneste {
 
     @PostMapping(value = "/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = ("Initialiserer et test scenario basert på angitt template key i VTPs eksempel templates"), response = TestscenarioDto.class)
-    public ResponseEntity initialiserTestscenario(@PathVariable(TEMPLATE_KEY) String templateKey, @Context UriInfo uriInfo) {
+    public ResponseEntity initialiserTestscenario(@PathVariable(TEMPLATE_KEY) String templateKey) {
         return templateRepository.finn(templateKey)
                 .map(template -> {
-                    final Map<String, String> userSuppliedVariables = getUserSuppliedVariables(uriInfo.getQueryParameters(), TEMPLATE_KEY);
-                    final Testscenario testscenario = testscenarioRepository.opprettTestscenario(template, userSuppliedVariables);
+                    final Testscenario testscenario = testscenarioRepository.opprettTestscenario(template, new HashMap<>());
                     logger.info("Initialiserer testscenario i VTP fra template: [{}] med id: [{}] ", templateKey, testscenario.getId());
 
                     pensjonTestdataService.opprettData(testscenario);
@@ -107,16 +101,14 @@ public class TestscenarioRestTjeneste {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = ("Initialiserer et testscenario basert på angitt json streng og returnerer det initialiserte objektet"), response = TestscenarioDto.class)
-    public ResponseEntity initialiserTestScenario(String testscenarioJson,  @Context UriInfo uriInfo) {
-        Map<String, String> userSuppliedVariables = getUserSuppliedVariables(uriInfo.getQueryParameters(), TEMPLATE_KEY);
-        Testscenario testscenario = testscenarioRepository.opprettTestscenarioFraJsonString(testscenarioJson, userSuppliedVariables);
+    public ResponseEntity initialiserTestScenario(String testscenarioJson) {
+        Testscenario testscenario = testscenarioRepository.opprettTestscenarioFraJsonString(testscenarioJson, new HashMap<>());
         logger.info("Initialiserer testscenario med ekstern testdatadefinisjon. Opprettet med id: [{}] ", testscenario.getId());
         return ResponseEntity.accepted()
                 .body(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()));
     }
 
-    @DELETE
-    @Path("/{id}")
+    @DeleteMapping("/{id}")
     @ApiOperation(value = "", notes= "Sletter et initialisert testscenario som matcher id")
     public ResponseEntity slettScenario(@PathVariable(SCENARIO_ID) String id) {
         logger.info("Sletter testscenario med id: [{}]", id);
@@ -192,19 +184,4 @@ public class TestscenarioRestTjeneste {
 
         return barnModell.map(PersonModell::getFødselsdato);
     }
-
-    private Map<String, String> getUserSuppliedVariables(MultivaluedMap<String, String> queryParameters, String... skipKeys) {
-        Set<String> skipTheseKeys = new HashSet<>(Arrays.asList(skipKeys));
-        Map<String, String> result = new LinkedHashMap<>();
-        for (Map.Entry<String, List<String>> e : queryParameters.entrySet()) {
-            if (skipTheseKeys.contains(e.getKey())) {
-                continue; // tar inn som egen nøkkel, skipper her
-            } else if (e.getValue().size() != 1) {
-                continue; // støtter ikke multi-value eller tomme
-            }
-            result.put(e.getKey(), e.getValue().get(0));
-        }
-        return result;
-    }
-
 }

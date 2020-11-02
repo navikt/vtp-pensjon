@@ -39,9 +39,9 @@ public class PensjonTestdataServiceImpl implements PensjonTestdataService {
     public void lagrePerson(final String ident) {
         String url = baseUrl + "/api/person/" + ident;
         HttpEntity<Object> request = new HttpEntity<>(null, new HttpHeaders());
-        final ResponseEntity response = client.postForEntity(url, request, ResponseEntity.class);
+        final ResponseEntity<String> response = client.postForEntity(url, request, String.class);
 
-        if (response.getStatusCode().is2xxSuccessful()) {
+        if (!response.getStatusCode().is2xxSuccessful()) {
             logger.error("Failed to create person (ident={}, uri={}, responseCode={})", ident, baseUrl, response.getStatusCode());
             throw new RuntimeException("Failed to create person with ident=" + ident + " in pensjon-testdata using Uri=" + baseUrl);
         }
