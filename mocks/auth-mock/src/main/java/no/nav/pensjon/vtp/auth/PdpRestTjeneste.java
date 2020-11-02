@@ -6,36 +6,32 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.List;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-
-@JaxrsResource
+@RestController
 @Api(tags = { "ABAC-PDP-Mock" })
-@Path("/asm-pdp/authorize")
+@RequestMapping("/asm-pdp/authorize")
 public class PdpRestTjeneste {
     private final static Logger LOG = LoggerFactory.getLogger(PdpRestTjeneste.class);
 
-    @GET
-    @Path("/ping")
-    public Response ping() {
-        return Response.ok().build();
+    @GetMapping(value = "/ping", produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity ping() {
+        return ResponseEntity.ok().build();
     }
 
-    @POST
-    @Produces("application/xacml+json")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "asm-pdp/authorize", notes = ("Mock impl av ABAC PDP authorize"))
-    public Response authorize(String entity) throws IOException {
+    public ResponseEntity authorize(String entity) throws IOException {
         LOG.info("Invoke: autorize with entry: {}", entity);
         int permits = getPermits(entity);
-        return Response.ok(buildPermitResponse(permits)).build();
+        return ResponseEntity.ok(buildPermitResponse(permits));
     }
 
     private int getPermits(String entity) throws IOException {

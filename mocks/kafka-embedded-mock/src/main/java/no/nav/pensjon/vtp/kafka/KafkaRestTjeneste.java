@@ -1,26 +1,25 @@
 package no.nav.pensjon.vtp.kafka;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import no.nav.pensjon.vtp.kafkaembedded.LocalKafkaProducer;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.admin.TopicListing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import no.nav.pensjon.vtp.kafkaembedded.LocalKafkaProducer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 @Api(tags = "Kafka services")
-@Path("/api/kafka")
+@RequestMapping("/api/kafka")
 public class KafkaRestTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(KafkaRestTjeneste.class);
 
@@ -32,11 +31,9 @@ public class KafkaRestTjeneste {
         this.kafkaAdminClient = kafkaAdminClient;
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/topics")
+    @GetMapping(value = "/topics", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = ("Returnerer kafka topics"), response = ArrayList.class)
-    public Response getTopics() throws InterruptedException, ExecutionException {
+    public ResponseEntity getTopics() throws InterruptedException, ExecutionException {
         ArrayList<KafkaTopicDto> list = new ArrayList<>();
         Map<String, TopicListing> topics = kafkaAdminClient.listTopics().namesToListings().get();
         for (Map.Entry<String, TopicListing> entry : topics.entrySet()) {
@@ -45,39 +42,26 @@ public class KafkaRestTjeneste {
             dto.setInternal(entry.getValue().isInternal());
             list.add(dto);
         }
-        return Response
-                .status(Response.Status.OK)
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(list)
-                .build();
+        return ResponseEntity.ok(list);
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/topics/{topic}")
+    @PostMapping(value = "/topics/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = ("Oppretter ny (tom) Kafka topic."))
-    public Response createTopic(@PathParam("topic") String topic) {
+    public ResponseEntity createTopic(@PathVariable("topic") String topic) {
         LOG.info("Request: oppretter topic: {}", topic);
         kafkaAdminClient.createTopics(Collections.singleton(new NewTopic(topic, 1, (short) 1)));
 
-        return Response
-                .status(Response.Status.CREATED)
-                .type(MediaType.APPLICATION_JSON)
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
                 .build();
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/send/{topic}")
+    @PostMapping(value = "/send/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = ("Legger melding på Kafka topic"))
-    public Response sendMessage(@PathParam("topic") String topic, @QueryParam("key") String key, String message) {
+    public ResponseEntity sendMessage(@PathVariable("topic") String topic, @RequestParam("key") String key, String message) {
         LOG.info("Request: send message to topic [{}]: {}", topic, message);
         localKafkaProducer.sendMelding(topic, key, message);
 
-        return Response
-                .status(Response.Status.OK)
-                .type(MediaType.APPLICATION_JSON)
-                .entity(message)
-                .build();
+        return ResponseEntity.ok(message);
     }
 }

@@ -1,29 +1,26 @@
 package no.nav.pensjon.vtp.miscellaneous.api.sak;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
+import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sak;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
-import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
-import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sak;
-
-@JaxrsResource
+@RestController
 @Api(tags = "Gsak repository")
-@Path("/api/sak")
+@RequestMapping("/api/sak")
 public class SakRestTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(SakRestTjeneste.class);
 
@@ -33,18 +30,16 @@ public class SakRestTjeneste {
         this.gsakRepo = gsakRepo;
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = ("Lager nytt saksnummer fra sekvens"), response = OpprettSakResponseDTO.class)
-    public Response foreldrepengesoknadErketype(OpprettSakRequestDTO requestDTO){
+    public ResponseEntity foreldrepengesoknadErketype(OpprettSakRequestDTO requestDTO){
 
         if(requestDTO.getLokalIdent() == null || requestDTO.getLokalIdent().size() < 1 || requestDTO.getFagområde() == null ||
                 requestDTO.getFagsystem() == null || requestDTO.getSakstype() == null){
-            return Response
-                    .status(Response.Status.BAD_REQUEST)
-                    .type(MediaType.TEXT_PLAIN)
-                    .entity("Request mangler påkrevde verdier")
-                    .build();
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .body("Request mangler påkrevde verdier");
         }
 
         List<PersonModell> brukere = requestDTO.getLokalIdent().stream().map(p ->
@@ -54,11 +49,10 @@ public class SakRestTjeneste {
 
         LOG.info("Opprettet sak med saksnummer: {}", sak.getSakId());
 
-        return Response
-                .status(Response.Status.OK)
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(new OpprettSakResponseDTO(sak.getSakId()))
-                .build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new OpprettSakResponseDTO(sak.getSakId()));
 
     }
 

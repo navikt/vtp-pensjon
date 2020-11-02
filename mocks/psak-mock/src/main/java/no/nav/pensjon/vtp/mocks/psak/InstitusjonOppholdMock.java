@@ -1,25 +1,22 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
 import io.swagger.annotations.Api;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-
-@JaxrsResource
+@RestController
 @Api(tags = {"InstitusjonOpphold"})
-@Path("/v1/person/institusjonsopphold")
+@RequestMapping("/v1/person/institusjonsopphold")
 public class InstitusjonOppholdMock {
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Institusjonsopphold> getIdenter(@HeaderParam("Nav-Personident") String requestIdent) {
         return new ArrayList<Institusjonsopphold>();
     }

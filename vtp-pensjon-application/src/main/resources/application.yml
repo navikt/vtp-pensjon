@@ -2,9 +2,6 @@ server:
   port: 8060
 cxf:
   path: /soap
-spring:
-  jersey:
-    application-path: /rest
 
 pensjon:
   testdata:

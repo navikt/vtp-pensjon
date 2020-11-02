@@ -1,22 +1,17 @@
 package no.nav.pensjon.vtp.miscellaneous.rest;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-
-@JaxrsResource
+@RestController
 @Api(tags = { "isAlive" })
-@Path("/isAlive")
 public class IsAliveImpl {
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
+
     @ApiOperation(value = "isAlive", notes = ("Sjekker om systemet er alive for NAIS"))
+    @GetMapping(value = "/isAlive", produces = MediaType.TEXT_PLAIN_VALUE)
     public String buildPermitResponse() {
         return "OK";
     }

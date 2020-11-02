@@ -1,29 +1,27 @@
 package no.nav.pensjon.vtp.auth.azuread;
 
-import static java.util.stream.Collectors.toList;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.Api;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import static java.util.stream.Collectors.toList;
 
-@JaxrsResource
+@RestController
 @Api(tags = {"AzureAd"})
-@Path("/MicrosoftGraphApi")
+@RequestMapping("/MicrosoftGraphApi")
 public class MicrosoftGraphApiMock {
     private final AnsatteIndeks ansatteIndeks;
 
@@ -31,15 +29,12 @@ public class MicrosoftGraphApiMock {
         this.ansatteIndeks = ansatteIndeks;
     }
 
-    @GET
-    @Produces({ "application/json;charset=UTF-8" })
-    @Path("/oidc/userinfo")
-    public Response userinfo(@HeaderParam("Authorization") String auth) {
+    @GetMapping(value= "/oidc/userinfo", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity userinfo(@HeaderParam("Authorization") String auth) {
         if (!auth.startsWith("Bearer access:")) {
-            return Response
-                    .status(Response.Status.FORBIDDEN)
-                    .entity("Bad mock access token; must be on format Bearer access:<userid>")
-                    .build();
+            return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                    .body("Bad mock access token; must be on format Bearer access:<userid>");
         }
 
         String accessToken = auth.substring(14);
@@ -54,18 +49,15 @@ public class MicrosoftGraphApiMock {
         response.put("given_name", ansatt.givenname);
         response.put("picture", "http://example.com/picture.jpg");
         response.put("email", ansatt.email);
-        return Response.ok(response).build();
+        return ResponseEntity.ok(response);
     }
 
-    @GET
-    @Produces({ "application/json;charset=UTF-8" })
-    @Path("/v1.0/me")
-    public Response me(@HeaderParam("Authorization") String auth, @QueryParam("select") String select) {
+    @GetMapping(value= "/v1.0/me", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity me(@HeaderParam("Authorization") String auth, @RequestParam String select) {
         if (!auth.startsWith("Bearer access:")) {
-            return Response
-                    .status(Response.Status.FORBIDDEN)
-                    .entity("Bad mock access token; must be on format Bearer access:<userid>")
-                    .build();
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body("Bad mock access token; must be on format Bearer access:<userid>");
         }
 
         String accessToken = auth.substring(14);
@@ -79,7 +71,7 @@ public class MicrosoftGraphApiMock {
 
         final User user = new User("https://graph.microsoft.com/v1.0/$metadata#users(" + select + ")/$entity", ident, memberOf);
 
-        return Response.ok(user).build();
+        return ResponseEntity.ok(user);
     }
 
     public static class User {

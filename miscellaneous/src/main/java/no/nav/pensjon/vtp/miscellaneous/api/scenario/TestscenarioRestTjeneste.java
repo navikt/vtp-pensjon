@@ -1,13 +1,7 @@
 package no.nav.pensjon.vtp.miscellaneous.api.scenario;
 
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static javax.ws.rs.core.Response.status;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.kontrakter.TestscenarioDto;
 import no.nav.pensjon.vtp.kontrakter.TestscenarioPersonopplysningDto;
 import no.nav.pensjon.vtp.kontrakter.TestscenariodataDto;
@@ -19,18 +13,24 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
 import java.time.LocalDate;
 import java.util.*;
 
-@JaxrsResource
+@RestController
 @Api(tags = {"Testscenario"})
-@Path("/api/testscenarios")
+@RequestMapping("/api/testscenarios")
 public class TestscenarioRestTjeneste {
     private static final Logger logger = LoggerFactory.getLogger(TestscenarioRestTjeneste.class);
 
@@ -47,8 +47,7 @@ public class TestscenarioRestTjeneste {
         this.pensjonTestdataService = pensjonTestdataService;
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = "Henter alle templates som er initiert i minnet til VTP", responseContainer = "List", response = TestscenarioDto.class)
     public List<TestscenarioDto> hentInitialiserteCaser() {
         Map<String, Testscenario> testscenarios = testscenarioRepository.getTestscenarios();
@@ -65,43 +64,33 @@ public class TestscenarioRestTjeneste {
         return testscenarioList;
     }
 
-    @GET
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = "Returnerer testscenario som matcher id", response = TestscenarioDto.class)
-    public Response hentScenario(@PathParam(SCENARIO_ID) String id){
+    public ResponseEntity hentScenario(@PathVariable(SCENARIO_ID) String id){
         if (testscenarioRepository.getTestscenario(id) != null) {
             Testscenario testscenario = testscenarioRepository.getTestscenario(id);
-            return status(Response.Status.OK)
-                    .entity(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()))
-                    .build();
+            return ResponseEntity.ok(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()));
         } else {
-            return status(Response.Status.NO_CONTENT).build();
+            return ResponseEntity.noContent().build();
         }
 
     }
 
-    @PUT
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value="", notes="Oppdaterer hele scenario som matcher id", response = TestscenarioDto.class)
-    public Response oppdaterHeleScenario(@PathParam(SCENARIO_ID) String id, TestscenarioDto testscenarioDto){
-        return status(Response.Status.NOT_IMPLEMENTED).build();
+    public ResponseEntity oppdaterHeleScenario(@PathVariable(SCENARIO_ID) String id, TestscenarioDto testscenarioDto){
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
-    @PATCH
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value="", notes="Oppdaterer deler av et scenario som matcher id", response = TestscenarioDto.class)
-    public Response endreScenario(@PathParam(SCENARIO_ID) String id, String patchArray){
-        return status(Response.Status.NOT_IMPLEMENTED).build();
+    public ResponseEntity endreScenario(@PathVariable(SCENARIO_ID) String id, String patchArray){
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
-    @POST
-    @Path("/{key}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping(value = "/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = ("Initialiserer et test scenario basert på angitt template key i VTPs eksempel templates"), response = TestscenarioDto.class)
-    public Response initialiserTestscenario(@PathParam(TEMPLATE_KEY) String templateKey, @Context UriInfo uriInfo) {
+    public ResponseEntity initialiserTestscenario(@PathVariable(TEMPLATE_KEY) String templateKey, @Context UriInfo uriInfo) {
         return templateRepository.finn(templateKey)
                 .map(template -> {
                     final Map<String, String> userSuppliedVariables = getUserSuppliedVariables(uriInfo.getQueryParameters(), TEMPLATE_KEY);
@@ -110,34 +99,31 @@ public class TestscenarioRestTjeneste {
 
                     pensjonTestdataService.opprettData(testscenario);
 
-                    return status(CREATED)
-                            .entity(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()))
-                            .build()     ;
+                    return ResponseEntity.accepted()
+                            .body(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()));
                 })
-                .orElse(status(NOT_FOUND).build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = ("Initialiserer et testscenario basert på angitt json streng og returnerer det initialiserte objektet"), response = TestscenarioDto.class)
-    public Response initialiserTestScenario(String testscenarioJson,  @Context UriInfo uriInfo) {
+    public ResponseEntity initialiserTestScenario(String testscenarioJson,  @Context UriInfo uriInfo) {
         Map<String, String> userSuppliedVariables = getUserSuppliedVariables(uriInfo.getQueryParameters(), TEMPLATE_KEY);
         Testscenario testscenario = testscenarioRepository.opprettTestscenarioFraJsonString(testscenarioJson, userSuppliedVariables);
         logger.info("Initialiserer testscenario med ekstern testdatadefinisjon. Opprettet med id: [{}] ", testscenario.getId());
-        return status(CREATED)
-                .entity(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()))
-                .build();
+        return ResponseEntity.accepted()
+                .body(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()));
     }
 
     @DELETE
     @Path("/{id}")
     @ApiOperation(value = "", notes= "Sletter et initialisert testscenario som matcher id")
-    public Response slettScenario(@PathParam(SCENARIO_ID) String id) {
+    public ResponseEntity slettScenario(@PathVariable(SCENARIO_ID) String id) {
         logger.info("Sletter testscenario med id: [{}]", id);
         if(testscenarioRepository.slettScenario(id)){
-            return Response.noContent().build();
+            return ResponseEntity.noContent().build();
         } else {
-            return status(Response.Status.BAD_REQUEST).build();
+            return ResponseEntity.badRequest().build();
         }
     }
 

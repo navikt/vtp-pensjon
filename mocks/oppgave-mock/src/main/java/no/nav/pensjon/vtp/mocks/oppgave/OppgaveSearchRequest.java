@@ -6,7 +6,6 @@ import no.nav.pensjon.vtp.mocks.oppgave.infrastruktur.validering.*;
 import javax.validation.constraints.Max;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
-
 import java.util.List;
 
 

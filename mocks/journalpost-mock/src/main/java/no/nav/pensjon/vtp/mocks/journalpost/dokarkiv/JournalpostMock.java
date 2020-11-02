@@ -3,21 +3,22 @@ package no.nav.pensjon.vtp.mocks.journalpost.dokarkiv;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import no.nav.dokarkiv.generated.model.*;
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.PATCH;
+import javax.ws.rs.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@JaxrsResource
+@RestController
 @Api(tags = {"Dokarkiv"})
-@Path("/dokarkiv/rest/journalpostapi/v1")
+@RequestMapping("/dokarkiv/rest/journalpostapi/v1")
 public class JournalpostMock {
     private static final Logger LOG = LoggerFactory.getLogger(JournalpostMock.class);
 
@@ -27,10 +28,9 @@ public class JournalpostMock {
         this.journalRepository = journalRepository;
     }
 
-    @POST
-    @Path("/journalpost")
+    @PostMapping(value = "/journalpost")
     @ApiOperation(value = "lag journalpost")
-    public Response lagJournalpost(OpprettJournalpostRequest opprettJournalpostRequest, @QueryParam("forsoekFerdigstill") Boolean forsoekFerdigstill) {
+    public ResponseEntity lagJournalpost(OpprettJournalpostRequest opprettJournalpostRequest, @RequestParam("forsoekFerdigstill") Boolean forsoekFerdigstill) {
         LOG.info("Dokarkiv. Lag journalpost. foersoekFerdigstill: {}", forsoekFerdigstill);
 
         JournalpostModell modell = new JournalpostMapper().tilModell(opprettJournalpostRequest);
@@ -49,14 +49,13 @@ public class JournalpostMock {
         response.setDokumenter(dokumentInfos);
         response.setJournalpostId(journalpostId);
         response.setJournalpostferdigstilt(Boolean.TRUE);
-        return Response.accepted().entity(response).build();
+        return ResponseEntity.accepted().body(response);
     }
 
 
-    @PUT
-    @Path("/journalpost/{journalpostid}")
+    @PutMapping("/journalpost/{journalpostid}")
     @ApiOperation(value = "Oppdater journalpost")
-    public Response oppdaterJournalpost(OppdaterJournalpostRequest oppdaterJournalpostRequest, @PathParam("journalpostid") String journalpostId){
+    public ResponseEntity oppdaterJournalpost(OppdaterJournalpostRequest oppdaterJournalpostRequest, @PathVariable("journalpostid") String journalpostId){
 
         LOG.info("Kall til oppdater journalpost: {}", journalpostId);
         Optional<JournalpostModell> journalpostModell = journalRepository.finnJournalpostMedJournalpostId(journalpostId);
@@ -67,18 +66,18 @@ public class JournalpostMock {
         OppdaterJournalpostResponse oppdaterJournalpostResponse = new OppdaterJournalpostResponse();
         oppdaterJournalpostResponse.setJournalpostId(journalpostId);
 
-        return Response.accepted().entity(oppdaterJournalpostResponse).build();
+        return ResponseEntity.accepted().body(oppdaterJournalpostResponse);
     }
 
     @PATCH
     @Path("/journalpost/{journalpostid}/ferdigstill")
     @ApiOperation(value = "Ferdigstill journalpost")
-    public Response ferdigstillJournalpost(FerdigstillJournalpostRequest ferdigstillJournalpostRequest){
+    public ResponseEntity ferdigstillJournalpost(FerdigstillJournalpostRequest ferdigstillJournalpostRequest){
 
         String journalfoerendeEnhet = ferdigstillJournalpostRequest.getJournalfoerendeEnhet();
         LOG.info("Kall til ferdigstill journalpost på enhet: {}", journalfoerendeEnhet);
 
-        return Response.ok().entity("OK").build();
+        return ResponseEntity.ok("OK");
     }
 
 

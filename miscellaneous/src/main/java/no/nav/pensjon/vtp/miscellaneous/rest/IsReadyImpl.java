@@ -1,21 +1,18 @@
 package no.nav.pensjon.vtp.miscellaneous.rest;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-
-@JaxrsResource
+@RestController
 @Api(tags = { "isReady" })
-@Path("/isReady")
+@RequestMapping("/isReady")
 public class IsReadyImpl {
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
+
+    @GetMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     @ApiOperation(value = "isReady", notes = ("Sjekker om systemet er ready for NAIS"))
     public String buildPermitResponse() {
         return "OK";

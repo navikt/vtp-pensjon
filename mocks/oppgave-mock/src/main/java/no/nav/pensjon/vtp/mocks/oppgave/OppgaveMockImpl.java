@@ -5,38 +5,47 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-import java.util.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-
-@JaxrsResource
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@RestController
 @Api(tags = "Oppgave Mock")
-@Path("oppgave/api/v1/oppgaver")
+@RequestMapping(value = "oppgave/api/v1/oppgaver",
+        produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE,
+        consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
 public class OppgaveMockImpl {
 
     private static final Logger LOG = LoggerFactory.getLogger(OppgaveMockImpl.class);
 
     private static final Map<Long, ObjectNode> oppgaver = new ConcurrentHashMap<>();
 
-    @POST
+    @PostMapping
     @ApiOperation(value = "Opprett oppgave", response = OppgaveJson.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "X-Correlation-ID", required = true, dataType = "string", paramType = "header"),
             @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
 
     })
-    public Response opprettOppgave(
+    public ResponseEntity opprettOppgave(
             @Valid @ApiParam(value = "Oppgaven som opprettes", required = true) ObjectNode oppgave,
             @Context HttpHeaders httpHeaders) {
-        Optional<Response> validert = validerIkkeFunksjonelt(httpHeaders);
+        Optional<ResponseEntity> validert = validerIkkeFunksjonelt(httpHeaders);
         if (validert.isPresent()) {
             return validert.get();
         }
@@ -48,12 +57,10 @@ public class OppgaveMockImpl {
 
         LOG.info("Opprettet oppgave: {}", oppgave);
 
-        return Response.status(Response.Status.CREATED)
-                .entity(oppgave)
-                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(oppgave);
     }
 
-    @GET
+    @GetMapping
     @ApiOperation(value = "Hent oppgaver", response = HentOppgaverResponse.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "X-Correlation-ID", required = true, dataType = "string", paramType = "header"),
@@ -63,10 +70,10 @@ public class OppgaveMockImpl {
             @ApiImplicitParam(name = "journalpostId", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "aktoerId", dataType = "string", paramType = "query")
     })
-    public Response hentOppgaver(
+    public ResponseEntity hentOppgaver(
             @Context HttpHeaders httpHeaders,
             @Context UriInfo uriInfo) {
-        Optional<Response> validert = validerIkkeFunksjonelt(httpHeaders);
+        Optional<ResponseEntity> validert = validerIkkeFunksjonelt(httpHeaders);
         if (validert.isPresent()) {
             return validert.get();
         }
@@ -99,23 +106,21 @@ public class OppgaveMockImpl {
             if (matches.get() == queries.size()) matching.add(oppgave);
         });
 
-        return Response.ok()
-                .entity(new HentOppgaverResponse(matching))
-                .build();
+        return ResponseEntity.ok(new HentOppgaverResponse(matching));
     }
 
-    private Optional<Response> validerIkkeFunksjonelt(HttpHeaders httpHeaders) {
+    private Optional<ResponseEntity> validerIkkeFunksjonelt(HttpHeaders httpHeaders) {
         // Validerer token på rett format
         String jwt = httpHeaders.getHeaderString("Authorization");
         if (jwt == null || !jwt.startsWith("Bearer")) {
             LOG.error("Ugyldig/manglende Authorization header");
-            return Optional.of(Response.status(Response.Status.BAD_REQUEST).build());
+            return Optional.of(ResponseEntity.badRequest().build());
 
         }
         // Caliderer at correlation id er satt
         String correlationId = httpHeaders.getHeaderString("X-Correlation-ID");
         if (correlationId == null || correlationId.isBlank()) {
-            return Optional.of(Response.status(Response.Status.BAD_GATEWAY).build());
+            return Optional.of(ResponseEntity.status(HttpStatus.BAD_GATEWAY).build());
         }
 
         return Optional.empty();

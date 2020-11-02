@@ -3,29 +3,27 @@ package no.nav.pensjon.vtp.mocks.psak;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-
 /**
  * VTP-teamet jobber med å lage mock for PDL, og dette er midlertidig løsning frem til vi merger inn i vtp-en
  */
-@JaxrsResource
+
+@RestController
 @Api(tags = {"PDL"})
-@Path("/graphql")
+@RequestMapping("/graphql")
 public class PDLMock {
     private static final Logger LOG = LoggerFactory.getLogger(PDLMock.class);
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
         public Map<String, List<Map<String,String>>> hentFullPerson(String data){
         LOG.info("Nytt kall mot graphQL med data: " + data);
         Map<String,String> errors = new HashMap<>();

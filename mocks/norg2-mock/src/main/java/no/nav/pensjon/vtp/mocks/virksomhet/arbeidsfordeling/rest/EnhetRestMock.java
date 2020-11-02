@@ -2,20 +2,16 @@ package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsfordeling.rest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
-import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
 import no.nav.norg2.model.Norg2RsEnhet;
 import no.nav.norg2.model.Norg2RsOrganisering;
 import no.nav.norg2.model.Norg2RsSimpleEnhet;
+import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
+import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDate;
@@ -26,9 +22,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@JaxrsResource
+@RestController
 @Api(tags = {"Norg2 enheter"})
-@Path("/norg2/api/v1")
+@RequestMapping("/norg2/api/v1")
 public class EnhetRestMock {
     private static final Logger LOG = LoggerFactory.getLogger(EnhetRestMock.class);
     private final EnheterIndeks enheterIndeks;
@@ -37,35 +33,29 @@ public class EnhetRestMock {
         this.enheterIndeks = enheterIndeks;
     }
 
-    @POST
-    @Produces({"application/json;charset=UTF-8"})
+    @PostMapping(value = "/arbeidsfordelinger", produces = MediaType.APPLICATION_JSON_VALUE)
     @io.swagger.annotations.ApiOperation(value = "Returnerer alle arbeidsfordelinger basert på multiple set av søkekriterier", response = Fordeling.class, responseContainer = "List", tags = {"arbeidsfordeling",})
     @io.swagger.annotations.ApiResponses(value = {
             @io.swagger.annotations.ApiResponse(code = 200, message = "Success", response = Fordeling.class, responseContainer = "List"),
             @io.swagger.annotations.ApiResponse(code = 400, message = "Bad request"),
             @io.swagger.annotations.ApiResponse(code = 404, message = "Not found"),
             @io.swagger.annotations.ApiResponse(code = 500, message = "Internal Server Error")})
-    @Path("/arbeidsfordelinger")
-    public Response getArbeidsFordelinger(List<Fordeling> fordelinger, @QueryParam("skjermet") boolean skjermet)
-            throws NotFoundException {
+    public ResponseEntity getArbeidsFordelinger(List<Fordeling> fordelinger, @RequestParam("skjermet") boolean skjermet) {
         LOG.info("kall på /norg2/api/v1/arbeidsfordelinger med entitites:" + fordelinger);
-        return Response.ok(fordelinger).build();
+        return ResponseEntity.ok(fordelinger);
     }
 
-    @GET
-    @Produces({"application/json;charset=UTF-8"})
+    @GetMapping(value = "/enhet", produces = MediaType.APPLICATION_JSON_VALUE)
     @io.swagger.annotations.ApiOperation(value = "Returnerer en filtrert liste av alle enheter", response = Norg2RsEnhet.class, responseContainer = "List", tags = {"enhet",})
     @io.swagger.annotations.ApiResponses(value = {
             @io.swagger.annotations.ApiResponse(code = 200, message = "Success", response = Norg2RsEnhet.class, responseContainer = "List"),
             @io.swagger.annotations.ApiResponse(code = 400, message = "Bad request"),
             @io.swagger.annotations.ApiResponse(code = 404, message = "Not found"),
             @io.swagger.annotations.ApiResponse(code = 500, message = "Internal Server Error")})
-    @Path("/enhet")
-    public Response getAllEnheterUsingGET(@ApiParam(value = "Enhetsstatus resulterende enheter skal filtreres på", allowableValues = "UNDER_ETABLERING, AKTIV, UNDER_AVVIKLING, NEDLAGT") @QueryParam("enhetStatusListe") List<String> enhetStatusListe
-            , @ApiParam(value = "Enhetsnumre for filtrering av enheter") @QueryParam("enhetsnummerListe") List<String> enhetsnummerListe
-            , @ApiParam(value = "Hvorvidt enheter skal være oppgavebehandlende", allowableValues = "UFILTRERT, KUN_OPPGAVEBEHANDLERE, INGEN_OPPGAVEBEHANDLERE") @QueryParam("oppgavebehandlerFilter") String oppgavebehandlerFilter
-            , @Context SecurityContext securityContext)
-            throws NotFoundException {
+    public ResponseEntity getAllEnheterUsingGET(@ApiParam(value = "Enhetsstatus resulterende enheter skal filtreres på", allowableValues = "UNDER_ETABLERING, AKTIV, UNDER_AVVIKLING, NEDLAGT") @RequestParam("enhetStatusListe") List<String> enhetStatusListe
+            , @ApiParam(value = "Enhetsnumre for filtrering av enheter") @RequestParam("enhetsnummerListe") List<String> enhetsnummerListe
+            , @ApiParam(value = "Hvorvidt enheter skal være oppgavebehandlende", allowableValues = "UFILTRERT, KUN_OPPGAVEBEHANDLERE, INGEN_OPPGAVEBEHANDLERE") @RequestParam("oppgavebehandlerFilter") String oppgavebehandlerFilter
+            ) {
         LOG.info("kall på /norg2/api/v1/enhet med enhetIDs:" + enhetsnummerListe.parallelStream().collect(Collectors.joining(",")));
 
         List<Norg2RsEnhet> norg2RsEnheter = norg2RsEnheter(enheterIndeks.getAlleEnheter()).stream()
@@ -73,53 +63,43 @@ public class EnhetRestMock {
                 .filter(e -> enhetStatusListe.isEmpty() || enhetStatusListe.contains(e.getStatus()))
                 .collect(Collectors.toList());
 
-        return Response.ok(norg2RsEnheter).build();
+        return ResponseEntity.ok(norg2RsEnheter);
     }
 
-    @GET
-    @Path("/enhet/navkontor/{geografiskOmraade}")
-    @Produces({"application/json;charset=UTF-8"})
+    @GetMapping(value = "/enhet/navkontor/{geografiskOmraade}", produces = MediaType.APPLICATION_JSON_VALUE)
     @io.swagger.annotations.ApiOperation(value = "Returnerer en NAV kontor som er en lokalkontor for spesifisert geografisk område", response = Norg2RsEnhet.class, tags = {"enhet",})
     @io.swagger.annotations.ApiResponses(value = {
             @io.swagger.annotations.ApiResponse(code = 200, message = "Success", response = Norg2RsEnhet.class),
             @io.swagger.annotations.ApiResponse(code = 404, message = "Not Found"),
             @io.swagger.annotations.ApiResponse(code = 500, message = "Internal Server Error")})
-    public Response getEnhetByGeografiskOmraadeUsingGET(@ApiParam(value = "Geografisk identifikator for NAV kontoret", required = true) @PathParam("geografiskOmraade") String geografiskOmraade
-            , @ApiParam(value = "Diskresjonskode på saker et NAV kontor kan behandle", allowableValues = "SPFO, SPSF, ANY") @QueryParam("disk") String disk
-            , @Context SecurityContext securityContext)
-            throws NotFoundException {
+    public ResponseEntity getEnhetByGeografiskOmraadeUsingGET(@ApiParam(value = "Geografisk identifikator for NAV kontoret", required = true) @PathVariable("geografiskOmraade") String geografiskOmraade
+            , @ApiParam(value = "Diskresjonskode på saker et NAV kontor kan behandle", allowableValues = "SPFO, SPSF, ANY") @RequestParam("disk") String disk){
         LOG.info("kall på /norg2/api/v1/enhet/navkontor/ " + geografiskOmraade + " returnerer default enhet 4407");
-        return Response.ok(enEnhet(4407L)).build();
+        return ResponseEntity.ok(enEnhet(4407L));
     }
 
-    @GET
-    @Path("/enhet/{enhetsnummer}")
-    @Produces({"application/json;charset=UTF-8"})
+    @GetMapping(value = "/enhet/{enhetsnummer}", produces = MediaType.APPLICATION_JSON_VALUE)
     @io.swagger.annotations.ApiOperation(value = "Returnerer en enhet basert på enhetsnummer", response = Norg2RsEnhet.class, tags = {"enhet",})
     @io.swagger.annotations.ApiResponses(value = {
             @io.swagger.annotations.ApiResponse(code = 200, message = "Success", response = Norg2RsEnhet.class),
             @io.swagger.annotations.ApiResponse(code = 404, message = "Not Found"),
             @io.swagger.annotations.ApiResponse(code = 500, message = "Internal Server Error")})
-    public Response getEnhetUsingGET(@ApiParam(value = "Enhetsnummeret til enheten oppslaget gjelder for", required = true) @PathParam("enhetsnummer") String enhetsnummer,
-                                     @Context SecurityContext securityContext) throws NotFoundException {
+    public ResponseEntity getEnhetUsingGET(@ApiParam(value = "Enhetsnummeret til enheten oppslaget gjelder for", required = true) @PathVariable("enhetsnummer") String enhetsnummer){
             LOG.info("kall på /norg2/api/v1/enhet/" + enhetsnummer);
 
             Norg2RsEnhet norg2RsEnhet = norg2RsEnheter(enheterIndeks.getAlleEnheter()).stream()
                     .filter(e -> e.getEnhetNr().equalsIgnoreCase(enhetsnummer))
                     .findAny().orElseThrow(() -> new InvalidParameterException("Could not find enhet with id " + enhetsnummer));
-            return Response.ok(norg2RsEnhet).build();
+            return ResponseEntity.ok(norg2RsEnhet);
     }
 
-    @GET
-    @Path("/enhet/{enhetsnummer}/organisering")
-    @Produces({"application/json;charset=UTF-8"})
+    @GetMapping(value = "/enhet/{enhetsnummer}/organisering", produces = MediaType.APPLICATION_JSON_VALUE)
     @io.swagger.annotations.ApiOperation(value = "Returnerer en organiseringsliste for enhetsnummer", response = Norg2RsOrganisering[].class, tags = {"enhet",})
     @io.swagger.annotations.ApiResponses(value = {
             @io.swagger.annotations.ApiResponse(code = 200, message = "Success", response = Norg2RsOrganisering[].class),
             @io.swagger.annotations.ApiResponse(code = 404, message = "Not Found"),
             @io.swagger.annotations.ApiResponse(code = 500, message = "Internal Server Error")})
-    public Response getOrganiseringListeForEnhet(@ApiParam(value = "Enhetsnummeret til enheten oppslaget gjelder for", required = true) @PathParam("enhetsnummer") String enhetsnummer,
-                                     @Context SecurityContext securityContext) throws NotFoundException {
+    public ResponseEntity getOrganiseringListeForEnhet(@ApiParam(value = "Enhetsnummeret til enheten oppslaget gjelder for", required = true) @PathVariable("enhetsnummer") String enhetsnummer){
         LOG.info(String.format("kall på /norg2/api/v1/enhet/%s/organisering", enhetsnummer));
 
         Norg2RsEnhet norg2RsEnhet = norg2RsEnheter(enheterIndeks.getAlleEnheter()).stream()
@@ -146,7 +126,7 @@ public class EnhetRestMock {
         organisering.setId(123456123456L);
         organisering.setOrgType("FORV");
 
-        return Response.ok(Collections.singletonList(organisering)).build();
+        return ResponseEntity.ok(Collections.singletonList(organisering));
     }
 
 

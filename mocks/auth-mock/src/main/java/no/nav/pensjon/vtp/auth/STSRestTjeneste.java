@@ -1,37 +1,34 @@
 package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.felles.OidcTokenGenerator;
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType;
-import org.jose4j.lang.JoseException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.HttpHeaders;
 import javax.xml.bind.JAXB;
 import java.io.StringWriter;
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Base64;
-import java.util.Optional;
 
 import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 
-@JaxrsResource
+@RestController
 @Api(tags = {"Security Token Service"})
-@Path("/v1/sts")
+@RequestMapping("/v1/sts")
 public class STSRestTjeneste {
     private final STSIssueResponseGenerator generator = new STSIssueResponseGenerator();
     private final SamlTokenGenerator samlTokenGenerator = new SamlTokenGenerator();
 
-    @POST
-    @Path("/token/exchange")
-    @Produces({MediaType.APPLICATION_JSON})
-    public SAMLResponse dummySaml(@QueryParam("grant_type") String grant_type,
-                                       @QueryParam("subject_token_type") String issuedTokenType,
-                                       @QueryParam("subject_token") String subject_token) {
+    @PostMapping(value = "/token/exchange", produces = MediaType.APPLICATION_JSON_VALUE)
+    public SAMLResponse dummySaml(@RequestParam String grant_type,
+                                       @RequestParam String subject_token_type,
+                                       @RequestParam String subject_token) {
         RequestSecurityTokenResponseType token = generator.buildRequestSecurityTokenResponseType("urn:oasis:names:tc:SAML:2.0:assertion");
         StringWriter sw = new StringWriter();
         JAXB.marshal(token, sw);
@@ -41,29 +38,22 @@ public class STSRestTjeneste {
         response.setAccess_token(Base64.getUrlEncoder().withoutPadding().encodeToString(xmlString.getBytes()));
         response.setDecodedToken(xmlString);
         response.setToken_type("Bearer");
-        response.setIssued_token_type(issuedTokenType);
+        response.setIssued_token_type(subject_token_type);
         response.setExpires_in(ZonedDateTime.of(LocalDateTime.MAX, ZoneId.systemDefault()));
 
         return response;
     }
 
-    @GET
-    @Path("/token")
-    @Produces({MediaType.APPLICATION_JSON})
-    public UserTokenResponse dummyToken(@QueryParam("grant_type") String grant_type,
-                                        @QueryParam("scope") String scope) throws JoseException {
+    @GetMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserTokenResponse dummyToken(@RequestParam String grant_type,
+                                        @RequestParam String scope) {
         String token = new OidcTokenGenerator("dummyBruker", "").withIssuer(Oauth2RestService.getIssuer()).create();
         return new UserTokenResponse(token, 600000 * 1000L, "Bearer");
     }
 
-    @GET
-    @Path("/samltoken")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response dummyToken(@Context SecurityContext securityContext, @Context HttpHeaders headers) throws Exception {
-        String username = Optional.ofNullable(securityContext)
-                .map(SecurityContext::getUserPrincipal)
-                .map(Principal::getName)
-                .orElse("CN=InternBruker,OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local");
+    @GetMapping(value = "/samltoken", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity dummyToken(HttpHeaders headers) throws Exception {
+        String username = "CN=InternBruker,OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local";
 
         String samlToken = samlTokenGenerator.issueToken(username);
         SAMLResponse samlResponse = new SAMLResponse();
@@ -73,7 +63,11 @@ public class STSRestTjeneste {
         samlResponse.setIssued_token_type("urn:ietf:params:oauth:token-type:saml2");
         samlResponse.setExpires_in(ZonedDateTime.of(LocalDateTime.MAX, ZoneId.systemDefault()));
 
-        return Response.status(Response.Status.OK).entity(samlResponse).header("Cache-Control", "no-store").header("Pragma", "no-cache").build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("Cache-Control", "no-store")
+                .header("Pragma", "no-cache")
+                .body(samlResponse);
     }
 
     public static class SAMLResponse {

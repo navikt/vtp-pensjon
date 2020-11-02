@@ -1,39 +1,31 @@
 package no.nav.pensjon.vtp.auth;
 
-import static java.util.Comparator.comparing;
-
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.apache.http.client.utils.URIBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.felles.KeyStoreTool;
 import no.nav.pensjon.vtp.felles.OidcTokenGenerator;
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
+import org.apache.http.client.utils.URIBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@JaxrsResource
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URISyntaxException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparing;
+
+@RestController
 @Api(tags = {"Openam"})
-@Path("/isso")
+@RequestMapping("/isso")
 public class Oauth2RestService {
 
     private static final Logger LOG = LoggerFactory.getLogger(Oauth2RestService.class);
@@ -49,22 +41,20 @@ public class Oauth2RestService {
         this.ansatteIndeks = ansatteIndeks;
     }
 
-    @GET
-    @Path("/oauth2/authorize")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
+    @GetMapping(value = "/oauth2/authorize", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE})
     @ApiOperation(value = "oauth2/authorize", notes = ("Mock impl av Oauth2 authorize"))
-    public Response authorize(
-            @Context HttpServletRequest req,
-            @Context HttpServletResponse resp,
-            @QueryParam("session") @DefaultValue("winssochain") String session,
-            @QueryParam("authIndexType") @DefaultValue("service") String authIndexType,
-            @QueryParam("authIndexValue") @DefaultValue("winssochain") String authIndexValue,
-            @QueryParam("response_type") @DefaultValue("code") String responseType,
-            @QueryParam("scope") @DefaultValue("openid") String scope,
-            @QueryParam("client_id") String clientId,
-            @QueryParam("state") String state,
-            @QueryParam("redirect_uri") String redirectUri) throws URISyntaxException {
-        LOG.info("kall mot oauth2/authorize med redirecturi " + redirectUri);
+    public ResponseEntity authorize(
+            HttpServletRequest req,
+            HttpServletResponse resp,
+            @RequestParam(defaultValue = "winssochain") String session,
+            @RequestParam(defaultValue ="service") String authIndexType,
+            @RequestParam(defaultValue ="winssochain") String authIndexValue,
+            @RequestParam(defaultValue ="code") String responseType,
+            @RequestParam(defaultValue ="openid") String scope,
+            @RequestParam String client_id,
+            @RequestParam String state,
+            @RequestParam String redirect_uri) throws URISyntaxException {
+        LOG.info("kall mot oauth2/authorize med redirecturi " + redirect_uri);
         Objects.requireNonNull(scope, "scope");
         if (!Objects.equals(scope, "openid")) {
             throw new IllegalArgumentException("Unsupported scope [" + scope + "], should be 'openid'");
@@ -74,17 +64,17 @@ public class Oauth2RestService {
             throw new IllegalArgumentException("Unsupported responseType [" + responseType + "], should be 'code'");
         }
 
-        Objects.requireNonNull(clientId, "client_id");
+        Objects.requireNonNull(client_id, "client_id");
         Objects.requireNonNull(state, "state");
-        Objects.requireNonNull(redirectUri, "redirectUri");
+        Objects.requireNonNull(redirect_uri, "redirect_uri");
 
-        URIBuilder uriBuilder = new URIBuilder(redirectUri);
+        URIBuilder uriBuilder = new URIBuilder(redirect_uri);
         uriBuilder.addParameter("scope", scope);
         uriBuilder.addParameter("state", state);
-        uriBuilder.addParameter("client_id", clientId);
+        uriBuilder.addParameter("client_id", client_id);
         uriBuilder.addParameter("iss", getIssuer());
-        uriBuilder.addParameter("redirect_uri", redirectUri);
-        clientIdCache.put(state, clientId);
+        uriBuilder.addParameter("redirect_uri", redirect_uri);
+        clientIdCache.put(state, client_id);
         if (!"".equals(req.getParameter("nonce"))) {
             nonceCache.put(state, req.getParameter("nonce"));
         }
@@ -97,13 +87,13 @@ public class Oauth2RestService {
         }
     }
 
-    private Response authorizeRedirect(URIBuilder location) throws URISyntaxException {
+    private ResponseEntity authorizeRedirect(URIBuilder location) throws URISyntaxException {
         // SEND JSON RESPONSE TIL OPENAM HELPER
         location.addParameter("code", "im-just-a-fake-code");
-        return Response.status(HttpServletResponse.SC_FOUND).location(location.build()).build();
+        return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(location.build()).build();
     }
 
-    private Response authorizeHtmlPage(URIBuilder location) {
+    private ResponseEntity authorizeHtmlPage(URIBuilder location) {
         String html = "<!DOCTYPE html>\n"
                 + "<html>\n" +
                 "<head>\n" +
@@ -126,47 +116,45 @@ public class Oauth2RestService {
                 "</body>\n" +
                 "</html>";
 
-        return Response.ok(html, MediaType.TEXT_HTML).build();
+        return ResponseEntity.ok(html);
     }
 
     // TODO (FC): Trengs denne fortsatt?
-    @POST
-    @Path("/oauth2/access_token")
-    @Produces({MediaType.APPLICATION_JSON})
+    @PostMapping(value = "/oauth2/access_token", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "oauth2/access_token", notes = ("Mock impl av Oauth2 access_token"))
-    public Response accessToken(
-            @Context HttpServletRequest req,
-            @FormParam("grant_type") String grantType,
-            @FormParam("realm") String realm,
-            @FormParam("code") String code,
-            @FormParam("refresh_token") String refreshToken,
-            @FormParam("redirect_uri") String redirectUri) {
-        if ("authorization_code".equals(grantType)) {
+    public ResponseEntity accessToken(
+            HttpServletRequest req,
+            @RequestParam String grant_type,
+            @RequestParam(required = false) String realm,
+            @RequestParam String code,
+            @RequestParam(required = false) String refresh_token,
+            @RequestParam String redirect_uri) {
+        if ("authorization_code".equals(grant_type)) {
             String token = createIdToken(req, code);
             LOG.info("Fikk parametere:" + req.getParameterMap().toString());
-            LOG.info("kall på /oauth2/access_token, opprettet token: " + token + " med redirect-url: " + redirectUri);
+            LOG.info("kall på /oauth2/access_token, opprettet token: " + token + " med redirect-url: " + redirect_uri);
             String generatedRefreshToken = "refresh:" + code;
             String generatedAccessToken = "access:" + code;
             Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken);
-            return Response.ok(oauthResponse).build();
-        } else if ("refresh_token".equals(grantType)) {
-            if (!refreshToken.startsWith("refresh:")) {
+            return ResponseEntity.ok(oauthResponse);
+        } else if ("refresh_token".equals(grant_type)) {
+            if (!refresh_token.startsWith("refresh:")) {
                 String message = "Invalid refresh token " + code;
                 LOG.error(message);
-                return Response.status(Response.Status.FORBIDDEN).entity(message).build();
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(message);
             } else {
-                String username = refreshToken.substring(8);
+                String username = refresh_token.substring(8);
                 String token = createIdToken(req, username);
                 LOG.info("Fikk parametere:" + req.getParameterMap().toString());
                 LOG.info("refresh-token-kall på /oauth2/access_token, opprettet nytt token: " + token);
                 String generatedRefreshToken = "refresh:" + username;
                 String generatedAccessToken = "access:" + username;
                 Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken);
-                return Response.ok(oauthResponse).build();
+                return ResponseEntity.ok(oauthResponse);
             }
         } else {
-            LOG.error("Unknown grant_type " + grantType);
-            return Response.serverError().entity("Unknown grant_type " + grantType).build();
+            LOG.error("Unknown grant_type " + grant_type);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown grant_type " + grant_type);
         }
 
     }
@@ -191,42 +179,33 @@ public class Oauth2RestService {
         return tokenGenerator.create();
     }
 
-    @GET
-    @Path("/isAlive.jsp")
-    @Produces(MediaType.TEXT_HTML)
-    public Response isAliveMock() {
+    @GetMapping(value = "/isAlive.jsp" ,produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity isAliveMock() {
         String isAlive = "Server is ALIVE";
-        return Response.ok(isAlive).build();
+        return ResponseEntity.ok(isAlive);
     }
 
-    @GET
-    @Path("/oauth2/../isAlive.jsp")
-    @Produces(MediaType.TEXT_HTML)
-    public Response isAliveMockRassUrl() {
+    @GetMapping(value = "/oauth2/../isAlive.jsp" ,produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity isAliveMockRassUrl() {
         String isAlive = "Server is ALIVE";
-        return Response.ok(isAlive).build();
+        return ResponseEntity.ok(isAlive);
     }
 
-    @GET
-    @Path("/oauth2/connect/jwk_uri")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(value = "/oauth2/connect/jwk_uri", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "oauth2/connect/jwk_uri", notes = ("Mock impl av Oauth2 jwk_uri"))
-    public Response authorize(@Context HttpServletRequest req) {
+    public ResponseEntity authorize(HttpServletRequest req) {
         LOG.info("kall på /oauth2/connect/jwk_uri");
         String jwks = KeyStoreTool.getJwks();
         LOG.info("JWKS: " + jwks);
-        return Response.ok(jwks).build();
+        return ResponseEntity.ok(jwks);
     }
 
     /**
      * brukes til autentisere bruker slik at en slipper å autentisere senere. OpenAM mikk-makk .
      */
-    @POST
-    @Path("/json/authenticate")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+    @PostMapping(value = "/json/authenticate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "json/authenticate", notes = ("Mock impl av OpenAM autenticate for service bruker innlogging"))
-    public Response serviceBrukerAuthenticate(@Context HttpServletRequest req,
+    public ResponseEntity serviceBrukerAuthenticate(HttpServletRequest req,
                                               @ApiParam("Liste over aksjonspunkt som skal bekreftes, inklusiv data som trengs for å løse de.") EndUserAuthenticateTemplate enduserTemplate) {
         LOG.info("kall på /json/authenticate");
         if (enduserTemplate == null) {
@@ -246,7 +225,7 @@ public class Oauth2RestService {
 
             template.setCallbacks(Arrays.asList(nameCallback, passwordCallback));
 
-            return Response.ok(template).build();
+            return ResponseEntity.ok(template);
         } else {
             // generer token som brukes til å bekrefte innlogging ovenfor openam
 
@@ -254,20 +233,18 @@ public class Oauth2RestService {
             // TODO generer unik session token?
 
             EndUserAuthenticateSuccess success = new EndUserAuthenticateSuccess("i-am-just-a-dummy-session-token-workaround", "/isso/console");
-            return Response.ok(success).build();
+            return ResponseEntity.ok(success);
         }
 
     }
 
-    @GET
-    @Path("/oauth2/.well-known/openid-configuration")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(value = "/oauth2/.well-known/openid-configuration", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Discovery url", notes = ("Mock impl av discovery urlen. "))
-    public Response wellKnown(@Context HttpServletRequest req) {
+    public ResponseEntity wellKnown(HttpServletRequest req) {
         LOG.info("kall på /oauth2/.well-known/openid-configuration");
         String baseUrl = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort();
         WellKnownResponse wellKnownResponse = new WellKnownResponse(baseUrl, getIssuer());
-        return Response.ok(wellKnownResponse).build();
+        return ResponseEntity.ok(wellKnownResponse);
     }
 
 }
