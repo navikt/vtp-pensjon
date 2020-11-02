@@ -7,12 +7,8 @@ import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.HeaderParam;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +26,7 @@ public class MicrosoftGraphApiMock {
     }
 
     @GetMapping(value= "/oidc/userinfo", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity userinfo(@HeaderParam("Authorization") String auth) {
+    public ResponseEntity userinfo(@RequestHeader("Authorization") String auth) {
         if (!auth.startsWith("Bearer access:")) {
             return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
@@ -53,7 +49,7 @@ public class MicrosoftGraphApiMock {
     }
 
     @GetMapping(value= "/v1.0/me", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity me(@HeaderParam("Authorization") String auth, @RequestParam String select) {
+    public ResponseEntity me(@RequestHeader("Authorization") String auth, @RequestParam String select) {
         if (!auth.startsWith("Bearer access:")) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)

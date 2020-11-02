@@ -79,11 +79,4 @@ public class JournalpostMock {
 
         return ResponseEntity.ok("OK");
     }
-
-
-
-
-
-
-
 }

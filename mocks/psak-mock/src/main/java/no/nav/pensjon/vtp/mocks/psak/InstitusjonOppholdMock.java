@@ -3,10 +3,10 @@ package no.nav.pensjon.vtp.mocks.psak;
 import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.ws.rs.HeaderParam;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 public class InstitusjonOppholdMock {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Institusjonsopphold> getIdenter(@HeaderParam("Nav-Personident") String requestIdent) {
+    public List<Institusjonsopphold> getIdenter(@RequestHeader("Nav-Personident") String requestIdent) {
         return new ArrayList<Institusjonsopphold>();
     }
 

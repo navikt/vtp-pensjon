@@ -2,13 +2,9 @@ package no.nav.pensjon.vtp.mocks.tps.aktoerregister.rest.api.v1;
 
 import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.HeaderParam;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +26,7 @@ public class AktoerIdentMock {
     private String personIdentMock = "12345678910";
     private String aktørIdMock = "1234567891011";
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, IdentinfoForAktoer> alleIdenterForIdenter(@HeaderParam(NAV_IDENTER_HEADER_KEY) Set<String> requestIdenter,
+    public Map<String, IdentinfoForAktoer> alleIdenterForIdenter(@RequestHeader(NAV_IDENTER_HEADER_KEY) Set<String> requestIdenter,
                                                                  @RequestParam(IDENTGRUPPE) String identgruppe,
                                                                  @RequestParam(GJELDENDE) boolean gjeldende,
                                                                  HttpServletResponse response) {

@@ -2,13 +2,9 @@ package no.nav.pensjon.vtp.mocks.psak.aktoerregister.rest.api.v1;
 
 import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.HeaderParam;
 import java.util.*;
 
 /**
@@ -34,7 +30,7 @@ public class PsakAktoerIdentMock {
     private String aktørIdMock = "1234567891011";
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, IdentinfoForAktoer> getIdenter(@HeaderParam(NAV_IDENTER_HEADER_KEY) Set<String> requestIdenter,
+    public Map<String, IdentinfoForAktoer> getIdenter(@RequestHeader(NAV_IDENTER_HEADER_KEY) Set<String> requestIdenter,
                                                       @NotNull  @RequestParam(IDENTGRUPPE) String identgruppe,
                                                       @NotNull  @RequestParam(GJELDENDE) boolean gjeldende) {
         validateRequest(requestIdenter);

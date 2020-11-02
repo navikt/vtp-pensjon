@@ -7,10 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.ws.rs.HeaderParam;
 
 @RestController
 @Api(tags = {"infotrygd-kontantstotte"})
@@ -20,7 +19,7 @@ public class InfotrygdKontantstotteMock {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "infotrygd-kontantstotte")
-    public ResponseEntity harBarnAktivKontantstøtte(@HeaderParam("fnr") String fnr) {
+    public ResponseEntity harBarnAktivKontantstøtte(@RequestHeader("fnr") String fnr) {
         LOG.info("infotrygd-kontantstotte. fnr: {}", fnr);
 
         return ResponseEntity.ok("{ \"harAktivKontantstotte\": false }");
