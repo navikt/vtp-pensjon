@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @Api(tags = {"LoginService"})
-@RequestMapping("/loginservice")
+@RequestMapping("/rest/loginservice")
 public class LoginService {
     private final PersonIndeks personIndeks;
 

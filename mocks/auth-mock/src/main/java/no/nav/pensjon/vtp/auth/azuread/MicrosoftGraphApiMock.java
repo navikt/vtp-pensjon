@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 
 @RestController
 @Api(tags = {"AzureAd"})
-@RequestMapping("/MicrosoftGraphApi")
+@RequestMapping("/rest/MicrosoftGraphApi")
 public class MicrosoftGraphApiMock {
     private final AnsatteIndeks ansatteIndeks;
 

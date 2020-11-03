@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/enonic")
+@RequestMapping("/rest/enonic")
 public class EnonicMock {
     private static final Logger logger = LoggerFactory.getLogger(EnonicMock.class);
 

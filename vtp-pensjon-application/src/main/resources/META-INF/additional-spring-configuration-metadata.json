@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "verbose",
+      "type": "java.lang.String",
+      "description": "Turns on verbose access logging."
+  }
+] }

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @Api(tags = {"Norg2 enheter"})
-@RequestMapping("/norg2/api/v1")
+@RequestMapping("/rest/norg2/api/v1")
 public class EnhetRestMock {
     private static final Logger LOG = LoggerFactory.getLogger(EnhetRestMock.class);
     private final EnheterIndeks enheterIndeks;

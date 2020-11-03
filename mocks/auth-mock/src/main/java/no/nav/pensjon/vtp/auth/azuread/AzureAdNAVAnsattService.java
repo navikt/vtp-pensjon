@@ -27,7 +27,7 @@ import static java.util.Comparator.comparing;
 
 @RestController
 @Api(tags = {"AzureAd"})
-@RequestMapping("/AzureAd")
+@RequestMapping("/rest/AzureAd")
 public class AzureAdNAVAnsattService {
     private static final Logger LOG = LoggerFactory.getLogger(AzureAdNAVAnsattService.class);
 

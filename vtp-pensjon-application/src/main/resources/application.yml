@@ -2,10 +2,6 @@ server:
   port: 8060
 cxf:
   path: /soap
-spring:
-  mvc:
-    servlet:
-      path: /rest
 pensjon:
   testdata:
     url: http://localhost:3000

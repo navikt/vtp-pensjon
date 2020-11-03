@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @Api(tags = {"InstitusjonOpphold"})
-@RequestMapping("/v1/person/institusjonsopphold")
+@RequestMapping("/rest/v1/person/institusjonsopphold")
 public class InstitusjonOppholdMock {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

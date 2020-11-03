@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @Api(tags = "Gsak repository")
-@RequestMapping("/api/sak")
+@RequestMapping("/rest/api/sak")
 public class SakRestTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(SakRestTjeneste.class);
 

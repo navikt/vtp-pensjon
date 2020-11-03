@@ -12,7 +12,7 @@ import java.util.Set;
 
 @RestController
 @Api(tags = {"aktoerregister"})
-@RequestMapping("/aktoerregister/api/v1/identer")
+@RequestMapping("/rest/aktoerregister/api/v1/identer")
 public class AktoerIdentMock {
 
     private static final String NAV_IDENTER_HEADER_KEY = "Nav-Personidenter";

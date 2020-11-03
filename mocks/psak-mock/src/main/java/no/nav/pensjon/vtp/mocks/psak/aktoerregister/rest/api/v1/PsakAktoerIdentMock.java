@@ -15,7 +15,7 @@ import java.util.*;
 
 @RestController
 @Api(tags = {"aktoerregister"})
-@RequestMapping("/psak/aktoerregister/api/v1/identer")
+@RequestMapping("/rest/psak/aktoerregister/api/v1/identer")
 public class PsakAktoerIdentMock {
 
     private static final String NAV_IDENTER_HEADER_KEY = "Nav-Personidenter";

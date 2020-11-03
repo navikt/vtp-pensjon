@@ -34,7 +34,7 @@
         },
         methods: {
             swaggerUrl: function () {
-                return this.getBackendHost + '/swagger';
+                return this.getBackendHost + '/swagger-ui/';
             }
         }
     }

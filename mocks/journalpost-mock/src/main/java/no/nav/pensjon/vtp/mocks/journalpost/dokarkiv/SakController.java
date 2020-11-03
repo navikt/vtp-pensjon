@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @Api(tags = {"Dokarkiv"})
-@RequestMapping("/api/v1")
+@RequestMapping("/rest/api/v1")
 public class SakController {
 
     @ApiOperation(value = "Finner saker for angitte søkekriterier", nickname = "finnSakerUsingGET", notes = "", response = SakJson.class, responseContainer = "List", authorizations = {

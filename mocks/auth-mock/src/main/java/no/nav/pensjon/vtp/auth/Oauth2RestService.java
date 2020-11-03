@@ -25,7 +25,7 @@ import static java.util.Comparator.comparing;
 
 @RestController
 @Api(tags = {"Openam"})
-@RequestMapping("/isso")
+@RequestMapping("/rest/isso")
 public class Oauth2RestService {
 
     private static final Logger LOG = LoggerFactory.getLogger(Oauth2RestService.class);

@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @Api("/inntektskomponenten-ws/rs/api/v1/hentinntektlistebolk")
-@RequestMapping("/inntektskomponenten-ws/rs/api/v1/hentinntektlistebolk")
+@RequestMapping("/rest/inntektskomponenten-ws/rs/api/v1/hentinntektlistebolk")
 public class HentInntektlisteBolkREST {
     private static final Logger LOG = LoggerFactory.getLogger(HentInntektlisteBolkREST.class);
 

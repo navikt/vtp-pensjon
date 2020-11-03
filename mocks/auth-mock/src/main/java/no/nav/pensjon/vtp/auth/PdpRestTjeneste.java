@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 @RestController
 @Api(tags = { "ABAC-PDP-Mock" })
-@RequestMapping("/asm-pdp/authorize")
+@RequestMapping("/rest/asm-pdp/authorize")
 public class PdpRestTjeneste {
     private final static Logger LOG = LoggerFactory.getLogger(PdpRestTjeneste.class);
 
