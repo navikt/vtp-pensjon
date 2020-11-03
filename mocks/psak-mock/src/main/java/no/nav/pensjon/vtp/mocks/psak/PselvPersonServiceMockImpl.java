@@ -50,20 +50,13 @@ public class PselvPersonServiceMockImpl implements PSELVPerson {
     }
 
     private Optional<ASBOPenPerson> getASBOPerson(String fodselsnummer) {
-        return PsakpselvPersonAdapter.getPreviouslyConverted(fodselsnummer)
-                .or(() -> hentFraRepo(fodselsnummer))
+        return personIndeks.findByFødselsnummer(fodselsnummer)
+                .map(PsakpselvPersonAdapter::toASBOPerson)
                 .or(() -> logIkkeFunnet(fodselsnummer));
     }
 
-    private Optional<ASBOPenPerson> hentFraRepo(String fodselsnummer) {
-        return personIndeks.getAlleSøkere().parallelStream()
-                .filter(p -> p.getSøker().getIdent().equals(fodselsnummer))
-                .map(PsakpselvPersonAdapter::toASBOPerson)
-                .findFirst();
-    }
-
     private Optional<ASBOPenPerson> logIkkeFunnet(String fodselsnummer) {
-        logger.warn("Klarte ikke å finne person med fnr: " + fodselsnummer + " verken i repo eller blant konverterte: " + PsakpselvPersonAdapter.getPreviouslyConverted());
+        logger.warn("Klarte ikke å finne person med fnr: " + fodselsnummer);
         return Optional.empty();
     }
 
