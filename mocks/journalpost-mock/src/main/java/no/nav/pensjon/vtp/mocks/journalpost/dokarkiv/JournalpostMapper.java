@@ -117,11 +117,11 @@ public class JournalpostMapper {
     }
 
     private Journalposttyper mapJournalposttype(OpprettJournalpostRequest.JournalpostTypeEnum type){
-        if(type.value().equalsIgnoreCase("INNGAAENDE")){
+        if(type.toString().equalsIgnoreCase("INNGAAENDE")){
             return Journalposttyper.INNGAAENDE_DOKUMENT;
-        } else if (type.value().equalsIgnoreCase("UTGAAENDE")){
+        } else if (type.toString().equalsIgnoreCase("UTGAAENDE")){
             return Journalposttyper.UTGAAENDE_DOKUMENT;
-        } else if(type.value().equalsIgnoreCase("NOTAT"))          {
+        } else if(type.toString().equalsIgnoreCase("NOTAT"))          {
             return Journalposttyper.NOTAT;
         } else {
             throw new IllegalArgumentException("Verdi journalposttype ikke støttet");

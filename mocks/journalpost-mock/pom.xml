@@ -51,26 +51,25 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <!-- specify the swagger yaml -->
                             <inputSpec>${basedir}/src/main/swagger/swagger.json</inputSpec>
                             <!--<configHelp>true</configHelp>-->
-                            <language>jaxrs-cxf-cdi</language>
+
+                            <generateApis>false</generateApis>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateModelTests>false</generateModelTests>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+
+                            <language>jaxrs</language>
+                            <output>${project.basedir}</output>
 
                             <apiPackage>no.nav.dokarkiv.generated.api</apiPackage>
                             <modelPackage>no.nav.dokarkiv.generated.model</modelPackage>
                             <invokerPackage>no.nav.dokarkiv.generated</invokerPackage>
 
-                            <!--kun modell ... -->
-                            <generateApis>false</generateApis>
-                            <generateSupportingFiles>false</generateSupportingFiles>
-
-                            <!-- pass any necessary config options -->
                             <configOptions>
                                 <dateLibrary>java8</dateLibrary>
-                                <interfaceOnly>true</interfaceOnly>
-                                <java8>false</java8>
-                                <implFolder>ignore-this-folder</implFolder>
-                                <sourceFolder>src/main/java</sourceFolder>
+                                <java8>true</java8>
+                                <sourceFolder>target/generated-sources/swagger</sourceFolder>
                             </configOptions>
                         </configuration>
                     </execution>
