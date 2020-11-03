@@ -1,25 +1,21 @@
 package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.felles.KeyStoreTool;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
-
 import org.jose4j.jwk.RsaJsonWebKey;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.NumericDate;
 import org.jose4j.lang.JoseException;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.HtmlUtils;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -27,9 +23,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@JaxrsResource
+@RestController
 @Api(tags = {"LoginService"})
-@Path("/loginservice")
+@RequestMapping("/loginservice")
 public class LoginService {
     private final PersonIndeks personIndeks;
 
@@ -37,9 +33,8 @@ public class LoginService {
         this.personIndeks = personIndeks;
     }
 
-    @GET
-    @Path("/login")
-    public Response login(@QueryParam("redirect") String redirect) {
+    @GetMapping(value = "/login")
+    public ResponseEntity login(@RequestParam("redirect") String redirect) {
         List<String> rows = personIndeks.getAlleSøkere().parallelStream()
                 .map(p -> {
                     String fnr = p.getSøker().getIdent();
@@ -64,12 +59,11 @@ public class LoginService {
                 "</body>" +
                 "</html>";
 
-        return Response.ok(html, MediaType.TEXT_HTML).build();
+        return ResponseEntity.ok(html);
     }
 
-    @GET
-    @Path("/login-redirect-with-cookie")
-    public Response doLogin(@QueryParam("redirect") String redirect, @QueryParam("fnr") String fnr) throws URISyntaxException, JoseException {
+    @GetMapping(value = "/login-redirect-with-cookie")
+    public ResponseEntity doLogin(@RequestParam("redirect") String redirect, @RequestParam("fnr") String fnr) throws URISyntaxException, JoseException {
         NumericDate now = NumericDate.now();
         JwtClaims claims = new JwtClaims();
 
@@ -96,21 +90,13 @@ public class LoginService {
 
         String token = jws.getCompactSerialization();
 
-        NewCookie cookie = new NewCookie(
-                "selvbetjening-idtoken",
-                token,
-                "/",
-                null,
-                1,
-                null,
-                -1,
-                null,
-                false,
-                false);
+        HttpCookie cookie = ResponseCookie.from("selvbetjening-idtoken", token)
+                .path("/").maxAge(-1L).httpOnly(false).secure(false).build();
 
-        return Response
-                .temporaryRedirect(new URI(redirect))
-                .cookie(cookie)
+        return ResponseEntity
+                .status(HttpStatus.TEMPORARY_REDIRECT)
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .location(new URI(redirect))
                 .build();
     }
 }

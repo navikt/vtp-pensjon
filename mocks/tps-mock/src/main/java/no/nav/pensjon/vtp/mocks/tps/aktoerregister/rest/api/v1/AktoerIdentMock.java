@@ -1,20 +1,18 @@
 package no.nav.pensjon.vtp.mocks.tps.aktoerregister.rest.api.v1;
 
 import io.swagger.annotations.Api;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-
-@JaxrsResource
+@RestController
 @Api(tags = {"aktoerregister"})
-@Path("/aktoerregister/api/v1/identer")
+@RequestMapping("/aktoerregister/api/v1/identer")
 public class AktoerIdentMock {
 
     private static final String NAV_IDENTER_HEADER_KEY = "Nav-Personidenter";
@@ -27,11 +25,10 @@ public class AktoerIdentMock {
     //TODO (TEAM FAMILIE) Lag mock-responser fra scenario NOSONAR
     private String personIdentMock = "12345678910";
     private String aktørIdMock = "1234567891011";
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Map<String, IdentinfoForAktoer> alleIdenterForIdenter(@HeaderParam(NAV_IDENTER_HEADER_KEY) Set<String> requestIdenter,
-                                                                 @QueryParam(IDENTGRUPPE) String identgruppe,
-                                                                 @QueryParam(GJELDENDE) boolean gjeldende,
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, IdentinfoForAktoer> alleIdenterForIdenter(@RequestHeader(NAV_IDENTER_HEADER_KEY) Set<String> requestIdenter,
+                                                                 @RequestParam(IDENTGRUPPE) String identgruppe,
+                                                                 @RequestParam(GJELDENDE) boolean gjeldende,
                                                                  HttpServletResponse response) {
 
         response.setHeader("Cache-Control", "no-cache");

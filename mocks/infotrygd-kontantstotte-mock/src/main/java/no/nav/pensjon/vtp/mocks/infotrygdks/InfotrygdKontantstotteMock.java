@@ -1,32 +1,27 @@
 package no.nav.pensjon.vtp.mocks.infotrygdks;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-
-@JaxrsResource
+@RestController
 @Api(tags = {"infotrygd-kontantstotte"})
-@Path("/infotrygd-kontantstotte/v1/harBarnAktivKontantstotte")
+@RequestMapping("/infotrygd-kontantstotte/v1/harBarnAktivKontantstotte")
 public class InfotrygdKontantstotteMock {
     private static final Logger LOG = LoggerFactory.getLogger(InfotrygdKontantstotteMock.class);
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "infotrygd-kontantstotte")
-    public Response harBarnAktivKontantstøtte(@HeaderParam("fnr") String fnr) {
+    public ResponseEntity harBarnAktivKontantstøtte(@RequestHeader("fnr") String fnr) {
         LOG.info("infotrygd-kontantstotte. fnr: {}", fnr);
 
-        return Response.status(200).entity("{ \"harAktivKontantstotte\": false }").build();
+        return ResponseEntity.ok("{ \"harAktivKontantstotte\": false }");
     }
 }

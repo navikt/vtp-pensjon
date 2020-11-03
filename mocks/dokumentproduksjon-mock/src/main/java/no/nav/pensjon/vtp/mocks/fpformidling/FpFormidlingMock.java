@@ -1,70 +1,51 @@
 package no.nav.pensjon.vtp.mocks.fpformidling;
 
-import java.util.*;
-
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import no.nav.pensjon.vtp.mocks.fpformidling.dto.*;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-import no.nav.pensjon.vtp.mocks.fpformidling.dto.BehandlingUuidDto;
-import no.nav.pensjon.vtp.mocks.fpformidling.dto.DokumentProdusertDto;
-import no.nav.pensjon.vtp.mocks.fpformidling.dto.DokumentbestillingDto;
-import no.nav.pensjon.vtp.mocks.fpformidling.dto.HentBrevmalerDto;
-import no.nav.pensjon.vtp.mocks.fpformidling.dto.TekstFraSaksbehandlerDto;
+import java.util.*;
 
-@JaxrsResource
+@RestController
 @Api("/fpformidling")
-@Path("/fpformidling")
+@RequestMapping("/fpformidling")
 public class FpFormidlingMock {
     private final Map<UUID, List<String>> dokumentProduksjon = new HashMap<>();
     private final Map<UUID, TekstFraSaksbehandlerDto> saksbehandlerTekst = new HashMap<>();
 
-    @POST
-    @Path("/hent-dokumentmaler")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping(value = "/hent-dokumentmaler", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "HentDokumentmalListe", notes = ("Returnerer tilgjengelige dokumentmaler"))
-    public Response hentDokumentmalListe(BehandlingUuidDto request) {
-        return Response.ok(new HentBrevmalerDto(Collections.emptyList())).build();
+    public ResponseEntity hentDokumentmalListe(BehandlingUuidDto request) {
+        return ResponseEntity.ok(new HentBrevmalerDto(Collections.emptyList()));
     }
 
-    @POST
-    @Path("brev/maler")
-    @Produces("application/json")
+    @PostMapping(value = "brev/maler", produces = MediaType.APPLICATION_JSON_VALUE)
     public HentBrevmalerDto hentBrevmaler(BehandlingUuidDto uuidDto) {
         return new HentBrevmalerDto(Collections.emptyList());
     }
 
-    @POST
-    @Path("brev/dokument-sendt")
-    @Produces("application/json")
+    @PostMapping(value = "brev/dokument-sendt", produces = MediaType.APPLICATION_JSON_VALUE)
     public Boolean erDokumentSendt(DokumentProdusertDto request) {
         return dokumentProduksjon.getOrDefault(request.getBehandlingUuid(), List.of()).contains(request.getDokumentMal());
     }
 
-    @POST
-    @Path("brev/bestill")
-    @Produces("application/json")
+    @PostMapping(value = "brev/bestill", produces = MediaType.APPLICATION_JSON_VALUE)
     public void bestillDokument(DokumentbestillingDto request) {
         dokumentProduksjon.putIfAbsent(request.getBehandlingUuid(), new ArrayList<>());
         dokumentProduksjon.get(request.getBehandlingUuid()).add(request.getDokumentMal());
     }
 
-    @POST
-    @Path("saksbehandlertekst/hent")
-    @Produces("application/json")
+    @PostMapping(value = "saksbehandlertekst/hent", produces = MediaType.APPLICATION_JSON_VALUE)
     public TekstFraSaksbehandlerDto hentSaksbehandlersTekst(BehandlingUuidDto uuidDto) {
         return saksbehandlerTekst.getOrDefault(uuidDto.getBehandlingUuid(), null);
     }
 
-    @POST
-    @Path("saksbehandlertekst/lagre")
-    @Produces("application/json")
+    @PostMapping(value = "saksbehandlertekst/lagre", produces = MediaType.APPLICATION_JSON_VALUE)
     public void lagreSaksbehandlersTekst(TekstFraSaksbehandlerDto request) {
         saksbehandlerTekst.put(request.getBehandlingUuid(), request);
     }

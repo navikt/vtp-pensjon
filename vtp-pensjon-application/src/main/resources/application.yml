@@ -3,9 +3,9 @@ server:
 cxf:
   path: /soap
 spring:
-  jersey:
-    application-path: /rest
-
+  mvc:
+    servlet:
+      path: /rest
 pensjon:
   testdata:
     url: http://localhost:3000

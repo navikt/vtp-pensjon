@@ -1,22 +1,21 @@
 package no.nav.pensjon.vtp.mocks.psak.aktoerregister.rest.api.v1;
 
 import io.swagger.annotations.Api;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.*;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 
 /**
  * Dette er en kopi av AktoerIdentMock med endepunkt som forventer ingen payload.
  * Vi beholder den opprinnelige AktoerIdentMock for å ikke knekke FP-løsningen
  */
 //TODO avklare denne med FP
-@JaxrsResource
+
+@RestController
 @Api(tags = {"aktoerregister"})
-@Path("/psak/aktoerregister/api/v1/identer")
+@RequestMapping("/psak/aktoerregister/api/v1/identer")
 public class PsakAktoerIdentMock {
 
     private static final String NAV_IDENTER_HEADER_KEY = "Nav-Personidenter";
@@ -30,11 +29,10 @@ public class PsakAktoerIdentMock {
     private String personIdentMock = "12345678910";
     private String aktørIdMock = "1234567891011";
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Map<String, IdentinfoForAktoer> getIdenter(@HeaderParam(NAV_IDENTER_HEADER_KEY) Set<String> requestIdenter,
-                                                      @NotNull  @QueryParam(IDENTGRUPPE) String identgruppe,
-                                                      @NotNull  @QueryParam(GJELDENDE) boolean gjeldende) {
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, IdentinfoForAktoer> getIdenter(@RequestHeader(NAV_IDENTER_HEADER_KEY) Set<String> requestIdenter,
+                                                      @NotNull  @RequestParam(IDENTGRUPPE) String identgruppe,
+                                                      @NotNull  @RequestParam(GJELDENDE) boolean gjeldende) {
         validateRequest(requestIdenter);
         Identinfo identinfo;
         if (AKTOERID_IDENTGRUPPE.equals(identgruppe)) {

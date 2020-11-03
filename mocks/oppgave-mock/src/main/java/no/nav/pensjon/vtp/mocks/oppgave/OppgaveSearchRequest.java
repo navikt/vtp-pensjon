@@ -1,173 +1,168 @@
 package no.nav.pensjon.vtp.mocks.oppgave;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiParam;
 import no.nav.pensjon.vtp.mocks.oppgave.infrastruktur.validering.*;
 
 import javax.validation.constraints.Max;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.QueryParam;
-
 import java.util.List;
 
 
 @AtleastOneOf(fields = {"statuskategori", "statuser", "aktoerId", "orgnr", "bnr", "samhandlernr"})
 public class OppgaveSearchRequest {
 
-    @QueryParam("erUtenMappe")
+    @JsonProperty("erUtenMappe")
     @ApiParam(value = "erUtenMappe", example = "true")
     private Boolean erUtenMappe;
 
-    @QueryParam("opprettetAv")
+    @JsonProperty("opprettetAv")
     @ApiParam(value = "Hvem som har opprettet oppgaven", example = "Z990695")
     private String opprettetAv;
 
-    @QueryParam("tildeltRessurs")
+    @JsonProperty("tildeltRessurs")
     @ApiParam(value = "Om oppgaven er tildelt en ressurs eller ikke", example = "false")
     private Boolean tildeltRessurs;
 
-    @QueryParam("ikkeTidligereTilordnetRessurs")
+    @JsonProperty("ikkeTidligereTilordnetRessurs")
     @ApiParam(value = "Oppgaven kan ikke tidligere ha vært tilordnet denne ressursen", example = "Z990695")
     private String ikkeTidligereTilordnetRessurs;
 
-    @QueryParam("tilordnetRessurs")
+    @JsonProperty("tilordnetRessurs")
     @ApiParam(value = "Hvilken ressurs oppgaven er tilordnet", example = "Z990695")
     private String tilordnetRessurs;
 
-    @QueryParam("behandlesAvApplikasjon")
+    @JsonProperty("behandlesAvApplikasjon")
     @ApiParam(value = "Hvilken applikasjon oppgaven behandles i, applikasjonskoder finnes i felles kodeverk", example = "AS36")
     private String behandlesAvApplikasjon;
 
     @IsoDateTime
-    @QueryParam("ferdigstiltFom")
+    @JsonProperty("ferdigstiltFom")
     @ApiParam(value = "Nedre grense for filtrering på ferdigstilt tidspunkt", example = "2018-05-24T13:49:00")
     private String ferdigstiltFom;
 
     @IsoDateTime
-    @QueryParam("ferdigstiltTom")
+    @JsonProperty("ferdigstiltTom")
     @ApiParam(value = "Øvre grense for filtrering på ferdigstilt tidspunkt", example = "2018-05-24T13:49:00")
     private String ferdigstiltTom;
 
     @IsoDateTime
-    @QueryParam("opprettetFom")
+    @JsonProperty("opprettetFom")
     @ApiParam(value = "Nedre grense for filtrering på opprettetTidspunkt", example = "2018-05-24T13:49:00")
     private String opprettetFom;
 
     @IsoDateTime
-    @QueryParam("opprettetTom")
+    @JsonProperty("opprettetTom")
     @ApiParam(value = "Øvre grense for filtrering på opprettetTidspunkt", example = "2018-05-25T15:00:00")
     private String opprettetTom;
 
     @IsoDate
-    @QueryParam("fristFom")
+    @JsonProperty("fristFom")
     @ApiParam(value = "Nedre grense for filtrering på fristFerdigstillelse", example = "2018-12-10")
     private String fristFom;
 
     @IsoDate
-    @QueryParam("fristTom")
+    @JsonProperty("fristTom")
     @ApiParam(value = "Øvre grense for filtrering på fristFerdigstillelse", example = "2018-12-21")
     private String fristTom;
 
     @IsoDate
-    @QueryParam("aktivDatoFom")
+    @JsonProperty("aktivDatoFom")
     @ApiParam(value = "Nedre grense for filtrering på aktivDato", example = "2018-12-30")
     private String aktivDatoFom;
 
     @IsoDate
-    @QueryParam("aktivDatoTom")
+    @JsonProperty("aktivDatoTom")
     @ApiParam(value = "Øvre grense for filtrering på aktivDato", example = "2018-11-25")
     private String aktivDatoTom;
 
-    @QueryParam("aktoerId")
+    @JsonProperty("aktoerId")
     @ApiParam(value = "Filtrering på oppgaver opprettet for en aktør (person)", example = "583957652")
     private String aktoerId;
 
-    @QueryParam("orgnr")
+    @JsonProperty("orgnr")
     @ApiParam(value = "Filtrering på oppgaver opprettet for en organisasjon", example = "917755736")
     private String orgnr;
 
-    @QueryParam("bnr")
+    @JsonProperty("bnr")
     @ApiParam(value = "Filtrering på oppgaver opprettet for et bostnummer", example = "11250199559")
     private String bnr;
 
-    @QueryParam("samhandlernr")
+    @JsonProperty("samhandlernr")
     @ApiParam(value = "Filtrering på oppgaver opprettet for en samhandler", example = "80000999999")
     private String samhandlernr;
 
-    @QueryParam("tema")
+    @JsonProperty("tema")
     @ApiParam(value = "Filtrering på tema (iht felles kodeverk), her kan flere temaer spesifiseres i samme søk", example = "FOR")
     private List<String> temaer;
 
-    @QueryParam("oppgavetype")
+    @JsonProperty("oppgavetype")
     @ApiParam(value = "Filtrering på oppgavetype (iht felles kodeverk), her kan flere oppgavetyper spesifiseres i samme søk", example = "JFR")
     private List<String> oppgavetyper;
 
-    @QueryParam("behandlingstema")
+    @JsonProperty("behandlingstema")
     @ApiParam(value = "Filtrering på behandlingstema (iht felles kodeverk)", example = "ab0317")
     private String behandlingstema;
 
-    @QueryParam("behandlingstype")
+    @JsonProperty("behandlingstype")
     @ApiParam(value = "Filtrering på behandlingstype (iht felles kodeverk)", example = "ae0106")
     private String behandlingstype;
 
-    @QueryParam("tildeltEnhetsnr")
+    @JsonProperty("tildeltEnhetsnr")
     @ApiParam(value = "Filtrering på tildelt enhet", example = "0100")
     private String tildeltEnhetsnr;
 
-    @QueryParam("opprettetAvEnhetsnr")
+    @JsonProperty("opprettetAvEnhetsnr")
     @ApiParam(value = "Filtrering på enhet som opprettet oppgaven", example = "0100")
     private String opprettetAvEnhetsnr;
 
-    @QueryParam("metadatanokkel")
+    @JsonProperty("metadatanokkel")
     @ApiParam(value = "Filtrering på metadatanøkkel", example = "REVURDERINGSTYPE")
     private MetadataKey metadatanokkel;
 
-    @QueryParam("metadataverdi")
+    @JsonProperty("metadataverdi")
     @ApiParam(value = "Filtrering på metadataverdi", example = "TILST_DOD")
     private List<String> metadataverdier;
 
-    @QueryParam("journalpostId")
+    @JsonProperty("journalpostId")
     @ApiParam(value = "Filtrering på journalpost", example = "8953456")
     private List<String> journalpostIds;
 
-    @QueryParam("saksreferanse")
+    @JsonProperty("saksreferanse")
     @ApiParam(value = "Filtrering på saksreferanse", example = "6764567")
     private List<String> saksreferanser;
 
-    @QueryParam("mappeId")
+    @JsonProperty("mappeId")
     @ApiParam(value = "Filtrering på mappe", example = "5435")
     private List<Long> mappeIds;
 
     @OneOrMoreOf(legalValues = {"OPPRETTET", "AAPNET", "UNDER_BEHANDLING", "FERDIGSTILT", "FEILREGISTRERT"}, name = "status")
-    @QueryParam("status")
+    @JsonProperty("status")
     @ApiParam(value = "Status på oppgaven, her kan flere statuser spesifiseres i samme søk", example = "FERDIGSTILT")
     private List<String> statuser;
 
     @OneOf(legalValues = {"AAPEN", "AVSLUTTET"}, name = "statuskategori")
-    @QueryParam("statuskategori")
+    @JsonProperty("statuskategori")
     @ApiParam(value = "Statuskategori er en kategorisering av statuser internt i oppgave, dvs at det kan søkes på enten AAPEN eller AVSLUTTET " +
             "og de relevante oppgave vil returneres uten at konsument trenger å spesifisere alle statuser som representerer " +
             "åpne oppgaver eller motsatt (avsluttede oppgaver)", example = "AAPEN")
     private String statuskategori;
 
     @OneOf(legalValues = {"ASC", "DESC"}, name = "sorteringsrekkefølge")
-    @QueryParam("sorteringsrekkefolge")
+    @JsonProperty(value = "sorteringsrekkefolge", defaultValue = "ASC")
     @ApiParam(value = "Rekkefølgen på de returnerte oppgavene", example = "ASC")
-    @DefaultValue("ASC")
     private String sorteringsrekkefolge;
 
     @OneOf(legalValues = {"OPPRETTET_TIDSPUNKT", "AKTIV_DATO", "FRIST", "ENDRET_TIDSPUNKT"}, name = "sorteringsfelt")
-    @QueryParam("sorteringsfelt")
+    @JsonProperty(value = "sorteringsfelt", defaultValue = "FRIST")
     @ApiParam(value = "Hvilket felt oppgavene sorteres etter", example = "ENDRET_TIDSPUNKT")
-    @DefaultValue("FRIST")
     private String sorteringsfelt;
 
-    @QueryParam("offset")
+    @JsonProperty("offset")
     @ApiParam(value = "Offset for paginering i søk", example = "10")
     private Long offset;
 
-    @QueryParam("limit")
+    @JsonProperty(value = "limit", defaultValue = "10")
     @ApiParam(value = "Begrensning i antall returnerte oppgaver", example = "10")
-    @DefaultValue("10")
     @Max(message = "{no.nav.oppgave.limit.Size}", value = 1000)
     private Long limit;
 

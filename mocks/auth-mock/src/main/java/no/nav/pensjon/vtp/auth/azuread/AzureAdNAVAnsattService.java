@@ -1,34 +1,33 @@
 package no.nav.pensjon.vtp.auth.azuread;
 
-import static java.util.Comparator.comparing;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse;
 import no.nav.pensjon.vtp.felles.AzureOidcTokenGenerator;
 import no.nav.pensjon.vtp.felles.KeyStoreTool;
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
-import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse;
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
-
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-@JaxrsResource
+import static java.util.Comparator.comparing;
+
+@RestController
 @Api(tags = {"AzureAd"})
-@Path("/AzureAd")
+@RequestMapping("/AzureAd")
 public class AzureAdNAVAnsattService {
     private static final Logger LOG = LoggerFactory.getLogger(AzureAdNAVAnsattService.class);
 
@@ -38,49 +37,41 @@ public class AzureAdNAVAnsattService {
         this.ansatteIndeks = ansatteIndeks;
     }
 
-    @GET
-    @Path("/isAlive")
-    @Produces(MediaType.TEXT_HTML)
-    public Response isAliveMock() {
+    @GetMapping(value = "/isAlive" ,produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity isAliveMock() {
         String isAlive = "Azure AD is OK";
-        return Response.ok(isAlive).build();
+        return ResponseEntity.ok(isAlive);
     }
 
-    @GET
-    @Path("/{tenant}/v2.0/.well-known/openid-configuration")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(value = "/{tenant}/v2.0/.well-known/openid-configuration", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Azure AD Discovery url", notes = ("Mock impl av Azure AD discovery urlen. "))
-    public Response wellKnown(@Context HttpServletRequest req, @PathParam("tenant") String tenant, @QueryParam("p") String profile) {
+    public ResponseEntity wellKnown(HttpServletRequest req, @PathVariable("tenant") String tenant, @RequestParam("p") String profile) {
         String baseUrl = getBaseUrl(req);
         String graphUrl = getGraphUrl(req);
         WellKnownResponse wellKnownResponse = new WellKnownResponse(baseUrl, graphUrl, tenant, profile);
-        return Response.ok(wellKnownResponse).build();
+        return ResponseEntity.ok(wellKnownResponse);
     }
 
-    @GET
-    @Path("/{tenant}/discovery/v2.0/keys")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(value = "/{tenant}/discovery/v2.0/keys", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "azureAd/discovery/keys", notes = ("Mock impl av Azure AD jwk_uri"))
-    public Response authorize(@Context HttpServletRequest req) {
+    public ResponseEntity authorize(HttpServletRequest req) {
         LOG.info("kall på /oauth2/connect/jwk_uri");
         String jwks = KeyStoreTool.getJwks();
         LOG.info("JWKS: " + jwks);
-        return Response.ok(jwks).build();
+        return ResponseEntity.ok(jwks);
     }
 
-    @POST
-    @Path("/{tenant}/oauth2/v2.0/token")
-    @Produces({MediaType.APPLICATION_JSON})
+    @PostMapping(value = "/{tenant}/oauth2/v2.0/token", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "azureAd/access_token", notes = ("Mock impl av Azure AD access_token"))
-    public Response accessToken(
-            @Context HttpServletRequest req,
-            @PathParam("tenant") String tenant,
-            @FormParam("grant_type") String grantType,
-            @FormParam("client_id") String clientId,
-            @FormParam("realm") String realm,
-            @FormParam("code") String code,
-            @FormParam("refresh_token") String refreshToken,
-            @FormParam("redirect_uri") String redirectUri) {
+    public ResponseEntity accessToken(
+            HttpServletRequest req,
+            @PathVariable("tenant") String tenant,
+            @RequestParam("grant_type") String grantType,
+            @RequestParam("client_id") String clientId,
+            @RequestParam("realm") String realm,
+            @RequestParam("code") String code,
+            @RequestParam("refresh_token") String refreshToken,
+            @RequestParam("redirect_uri") String redirectUri) {
         if ("authorization_code".equals(grantType)) {
             String token = createIdToken(code, tenant, clientId);
             String generatedRefreshToken = "refresh:" + code;
@@ -88,7 +79,7 @@ public class AzureAdNAVAnsattService {
             LOG.info("Fikk parametere:" + req.getParameterMap().toString());
             LOG.info("kall på /oauth2/access_token, opprettet token: " + token + " med redirect-url: " + redirectUri);
             Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken);
-            return Response.ok(oauthResponse).build();
+            return ResponseEntity.ok(oauthResponse);
         } else if ("refresh_token".equals(grantType)) {
             String usernameWithNonce = refreshToken.substring(8);
             String token = createIdToken(usernameWithNonce /*+ ";"*/, tenant, clientId);
@@ -97,10 +88,10 @@ public class AzureAdNAVAnsattService {
             String generatedRefreshToken = "refresh:" + usernameWithNonce;
             String generatedAccessToken = "access:" + usernameWithNonce;
             Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken);
-            return Response.ok(oauthResponse).build();
+            return ResponseEntity.ok(oauthResponse);
         } else {
             LOG.error("Unknown grant_type " + grantType);
-            return Response.serverError().entity("Unknown grant_type " + grantType).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown grant_type " + grantType);
         }
     }
 
@@ -136,20 +127,18 @@ public class AzureAdNAVAnsattService {
     // &nonce=xJDu2DjmaiFY8ivIakELFLVZDY6OivuE1GAUJ0fIEf0
     // &prompt=select_account
 
-    @GET
-    @Path("/{tenant}/v2.0/authorize")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
+    @GetMapping(value = "/{tenant}/v2.0/authorize", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE})
     @ApiOperation(value = "AzureAD/v2.0/authorize", notes = ("Mock impl av Azure AD authorize"))
-    public Response authorize(
-            @Context HttpServletRequest req,
-            @Context HttpServletResponse resp,
-            @PathParam("tenant") String tenant,
-            @QueryParam("response_type") @DefaultValue("code") String responseType,
-            @QueryParam("scope") @DefaultValue("openid") String scope,
-            @QueryParam("client_id") String clientId,
-            @QueryParam("state") String state,
-            @QueryParam("nonce") String nonce,
-            @QueryParam("redirect_uri") String redirectUri
+    public ResponseEntity authorize(
+            HttpServletRequest req,
+            HttpServletResponse resp,
+            @PathVariable("tenant") String tenant,
+            @RequestParam(value = "response_type", defaultValue = "code") String responseType,
+            @RequestParam(value = "scope", defaultValue = "openid") String scope,
+            @RequestParam("client_id") String clientId,
+            @RequestParam("state") String state,
+            @RequestParam("nonce") String nonce,
+            @RequestParam("redirect_uri") String redirectUri
     )
             throws Exception {
         LOG.info("kall mot AzureAD authorize med redirecturi " + redirectUri);
@@ -182,7 +171,7 @@ public class AzureAdNAVAnsattService {
         return authorizeHtmlPage(uriBuilder, nonce);
     }
 
-    private Response authorizeHtmlPage(URIBuilder location, String nonce) {
+    private ResponseEntity authorizeHtmlPage(URIBuilder location, String nonce) {
         String html = "<!DOCTYPE html>\n"
                 + "<html>\n" +
                 "<head>\n" +
@@ -205,14 +194,14 @@ public class AzureAdNAVAnsattService {
                 "</body>\n" +
                 "</html>";
 
-        return Response.ok(html, MediaType.TEXT_HTML).build();
+        return ResponseEntity.ok(html);
     }
 
-    private String getBaseUrl(@Context HttpServletRequest req) {
+    private String getBaseUrl(HttpServletRequest req) {
         return req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/rest/AzureAd";
     }
 
-    private String getGraphUrl(@Context HttpServletRequest req) {
+    private String getGraphUrl(HttpServletRequest req) {
         return req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/rest/MicrosoftGraphApi";
     }
 

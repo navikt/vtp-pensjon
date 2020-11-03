@@ -1,31 +1,24 @@
 package no.nav.pensjon.vtp.miscellaneous.api.scenario;
 
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.toList;
-
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static javax.ws.rs.core.Response.ok;
-import static javax.ws.rs.core.Response.status;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.TreeMap;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
-
-@JaxrsResource
+@RestController
 @Api(tags = { "Testscenario/templates" })
-@Path("/api/testscenario/templates")
+@RequestMapping("/api/testscenario/templates")
 public class TestscenarioTemplateRestTjeneste {
     private final TestscenarioTemplateRepository templateRepository;
 
@@ -33,8 +26,7 @@ public class TestscenarioTemplateRestTjeneste {
         this.templateRepository = templateRepository;
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "templates", notes = ("Liste av tilgjengelig Testscenario Templates"), response = TemplateReferanse.class, responseContainer = "List")
     public List<TemplateReferanse> listTestscenarioTemplates() {
         return templateRepository.getTemplates()
@@ -43,18 +35,16 @@ public class TestscenarioTemplateRestTjeneste {
             .collect(toList());
     }
 
-    @GET
-    @Path("/{key}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(value = "/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "templates", notes = ("Beskrivelse av template, inklusiv påkrevde variable (og evt. default verdier"), response = TemplateDto.class)
-    public Response beskrivTestscenarioTemplate(@PathParam("key") String key) {
+    public ResponseEntity beskrivTestscenarioTemplate(@PathVariable("key") String key) {
         return templateRepository.finn(key)
                 .map(template -> {
                     final TreeMap<String, String> map = new TreeMap<>();
                     template.getDefaultVars().forEach(map::putIfAbsent);
                     template.getExpectedVars().forEach(v -> map.putIfAbsent(v.getName(), null));
-                    return ok(new TemplateDto(key, template.getTemplateNavn(), map)).build();
+                    return ResponseEntity.ok(new TemplateDto(key, template.getTemplateNavn(), map));
                 })
-                .orElse(status(NOT_FOUND.getStatusCode(), "Template " + key + " ikke funnet").build());
+                .orElse(ResponseEntity.notFound().build());
     }
 }

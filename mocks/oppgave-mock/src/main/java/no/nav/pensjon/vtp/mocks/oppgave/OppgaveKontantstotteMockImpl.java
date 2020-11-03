@@ -1,27 +1,18 @@
 package no.nav.pensjon.vtp.mocks.oppgave;
 
+import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.container.ContainerRequestContext;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import io.swagger.annotations.*;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-
-@JaxrsResource
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-@Path("oppgave-kontantstotte/api/v1/oppgaver")
+@RestController
+@RequestMapping(value = "oppgave-kontantstotte/api/v1/oppgaver", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class OppgaveKontantstotteMockImpl {
     private static final Logger LOG = LoggerFactory.getLogger(OppgaveKontantstotteMockImpl.class);
 
@@ -34,8 +25,7 @@ public class OppgaveKontantstotteMockImpl {
             .medPrioritet(Prioritet.NORM)
             .medOppgavetype("BEH_SAK");
 
-    @GET
-    @Path("/{id}")
+    @GetMapping(value = "/{id}")
     @ApiOperation(value = "Henter oppgave for en gitt id", response = OppgaveJson.class)
     @ApiImplicitParams({@ApiImplicitParam(name = "X-Correlation-ID", required = true, dataType = "string", paramType = "header")})
     @ApiResponses(value = {
@@ -46,12 +36,12 @@ public class OppgaveKontantstotteMockImpl {
             @ApiResponse(code = 409, message = "Konflikt"),
             @ApiResponse(code = 500, message = "Ukjent feilsituasjon har oppstått i Oppgave")
     })
-    public Response hentOppgave(@PathParam("id") Long id, @Context ContainerRequestContext ctx) {
-        return Response.ok(new OppgaveJson(oppgaveMock.medId(id).build())).build();
+    public ResponseEntity hentOppgave(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(new OppgaveJson(oppgaveMock.medId(id).build()));
     }
 
 
-    @GET
+    @GetMapping()
     @ApiOperation(value = "Søk etter oppgaver", response = FinnOppgaveResponse.class)
     @ApiImplicitParams({@ApiImplicitParam(name = "X-Correlation-ID", required = true, dataType = "string", paramType = "header")})
     @ApiResponses(value = {
@@ -61,19 +51,15 @@ public class OppgaveKontantstotteMockImpl {
             @ApiResponse(code = 403, message = "Bruker er ikke autorisert for denne operasjonen"),
             @ApiResponse(code = 500, message = "Ukjent feilsituasjon har oppstått i Oppgave")
     })
-    public Response finnOppgaver(@Valid @BeanParam OppgaveSearchRequest searchRequest, @Context ContainerRequestContext ctx) {
-        LOG.info("Søker etter oppgaver for: {}", searchRequest);
-
-        return Response.ok()
-                .entity(new FinnOppgaveResponse(
+    public ResponseEntity finnOppgaver() {
+        return ResponseEntity.ok()
+                .body(new FinnOppgaveResponse(
                         List.of(new OppgaveJson(oppgaveMock.medId(123456789L).build())),
-                        1))
-                        .build();
+                        1));
     }
 
 
-    @PUT
-    @Path("/{id}")
+    @PutMapping("/{id}")
     @ApiOperation(value = "Endrer en eksisterende oppgave", response = OppgaveJson.class)
     @ApiImplicitParams({@ApiImplicitParam(name = "X-Correlation-ID", required = true, dataType = "string", paramType = "header")})
     @ApiResponses(value = {
@@ -84,13 +70,11 @@ public class OppgaveKontantstotteMockImpl {
             @ApiResponse(code = 409, message = "Konflikt"),
             @ApiResponse(code = 500, message = "Ukjent feilsituasjon har oppstått i Oppgave")
     })
-    public Response endreOppgave(@Valid @ApiParam(value = "Oppgaven som skal endres", required = true) OppgaveJson oppgaveJson,
-                                 @Context UriInfo uriInfo,
-                                 @PathParam("id") Long id,
-                                 @QueryParam("brukerId") @ApiParam(hidden = true) String brukerId,
-                                 @Context ContainerRequestContext ctx) {
+    public ResponseEntity endreOppgave(@Valid @ApiParam(value = "Oppgaven som skal endres", required = true) OppgaveJson oppgaveJson,
+                                 @PathVariable("id") Long id,
+                                 @RequestParam("brukerId") @ApiParam(hidden = true) String brukerId) {
 
         LOG.info("Mottatt endringsrequest: {}", oppgaveJson);
-        return Response.ok().entity(oppgaveJson).build();
+        return ResponseEntity.ok(oppgaveJson);
     }
 }

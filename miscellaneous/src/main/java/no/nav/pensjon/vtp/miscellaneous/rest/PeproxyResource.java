@@ -1,24 +1,24 @@
 package no.nav.pensjon.vtp.miscellaneous.rest;
 
-import static javax.ws.rs.client.ClientBuilder.newClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.client.Client;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+import java.net.URI;
 
 /**
  * Mock of https://github.com/navikt/peproxy
  */
-@JaxrsResource
-@Path("/peproxy")
-public class PeproxyResource {
-    private final Client client = newClient();
 
-    @GET
-    public String proxy(@HeaderParam("target") String target) {
-        return client.target(target).request().get(String.class);
+@RestController
+@RequestMapping("/peproxy")
+public class PeproxyResource {
+    private final RestTemplate client = new RestTemplate();
+
+    @GetMapping
+    public String proxy(@RequestHeader("target") String target) {
+        return client.getForEntity(URI.create(target), String.class).getBody();
     }
 }

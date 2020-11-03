@@ -1,24 +1,17 @@
 package no.nav.pensjon.vtp.mocks.oppgave;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import io.swagger.annotations.Api;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-
-@JaxrsResource
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@RestController
 @Api(tags = "Oppgave Mock")
-@Path("oppgave/api/v1/internal/alive")
+@RequestMapping("oppgave/api/v1/internal/alive")
 public class OppgaveInternalAliveMockImpl {
-    @GET
-    public Response isAlive() {
-        return Response.ok().build();
+    @GetMapping
+    public ResponseEntity isAlive() {
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,25 +1,25 @@
 package no.nav.pensjon.vtp.miscellaneous.api.journalforing;
 
-import java.time.LocalDateTime;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalstatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import no.nav.pensjon.vtp.testmodell.dokument.JournalpostModellGenerator;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId;
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalstatus;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-@JaxrsResource
+import java.time.LocalDateTime;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
+@RestController
 @Api(tags = "Journalføringsmock")
-@Path("/api/journalforing")
+@RequestMapping("/api/journalforing")
 public class JournalforingRestTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(JournalforingRestTjeneste.class);
 
@@ -35,11 +35,9 @@ public class JournalforingRestTjeneste {
         this.journalRepository = journalRepository;
     }
 
-    @POST
-    @Path("/foreldrepengesoknadxml/fnr/{fnr}/dokumenttypeid/{dokumenttypeid}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping(value = "/foreldrepengesoknadxml/fnr/{fnr}/dokumenttypeid/{dokumenttypeid}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = ("Lager en journalpost av type DokumenttypeId (se kilde for gyldige verdier, e.g. I000003). Innhold i journalpost legges ved som body."), response = JournalforingResultatDto.class)
-    public JournalforingResultatDto foreldrepengesoknadErketype(String xml, @PathParam(AKTORID_KEY) String fnr, @PathParam(DOKUMENTTYYPEID_KEY) DokumenttypeId dokumenttypeId){
+    public JournalforingResultatDto foreldrepengesoknadErketype(String xml, @PathVariable(AKTORID_KEY) String fnr, @PathVariable(DOKUMENTTYYPEID_KEY) DokumenttypeId dokumenttypeId){
 
 
 
@@ -54,9 +52,8 @@ public class JournalforingRestTjeneste {
         return res;
     }
 
-    @POST
-    @Path("/ustrukturertjournalpost/fnr/{fnr}/dokumenttypeid/{dokumenttypeid}")
-    public JournalforingResultatDto lagUstrukturertJournalpost(@PathParam(AKTORID_KEY) String fnr, @PathParam(DOKUMENTTYYPEID_KEY) DokumenttypeId dokumenttypeid, @QueryParam(JOURNALSTATUS) String journalstatus){
+    @PostMapping(value = "/ustrukturertjournalpost/fnr/{fnr}/dokumenttypeid/{dokumenttypeid}")
+    public JournalforingResultatDto lagUstrukturertJournalpost(@PathVariable(AKTORID_KEY) String fnr, @PathVariable(DOKUMENTTYYPEID_KEY) DokumenttypeId dokumenttypeid, @RequestParam(JOURNALSTATUS) String journalstatus){
         JournalpostModell journalpostModell = JournalpostModellGenerator.lagJournalpostUstrukturertDokument(fnr,dokumenttypeid);
         if(journalstatus != null && journalstatus.length() > 0){
             Journalstatus status = new Journalstatus(journalstatus);
@@ -74,13 +71,12 @@ public class JournalforingRestTjeneste {
     }
 
 
-    @POST
-    @Path("/knyttsaktiljournalpost/journalpostid/{journalpostid}/saksnummer/{saksnummer}")
-    public JournalforingResultatDto knyttSakTilJournalpost(@PathParam(JOURNALPOST_ID) String journalpostId, @PathParam(SAKSNUMMER) String saksnummer ){
+    @PostMapping(value = "/knyttsaktiljournalpost/journalpostid/{journalpostid}/saksnummer/{saksnummer}")
+    public JournalforingResultatDto knyttSakTilJournalpost(@PathVariable(JOURNALPOST_ID) String journalpostId, @PathVariable(SAKSNUMMER) String saksnummer ){
 
         LOG.info("Knytter sak: {} til journalpost: {}", saksnummer, journalpostId);
 
-        JournalpostModell journalpostModell = journalRepository.finnJournalpostMedJournalpostId(journalpostId).orElseThrow(()-> new NotFoundException("Kunne ikke finne journalpost"));
+        JournalpostModell journalpostModell = journalRepository.finnJournalpostMedJournalpostId(journalpostId).orElseThrow(()-> new ResponseStatusException(NOT_FOUND, "Kunne ikke finne journalpost"));
         journalpostModell.setSakId(saksnummer);
 
         JournalforingResultatDto res = new JournalforingResultatDto();

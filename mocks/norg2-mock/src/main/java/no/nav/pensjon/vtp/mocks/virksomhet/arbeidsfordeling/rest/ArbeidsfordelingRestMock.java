@@ -1,27 +1,22 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsfordeling.rest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
+import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
-import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
-import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
-
-@JaxrsResource
+@RestController
 @Api(tags = {"ArbeidsfordelingMock"})
-@Path("/norg2/api/v1/arbeidsfordeling")
+@RequestMapping("/norg2/api/v1/arbeidsfordeling")
 public class ArbeidsfordelingRestMock {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArbeidsfordelingRestMock.class);
@@ -32,10 +27,7 @@ public class ArbeidsfordelingRestMock {
         this.enheterIndeks = enheterIndeks;
     }
 
-    @POST
-    @Path("/enheter")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping(value = "/enheter", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "allenheter", notes = ("Returnerer enheter fra NORG2"))
     public ArbeidsfordelingResponse[] hentAlleEnheter(ArbeidsfordelingRequest request) {
         LOG.info(LOG_PREFIX, "allenheter");
@@ -52,10 +44,7 @@ public class ArbeidsfordelingRestMock {
         return true;
     }
 
-    @POST
-    @Path("/enheter/bestmatch")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping(value = "/enheter/bestmatch", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "finnenhet", notes = ("Returnerer  enheter fra NORG2"))
     public ArbeidsfordelingResponse[] finnEnhet(ArbeidsfordelingRequest request) {
         LOG.info(LOG_PREFIX, "bestmatch");

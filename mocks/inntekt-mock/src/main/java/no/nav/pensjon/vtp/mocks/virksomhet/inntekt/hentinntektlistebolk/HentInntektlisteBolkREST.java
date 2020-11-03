@@ -1,23 +1,8 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.inntekt.hentinntektlistebolk;
 
-import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
+import no.nav.pensjon.vtp.mocks.virksomhet.inntekt.hentinntektlistebolk.modell.HentInntektlisteBolkMapperRest;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
@@ -25,11 +10,22 @@ import no.nav.tjenester.aordningen.inntektsinformasjon.Aktoer;
 import no.nav.tjenester.aordningen.inntektsinformasjon.ArbeidsInntektIdent;
 import no.nav.tjenester.aordningen.inntektsinformasjon.request.HentInntektListeBolkRequest;
 import no.nav.tjenester.aordningen.inntektsinformasjon.response.HentInntektListeBolkResponse;
-import no.nav.pensjon.vtp.mocks.virksomhet.inntekt.hentinntektlistebolk.modell.HentInntektlisteBolkMapperRest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@JaxrsResource
+import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@RestController
 @Api("/inntektskomponenten-ws/rs/api/v1/hentinntektlistebolk")
-@Path("/inntektskomponenten-ws/rs/api/v1/hentinntektlistebolk")
+@RequestMapping("/inntektskomponenten-ws/rs/api/v1/hentinntektlistebolk")
 public class HentInntektlisteBolkREST {
     private static final Logger LOG = LoggerFactory.getLogger(HentInntektlisteBolkREST.class);
 
@@ -39,8 +35,7 @@ public class HentInntektlisteBolkREST {
         this.inntektYtelseIndeks = inntektYtelseIndeks;
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "HentInntektlisteBolk", notes = ("Returnerer inntektliste fra Inntektskomponenten"))
     public HentInntektListeBolkResponse hentInntektlisteBolk(HentInntektListeBolkRequest request){
 

@@ -1,51 +1,44 @@
 package no.nav.pensjon.vtp.mocks.tps.proxy.api.v1.innsyn;
 
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import io.swagger.annotations.Api;
-
-import no.nav.pensjon.vtp.core.annotations.JaxrsResource;
 import no.nav.pensjon.vtp.mocks.tps.proxy.api.v1.innsyn.dto.Personinfo;
 import no.nav.pensjon.vtp.mocks.tps.proxy.api.v1.innsyn.dto.Relasjon;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@JaxrsResource
-@Path("/api/v1/innsyn")
-@Produces(MediaType.APPLICATION_JSON)
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
+@RestController
+@RequestMapping(value = "/api/v1/innsyn", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = {"innsyn-controller"})
 public class InnsynMock {
-    @GET
-    @Path("/person")
-    public Personinfo hentPersoninfoForIdent(@NotNull @HeaderParam("Authorization") String authToken,
-                                             @NotNull @HeaderParam("Nav-Call-Id") String callId,
-                                             @NotNull @HeaderParam("Nav-Consumer-Id") String consumerId,
-                                             @NotNull @HeaderParam("Nav-Personident") String personident) {
+    @GetMapping("/person")
+    public Personinfo hentPersoninfoForIdent(@NotNull @RequestHeader("Authorization") String authToken,
+                                             @NotNull @RequestHeader("Nav-Call-Id") String callId,
+                                             @NotNull @RequestHeader("Nav-Consumer-Id") String consumerId,
+                                             @NotNull @RequestHeader("Nav-Personident") String personident) {
 
         return Personinfo.builder().build();
     }
 
-    @GET
-    @Path("/relasjon")
-    public List<Relasjon> hentRelasjonsinfoForIdent(@NotNull @HeaderParam("Authorization") String authToken,
-                                                    @NotNull @HeaderParam("Nav-Call-Id") String callId,
-                                                    @NotNull @HeaderParam("Nav-Consumer-Id") String consumerId,
-                                                    @NotNull @HeaderParam("Nav-Personident") String personident) {
+    @GetMapping("/relasjon")
+    public List<Relasjon> hentRelasjonsinfoForIdent(@NotNull @RequestHeader("Authorization") String authToken,
+                                                    @NotNull @RequestHeader("Nav-Call-Id") String callId,
+                                                    @NotNull @RequestHeader("Nav-Consumer-Id") String consumerId,
+                                                    @NotNull @RequestHeader("Nav-Personident") String personident) {
 
         return List.of(Relasjon.builder().build());
     }
 
-    @GET
-    @Path("/barn")
-    public List<Relasjon> hentBarneListeForIdent(@NotNull @HeaderParam("Authorization") String authToken,
-                                                    @NotNull @HeaderParam("Nav-Call-Id") String callId,
-                                                    @NotNull @HeaderParam("Nav-Consumer-Id") String consumerId,
-                                                    @NotNull @HeaderParam("Nav-Personident") String personident) {
+    @GetMapping("/barn")
+    public List<Relasjon> hentBarneListeForIdent(@NotNull @RequestHeader("Authorization") String authToken,
+                                                    @NotNull @RequestHeader("Nav-Call-Id") String callId,
+                                                    @NotNull @RequestHeader("Nav-Consumer-Id") String consumerId,
+                                                    @NotNull @RequestHeader("Nav-Personident") String personident) {
 
         return List.of(Relasjon.builder().build());
     }
