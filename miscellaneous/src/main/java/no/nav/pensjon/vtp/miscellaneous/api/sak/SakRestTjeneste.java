@@ -2,7 +2,7 @@ package no.nav.pensjon.vtp.miscellaneous.api.sak;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import no.nav.pensjon.vtp.mocks.virksomhet.sak.v1.GsakRepo;
+import no.nav.pensjon.vtp.mocks.oppgave.gask.sak.v1.GsakRepo;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
 import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sak;

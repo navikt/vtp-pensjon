@@ -103,16 +103,13 @@ public class PenPersonServiceMockImpl implements PENPerson {
     }
 
     private Optional<ASBOPenPerson> getASBOPenPerson(String fodselsnummer) {
-        return personIndeks.getAlleSøkere().parallelStream()
-                        .filter(p -> p.getSøker().getIdent().equals(fodselsnummer))
+        return personIndeks.findByFødselsnummer(fodselsnummer)
                         .map(PsakpselvPersonAdapter::toASBOPerson)
-                        .findFirst()
-                        .or(() -> PsakpselvPersonAdapter.getPreviouslyConverted(fodselsnummer))
                         .or(() -> logIkkeFunnet(fodselsnummer));
     }
 
     private Optional<ASBOPenPerson> logIkkeFunnet(String fodselsnummer) {
-        LOG.warn("Klarte ikke å finne person med fnr: " + fodselsnummer + " verken i repo eller blant konverterte " + PsakpselvPersonAdapter.getPreviouslyConverted());
+        LOG.warn("Klarte ikke å finne person med fnr: " + fodselsnummer);
         return Optional.empty();
     }
 }
