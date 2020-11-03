@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.mocks.oppgave.gask.oppgavebehandling.v2;
 
+import static no.nav.pensjon.vtp.mocks.oppgave.gask.oppgavebehandling.v2.Mapper.asOppaveFoo;
+
 import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -10,7 +12,6 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFoo;
 import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveRepository;
 import no.nav.pensjon.vtp.mocks.oppgave.repository.Sporing;
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
@@ -29,6 +30,7 @@ import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.OpprettMappeRe
 import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.OpprettMappeResponse;
 import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.OpprettOppgaveBolkRequest;
 import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.OpprettOppgaveBolkResponse;
+import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.OpprettOppgaveRequest;
 import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.OpprettOppgaveResponse;
 import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.SlettMappeRequest;
 import no.nav.virksomhet.tjenester.oppgavebehandling.v2.ObjectFactory;
@@ -39,12 +41,10 @@ import no.nav.virksomhet.tjenester.oppgavebehandling.v2.Oppgavebehandling;
 @XmlSeeAlso({no.nav.virksomhet.tjenester.oppgavebehandling.feil.v2.ObjectFactory.class, ObjectFactory.class, no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")
 public class OppgaveBehandlingMock implements Oppgavebehandling {
-    private final AnsatteIndeks ansatteIndeks;
     private final EnheterIndeks enheterIndeks;
     private final OppgaveRepository oppgaveRepository;
 
-    public OppgaveBehandlingMock(AnsatteIndeks ansatteIndeks, EnheterIndeks enheterIndeks, OppgaveRepository oppgaveRepository) {
-        this.ansatteIndeks = ansatteIndeks;
+    public OppgaveBehandlingMock(EnheterIndeks enheterIndeks, OppgaveRepository oppgaveRepository) {
         this.enheterIndeks = enheterIndeks;
         this.oppgaveRepository = oppgaveRepository;
     }
@@ -65,15 +65,9 @@ public class OppgaveBehandlingMock implements Oppgavebehandling {
     @RequestWrapper(localName = "opprettOppgave", targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2", className = "no.nav.virksomhet.tjenester.oppgavebehandling.v2.OpprettOppgave")
     @ResponseWrapper(localName = "opprettOppgaveResponse", targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2", className = "no.nav.virksomhet.tjenester.oppgavebehandling.v2.OpprettOppgaveResponse")
     @WebResult(name = "response")
-    public no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.OpprettOppgaveResponse opprettOppgave(
-            @WebParam(name = "request")
-                    no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.OpprettOppgaveRequest request) {
-
-        Norg2Modell norg2Modell = enheterIndeks.finnByEnhetId("" + request.getOpprettetAvEnhetId())
-                .orElseThrow(() -> new IllegalArgumentException("Unknown enhet " + request.getOpprettetAvEnhetId()));
-
+    public OpprettOppgaveResponse opprettOppgave(@WebParam(name = "request") OpprettOppgaveRequest request) {
         OpprettOppgaveResponse response = new OpprettOppgaveResponse();
-        response.setOppgaveId(oppgaveRepository.saveOppgave(Mapper.asOppaveFoo(new Sporing("saksbeh", norg2Modell), request.getOpprettOppgave())));
+        response.setOppgaveId(oppgaveRepository.saveOppgave(asOppaveFoo(new Sporing("saksbeh", getNorg2Modell(request.getOpprettetAvEnhetId())), request.getOpprettOppgave())));
         return response;
     }
 
@@ -114,9 +108,7 @@ public class OppgaveBehandlingMock implements Oppgavebehandling {
      */
     @Override
     public void lagreOppgave(LagreOppgaveRequest request) {
-        request.getEndreOppgave().getVersjon();
-        //oppgaveRepository.saveOppgave();
-        throw new UnsupportedOperationException("Ikke implementert");
+        oppgaveRepository.saveOppgave(asOppaveFoo(new Sporing("saksbeh", getNorg2Modell(request.getEndretAvEnhetId())), request.getEndreOppgave()));
     }
 
     /**
@@ -141,5 +133,10 @@ public class OppgaveBehandlingMock implements Oppgavebehandling {
     @Override
     public FerdigstillOppgaveBolkResponse ferdigstillOppgaveBolk(FerdigstillOppgaveBolkRequest request) {
         throw new UnsupportedOperationException("Ikke implementert");
+    }
+
+    private Norg2Modell getNorg2Modell(int enhetId) {
+        return enheterIndeks.finnByEnhetId("" + enhetId)
+                .orElseThrow(() -> new IllegalArgumentException("Unknown enhet " + enhetId));
     }
 }

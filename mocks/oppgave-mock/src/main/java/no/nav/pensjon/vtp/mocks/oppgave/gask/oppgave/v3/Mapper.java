@@ -1,11 +1,21 @@
 package no.nav.pensjon.vtp.mocks.oppgave.gask.oppgave.v3;
 
+import static java.time.ZoneId.systemDefault;
+import static java.util.Optional.ofNullable;
+
+import static javax.xml.datatype.DatatypeFactory.newInstance;
+
+import static org.slf4j.LoggerFactory.getLogger;
+
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.slf4j.Logger;
 
 import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFoo;
 import no.nav.tjeneste.virksomhet.oppgave.v3.informasjon.oppgave.Bruker;
@@ -17,12 +27,12 @@ import no.nav.tjeneste.virksomhet.oppgave.v3.informasjon.oppgave.Oppgavetype;
 import no.nav.tjeneste.virksomhet.oppgave.v3.informasjon.oppgave.Prioritet;
 import no.nav.tjeneste.virksomhet.oppgave.v3.informasjon.oppgave.Sporingsdetalj;
 import no.nav.tjeneste.virksomhet.oppgave.v3.informasjon.oppgave.Underkategori;
-import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.OpprettOppgave;
 
 public class Mapper {
-    public static Oppgave asOppgave3(OppgaveFoo oppgaveFoo) {
-        OpprettOppgave oo = oppgaveFoo.getOpprettOppgave();
+    private static final DatatypeFactory datatypeFactory = getDatetypeFactory();
+    private static final Logger logger = getLogger(Mapper.class);
 
+    public static Oppgave asOppgave3(OppgaveFoo oo) {
         Oppgave o = new Oppgave();
 
         o.setAktivFra(asXMLGregorianCalendar(oo.getAktivFra()));
@@ -45,7 +55,7 @@ public class Mapper {
 
         o.setKravId(oo.getKravId());
 
-        o.setLest(oo.getLest());
+        o.setLest(oo.isLest());
 
         o.setMappe(asMappe(oo.getMappeId()));
         o.setMottattDato(asXMLGregorianCalendar(oo.getMottattDato()));
@@ -53,7 +63,7 @@ public class Mapper {
         o.setNormDato(asXMLGregorianCalendar(oo.getNormDato()));
 
         o.setOppfolging(oo.getOppfolging());
-        o.setOppgaveId(oppgaveFoo.getOppgaveId());
+        o.setOppgaveId(oo.getOppgaveId());
         o.setOppgavetype(asOppgavetype(oo.getOppgavetypeKode()));
 
         o.setPrioritet(asPrioritet(oo.getPrioritetKode()));
@@ -64,15 +74,23 @@ public class Mapper {
         o.setSkannetDato(asXMLGregorianCalendar(oo.getSkannetDato()));
         o.setSoknadsId(oo.getSoknadsId());
 
-        o.setSporing(asSporing(oppgaveFoo));
+        o.setSporing(asSporing(oo));
         //o.setStatus();
 
-        o.setVersjon(oppgaveFoo.getVersion());
+        o.setVersjon(oo.getVersion());
 
         o.setUnderkategori(asUnderkategori(oo.getUnderkategoriKode()));
         //o.setUtvidelse(oo.ut);
 
         return o;
+    }
+
+    private static XMLGregorianCalendar asXMLGregorianCalendar(LocalDate date) {
+        return ofNullable(date)
+                .map(localDate -> localDate.atStartOfDay(systemDefault()))
+                .map(GregorianCalendar::from)
+                .map(datatypeFactory::newXMLGregorianCalendar)
+                .orElse(null);
     }
 
     private static no.nav.tjeneste.virksomhet.oppgave.v3.informasjon.oppgave.Sporing asSporing(OppgaveFoo oppgaveFoo) {
@@ -131,16 +149,22 @@ public class Mapper {
         return fagomrade;
     }
 
+    private static DatatypeFactory getDatetypeFactory() {
+        try {
+            return newInstance();
+        } catch (DatatypeConfigurationException e) {
+            logger.error("Unable to create datetypefactory", e);
+            throw new RuntimeException(e);
+        }
+    }
+
     private static XMLGregorianCalendar asXMLGregorianCalendar(Calendar calendar) {
         if (calendar == null) {
             return null;
-        }
-        try {
+        } else {
             GregorianCalendar c = new GregorianCalendar();
             c.setTime(calendar.getTime());
-            return DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-        } catch (DatatypeConfigurationException e) {
-            throw new RuntimeException(e);
+            return datatypeFactory.newXMLGregorianCalendar(c);
         }
     }
 }
