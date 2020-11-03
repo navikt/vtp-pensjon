@@ -93,7 +93,7 @@ public class TestscenarioRestTjeneste {
 
                     pensjonTestdataService.opprettData(testscenario);
 
-                    return ResponseEntity.accepted()
+                    return ResponseEntity.status(HttpStatus.CREATED)
                             .body(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()));
                 })
                 .orElse(ResponseEntity.notFound().build());
@@ -104,7 +104,7 @@ public class TestscenarioRestTjeneste {
     public ResponseEntity initialiserTestScenario(String testscenarioJson) {
         Testscenario testscenario = testscenarioRepository.opprettTestscenarioFraJsonString(testscenarioJson, new HashMap<>());
         logger.info("Initialiserer testscenario med ekstern testdatadefinisjon. Opprettet med id: [{}] ", testscenario.getId());
-        return ResponseEntity.accepted()
+        return ResponseEntity.status(HttpStatus.CREATED)
                 .body(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()));
     }
 
