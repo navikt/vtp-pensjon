@@ -13,7 +13,7 @@ import java.util.*;
 
 @RestController
 @Api("/fpformidling")
-@RequestMapping("/fpformidling")
+@RequestMapping("/rest/fpformidling")
 public class FpFormidlingMock {
     private final Map<UUID, List<String>> dokumentProduksjon = new HashMap<>();
     private final Map<UUID, TekstFraSaksbehandlerDto> saksbehandlerTekst = new HashMap<>();

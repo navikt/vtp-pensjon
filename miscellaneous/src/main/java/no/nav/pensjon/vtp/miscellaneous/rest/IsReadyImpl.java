@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Api(tags = { "isReady" })
-@RequestMapping("/isReady")
+@RequestMapping("/rest/isReady")
 public class IsReadyImpl {
 
     @GetMapping(produces = MediaType.TEXT_PLAIN_VALUE)

@@ -20,7 +20,7 @@ import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 
 @RestController
 @Api(tags = {"Security Token Service"})
-@RequestMapping("/v1/sts")
+@RequestMapping("/rest/v1/sts")
 public class STSRestTjeneste {
     private final STSIssueResponseGenerator generator = new STSIssueResponseGenerator();
     private final SamlTokenGenerator samlTokenGenerator = new SamlTokenGenerator();

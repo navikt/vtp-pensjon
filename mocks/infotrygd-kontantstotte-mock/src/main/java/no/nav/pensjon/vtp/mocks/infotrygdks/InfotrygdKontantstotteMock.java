@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Api(tags = {"infotrygd-kontantstotte"})
-@RequestMapping("/infotrygd-kontantstotte/v1/harBarnAktivKontantstotte")
+@RequestMapping("/rest/infotrygd-kontantstotte/v1/harBarnAktivKontantstotte")
 public class InfotrygdKontantstotteMock {
     private static final Logger LOG = LoggerFactory.getLogger(InfotrygdKontantstotteMock.class);
 

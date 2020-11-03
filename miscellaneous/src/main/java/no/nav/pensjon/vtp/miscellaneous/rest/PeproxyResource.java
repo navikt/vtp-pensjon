@@ -13,7 +13,7 @@ import java.net.URI;
  */
 
 @RestController
-@RequestMapping("/peproxy")
+@RequestMapping("/rest/peproxy")
 public class PeproxyResource {
     private final RestTemplate client = new RestTemplate();
 

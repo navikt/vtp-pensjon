@@ -19,7 +19,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @Api(tags = "Journalføringsmock")
-@RequestMapping("/api/journalforing")
+@RequestMapping("/rest/api/journalforing")
 public class JournalforingRestTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(JournalforingRestTjeneste.class);
 

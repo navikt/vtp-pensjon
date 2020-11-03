@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @Api(tags = {"Infotrygdmock/grunnlag"})
-@RequestMapping("/infotrygd/grunnlag")
+@RequestMapping("/rest/infotrygd/grunnlag")
 public class InfotrygdGrunnlagMock {
     private static final Logger LOG = LoggerFactory.getLogger(InfotrygdGrunnlagMock.class);
     private static final String LOG_PREFIX = "InfotrygdGrunnlag Rest kall til {}";

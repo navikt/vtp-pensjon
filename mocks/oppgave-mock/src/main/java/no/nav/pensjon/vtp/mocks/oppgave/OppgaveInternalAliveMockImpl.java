@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Api(tags = "Oppgave Mock")
-@RequestMapping("oppgave/api/v1/internal/alive")
+@RequestMapping("/rest/oppgave/api/v1/internal/alive")
 public class OppgaveInternalAliveMockImpl {
     @GetMapping
     public ResponseEntity isAlive() {

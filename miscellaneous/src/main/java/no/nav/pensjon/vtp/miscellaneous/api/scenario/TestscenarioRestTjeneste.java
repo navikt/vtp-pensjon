@@ -25,7 +25,7 @@ import java.util.*;
 
 @RestController
 @Api(tags = {"Testscenario"})
-@RequestMapping("/api/testscenarios")
+@RequestMapping("/rest/api/testscenarios")
 public class TestscenarioRestTjeneste {
     private static final Logger logger = LoggerFactory.getLogger(TestscenarioRestTjeneste.class);
 

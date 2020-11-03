@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 
 @RestController
 @Api(tags = { "Testscenario/templates" })
-@RequestMapping("/api/testscenario/templates")
+@RequestMapping("/rest/api/testscenario/templates")
 public class TestscenarioTemplateRestTjeneste {
     private final TestscenarioTemplateRepository templateRepository;
 

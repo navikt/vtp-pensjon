@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @Api(tags = {"Dokarkiv"})
-@RequestMapping("/dokarkiv/rest/journalpostapi/v1")
+@RequestMapping("/rest/dokarkiv/rest/journalpostapi/v1")
 public class JournalpostMock {
     private static final Logger LOG = LoggerFactory.getLogger(JournalpostMock.class);
 

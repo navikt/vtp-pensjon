@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @Api(tags = {"Sigrun/beregnetskatt"})
-@RequestMapping("/api/beregnetskatt")
+@RequestMapping("/rest/api/beregnetskatt")
 public class SigrunMock {
     private static final Logger LOG = LoggerFactory.getLogger(SigrunMock.class);
 

@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @Api(tags = {"ArbeidsfordelingMock"})
-@RequestMapping("/norg2/api/v1/arbeidsfordeling")
+@RequestMapping("/rest/norg2/api/v1/arbeidsfordeling")
 public class ArbeidsfordelingRestMock {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArbeidsfordelingRestMock.class);

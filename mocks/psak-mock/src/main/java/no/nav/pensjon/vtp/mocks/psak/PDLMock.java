@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @Api(tags = {"PDL"})
-@RequestMapping("/graphql")
+@RequestMapping("/rest/graphql")
 public class PDLMock {
     private static final Logger LOG = LoggerFactory.getLogger(PDLMock.class);
 

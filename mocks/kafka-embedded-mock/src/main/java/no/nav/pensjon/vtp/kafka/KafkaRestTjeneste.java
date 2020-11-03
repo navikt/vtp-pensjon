@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Api(tags = "Kafka services")
-@RequestMapping("/api/kafka")
+@RequestMapping("/rest/api/kafka")
 public class KafkaRestTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(KafkaRestTjeneste.class);
 
