@@ -8,11 +8,12 @@ import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
-import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
@@ -83,7 +84,7 @@ public class EnhetRestMock {
 
             Norg2RsEnhet norg2RsEnhet = norg2RsEnheter(enheterIndeks.getAlleEnheter()).stream()
                     .filter(e -> e.getEnhetNr().equalsIgnoreCase(enhetsnummer))
-                    .findAny().orElseThrow(() -> new InvalidParameterException("Could not find enhet with id " + enhetsnummer));
+                    .findAny().orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Could not find enhet with id " + enhetsnummer));
             return ResponseEntity.ok(norg2RsEnhet);
     }
 
@@ -98,7 +99,7 @@ public class EnhetRestMock {
 
         Norg2RsEnhet norg2RsEnhet = norg2RsEnheter(enheterIndeks.getAlleEnheter()).stream()
                 .filter(e -> e.getEnhetNr().equalsIgnoreCase(enhetsnummer))
-                .findAny().orElseThrow(() -> new InvalidParameterException("Could not find enhet with id " + enhetsnummer));
+                .findAny().orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Could not find enhet with id " + enhetsnummer));
 
         Norg2RsOrganisering organisering = new Norg2RsOrganisering();
         Norg2RsSimpleEnhet organisererEnhet = new Norg2RsSimpleEnhet();
