@@ -10,11 +10,6 @@ export default new Router({
       path: '/',
       name: 'datascenarier',
       component: Datascenarier
-    },
-    {
-      path: '/soknader',
-      name: 'soeknader',
-      component: () => import('@/views/Soeknader.vue'),
     }
   ]
 })

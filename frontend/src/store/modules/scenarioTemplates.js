@@ -92,11 +92,6 @@ const actions = {
             .get(rootGetters.getApiUrl + "/testscenarios")
             .then(response => {
                 commit('setInitializedScenarios', response.data);
-                /*
-                response.data.forEach(function (data) {
-                    commit('addInitializedScenario', data)
-                });
-                */
             });
     },
     slettScenario: (context, scenarioId) => {
