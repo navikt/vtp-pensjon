@@ -16,8 +16,6 @@ import java.util.stream.Stream;
 public class PsakpselvPersonAdapter {
     private PsakpselvPersonAdapter(){}
 
-    private static final Map<String, ASBOPenPerson> PERSONER = new HashMap<>();
-
     public static ASBOPenPerson toASBOPerson(Personopplysninger personopplysninger) {
         ASBOPenPerson asboPenPerson = populateAsboPenPerson(personopplysninger.getSøker());
         asboPenPerson.setRelasjoner(fetchRelasjoner(personopplysninger));
@@ -62,7 +60,6 @@ public class PsakpselvPersonAdapter {
         utbetalingsinformasjon.setUtbetalingsType("NORKNT");
         asboPenPerson.setUtbetalingsinformasjon(utbetalingsinformasjon);
 
-        PERSONER.put(asboPenPerson.getFodselsnummer(), asboPenPerson);
         return asboPenPerson;
     }
 
@@ -109,14 +106,6 @@ public class PsakpselvPersonAdapter {
         ASBOPenPerson annen = new ASBOPenPerson();
         annen.setFodselsnummer(familierelasjon.getTil().getIdent());
         return annen;
-    }
-
-    public static Optional<ASBOPenPerson> getPreviouslyConverted(String foedselsnummer){
-        return Optional.ofNullable(PERSONER.get(foedselsnummer));
-    }
-
-    public static String getPreviouslyConverted(){
-        return PERSONER.keySet().toString();
     }
 
     private static Optional<GregorianCalendar> fetchDate(LocalDate date) {

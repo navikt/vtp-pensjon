@@ -3,17 +3,19 @@ package no.nav.pensjon.vtp.testmodell.personopplysning;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class PersonIndeks {
 
-    private Map<String, BrukerModell> byIdent = new HashMap<>();
-    private Map<String, BrukerModell> byAktørIdent = new HashMap<>();
-    private Map<String, Personopplysninger> byIdentPersonopplysninger = new HashMap<>();
+    private final Map<String, BrukerModell> byIdent = new HashMap<>();
+    private final Map<String, BrukerModell> byAktørIdent = new HashMap<>();
+    private final Map<String, Personopplysninger> byIdentPersonopplysninger = new HashMap<>();
 
     public PersonIndeks() {
     }
@@ -89,5 +91,9 @@ public class PersonIndeks {
 
     public synchronized Set<Personopplysninger> getAlleAnnenPart(){
         return byIdentPersonopplysninger.values().stream().filter(p -> p.getAnnenPart()!=null).collect(Collectors.toSet());
+    }
+
+    public Optional<Personopplysninger> findByFødselsnummer(String fodselsnummer) {
+        return Optional.ofNullable(byIdentPersonopplysninger.get(fodselsnummer));
     }
 }
