@@ -8,11 +8,9 @@ import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -80,12 +78,11 @@ public class EnhetRestMock {
             @io.swagger.annotations.ApiResponse(code = 404, message = "Not Found"),
             @io.swagger.annotations.ApiResponse(code = 500, message = "Internal Server Error")})
     public ResponseEntity getEnhetUsingGET(@PathVariable("enhetsnummer") String enhetsnummer){
-            LOG.info("kall på /norg2/api/v1/enhet/" + enhetsnummer);
-
-            Norg2RsEnhet norg2RsEnhet = norg2RsEnheter(enheterIndeks.getAlleEnheter()).stream()
+            return norg2RsEnheter(enheterIndeks.getAlleEnheter()).stream()
                     .filter(e -> e.getEnhetNr().equalsIgnoreCase(enhetsnummer))
-                    .findAny().orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Could not find enhet with id " + enhetsnummer));
-            return ResponseEntity.ok(norg2RsEnhet);
+                    .map(ResponseEntity::ok)
+                    .findAny()
+                    .orElse(ResponseEntity.ok(enEnhet(Long.parseLong(enhetsnummer))));
     }
 
     @GetMapping(value = "/enhet/{enhetsnummer}/organisering", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -95,11 +92,10 @@ public class EnhetRestMock {
             @io.swagger.annotations.ApiResponse(code = 404, message = "Not Found"),
             @io.swagger.annotations.ApiResponse(code = 500, message = "Internal Server Error")})
     public ResponseEntity getOrganiseringListeForEnhet(@PathVariable("enhetsnummer") String enhetsnummer){
-        LOG.info(String.format("kall på /norg2/api/v1/enhet/%s/organisering", enhetsnummer));
-
         Norg2RsEnhet norg2RsEnhet = norg2RsEnheter(enheterIndeks.getAlleEnheter()).stream()
                 .filter(e -> e.getEnhetNr().equalsIgnoreCase(enhetsnummer))
-                .findAny().orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Could not find enhet with id " + enhetsnummer));
+                .findAny()
+                .orElse(enEnhet(Long.parseLong(enhetsnummer)));
 
         Norg2RsOrganisering organisering = new Norg2RsOrganisering();
         Norg2RsSimpleEnhet organisererEnhet = new Norg2RsSimpleEnhet();
