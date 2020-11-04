@@ -39,8 +39,7 @@ public class EnhetRestMock {
             @io.swagger.annotations.ApiResponse(code = 404, message = "Not found"),
             @io.swagger.annotations.ApiResponse(code = 500, message = "Internal Server Error")})
     public ResponseEntity getArbeidsFordelinger(List<Fordeling> fordelinger, @RequestParam("skjermet") boolean skjermet) {
-        LOG.info("kall på /norg2/api/v1/arbeidsfordelinger med entitites:" + fordelinger);
-        return ResponseEntity.ok(fordelinger);
+        return ResponseEntity.ok(norg2RsEnheter(enheterIndeks.getAlleEnheter()));
     }
 
     @GetMapping(value = "/enhet", produces = MediaType.APPLICATION_JSON_VALUE)
