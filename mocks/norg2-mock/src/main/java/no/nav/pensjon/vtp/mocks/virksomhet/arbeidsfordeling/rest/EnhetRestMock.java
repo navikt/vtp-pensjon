@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsfordeling.rest;
 
 import io.swagger.annotations.Api;
+import no.nav.norg2.model.Norg2RsArbeidsfordeling;
 import no.nav.norg2.model.Norg2RsEnhet;
 import no.nav.norg2.model.Norg2RsOrganisering;
 import no.nav.norg2.model.Norg2RsSimpleEnhet;
@@ -38,8 +39,8 @@ public class EnhetRestMock {
             @io.swagger.annotations.ApiResponse(code = 400, message = "Bad request"),
             @io.swagger.annotations.ApiResponse(code = 404, message = "Not found"),
             @io.swagger.annotations.ApiResponse(code = 500, message = "Internal Server Error")})
-    public ResponseEntity getArbeidsFordelinger(List<Fordeling> fordelinger, @RequestParam("skjermet") boolean skjermet) {
-        return ResponseEntity.ok(norg2RsEnheter(enheterIndeks.getAlleEnheter()));
+    public ResponseEntity getArbeidsFordelinger(@RequestParam(value = "fordelinger", required = false, defaultValue = "") List<Fordeling> fordelinger, @RequestParam("skjermet") boolean skjermet) {
+        return ResponseEntity.ok(norg2RsArbeidsfordelinger(enheterIndeks.getAlleEnheter()));
     }
 
     @GetMapping(value = "/enhet", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -144,6 +145,21 @@ public class EnhetRestMock {
         norg2RsEnhet.setNavn("NAV Arbeid og ytelser Tønsberg");
         norg2RsEnhet.setOppgavebehandler(true);
         return norg2RsEnhet;
+    }
+
+    private List<Norg2RsArbeidsfordeling> norg2RsArbeidsfordelinger(Collection<Norg2Modell> enheter){
+        return enheter.stream()
+                .map(this::convertToArbeidsfordeling)
+                .collect(Collectors.toList());
+    }
+
+    private Norg2RsArbeidsfordeling convertToArbeidsfordeling(Norg2Modell modell) {
+        Norg2RsArbeidsfordeling norg2RsArbeidsfordeling = new Norg2RsArbeidsfordeling();
+        norg2RsArbeidsfordeling.setEnhetId(Long.parseLong(modell.getEnhetId()));
+        norg2RsArbeidsfordeling.setEnhetNr(modell.getEnhetId());
+        norg2RsArbeidsfordeling.setEnhetNavn(modell.getNavn());
+        norg2RsArbeidsfordeling.setDiskresjonskode(modell.getDiskresjonskode());
+        return norg2RsArbeidsfordeling;
     }
 
 }
