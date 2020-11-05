@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,7 +25,7 @@ public class PdpRestTjeneste {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "asm-pdp/authorize", notes = ("Mock impl av ABAC PDP authorize"))
-    public ResponseEntity authorize(String entity) throws IOException {
+    public ResponseEntity authorize(@RequestBody String entity) throws IOException {
         LOG.info("Invoke: autorize with entry: {}", entity);
         int permits = getPermits(entity);
         return ResponseEntity.ok(buildPermitResponse(permits));

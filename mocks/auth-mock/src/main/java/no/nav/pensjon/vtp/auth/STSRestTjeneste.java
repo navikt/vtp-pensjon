@@ -52,7 +52,7 @@ public class STSRestTjeneste {
     }
 
     @GetMapping(value = "/samltoken", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity dummyToken(HttpHeaders headers) throws Exception {
+    public ResponseEntity dummyToken(@RequestHeader HttpHeaders headers) throws Exception {
         String username = "CN=InternBruker,OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local";
 
         String samlToken = samlTokenGenerator.issueToken(username);
