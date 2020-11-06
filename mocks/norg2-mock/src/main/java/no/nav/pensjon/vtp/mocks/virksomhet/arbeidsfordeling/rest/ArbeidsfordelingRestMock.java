@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +30,7 @@ public class ArbeidsfordelingRestMock {
 
     @PostMapping(value = "/enheter", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "allenheter", notes = ("Returnerer enheter fra NORG2"))
-    public ArbeidsfordelingResponse[] hentAlleEnheter(ArbeidsfordelingRequest request) {
+    public ArbeidsfordelingResponse[] hentAlleEnheter(@RequestBody ArbeidsfordelingRequest request) {
         LOG.info(LOG_PREFIX, "allenheter");
         return enheterIndeks.getAlleEnheter().stream()
                 .filter(e -> skalEnhetMed(e, request.getTema()))
@@ -46,7 +47,7 @@ public class ArbeidsfordelingRestMock {
 
     @PostMapping(value = "/enheter/bestmatch", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "finnenhet", notes = ("Returnerer  enheter fra NORG2"))
-    public ArbeidsfordelingResponse[] finnEnhet(ArbeidsfordelingRequest request) {
+    public ArbeidsfordelingResponse[] finnEnhet(@RequestBody ArbeidsfordelingRequest request) {
         LOG.info(LOG_PREFIX, "bestmatch");
         List<String> spesielleDiskrKoder = List.of("UFB", "SPSF", "SPFO");
         List<Norg2Modell> resultat = new ArrayList<>();

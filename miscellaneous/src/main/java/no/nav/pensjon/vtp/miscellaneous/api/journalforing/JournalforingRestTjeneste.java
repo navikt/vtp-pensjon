@@ -37,7 +37,7 @@ public class JournalforingRestTjeneste {
 
     @PostMapping(value = "/foreldrepengesoknadxml/fnr/{fnr}/dokumenttypeid/{dokumenttypeid}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = ("Lager en journalpost av type DokumenttypeId (se kilde for gyldige verdier, e.g. I000003). Innhold i journalpost legges ved som body."), response = JournalforingResultatDto.class)
-    public JournalforingResultatDto foreldrepengesoknadErketype(String xml, @PathVariable(AKTORID_KEY) String fnr, @PathVariable(DOKUMENTTYYPEID_KEY) DokumenttypeId dokumenttypeId){
+    public JournalforingResultatDto foreldrepengesoknadErketype(@RequestBody String xml, @PathVariable(AKTORID_KEY) String fnr, @PathVariable(DOKUMENTTYYPEID_KEY) DokumenttypeId dokumenttypeId){
 
 
 

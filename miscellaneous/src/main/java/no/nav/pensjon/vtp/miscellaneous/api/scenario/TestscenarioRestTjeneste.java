@@ -73,13 +73,13 @@ public class TestscenarioRestTjeneste {
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value="", notes="Oppdaterer hele scenario som matcher id", response = TestscenarioDto.class)
-    public ResponseEntity oppdaterHeleScenario(@PathVariable(SCENARIO_ID) String id, TestscenarioDto testscenarioDto){
+    public ResponseEntity oppdaterHeleScenario(@PathVariable(SCENARIO_ID) String id, @RequestBody TestscenarioDto testscenarioDto){
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
     @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value="", notes="Oppdaterer deler av et scenario som matcher id", response = TestscenarioDto.class)
-    public ResponseEntity endreScenario(@PathVariable(SCENARIO_ID) String id, String patchArray){
+    public ResponseEntity endreScenario(@PathVariable(SCENARIO_ID) String id, @RequestBody String patchArray){
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
@@ -101,7 +101,7 @@ public class TestscenarioRestTjeneste {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = ("Initialiserer et testscenario basert på angitt json streng og returnerer det initialiserte objektet"), response = TestscenarioDto.class)
-    public ResponseEntity initialiserTestScenario(String testscenarioJson) {
+    public ResponseEntity initialiserTestScenario(@RequestBody String testscenarioJson) {
         Testscenario testscenario = testscenarioRepository.opprettTestscenarioFraJsonString(testscenarioJson, new HashMap<>());
         logger.info("Initialiserer testscenario med ekstern testdatadefinisjon. Opprettet med id: [{}] ", testscenario.getId());
         return ResponseEntity.status(HttpStatus.CREATED)

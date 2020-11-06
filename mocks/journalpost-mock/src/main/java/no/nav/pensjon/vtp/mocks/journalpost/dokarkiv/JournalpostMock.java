@@ -28,7 +28,7 @@ public class JournalpostMock {
 
     @PostMapping(value = "/journalpost")
     @ApiOperation(value = "lag journalpost")
-    public ResponseEntity lagJournalpost(OpprettJournalpostRequest opprettJournalpostRequest, @RequestParam("forsoekFerdigstill") Boolean forsoekFerdigstill) {
+    public ResponseEntity lagJournalpost(@RequestBody OpprettJournalpostRequest opprettJournalpostRequest, @RequestParam("forsoekFerdigstill") Boolean forsoekFerdigstill) {
         LOG.info("Dokarkiv. Lag journalpost. foersoekFerdigstill: {}", forsoekFerdigstill);
 
         JournalpostModell modell = new JournalpostMapper().tilModell(opprettJournalpostRequest);
@@ -53,7 +53,7 @@ public class JournalpostMock {
 
     @PutMapping("/journalpost/{journalpostid}")
     @ApiOperation(value = "Oppdater journalpost")
-    public ResponseEntity oppdaterJournalpost(OppdaterJournalpostRequest oppdaterJournalpostRequest, @PathVariable("journalpostid") String journalpostId){
+    public ResponseEntity oppdaterJournalpost(@RequestBody OppdaterJournalpostRequest oppdaterJournalpostRequest, @PathVariable("journalpostid") String journalpostId){
 
         LOG.info("Kall til oppdater journalpost: {}", journalpostId);
         Optional<JournalpostModell> journalpostModell = journalRepository.finnJournalpostMedJournalpostId(journalpostId);
@@ -69,7 +69,7 @@ public class JournalpostMock {
 
     @PatchMapping("/journalpost/{journalpostid}/ferdigstill")
     @ApiOperation(value = "Ferdigstill journalpost")
-    public ResponseEntity ferdigstillJournalpost(FerdigstillJournalpostRequest ferdigstillJournalpostRequest){
+    public ResponseEntity ferdigstillJournalpost(@RequestBody FerdigstillJournalpostRequest ferdigstillJournalpostRequest){
 
         String journalfoerendeEnhet = ferdigstillJournalpostRequest.getJournalfoerendeEnhet();
         LOG.info("Kall til ferdigstill journalpost på enhet: {}", journalfoerendeEnhet);

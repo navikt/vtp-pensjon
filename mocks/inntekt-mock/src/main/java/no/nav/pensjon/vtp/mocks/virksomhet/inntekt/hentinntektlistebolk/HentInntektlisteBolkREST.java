@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,7 +38,7 @@ public class HentInntektlisteBolkREST {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "HentInntektlisteBolk", notes = ("Returnerer inntektliste fra Inntektskomponenten"))
-    public HentInntektListeBolkResponse hentInntektlisteBolk(HentInntektListeBolkRequest request){
+    public HentInntektListeBolkResponse hentInntektlisteBolk(@RequestBody HentInntektListeBolkRequest request){
 
         List<Aktoer> identListe = request.getIdentListe();
         LOG.info("Henter inntekter for personer: {}", identListe.stream().map(Aktoer::getIdentifikator).collect(Collectors.joining(",")));
