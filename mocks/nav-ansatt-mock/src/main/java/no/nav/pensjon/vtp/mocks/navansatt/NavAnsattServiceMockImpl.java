@@ -1,17 +1,20 @@
 package no.nav.pensjon.vtp.mocks.navansatt;
 
-import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
-import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
-import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
-import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
-import no.nav.inf.psak.navansatt.*;
+import no.nav.inf.psak.navansatt.HentNAVAnsattEnhetListeFaultPenGeneriskMsg;
+import no.nav.inf.psak.navansatt.HentNAVAnsattEnhetListeFaultPenNAVAnsattIkkeFunnetMsg;
+import no.nav.inf.psak.navansatt.HentNAVAnsattFaultPenNAVAnsattIkkeFunnetMsg;
+import no.nav.inf.psak.navansatt.PSAKNAVAnsatt;
 import no.nav.lib.pen.psakpselv.asbo.ASBOPenFagomrade;
 import no.nav.lib.pen.psakpselv.asbo.ASBOPenFagomradeListe;
 import no.nav.lib.pen.psakpselv.asbo.navansatt.ASBOPenNAVAnsatt;
 import no.nav.lib.pen.psakpselv.asbo.navansatt.ASBOPenNAVAnsattListe;
 import no.nav.lib.pen.psakpselv.asbo.navorgenhet.ASBOPenNAVEnhet;
 import no.nav.lib.pen.psakpselv.asbo.navorgenhet.ASBOPenNAVEnhetListe;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
+import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
+import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
+import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
 
 import javax.jws.*;
 import javax.xml.ws.RequestWrapper;
@@ -99,7 +102,11 @@ public class NavAnsattServiceMockImpl implements PSAKNAVAnsatt {
     @WebResult(name = "hentNAVAnsattResponse")
     @Override
     public ASBOPenNAVAnsatt hentNAVAnsatt(@WebParam(name = "hentNAVAnsattRequest") ASBOPenNAVAnsatt asboPenNAVAnsatt) throws HentNAVAnsattFaultPenNAVAnsattIkkeFunnetMsg {
-        NAVAnsatt ansatt = ansatteIndeks.hentNAVAnsatt(asboPenNAVAnsatt.getAnsattId()).orElseThrow(() -> new HentNAVAnsattFaultPenNAVAnsattIkkeFunnetMsg("NAV-ansatt '" + asboPenNAVAnsatt.getAnsattId() + "' ikke funnet."));
+        NAVAnsatt ansatt = ansatteIndeks.hentNAVAnsatt(asboPenNAVAnsatt.getAnsattId())
+                .orElse(ansatteIndeks.hentAlleAnsatte()
+                .filter(a -> "PensjonSaksbehandler".equalsIgnoreCase(a.sn))
+                .findAny()
+                .orElseThrow(() -> new HentNAVAnsattFaultPenNAVAnsattIkkeFunnetMsg("NAV-ansatt '" + asboPenNAVAnsatt.getAnsattId() + "' ikke funnet")));
         asboPenNAVAnsatt.setAnsattNavn(ansatt.displayName);
         asboPenNAVAnsatt.setFornavn(ansatt.givenname);
         asboPenNAVAnsatt.setEtternavn(ansatt.sn);
