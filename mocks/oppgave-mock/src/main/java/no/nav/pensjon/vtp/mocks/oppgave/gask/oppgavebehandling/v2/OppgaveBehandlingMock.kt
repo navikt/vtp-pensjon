@@ -4,7 +4,7 @@ import no.nav.pensjon.vtp.core.annotations.SoapService
 import no.nav.pensjon.vtp.core.util.toLocalDate
 import no.nav.pensjon.vtp.core.util.toNullable
 import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFoo
-import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFooRepository
+import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFooBaseRepository
 import no.nav.pensjon.vtp.mocks.oppgave.repository.Sporing
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell
@@ -22,7 +22,7 @@ import javax.xml.ws.ResponseWrapper
 @WebService(targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2", name = "Oppgavebehandling")
 @XmlSeeAlso(ObjectFactory::class, no.nav.virksomhet.tjenester.oppgavebehandling.v2.ObjectFactory::class, no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.ObjectFactory::class)
 @HandlerChain(file = "/Handler-chain.xml")
-class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private val oppgaveRepository: OppgaveFooRepository) : Oppgavebehandling {
+class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private val oppgaveRepository: OppgaveFooBaseRepository) : Oppgavebehandling {
     /**
      *
      * Tjenesten lagreOppgaveBolk leveres av FGSAK. *

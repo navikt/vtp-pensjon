@@ -6,14 +6,14 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 @Repository
-class OppgaveRepository {
+class OppgaveRepository : OppgaveFooBaseRepository {
     private val oppgaver: MutableMap<String, OppgaveFoo> = ConcurrentHashMap()
 
-    fun findById(id: String): Optional<OppgaveFoo> = oppgaver[id].toOptional()
+    override fun findById(id: String): Optional<OppgaveFoo> = oppgaver[id].toOptional()
 
-    fun findAll() : Collection<OppgaveFoo> = oppgaver.values
+    override fun findAll() : Collection<OppgaveFoo> = oppgaver.values
 
-    fun save(oppgave: OppgaveFoo): OppgaveFoo {
+    override fun save(oppgave: OppgaveFoo): OppgaveFoo {
         oppgaver[oppgave.oppgaveId]
                 ?.takeIf(oppgave::hasDifferentVersion)
                 ?.let {
