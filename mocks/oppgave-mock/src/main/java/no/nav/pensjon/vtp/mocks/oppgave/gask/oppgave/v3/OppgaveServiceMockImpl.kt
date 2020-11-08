@@ -54,8 +54,19 @@ class OppgaveServiceMockImpl(private val oppgaveRepository: OppgaveRepository) :
     @ResponseWrapper(localName = "finnOppgaveListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgave/v3", className = "no.nav.tjeneste.virksomhet.oppgave.v3.FinnOppgaveListeResponse")
     override fun finnOppgaveListe(@WebParam(name = "request") finnOppgaveListeRequest: FinnOppgaveListeRequest): FinnOppgaveListeResponse =
             oppgaveRepository.findAll()
+                    .filter {
+                        finnOppgaveListeRequest.sok == null ||
+                                filterOppgave(finnOppgaveListeRequest.sok, it)
+                    }
                     .asOppgave3()
                     .asResponse()
+
+    private fun filterOppgave(sok: FinnOppgaveListeSok, oppgave: OppgaveFoo): Boolean {
+        return with(sok) {
+            (sakId == null || sakId == oppgave.saksnummer) &&
+                    (brukerId == null || brukerId == oppgave.brukerId)
+        }
+    }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/oppgave/v3/Oppgave_v3/finnFerdigstiltOppgaveListeRequest")
     @WebResult(name = "response")
