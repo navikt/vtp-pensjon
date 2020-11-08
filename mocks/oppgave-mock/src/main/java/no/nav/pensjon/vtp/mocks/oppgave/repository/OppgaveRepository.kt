@@ -1,17 +1,19 @@
 package no.nav.pensjon.vtp.mocks.oppgave.repository
 
+import no.nav.pensjon.vtp.core.util.toOptional
 import org.springframework.stereotype.Repository
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 @Repository
 class OppgaveRepository {
     private val oppgaver: MutableMap<String, OppgaveFoo> = ConcurrentHashMap()
 
-    fun findById(id: String): OppgaveFoo? = oppgaver[id]
+    fun findById(id: String): Optional<OppgaveFoo> = oppgaver[id].toOptional()
 
     fun findAll() : Collection<OppgaveFoo> = oppgaver.values
 
-    fun save(oppgave: OppgaveFoo): String {
+    fun save(oppgave: OppgaveFoo): OppgaveFoo {
         oppgaver[oppgave.oppgaveId]
                 ?.takeIf(oppgave::hasDifferentVersion)
                 ?.let {
@@ -22,6 +24,6 @@ class OppgaveRepository {
                 }
 
         oppgaver[oppgave.oppgaveId] = oppgave.withIncrementedVersion()
-        return oppgave.oppgaveId
+        return oppgave
     }
 }

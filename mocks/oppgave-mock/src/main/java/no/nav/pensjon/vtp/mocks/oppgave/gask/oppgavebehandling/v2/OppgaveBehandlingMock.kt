@@ -2,8 +2,9 @@ package no.nav.pensjon.vtp.mocks.oppgave.gask.oppgavebehandling.v2
 
 import no.nav.pensjon.vtp.core.annotations.SoapService
 import no.nav.pensjon.vtp.core.util.toLocalDate
+import no.nav.pensjon.vtp.core.util.toNullable
 import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFoo
-import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveRepository
+import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFooRepository
 import no.nav.pensjon.vtp.mocks.oppgave.repository.Sporing
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell
@@ -21,7 +22,7 @@ import javax.xml.ws.ResponseWrapper
 @WebService(targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2", name = "Oppgavebehandling")
 @XmlSeeAlso(ObjectFactory::class, no.nav.virksomhet.tjenester.oppgavebehandling.v2.ObjectFactory::class, no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.ObjectFactory::class)
 @HandlerChain(file = "/Handler-chain.xml")
-class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private val oppgaveRepository: OppgaveRepository) : Oppgavebehandling {
+class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private val oppgaveRepository: OppgaveFooRepository) : Oppgavebehandling {
     /**
      *
      * Tjenesten lagreOppgaveBolk leveres av FGSAK. *
@@ -78,7 +79,7 @@ class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private va
                     skannetDato = skannetDato?.toLocalDate(),
                     soknadsId = soknadsId,
                     underkategoriKode = underkategoriKode
-            )))
+            )).oppgaveId)
         }
     }
 
@@ -140,7 +141,7 @@ class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private va
     @RequestWrapper(localName = "lagreOppgave", targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2", className = "no.nav.virksomhet.tjenester.oppgavebehandling.v2.LagreOppgave")
     @ResponseWrapper(localName = "lagreOppgaveResponse", targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2", className = "no.nav.virksomhet.tjenester.oppgavebehandling.v2.LagreOppgaveResponse")
     override fun lagreOppgave(request: LagreOppgaveRequest) {
-        val oppgave = oppgaveRepository.findById(request.endreOppgave.oppgaveId)
+        val oppgave = oppgaveRepository.findById(request.endreOppgave.oppgaveId).toNullable()
                 ?: throw LagreOppgaveOppgaveIkkeFunnet("Oppgave med id=$request.endreOppgave.oppgaveId ikke funnet")
 
         with(request.endreOppgave) {

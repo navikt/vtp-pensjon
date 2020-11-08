@@ -1,10 +1,16 @@
 package no.nav.pensjon.vtp.mocks.oppgave.repository
 
+import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.Version
+import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDate
 import java.util.*
 
+@Document
 data class OppgaveFoo(
+    @Id
     val oppgaveId: String = UUID.randomUUID().toString(),
+    @Version
     val version: Int = 0,
     val opprettetSporing: Sporing?,
     val endretSporing: Sporing?,
