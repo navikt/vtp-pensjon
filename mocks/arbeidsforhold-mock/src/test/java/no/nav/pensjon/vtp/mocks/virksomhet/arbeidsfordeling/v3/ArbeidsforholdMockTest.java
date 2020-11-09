@@ -8,7 +8,8 @@ import org.junit.Test;
 import no.nav.pensjon.vtp.mocks.virksomhet.arbeidsforhold.v3.ArbeidsforholdMockImpl;
 import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
@@ -31,10 +32,11 @@ import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforhold
 public class ArbeidsforholdMockTest {
     private final PersonIndeks personIndeks = new PersonIndeks();
     private final InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
-    private final OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
+    private final OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
 
     private final TestscenarioRepository testscenarioRepository = new TestscenarioRepositoryImpl();
     private final TestscenarioService testRepo = getTestscenarioRepository();
+    private TestscenarioTemplateRepository templateRepository;
 
     private TestscenarioServiceImpl getTestscenarioRepository() {
         try {
@@ -42,13 +44,11 @@ public class ArbeidsforholdMockTest {
             VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
             TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks(), virksomhetIndeks);
             return new TestscenarioServiceImpl(
-                    testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks, organisasjonIndeks);
+                    testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks, organisasjonRepository);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-    private TestscenarioTemplateRepository templateRepository;
 
     @Before
     public void setup() {
@@ -75,8 +75,6 @@ public class ArbeidsforholdMockTest {
         Regelverker regelverk = new Regelverker();
         regelverk.setKodeverksRef("A_ORDNINGEN");
         finnArbeidsforholdPrArbeidstakerRequest.setRapportertSomRegelverk(regelverk);
-
-        testscenario.getSøkerInntektYtelse();
 
         try {
             arbeidsforholdMock.finnArbeidsforholdPrArbeidstaker(finnArbeidsforholdPrArbeidstakerRequest);

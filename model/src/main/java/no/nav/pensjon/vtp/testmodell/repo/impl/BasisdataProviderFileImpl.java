@@ -10,7 +10,7 @@ import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseModell;
@@ -77,15 +77,13 @@ public class BasisdataProviderFileImpl {
         return virksomhetIndeks;
     }
 
-    public static OrganisasjonIndeks loadOrganisasjoner() throws IOException {
+    public static void loadOrganisasjoner(final OrganisasjonRepository organisasjonRepository) throws IOException {
         final JsonMapper jsonMapper = new JsonMapper();
-        final OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
         try (InputStream is = BasisdataProviderFileImpl.class.getResourceAsStream("/basedata/organisasjon.json")) {
             TypeReference<List<OrganisasjonModell>> typeRef = new TypeReference<>() {
             };
             List<OrganisasjonModell> organisasjoner = jsonMapper.lagObjectMapper().readValue(is, typeRef);
-            organisasjonIndeks.leggTil(organisasjoner);
+            organisasjonRepository.saveAll(organisasjoner);
         }
-        return organisasjonIndeks;
     }
 }

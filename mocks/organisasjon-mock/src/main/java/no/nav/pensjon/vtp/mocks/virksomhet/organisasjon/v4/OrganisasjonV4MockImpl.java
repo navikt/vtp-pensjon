@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.binding.HentNoekkelinfoOrganisasjonUgyldigInput;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.binding.HentOrganisasjonUgyldigInput;
@@ -48,10 +48,10 @@ public class OrganisasjonV4MockImpl implements OrganisasjonV4 {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrganisasjonV4MockImpl.class);
 
-    private final OrganisasjonIndeks organisasjonIndeks;
+    private final OrganisasjonRepository organisasjonRepository;
 
-    public OrganisasjonV4MockImpl(OrganisasjonIndeks organisasjonIndeks) {
-        this.organisasjonIndeks = organisasjonIndeks;
+    public OrganisasjonV4MockImpl(OrganisasjonRepository organisasjonRepository) {
+        this.organisasjonRepository = organisasjonRepository;
     }
 
     @Override
@@ -97,7 +97,7 @@ public class OrganisasjonV4MockImpl implements OrganisasjonV4 {
         if (request.getOrgnummer() != null) {
             HentOrganisasjonResponse response = new HentOrganisasjonResponse();
             //response.setOrganisasjon(orggen.lagOrganisasjon(request.getOrgnummer()));
-            Optional<OrganisasjonModell> organisasjonModell = organisasjonIndeks.getOrganisasjon(request.getOrgnummer());
+            Optional<OrganisasjonModell> organisasjonModell = organisasjonRepository.findById(request.getOrgnummer());
             if (organisasjonModell.isPresent()) {
                 OrganisasjonModell modell = organisasjonModell.get();
                 Organisasjon organisasjon = OrganisasjonsMapper.mapOrganisasjonFraModell(modell);

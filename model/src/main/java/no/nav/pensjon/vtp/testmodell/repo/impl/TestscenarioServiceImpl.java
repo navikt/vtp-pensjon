@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModeller;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AnnenPartModell;
@@ -34,16 +34,16 @@ public class TestscenarioServiceImpl implements TestscenarioService {
     private final TestscenarioRepository testscenarioRepository;
     private final PersonIndeks personIndeks;
     private final InntektYtelseIndeks inntektYtelseIndeks;
-    private final OrganisasjonIndeks organisasjonIndeks;
+    private final OrganisasjonRepository organisasjonRepository;
 
 
     public TestscenarioServiceImpl(TestscenarioFraTemplateMapper mapper, TestscenarioRepository testscenarioRepository,
-            PersonIndeks personIndeks, InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonIndeks organisasjonIndeks) {
+            PersonIndeks personIndeks, InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonRepository organisasjonRepository) {
         this.mapper = mapper;
         this.testscenarioRepository = testscenarioRepository;
         this.personIndeks = personIndeks;
         this.inntektYtelseIndeks = inntektYtelseIndeks;
-        this.organisasjonIndeks = organisasjonIndeks;
+        this.organisasjonRepository = organisasjonRepository;
     }
 
 
@@ -87,7 +87,9 @@ public class TestscenarioServiceImpl implements TestscenarioService {
             personIndeks.indekserPersonopplysningerByIdent(personopplysninger);
             testScenario.getPersonligArbeidsgivere().forEach(personIndeks::leggTil);
 
-            inntektYtelseIndeks.leggTil(personopplysninger.getSøker().getIdent(), testScenario.getSøkerInntektYtelse());
+            if (personopplysninger.getSøker().getIdent() != null && testScenario.getSøkerInntektYtelse() != null) {
+                inntektYtelseIndeks.leggTil(personopplysninger.getSøker().getIdent(), testScenario.getSøkerInntektYtelse());
+            }
             if (personopplysninger.getAnnenPart() != null) {
                 inntektYtelseIndeks.leggTil(personopplysninger.getAnnenPart().getIdent(), testScenario.getAnnenpartInntektYtelse());
             }
@@ -96,7 +98,7 @@ public class TestscenarioServiceImpl implements TestscenarioService {
         OrganisasjonModeller organisasjonModeller = testScenario.getOrganisasjonModeller();
         if (organisasjonModeller != null) {
             List<OrganisasjonModell> modeller = organisasjonModeller.getModeller();
-            organisasjonIndeks.leggTil(modeller);
+            organisasjonRepository.saveAll(modeller);
         }
 
         return testscenarioRepository.save(testScenario);

@@ -24,9 +24,7 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.Arbeidsforhold
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.ArbeidsforholdModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
-import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidsgiverSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidstakerUgyldigInput;
-import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidstakerePrArbeidsgiverUgyldigInput;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.HentArbeidsforholdHistorikkArbeidsforholdIkkeFunnet;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.feil.ArbeidsforholdIkkeFunnet;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.feil.UgyldigInput;

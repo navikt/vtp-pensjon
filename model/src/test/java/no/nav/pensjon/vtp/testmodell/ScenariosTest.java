@@ -6,7 +6,8 @@ import org.junit.Test;
 
 import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
@@ -32,12 +33,12 @@ public class ScenariosTest {
         VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
         PersonIndeks personIndeks = new PersonIndeks();
         InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
-        OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
+        OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
 
         TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks(), virksomhetIndeks);
         TestscenarioRepository testscenarioRepository = new TestscenarioRepositoryImpl();
         TestscenarioServiceImpl testScenarioRepository = new TestscenarioServiceImpl(testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks,
-                organisasjonIndeks);
+                organisasjonRepository);
 
         templateRepository.getTemplates().forEach(sc -> {
             Testscenario testScenario = testScenarioRepository.opprettTestscenario(sc);

@@ -3,7 +3,6 @@ package no.nav.pensjon.vtp.application.configuration;
 import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadAdresser;
 import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadAnsatte;
 import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadEnheter;
-import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadOrganisasjoner;
 import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadVirksomheter;
 
 import java.io.IOException;
@@ -16,7 +15,6 @@ import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataServ
 import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataServiceImpl;
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateLoader;
@@ -33,11 +31,6 @@ public class RepositoryConfiguration {
     @Bean
     public AnsatteIndeks ansatteIndeks() {
         return loadAnsatte();
-    }
-
-    @Bean
-    public OrganisasjonIndeks organisasjonIndeks() throws IOException {
-        return loadOrganisasjoner();
     }
 
     @Bean
