@@ -17,6 +17,7 @@ import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepositoryInMemory;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModelRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
@@ -34,7 +35,7 @@ public class MuterScenarioTest {
         TestscenarioTemplateLoader loader = new TestscenarioTemplateLoader();
         TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl(loader.load());
 
-        PersonIndeks personIndeks = new PersonIndeks();
+        PersonIndeks personIndeks = new PersonIndeks(new BrukerModelRepositoryInMemory());
         InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
         OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
 

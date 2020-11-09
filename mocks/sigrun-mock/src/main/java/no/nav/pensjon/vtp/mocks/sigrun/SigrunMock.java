@@ -6,6 +6,7 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.sigrun.Inntektsår;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.sigrun.Oppføring;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,13 +38,18 @@ public class SigrunMock {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "beregnetskatt", notes = ("Returnerer beregnetskatt fra Sigrun"))
-    public ResponseEntity buildPermitResponse(@RequestHeader(value = "x-naturligident", required = false) String brukerFnr,
+    public ResponseEntity<?> buildPermitResponse(@RequestHeader(value = "x-naturligident", required = false) String brukerFnr,
                                               @RequestHeader(value = "x-inntektsaar", required = false) String inntektsAar,
                                               @RequestHeader(value = "x-aktoerid", required = false) String aktørId) {
         LOG.info("Sigrun for aktørId: {} ", aktørId);
 
         if (brukerFnr == null && aktørId != null) {
-            brukerFnr = personIndeks.finnByAktørIdent(aktørId).getIdent();
+            Optional<BrukerModell> brukerModell = personIndeks.finnByAktørIdent(aktørId);
+            if (brukerModell.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kunne ikke finne bruker");
+            } else {
+                brukerFnr = brukerModell.get().getIdent();
+            }
         } else if (brukerFnr == null) {
             LOG.info("sigrun. fnr eller aktoerid må være oppgitt.");
             return ResponseEntity.badRequest().body("Kan ikke ha tomt felt for både aktoerid og naturligident.");

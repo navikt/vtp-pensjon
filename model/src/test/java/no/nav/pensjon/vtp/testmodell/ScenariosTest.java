@@ -9,6 +9,7 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModelRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
@@ -31,7 +32,7 @@ public class ScenariosTest {
 
         AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
         VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
-        PersonIndeks personIndeks = new PersonIndeks();
+        PersonIndeks personIndeks = new PersonIndeks(new BrukerModelRepositoryInMemory());
         InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
         OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
 

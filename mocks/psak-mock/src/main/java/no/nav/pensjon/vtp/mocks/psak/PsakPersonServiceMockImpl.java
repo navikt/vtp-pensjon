@@ -37,7 +37,7 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
     ) throws FinnPersonFaultPenGeneriskMsg {
         ASBOPenFinnPersonResponse asboPenFinnPersonResponse = new ASBOPenFinnPersonResponse();
         ASBOPenPersonListe liste = new ASBOPenPersonListe();
-        liste.setPersoner(personIndeks.getAlleSøkere().parallelStream()
+        liste.setPersoner(personIndeks.getAlleSøkere()
                 .map(PsakpselvPersonAdapter::toASBOPerson)
                 .toArray(ASBOPenPerson[]::new));
 

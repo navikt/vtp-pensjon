@@ -16,6 +16,7 @@ import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModeller;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AnnenPartModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonNavn;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
@@ -82,7 +83,9 @@ public class TestscenarioServiceImpl implements TestscenarioService {
                 annenPart.setEtternavn(annenPartNavn.getEtternavn());
                 personIndeks.leggTil(annenPart);
             }
-            personIndeks.indekserFamilierelasjonBrukere(personopplysninger.getFamilierelasjoner());
+            for (FamilierelasjonModell fr : personopplysninger.getFamilierelasjoner()) {
+                personIndeks.leggTil(fr.getTil());
+            }
 
             personIndeks.indekserPersonopplysningerByIdent(personopplysninger);
             testScenario.getPersonligArbeidsgivere().forEach(personIndeks::leggTil);

@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.medlemskap.v2;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
@@ -73,8 +74,10 @@ public class MedlemServiceMockImpl implements MedlemskapV2 {
         LOG.info("hentPeriodeListe. IdentFNR: {}", request.getIdent().getValue());
         if (request.getIdent() != null) {
             String fnr = request.getIdent().getValue();
-            List<Medlemsperiode> medlemsperiodeListe = new MedlemskapperioderAdapter(personIndeks).finnMedlemsperioder(fnr);
-            HentPeriodeListeResponse response = new HentPeriodeListeResponse().withPeriodeListe(medlemsperiodeListe);
+            HentPeriodeListeResponse response = new HentPeriodeListeResponse();
+            new MedlemskapperioderAdapter(personIndeks)
+                    .finnMedlemsperioder(fnr)
+                    .ifPresent(response::withPeriodeListe);
             return response;
         }
         throw new IllegalArgumentException("Request eller ident i request mangler");

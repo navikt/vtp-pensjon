@@ -51,7 +51,7 @@ public class BehandleSak2ServiceMockImpl implements BehandleSakV2 {
 
         Set<String> identer = request.getSak().getGjelderBrukerListe().stream().map(WSAktor::getIdent).collect(Collectors.toSet());
 
-        List<PersonModell> personer = identer.stream().map(i -> (PersonModell) personIndeks.finnByIdent(i))
+        List<PersonModell> personer = identer.stream().map(i -> (PersonModell) personIndeks.finnByIdent(i).orElseThrow(() -> new RuntimeException("Person ikke funnet")))
             .collect(Collectors.toList());
 
         WSSak wsSak = request.getSak();

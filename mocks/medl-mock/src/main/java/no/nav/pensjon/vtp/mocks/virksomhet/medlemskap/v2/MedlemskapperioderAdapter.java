@@ -2,10 +2,10 @@ package no.nav.pensjon.vtp.mocks.virksomhet.medlemskap.v2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import no.nav.pensjon.vtp.felles.ConversionUtils;
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapperiodeModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.Medlemsperiode;
@@ -24,20 +24,17 @@ public class MedlemskapperioderAdapter {
         this.personIndeks = personIndeks;
     }
 
-    public List<Medlemsperiode> finnMedlemsperioder(String personIdent) {
-        if (personIdent != null) {
-            BrukerModell brukerModell = personIndeks.finnByIdent(personIdent);
-            if (brukerModell!=null && brukerModell instanceof PersonModell) {
-                PersonModell pm = (PersonModell)brukerModell;
-
-                List<Medlemsperiode> periodeListe = new ArrayList<>();
-                if(pm.getMedlemskap() != null && pm.getMedlemskap().getPerioder() != null) {
-                    pm.getMedlemskap().getPerioder().forEach(medlemsskapsperiode -> periodeListe.add(tilMedlemsperiode(medlemsskapsperiode)));
-                }
-                return periodeListe;
-            }
-        }
-        return null;
+    public Optional<List<Medlemsperiode>> finnMedlemsperioder(String personIdent) {
+        return personIndeks.finnByIdent(personIdent)
+                .filter(PersonModell.class::isInstance)
+                .map(PersonModell.class::cast)
+                .map(pm -> {
+                    List<Medlemsperiode> periodeListe = new ArrayList<>();
+                    if(pm.getMedlemskap() != null && pm.getMedlemskap().getPerioder() != null) {
+                        pm.getMedlemskap().getPerioder().forEach(medlemsskapsperiode -> periodeListe.add(tilMedlemsperiode(medlemsskapsperiode)));
+                    }
+                    return periodeListe;
+                });
     }
 
     private Medlemsperiode tilMedlemsperiode(MedlemskapperiodeModell medlemsskapsperiode) {

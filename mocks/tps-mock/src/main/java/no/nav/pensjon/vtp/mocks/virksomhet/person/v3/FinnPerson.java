@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.person.v3;
 
+import java.util.Optional;
+
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
@@ -18,24 +20,25 @@ public class FinnPerson {
 
     public PersonModell finnPerson(Aktoer aktoer) throws HentPersonPersonIkkeFunnet {
 
-        BrukerModell bruker;
+        Optional<BrukerModell> optionalBrukerModell;
         String ident;
         if (aktoer instanceof PersonIdent) {
             PersonIdent personIdent = (PersonIdent) aktoer;
             ident = personIdent.getIdent().getIdent();
-            bruker = personIndeks.finnByIdent(ident);
+            optionalBrukerModell = personIndeks.finnByIdent(ident);
         } else {
             AktoerId aktoerId = (AktoerId) aktoer;
             ident = aktoerId.getAktoerId();
-            bruker = personIndeks.finnByAktørIdent(ident);
+            optionalBrukerModell = personIndeks.finnByAktørIdent(ident);
         }
 
-        if (bruker == null) {
-            throw new HentPersonPersonIkkeFunnet("BrukerModell ikke funnet:" + ident, new PersonIkkeFunnet());
-        } else if (!(bruker instanceof PersonModell)) {
-            throw new IllegalStateException("Fant ikke bruker av type PersonModell for ident:" + ident + ", fikk:" + bruker);
+        final BrukerModell brukerModell = optionalBrukerModell
+                .orElseThrow(() -> new HentPersonPersonIkkeFunnet("BrukerModell ikke funnet:" + ident, new PersonIkkeFunnet()));
+
+        if (!(brukerModell instanceof PersonModell)) {
+            throw new IllegalStateException("Fant ikke bruker av type PersonModell for ident:" + ident + ", fikk:" + optionalBrukerModell);
         }
-        return (PersonModell)bruker;
+        return (PersonModell)brukerModell;
     }
 
 }

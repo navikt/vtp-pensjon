@@ -59,11 +59,9 @@ public class AktoerServiceMockImpl implements AktoerV2 {
                                                              @WebParam(name = "hentIdentForAktoerIdRequest") HentIdentForAktoerIdRequest request)
             throws HentIdentForAktoerIdPersonIkkeFunnet {
         LOG.info("hentIdentForAktoerId: " + request.getAktoerId());
-        BrukerModell brukerModell = personIndeks.finnByAktørIdent(request.getAktoerId());
+        BrukerModell brukerModell = personIndeks.finnByAktørIdent(request.getAktoerId())
+                .orElseThrow(() -> new HentIdentForAktoerIdPersonIkkeFunnet("Fant ingen ident for aktoerid: " + request.getAktoerId(), new PersonIkkeFunnet()));
 
-        if (brukerModell == null) {
-            throw new HentIdentForAktoerIdPersonIkkeFunnet("Fant ingen ident for aktoerid: " + request.getAktoerId(), new PersonIkkeFunnet());
-        }
         HentIdentForAktoerIdResponse response = new HentIdentForAktoerIdResponse();
         response.setIdent(brukerModell.getIdent());
         LOG.info("Respons ident for aktørid: " + response.getIdent());
@@ -80,11 +78,8 @@ public class AktoerServiceMockImpl implements AktoerV2 {
             throws HentAktoerIdForIdentPersonIkkeFunnet {
         LOG.info("hentIdentForAktoerId: " + request.getIdent());
 
-        BrukerModell brukerModell = personIndeks.finnByIdent(request.getIdent());
-
-        if (brukerModell == null) {
-            throw new HentAktoerIdForIdentPersonIkkeFunnet("Fant ingen aktoerid for ident: " + request.getIdent(), new PersonIkkeFunnet());
-        }
+        BrukerModell brukerModell = personIndeks.finnByIdent(request.getIdent())
+                .orElseThrow(() -> new HentAktoerIdForIdentPersonIkkeFunnet("Fant ingen aktoerid for ident: " + request.getIdent(), new PersonIkkeFunnet()));
 
         HentAktoerIdForIdentResponse response = new HentAktoerIdForIdentResponse();
         response.setAktoerId(brukerModell.getAktørIdent());
@@ -104,10 +99,7 @@ public class AktoerServiceMockImpl implements AktoerV2 {
         Map<String, String> identTilAktørId = new LinkedHashMap<>();
 
         hentAktoerIdForIdentListeRequest.getIdentListe()
-            .forEach(ident -> {
-                BrukerModell bruker = personIndeks.finnByIdent(ident);
-                identTilAktørId.put(ident, bruker == null ? null : bruker.getAktørIdent());
-            });
+            .forEach(ident -> identTilAktørId.put(ident, personIndeks.finnByIdent(ident).map(BrukerModell::getAktørIdent).orElse(null)));
 
         HentAktoerIdForIdentListeResponse response = new HentAktoerIdForIdentListeResponse();
         identTilAktørId.forEach((ident, aktørId) -> {

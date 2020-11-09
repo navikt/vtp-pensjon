@@ -35,7 +35,7 @@ public class LoginService {
 
     @GetMapping(value = "/login")
     public ResponseEntity login(@RequestParam("redirect") String redirect) {
-        List<String> rows = personIndeks.getAlleSøkere().parallelStream()
+        List<String> rows = personIndeks.getAlleSøkere()
                 .map(p -> {
                     String fnr = p.getSøker().getIdent();
                     String navn = p.getSøker().getFornavn() + " " + p.getSøker().getEtternavn();

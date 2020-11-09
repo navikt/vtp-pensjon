@@ -1,11 +1,8 @@
 package no.nav.pensjon.vtp.testmodell.personopplysning;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
@@ -13,11 +10,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class PersonIndeks {
 
-    private final Map<String, BrukerModell> byIdent = new HashMap<>();
-    private final Map<String, BrukerModell> byAktørIdent = new HashMap<>();
+    private final BrukerModellRepository brukerModellRepository;
     private final Map<String, Personopplysninger> byIdentPersonopplysninger = new HashMap<>();
 
-    public PersonIndeks() {
+    public PersonIndeks(BrukerModellRepository brukerModellRepository) {
+        this.brukerModellRepository = brukerModellRepository;
     }
 
     public synchronized void indekserPersonopplysningerByIdent(Personopplysninger pers) {
@@ -40,57 +37,40 @@ public class PersonIndeks {
             return;
         }
         String ident = bruker.getIdent();
-        String aktørIdent = bruker.getAktørIdent();
         if (bruker instanceof BrukerIdent && ident == null) {
             // skip - er BrukerIdent, venter på full bruker
             return;
         }
 
-        if (byIdent.get(ident) instanceof BrukerIdent) {
+        Optional<BrukerModell> existingBruker = brukerModellRepository.findById(ident);
+        if (existingBruker.filter(BrukerIdent.class::isInstance).isPresent()) {
             // overskriv
-            byIdent.put(ident, bruker);
-            byAktørIdent.put(aktørIdent, bruker);
-        }
-
-        byIdent.putIfAbsent(ident, bruker);
-        byAktørIdent.putIfAbsent(aktørIdent, bruker);
-    }
-
-    public synchronized void indekserFamilierelasjonBrukere(Collection<FamilierelasjonModell> familierelasjoner) {
-        for (FamilierelasjonModell fr : familierelasjoner) {
-            leggTil(fr.getTil());
+            brukerModellRepository.save(bruker);
+        } else if (existingBruker.isEmpty()) {
+            brukerModellRepository.save(bruker);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public synchronized  <V extends BrukerModell> V finnByIdent(String ident) {
-        if(byIdent.containsKey(ident)) {
-            return (V) byIdent.get(ident);
-        } else {
-            throw new RuntimeException("Finner ikke bruker med ident: "+ ident);
-        }
+    public synchronized Optional<BrukerModell> finnByIdent(String ident) {
+        return brukerModellRepository.findById(ident);
     }
 
     @SuppressWarnings("unchecked")
-    public synchronized  <V extends BrukerModell> V finnByAktørIdent(String ident) {
-        if(byAktørIdent.containsKey(ident)){
-            return (V) byAktørIdent.get(ident);
-        } else {
-            throw new RuntimeException("Finner ikke bruker med AktørId: "+ident);
-        }
-
+    public synchronized Optional<BrukerModell> finnByAktørIdent(String ident) {
+        return brukerModellRepository.findByAktørIdent(ident);
     }
 
     public synchronized Personopplysninger finnPersonopplysningerByIdent(String ident) {
         return byIdentPersonopplysninger.get(ident);
     }
 
-    public synchronized Set<Personopplysninger> getAlleSøkere(){
-        return byIdentPersonopplysninger.values().stream().filter(p -> p.getSøker()!=null).collect(Collectors.toSet());
+    public synchronized Stream<Personopplysninger> getAlleSøkere(){
+        return byIdentPersonopplysninger.values().stream().filter(p -> p.getSøker()!=null).distinct();
     }
 
-    public synchronized Set<Personopplysninger> getAlleAnnenPart(){
-        return byIdentPersonopplysninger.values().stream().filter(p -> p.getAnnenPart()!=null).collect(Collectors.toSet());
+    public synchronized Stream<Personopplysninger> getAlleAnnenPart(){
+        return byIdentPersonopplysninger.values().stream().filter(p -> p.getAnnenPart()!=null).distinct();
     }
 
     public Optional<Personopplysninger> findByFødselsnummer(String fodselsnummer) {

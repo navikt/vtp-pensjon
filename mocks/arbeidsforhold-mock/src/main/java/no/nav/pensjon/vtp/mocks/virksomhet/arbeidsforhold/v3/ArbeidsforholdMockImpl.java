@@ -159,14 +159,12 @@ public class ArbeidsforholdMockImpl implements ArbeidsforholdV3 {
 
     private List<String> identerSøkere() {
         return personIndeks.getAlleSøkere()
-                .stream()
                 .map(t -> t.getSøker().getIdent())
                 .collect(Collectors.toList());
     }
 
     private List<String> identerAnnenpart() {
         return personIndeks.getAlleAnnenPart()
-                .stream()
                 .map(t -> t.getAnnenPart().getIdent())
                 .collect(Collectors.toList());
     }
