@@ -12,11 +12,11 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioBuilderRepositoryImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioServiceImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateLoader;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
@@ -35,8 +35,9 @@ public class ScenariosTest {
         OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
 
         TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks(), virksomhetIndeks);
-        TestscenarioBuilderRepository testscenarioBuilderRepository = new TestscenarioBuilderRepositoryImpl(personIndeks, inntektYtelseIndeks, organisasjonIndeks);
-        TestscenarioRepositoryImpl testScenarioRepository = new TestscenarioRepositoryImpl(testscenarioFraTemplateMapper, testscenarioBuilderRepository);
+        TestscenarioRepository testscenarioRepository = new TestscenarioRepositoryImpl();
+        TestscenarioServiceImpl testScenarioRepository = new TestscenarioServiceImpl(testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks,
+                organisasjonIndeks);
 
         templateRepository.getTemplates().forEach(sc -> {
             Testscenario testScenario = testScenarioRepository.opprettTestscenario(sc);

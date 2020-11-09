@@ -44,13 +44,11 @@ public class Testscenario {
 
     private final VariabelContainer vars = new VariabelContainer();
 
-    public Testscenario(String templateNavn, String id, IdenterIndeks scenarioIndeks, final VirksomhetIndeks virksomhetIndeks) {
+    public Testscenario(final String templateNavn, final String id, LokalIdentIndeks identer, final ScenarioVirksomheter scenarioVirksomheter) {
         this.templateNavn = templateNavn;
         this.id = id;
-
-        this.scenarioVirksomheter = new ScenarioVirksomheter(this.templateNavn, virksomhetIndeks);
-
-        this.identer = scenarioIndeks.getIdenter(getId());
+        this.scenarioVirksomheter = scenarioVirksomheter;
+        this.identer = identer;
     }
 
     public String getTemplateNavn() {

@@ -12,14 +12,14 @@ import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioService;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioBuilderRepositoryImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioServiceImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateLoader;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
@@ -33,16 +33,16 @@ public class ArbeidsforholdMockTest {
     private final InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
     private final OrganisasjonIndeks organisasjonIndeks = new OrganisasjonIndeks();
 
-    private final TestscenarioBuilderRepository testscenarioBuilderRepository = new TestscenarioBuilderRepositoryImpl(personIndeks, inntektYtelseIndeks, organisasjonIndeks);
-    private final TestscenarioRepository testRepo = getTestscenarioRepository();
+    private final TestscenarioRepository testscenarioRepository = new TestscenarioRepositoryImpl();
+    private final TestscenarioService testRepo = getTestscenarioRepository();
 
-    private TestscenarioRepositoryImpl getTestscenarioRepository() {
+    private TestscenarioServiceImpl getTestscenarioRepository() {
         try {
             AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
             VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
             TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks(), virksomhetIndeks);
-            return new TestscenarioRepositoryImpl(
-                    testscenarioFraTemplateMapper, testscenarioBuilderRepository);
+            return new TestscenarioServiceImpl(
+                    testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks, organisasjonIndeks);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -53,9 +53,8 @@ public class ArbeidsforholdMockTest {
     @Before
     public void setup() {
         TestscenarioTemplateLoader loader = new TestscenarioTemplateLoader();
-        TestscenarioTemplateRepositoryImpl templateRepositoryImpl = new TestscenarioTemplateRepositoryImpl(loader.load());
 
-        templateRepository = templateRepositoryImpl;
+        templateRepository = new TestscenarioTemplateRepositoryImpl(loader.load());
     }
 
     @Test

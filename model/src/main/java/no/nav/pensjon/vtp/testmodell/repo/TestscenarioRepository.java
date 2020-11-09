@@ -1,17 +1,14 @@
 package no.nav.pensjon.vtp.testmodell.repo;
 
-import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public interface TestscenarioRepository {
-    Map<String, Testscenario> getTestscenarios();
+    Stream<Testscenario> findAll();
 
-    Testscenario getTestscenario(String id);
+    Optional<Testscenario> findById(String id);
 
-    Testscenario opprettTestscenario(TestscenarioTemplate template);
+    void delete(String id);
 
-    Testscenario opprettTestscenario(TestscenarioTemplate template, Map<String, String> userSuppliedVariables);
-
-    Testscenario opprettTestscenarioFraJsonString(String testscenarioJson, Map<String, String> userSuppliedVariables);
-
-    Boolean slettScenario(String id);
+    Testscenario save(Testscenario testscenario);
 }
