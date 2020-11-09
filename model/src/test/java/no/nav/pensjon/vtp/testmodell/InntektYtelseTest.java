@@ -39,6 +39,7 @@ import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTilTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
+import no.nav.pensjon.vtp.testmodell.virksomhet.ScenarioVirksomheter;
 import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
 public class InntektYtelseTest {
@@ -55,7 +56,7 @@ public class InntektYtelseTest {
         initInfotrygdModell(inntektYtelse);
         initInntektskomponentModell(inntektYtelse);
 
-        Testscenario scenario = new Testscenario("test3", "test3-123", identerIndeks, virksomhetIndeks);
+        Testscenario scenario = new Testscenario("test3", null, identerIndeks.getIdenter("abc"), new ScenarioVirksomheter("test3", virksomhetIndeks));
         scenario.setSøkerInntektYtelse(inntektYtelse);
 
         String json = skrivInntektYtelse(scenario, mapper);

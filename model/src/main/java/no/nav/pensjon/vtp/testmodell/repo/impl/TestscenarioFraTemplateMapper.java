@@ -45,7 +45,8 @@ public class TestscenarioFraTemplateMapper {
     }
 
     public Testscenario lagTestscenario(TestscenarioTemplate template, String unikTestscenarioId, Map<String, String> vars) {
-        Testscenario testScenario = new Testscenario(template.getTemplateNavn(), unikTestscenarioId, identerIndeks, virksomhetIndeks);
+        Testscenario testScenario = new Testscenario(template.getTemplateNavn(),
+                unikTestscenarioId, identerIndeks.getIdenter(unikTestscenarioId), new ScenarioVirksomheter(template.getTemplateNavn(), virksomhetIndeks));
         load(testScenario, template, vars);
         return testScenario;
     }
@@ -53,7 +54,8 @@ public class TestscenarioFraTemplateMapper {
     public Testscenario lagTestscenarioFraJsonString(String testscenarioJson, String unikTestscenarioId, Map<String, String> vars) {
         ObjectNode node = hentObjecetNodeForTestscenario(testscenarioJson);
         String templateNavn = hentTemplateNavnFraJsonString(node);
-        Testscenario testscenario = new Testscenario(templateNavn, unikTestscenarioId, identerIndeks, virksomhetIndeks);
+        Testscenario testscenario = new Testscenario(templateNavn,
+                unikTestscenarioId, identerIndeks.getIdenter(unikTestscenarioId), new ScenarioVirksomheter(templateNavn, virksomhetIndeks));
         loadTestscenarioFraJsonString(testscenario, node, vars);
         return testscenario;
     }

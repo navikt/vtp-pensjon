@@ -1,8 +1,11 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,40 +20,51 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonNavn;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioBuilderRepository;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioService;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.util.TestdataUtil;
 
 @Component
-public class TestscenarioBuilderRepositoryImpl implements TestscenarioBuilderRepository {
+public class TestscenarioServiceImpl implements TestscenarioService {
+    private static final Logger log = LoggerFactory.getLogger(TestscenarioServiceImpl.class);
 
-    private static final Logger log = LoggerFactory.getLogger(TestscenarioBuilderRepositoryImpl.class);
-
-    private final Map<String, Testscenario> scenarios = new ConcurrentHashMap<>(); // not ordered for front-end
-
+    private final TestscenarioFraTemplateMapper mapper;
+    private final TestscenarioRepository testscenarioRepository;
     private final PersonIndeks personIndeks;
     private final InntektYtelseIndeks inntektYtelseIndeks;
     private final OrganisasjonIndeks organisasjonIndeks;
 
-    public TestscenarioBuilderRepositoryImpl(PersonIndeks personIndeks,
-            InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonIndeks organisasjonIndeks) {
+
+    public TestscenarioServiceImpl(TestscenarioFraTemplateMapper mapper, TestscenarioRepository testscenarioRepository,
+            PersonIndeks personIndeks, InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonIndeks organisasjonIndeks) {
+        this.mapper = mapper;
+        this.testscenarioRepository = testscenarioRepository;
         this.personIndeks = personIndeks;
         this.inntektYtelseIndeks = inntektYtelseIndeks;
         this.organisasjonIndeks = organisasjonIndeks;
     }
 
+
     @Override
-    public Map<String, Testscenario> getTestscenarios() {
-        return scenarios;
+    public Testscenario opprettTestscenario(TestscenarioTemplate template) {
+        return opprettTestscenario(template, Collections.emptyMap());
     }
 
     @Override
-    public Testscenario getTestscenario(String id) {
-        return scenarios.get(id);
+    public Testscenario opprettTestscenario(TestscenarioTemplate template, Map<String, String> variables) {
+        String unikTestscenarioId = UUID.randomUUID().toString();
+        return doSave(mapper.lagTestscenario(template, unikTestscenarioId, variables));
     }
 
-    public void indekser(Testscenario testScenario) {
-        scenarios.put(testScenario.getId(), testScenario);
+    @Override
+    public Testscenario opprettTestscenarioFraJsonString(String testscenarioJson, Map<String, String> variables) {
+        String unikTestscenarioId = UUID.randomUUID().toString();
+        return doSave(mapper.lagTestscenarioFraJsonString(testscenarioJson, unikTestscenarioId, variables));
+    }
+
+    private Testscenario doSave(Testscenario testScenario) {
         Personopplysninger personopplysninger = testScenario.getPersonopplysninger();
         if (personopplysninger == null) {
             log.warn("TestscenarioImpl mangler innhold:" + testScenario);
@@ -84,10 +98,22 @@ public class TestscenarioBuilderRepositoryImpl implements TestscenarioBuilderRep
             List<OrganisasjonModell> modeller = organisasjonModeller.getModeller();
             organisasjonIndeks.leggTil(modeller);
         }
+
+        return testscenarioRepository.save(testScenario);
     }
 
     @Override
-    public Boolean slettScenario(String id) {
-        return scenarios.remove(id) != null;
+    public Stream<Testscenario> findAll() {
+        return testscenarioRepository.findAll();
+    }
+
+    @Override
+    public Optional<Testscenario> getTestscenario(String id) {
+        return testscenarioRepository.findById(id);
+    }
+
+    @Override
+    public void slettScenario(String id) {
+        testscenarioRepository.delete(id);
     }
 }

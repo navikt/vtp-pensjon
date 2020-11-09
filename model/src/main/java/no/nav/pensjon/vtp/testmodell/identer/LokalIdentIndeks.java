@@ -2,20 +2,15 @@ package no.nav.pensjon.vtp.testmodell.identer;
 
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /** konverterer lokale identer brukt i testcase til utvalgte fødselsnummer hentet fra syntetisk liste. */
 public class LokalIdentIndeks {
-    private static final Logger LOG = LoggerFactory.getLogger(LokalIdentIndeks.class);
-
     private final IdentGenerator identGenerator;
     private final Map<String, String> identer = new ConcurrentHashMap<>(); // NOSONAR
-    private String unikScenarioId;
+    private final String unikScenarioId;
 
     public LokalIdentIndeks(String unikScenarioId, IdentGenerator identGenerator) {
         this.unikScenarioId = unikScenarioId;

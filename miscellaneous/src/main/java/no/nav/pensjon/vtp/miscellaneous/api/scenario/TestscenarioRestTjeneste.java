@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.miscellaneous.api.scenario;
 
+import static org.springframework.http.ResponseEntity.of;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import no.nav.pensjon.vtp.kontrakter.TestscenarioDto;
@@ -11,7 +13,7 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.Inntektskomp
 import no.nav.pensjon.vtp.testmodell.personopplysning.BarnModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioService;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @Api(tags = {"Testscenario"})
@@ -33,42 +36,36 @@ public class TestscenarioRestTjeneste {
     private static final String SCENARIO_ID = "id";
 
     private final TestscenarioTemplateRepository templateRepository;
-    private final TestscenarioRepository testscenarioRepository;
+    private final TestscenarioService testscenarioService;
     private final PensjonTestdataService pensjonTestdataService;
 
-    public TestscenarioRestTjeneste(TestscenarioTemplateRepository templateRepository, TestscenarioRepository testscenarioRepository, PensjonTestdataService pensjonTestdataService) {
+    public TestscenarioRestTjeneste(TestscenarioTemplateRepository templateRepository, TestscenarioService testscenarioService, PensjonTestdataService pensjonTestdataService) {
         this.templateRepository = templateRepository;
-        this.testscenarioRepository = testscenarioRepository;
+        this.testscenarioService = testscenarioService;
         this.pensjonTestdataService = pensjonTestdataService;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = "Henter alle templates som er initiert i minnet til VTP", responseContainer = "List", response = TestscenarioDto.class)
     public List<TestscenarioDto> hentInitialiserteCaser() {
-        Map<String, Testscenario> testscenarios = testscenarioRepository.getTestscenarios();
-        List<TestscenarioDto> testscenarioList = new ArrayList<>();
-
-        testscenarios.forEach((key, testscenario) -> {
-            if (testscenario.getTemplateNavn() != null) {
-                testscenarioList.add(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()));
-            } else {
-                testscenarioList.add(konverterTilTestscenarioDto(testscenario));
-            }
-        });
-
-        return testscenarioList;
+        return testscenarioService.findAll()
+                .map(testscenario -> {
+                    if (testscenario.getTemplateNavn() != null) {
+                        return konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn());
+                    } else {
+                        return konverterTilTestscenarioDto(testscenario);
+                    }
+                })
+                .collect(Collectors.toList());
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = "Returnerer testscenario som matcher id", response = TestscenarioDto.class)
-    public ResponseEntity hentScenario(@PathVariable(SCENARIO_ID) String id){
-        if (testscenarioRepository.getTestscenario(id) != null) {
-            Testscenario testscenario = testscenarioRepository.getTestscenario(id);
-            return ResponseEntity.ok(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()));
-        } else {
-            return ResponseEntity.noContent().build();
-        }
-
+    public ResponseEntity<TestscenarioDto> hentScenario(@PathVariable(SCENARIO_ID) String id){
+        return of(
+                testscenarioService.getTestscenario(id)
+                        .map(t -> konverterTilTestscenarioDto(t, t.getTemplateNavn()))
+        );
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -88,7 +85,7 @@ public class TestscenarioRestTjeneste {
     public ResponseEntity initialiserTestscenario(@PathVariable(TEMPLATE_KEY) String templateKey) {
         return templateRepository.finn(templateKey)
                 .map(template -> {
-                    final Testscenario testscenario = testscenarioRepository.opprettTestscenario(template, new HashMap<>());
+                    final Testscenario testscenario = testscenarioService.opprettTestscenario(template, new HashMap<>());
                     logger.info("Initialiserer testscenario i VTP fra template: [{}] med id: [{}] ", templateKey, testscenario.getId());
 
                     pensjonTestdataService.opprettData(testscenario);
@@ -102,7 +99,7 @@ public class TestscenarioRestTjeneste {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = ("Initialiserer et testscenario basert på angitt json streng og returnerer det initialiserte objektet"), response = TestscenarioDto.class)
     public ResponseEntity initialiserTestScenario(@RequestBody String testscenarioJson) {
-        Testscenario testscenario = testscenarioRepository.opprettTestscenarioFraJsonString(testscenarioJson, new HashMap<>());
+        Testscenario testscenario = testscenarioService.opprettTestscenarioFraJsonString(testscenarioJson, new HashMap<>());
         logger.info("Initialiserer testscenario med ekstern testdatadefinisjon. Opprettet med id: [{}] ", testscenario.getId());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()));
@@ -112,11 +109,8 @@ public class TestscenarioRestTjeneste {
     @ApiOperation(value = "", notes= "Sletter et initialisert testscenario som matcher id")
     public ResponseEntity slettScenario(@PathVariable(SCENARIO_ID) String id) {
         logger.info("Sletter testscenario med id: [{}]", id);
-        if(testscenarioRepository.slettScenario(id)){
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        testscenarioService.slettScenario(id);
+        return ResponseEntity.noContent().build();
     }
 
 
