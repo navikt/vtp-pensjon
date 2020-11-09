@@ -1,8 +1,5 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.medlemskap.v2;
 
-import java.util.List;
-import java.util.Optional;
-
 import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -18,11 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.MedlemskapV2;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.PersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.Sikkerhetsbegrensning;
-import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.Medlemsperiode;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.meldinger.HentPeriodeListeRequest;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.meldinger.HentPeriodeListeResponse;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.meldinger.HentPeriodeRequest;
@@ -35,10 +31,10 @@ import no.nav.tjeneste.virksomhet.medlemskap.v2.meldinger.HentPeriodeResponse;
 public class MedlemServiceMockImpl implements MedlemskapV2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(MedlemServiceMockImpl.class);
-    private final PersonIndeks personIndeks;
+    private final BrukerModellRepository brukerModellRepository;
 
-    public MedlemServiceMockImpl(PersonIndeks personIndeks){
-        this.personIndeks = personIndeks;
+    public MedlemServiceMockImpl(BrukerModellRepository brukerModellRepository){
+        this.brukerModellRepository = brukerModellRepository;
     }
 
     @WebMethod
@@ -75,7 +71,7 @@ public class MedlemServiceMockImpl implements MedlemskapV2 {
         if (request.getIdent() != null) {
             String fnr = request.getIdent().getValue();
             HentPeriodeListeResponse response = new HentPeriodeListeResponse();
-            new MedlemskapperioderAdapter(personIndeks)
+            new MedlemskapperioderAdapter(brukerModellRepository)
                     .finnMedlemsperioder(fnr)
                     .ifPresent(response::withPeriodeListe);
             return response;

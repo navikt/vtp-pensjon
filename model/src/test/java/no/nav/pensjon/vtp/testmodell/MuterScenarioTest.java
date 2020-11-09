@@ -35,14 +35,14 @@ public class MuterScenarioTest {
         TestscenarioTemplateLoader loader = new TestscenarioTemplateLoader();
         TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl(loader.load());
 
-        PersonIndeks personIndeks = new PersonIndeks(new BrukerModelRepositoryInMemory());
+        PersonIndeks personIndeks = new PersonIndeks();
         InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
         OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
 
         TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(loadAdresser(), new IdenterIndeks(), loadVirksomheter());
         TestscenarioRepository testscenarioRepository = new TestscenarioRepositoryImpl();
         TestscenarioServiceImpl testScenarioRepository = new TestscenarioServiceImpl(testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks,
-                organisasjonRepository);
+                organisasjonRepository, new BrukerModelRepositoryInMemory());
 
         List<TestscenarioTemplate> templates = templateRepository.getTemplates().collect(toList());
         assertFalse(templates.isEmpty());

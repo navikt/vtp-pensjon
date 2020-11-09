@@ -16,6 +16,9 @@ import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModeller;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AnnenPartModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerIdent;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonNavn;
@@ -36,15 +39,17 @@ public class TestscenarioServiceImpl implements TestscenarioService {
     private final PersonIndeks personIndeks;
     private final InntektYtelseIndeks inntektYtelseIndeks;
     private final OrganisasjonRepository organisasjonRepository;
-
+    private final BrukerModellRepository brukerModellRepository;
 
     public TestscenarioServiceImpl(TestscenarioFraTemplateMapper mapper, TestscenarioRepository testscenarioRepository,
-            PersonIndeks personIndeks, InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonRepository organisasjonRepository) {
+            PersonIndeks personIndeks, InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonRepository organisasjonRepository,
+            BrukerModellRepository brukerModellRepository) {
         this.mapper = mapper;
         this.testscenarioRepository = testscenarioRepository;
         this.personIndeks = personIndeks;
         this.inntektYtelseIndeks = inntektYtelseIndeks;
         this.organisasjonRepository = organisasjonRepository;
+        this.brukerModellRepository = brukerModellRepository;
     }
 
 
@@ -74,21 +79,21 @@ public class TestscenarioServiceImpl implements TestscenarioService {
             PersonNavn sokerNavn = TestdataUtil.getSokerName(søker);
             søker.setFornavn(sokerNavn.getFornavn());
             søker.setEtternavn(sokerNavn.getEtternavn());
-            personIndeks.leggTil(søker);
+            leggTil(søker);
 
             AnnenPartModell annenPart = personopplysninger.getAnnenPart();
             if(annenPart != null){
                 PersonNavn annenPartNavn = TestdataUtil.getAnnenPartName(søker, annenPart);
                 annenPart.setFornavn(annenPartNavn.getFornavn());
                 annenPart.setEtternavn(annenPartNavn.getEtternavn());
-                personIndeks.leggTil(annenPart);
+                leggTil(annenPart);
             }
             for (FamilierelasjonModell fr : personopplysninger.getFamilierelasjoner()) {
-                personIndeks.leggTil(fr.getTil());
+                leggTil(fr.getTil());
             }
 
             personIndeks.indekserPersonopplysningerByIdent(personopplysninger);
-            testScenario.getPersonligArbeidsgivere().forEach(personIndeks::leggTil);
+            testScenario.getPersonligArbeidsgivere().forEach(this::leggTil);
 
             if (personopplysninger.getSøker().getIdent() != null && testScenario.getSøkerInntektYtelse() != null) {
                 inntektYtelseIndeks.leggTil(personopplysninger.getSøker().getIdent(), testScenario.getSøkerInntektYtelse());
@@ -105,6 +110,26 @@ public class TestscenarioServiceImpl implements TestscenarioService {
         }
 
         return testscenarioRepository.save(testScenario);
+    }
+
+    public synchronized void leggTil(BrukerModell bruker) {
+        if (bruker == null) {
+            // quiet escape
+            return;
+        }
+        String ident = bruker.getIdent();
+        if (bruker instanceof BrukerIdent && ident == null) {
+            // skip - er BrukerIdent, venter på full bruker
+            return;
+        }
+
+        Optional<BrukerModell> existingBruker = brukerModellRepository.findById(ident);
+        if (existingBruker.filter(BrukerIdent.class::isInstance).isPresent()) {
+            // overskriv
+            brukerModellRepository.save(bruker);
+        } else if (existingBruker.isEmpty()) {
+            brukerModellRepository.save(bruker);
+        }
     }
 
     @Override

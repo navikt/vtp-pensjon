@@ -6,10 +6,8 @@ import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapperiodeModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BarnModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModelRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell.Kjønn;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Landkode;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell.Diskresjonskoder;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.personopplysning.SivilstandModell;
@@ -41,7 +39,6 @@ public class PersonopplysningerTest {
 
     @Test
     public void skal_skrive_scenario_til_personopplysninger_json() throws Exception {
-        PersonIndeks personIndeks = new PersonIndeks(new BrukerModelRepositoryInMemory());
         VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
         AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
         IdenterIndeks identerIndeks = new IdenterIndeks();
@@ -81,9 +78,6 @@ public class PersonopplysningerTest {
         SøkerModell søker2 = scenario2.getPersonopplysninger().getSøker();
         assertThat(søker2).isNotNull();
         assertThat(søker2.getEtternavn()).isNotEmpty();
-
-        assertThat(personIndeks.finnByIdent(søker2.getIdent()))
-                .contains(søker2);
     }
 
     private String skrivPersonopplysninger(Testscenario scenario, TestscenarioTilTemplateMapper mapper, JsonMapper jsonMapper) throws IOException {

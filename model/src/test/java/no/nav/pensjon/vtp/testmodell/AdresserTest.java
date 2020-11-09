@@ -39,14 +39,14 @@ public class AdresserTest {
     public void sjekk_scenarios() throws Exception {
         AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
         VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
-        PersonIndeks personIndeks = new PersonIndeks(new BrukerModelRepositoryInMemory());
+        PersonIndeks personIndeks = new PersonIndeks();
         InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
         OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
 
         TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks(), virksomhetIndeks);
         TestscenarioRepository testscenarioRepository = new TestscenarioRepositoryImpl();
         TestscenarioServiceImpl testScenarioRepository = new TestscenarioServiceImpl(testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks,
-                organisasjonRepository);
+                organisasjonRepository, new BrukerModelRepositoryInMemory());
         TestscenarioTemplateLoader loader = new TestscenarioTemplateLoader();
         TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl(loader.load());
         templateRepository.getTemplates().forEach(testscenarioTemplate ->

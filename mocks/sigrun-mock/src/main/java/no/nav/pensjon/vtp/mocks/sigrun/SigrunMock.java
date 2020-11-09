@@ -7,6 +7,7 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.sigrun.Inntektsår;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.sigrun.Oppføring;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +29,13 @@ import java.util.stream.Collectors;
 public class SigrunMock {
     private static final Logger LOG = LoggerFactory.getLogger(SigrunMock.class);
 
+    private final BrukerModellRepository brukerModellRepository;
     private final InntektYtelseIndeks inntektYtelseIndeks;
     private final PersonIndeks personIndeks;
 
-    public SigrunMock(InntektYtelseIndeks inntektYtelseIndeks, PersonIndeks personIndeks) {
+    public SigrunMock(BrukerModellRepository brukerModellRepository, InntektYtelseIndeks inntektYtelseIndeks,
+            PersonIndeks personIndeks) {
+        this.brukerModellRepository = brukerModellRepository;
         this.inntektYtelseIndeks = inntektYtelseIndeks;
         this.personIndeks = personIndeks;
     }
@@ -44,7 +48,7 @@ public class SigrunMock {
         LOG.info("Sigrun for aktørId: {} ", aktørId);
 
         if (brukerFnr == null && aktørId != null) {
-            Optional<BrukerModell> brukerModell = personIndeks.finnByAktørIdent(aktørId);
+            Optional<BrukerModell> brukerModell = brukerModellRepository.findByAktørIdent(aktørId);
             if (brukerModell.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kunne ikke finne bruker");
             } else {

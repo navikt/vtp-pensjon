@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import no.nav.pensjon.vtp.felles.ConversionUtils;
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapperiodeModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.Medlemsperiode;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.kodeverk.KildeMedTerm;
@@ -17,15 +17,14 @@ import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.kodeverk.StatuskodeM
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.kodeverk.TrygdedekningMedTerm;
 
 public class MedlemskapperioderAdapter {
+    private final BrukerModellRepository brukerModellRepository;
 
-    private final PersonIndeks personIndeks;
-
-    public MedlemskapperioderAdapter(PersonIndeks personIndeks) {
-        this.personIndeks = personIndeks;
+    public MedlemskapperioderAdapter(BrukerModellRepository brukerModellRepository) {
+        this.brukerModellRepository = brukerModellRepository;
     }
 
     public Optional<List<Medlemsperiode>> finnMedlemsperioder(String personIdent) {
-        return personIndeks.finnByIdent(personIdent)
+        return brukerModellRepository.findById(personIdent)
                 .filter(PersonModell.class::isInstance)
                 .map(PersonModell.class::cast)
                 .map(pm -> {

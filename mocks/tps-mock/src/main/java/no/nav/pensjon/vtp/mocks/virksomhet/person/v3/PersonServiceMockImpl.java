@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.person.v3;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
@@ -16,6 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell.Rolle;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
@@ -27,10 +30,12 @@ import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonhistorikkPersonIkk
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 import no.nav.tjeneste.virksomhet.person.v3.feil.PersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Aktoer;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.AktoerId;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.BostedsadressePeriode;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Diskresjonskoder;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Familierelasjon;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonIdent;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonstatusPeriode;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.StatsborgerskapPeriode;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentEkteskapshistorikkRequest;
@@ -58,9 +63,11 @@ public class PersonServiceMockImpl implements PersonV3 {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonServiceMockImpl.class);
 
+    private final BrukerModellRepository brukerModellRepository;
     private final PersonIndeks personIndeks;
 
-    public PersonServiceMockImpl(PersonIndeks personIndeks) {
+    public PersonServiceMockImpl(BrukerModellRepository brukerModellRepository, PersonIndeks personIndeks) {
+        this.brukerModellRepository = brukerModellRepository;
         this.personIndeks = personIndeks;
     }
 
@@ -113,7 +120,25 @@ public class PersonServiceMockImpl implements PersonV3 {
     }
 
     public PersonModell finnPerson(Aktoer aktoer) throws HentPersonPersonIkkeFunnet {
-        return new FinnPerson(personIndeks).finnPerson(aktoer);
+        Optional<BrukerModell> optionalBrukerModell;
+        String ident;
+        if (aktoer instanceof PersonIdent) {
+            PersonIdent personIdent = (PersonIdent) aktoer;
+            ident = personIdent.getIdent().getIdent();
+            optionalBrukerModell = brukerModellRepository.findById(ident);
+        } else {
+            AktoerId aktoerId = (AktoerId) aktoer;
+            ident = aktoerId.getAktoerId();
+            optionalBrukerModell = brukerModellRepository.findByAktørIdent(ident);
+        }
+
+        final BrukerModell brukerModell = optionalBrukerModell
+                .orElseThrow(() -> new HentPersonPersonIkkeFunnet("BrukerModell ikke funnet:" + ident, new PersonIkkeFunnet()));
+
+        if (!(brukerModell instanceof PersonModell)) {
+            throw new IllegalStateException("Fant ikke bruker av type PersonModell for ident:" + ident + ", fikk:" + optionalBrukerModell);
+        }
+        return (PersonModell)brukerModell;
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/person/v3/Person_v3/hentGeografiskTilknytningRequest")

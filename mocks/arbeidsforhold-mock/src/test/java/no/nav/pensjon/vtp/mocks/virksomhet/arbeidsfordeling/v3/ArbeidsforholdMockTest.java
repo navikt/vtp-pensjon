@@ -31,7 +31,7 @@ import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.R
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerRequest;
 
 public class ArbeidsforholdMockTest {
-    private final PersonIndeks personIndeks = new PersonIndeks(new BrukerModelRepositoryInMemory());
+    private final PersonIndeks personIndeks = new PersonIndeks();
     private final InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
     private final OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
 
@@ -45,7 +45,7 @@ public class ArbeidsforholdMockTest {
             VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
             TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks(), virksomhetIndeks);
             return new TestscenarioServiceImpl(
-                    testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks, organisasjonRepository);
+                    testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks, organisasjonRepository, new BrukerModelRepositoryInMemory());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
