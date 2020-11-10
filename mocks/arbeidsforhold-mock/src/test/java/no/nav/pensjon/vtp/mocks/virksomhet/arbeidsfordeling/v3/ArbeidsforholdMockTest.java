@@ -12,6 +12,7 @@ import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModelRepositoryInMemory;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIdentFooRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
@@ -31,7 +32,7 @@ import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.R
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerRequest;
 
 public class ArbeidsforholdMockTest {
-    private final PersonIndeks personIndeks = new PersonIndeks();
+    private final PersonIndeks personIndeks = new PersonIndeks(new PersonIdentFooRepositoryInMemory());
     private final InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
     private final OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
 

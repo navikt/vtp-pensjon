@@ -20,6 +20,7 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModelRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.GateadresseModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Landkode;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIdentFooRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.UstrukturertAdresseModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
@@ -39,7 +40,7 @@ public class AdresserTest {
     public void sjekk_scenarios() throws Exception {
         AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
         VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
-        PersonIndeks personIndeks = new PersonIndeks();
+        PersonIndeks personIndeks = new PersonIndeks(new PersonIdentFooRepositoryInMemory());
         InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
         OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
 

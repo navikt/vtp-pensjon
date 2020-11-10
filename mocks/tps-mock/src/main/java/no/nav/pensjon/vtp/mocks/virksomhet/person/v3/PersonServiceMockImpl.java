@@ -87,7 +87,11 @@ public class PersonServiceMockImpl implements PersonV3 {
         Bruker person = new PersonAdapter().fra(bruker);
 
 
-        Personopplysninger pers = personIndeks.finnPersonopplysningerByIdent(bruker.getIdent());
+        Personopplysninger pers = personIndeks.finnPersonopplysningerByIdent(bruker.getIdent())
+                .orElseThrow(() -> {
+                    String message = "Person med ident " + bruker.getIdent() + " ikke funnet";
+                    return new HentPersonPersonIkkeFunnet(message, new PersonIkkeFunnet().withFeilmelding("Person med ident " + bruker.getIdent() + " ikke funnet"));
+                });
 
         boolean erBarnet = false;
         for (FamilierelasjonModell relasjon : pers.getFamilierelasjoner()) {
