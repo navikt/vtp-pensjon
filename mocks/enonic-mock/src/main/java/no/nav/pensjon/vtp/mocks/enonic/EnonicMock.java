@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class EnonicMock {
     private static final Logger logger = LoggerFactory.getLogger(EnonicMock.class);
 
-    @GetMapping(value = "{var:.+}")
-    public ResponseEntity get(@PathVariable("var") String path) {
-        logger.info("Fikk en forespørsel på {}", path);
+    @GetMapping(value = "/*")
+    public ResponseEntity get() {
+        logger.info("Fikk en forespørsel på /rest/enonic");
         return ResponseEntity.ok().build();
     }
 }
