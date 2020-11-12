@@ -126,7 +126,7 @@ public class Oauth2RestService {
             HttpServletRequest req,
             @RequestParam String grant_type,
             @RequestParam(required = false) String realm,
-            @RequestParam String code,
+            @RequestParam(required = false) String code,
             @RequestParam(required = false) String refresh_token,
             @RequestParam String redirect_uri) {
         if ("authorization_code".equals(grant_type)) {
@@ -139,7 +139,7 @@ public class Oauth2RestService {
             return ResponseEntity.ok(oauthResponse);
         } else if ("refresh_token".equals(grant_type)) {
             if (!refresh_token.startsWith("refresh:")) {
-                String message = "Invalid refresh token " + code;
+                String message = "Invalid refresh token " + refresh_token;
                 LOG.error(message);
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(message);
             } else {
