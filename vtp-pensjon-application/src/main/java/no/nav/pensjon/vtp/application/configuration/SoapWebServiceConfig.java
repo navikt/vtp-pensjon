@@ -17,6 +17,7 @@ import org.apache.cxf.Bus;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.jaxws.JAXWSMethodInvoker;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
+import org.apache.cxf.jaxws.support.JaxWsServiceFactoryBean;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.service.invoker.Factory;
 import org.apache.cxf.service.invoker.Invoker;
@@ -42,16 +43,26 @@ public class SoapWebServiceConfig {
 
     @PostConstruct
     public void registerSoapServices() {
+        // Can't find any documentation if it is okay to reuse this factory bean.
+        // It takes about 20 seconds to register the endpoints without reusing
+        // this bean. With reuse it takes about 2 seconds. This is the smallest
+        // unit for reuse, that we found, that saves a lot of time on startup.
+        final JaxWsServiceFactoryBean jaxWsServiceFactoryBean = new JaxWsServiceFactoryBean();
+
         applicationContext.getBeansWithAnnotation(SoapService.class)
                 .forEach((name, service) ->
                         stream(ofNullable(service.getClass().getAnnotation(SoapService.class))
                                 .map(SoapService::path)
                                 .orElseThrow(() -> new RuntimeException("Missing @" + SoapService.class.getSimpleName() + " on class " + service.getClass().getSimpleName())))
-                                .forEach(path -> new EndpointImpl(bus, service, new JaxWsMethodInspectingInvokerServerFactoryBean()).publish(path))
+                                .forEach(path -> new EndpointImpl(bus, service, new JaxWsMethodInspectingInvokerServerFactoryBean(jaxWsServiceFactoryBean)).publish(path))
                 );
     }
 
     private static class JaxWsMethodInspectingInvokerServerFactoryBean extends JaxWsServerFactoryBean {
+        public JaxWsMethodInspectingInvokerServerFactoryBean(JaxWsServiceFactoryBean serviceFactory) {
+            super(serviceFactory);
+        }
+
         @Override
         protected Invoker createInvoker() {
             if (getServiceBean() == null) {
