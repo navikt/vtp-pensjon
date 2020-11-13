@@ -20,8 +20,6 @@
         <module>dokdist-mock</module>
         <module>enonic-mock</module>
         <module>egenansatt-mock</module>
-        <module>infotrygd-mock</module>
-        <module>infotrygd-kontantstotte-mock</module>
         <module>innsynjournal-mock</module>
         <module>inntekt-mock</module>
         <module>joark-mock</module>

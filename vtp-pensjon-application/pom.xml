@@ -33,14 +33,6 @@
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>infotrygd-mock</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>infotrygd-kontantstotte-mock</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>medl-mock</artifactId>
         </dependency>
         <dependency>
