@@ -15,6 +15,10 @@
     <description>TestHub front-end javascript</description>
     <packaging>jar</packaging>
 
+    <properties>
+        <frontend.skip>false</frontend.skip>
+    </properties>
+
     <build>
         <plugins>
 
@@ -29,6 +33,7 @@
                         </goals>
                         <phase>compile</phase>
                         <configuration>
+                            <skip>${frontend.skip}</skip>
                             <executable>npm</executable>
                             <!-- optional -->
                             <arguments>
@@ -44,6 +49,7 @@
                         </goals>
                         <phase>compile</phase>
                         <configuration>
+                            <skip>${frontend.skip}</skip>
                             <executable>npm</executable>
                             <!-- optional -->
                             <arguments>
