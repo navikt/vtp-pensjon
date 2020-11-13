@@ -1,11 +1,15 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
+import static java.util.Optional.ofNullable;
+
 import no.nav.lib.pen.psakpselv.asbo.person.*;
+import no.nav.pensjon.vtp.testmodell.kodeverk.Diskresjonskoder;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.GateadresseModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
-import no.nav.pensjon.vtp.testmodell.personopplysning.VoksenModell;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -13,27 +17,34 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PsakpselvPersonAdapter {
-    private PsakpselvPersonAdapter(){}
+import org.springframework.stereotype.Component;
 
-    public static ASBOPenPerson toASBOPerson(Personopplysninger personopplysninger) {
+@Component
+public class PsakpselvPersonAdapter {
+    private final BrukerModellRepository brukerModellRepository;
+
+    public PsakpselvPersonAdapter(BrukerModellRepository brukerModellRepository) {
+        this.brukerModellRepository = brukerModellRepository;
+    }
+
+    public ASBOPenPerson toASBOPerson(Personopplysninger personopplysninger) {
         ASBOPenPerson asboPenPerson = populateAsboPenPerson(personopplysninger.getSøker());
         asboPenPerson.setRelasjoner(fetchRelasjoner(personopplysninger));
         return asboPenPerson;
     }
 
-    private static ASBOPenPerson populateAsboPenPerson(VoksenModell søker) {
+    private static ASBOPenPerson populateAsboPenPerson(PersonModell søker) {
         ASBOPenPerson asboPenPerson = new ASBOPenPerson();
         asboPenPerson.setFodselsnummer(søker.getIdent());
         asboPenPerson.setFornavn(søker.getFornavn());
         asboPenPerson.setEtternavn(søker.getEtternavn());
         asboPenPerson.setKortnavn(søker.getFornavn() + " " + søker.getEtternavn());
-        asboPenPerson.setStatus(søker.getPersonstatus().getStatus());
-        asboPenPerson.setStatusKode(søker.getPersonstatus().getPersonstatusType().toString());
-        asboPenPerson.setDiskresjonskode(søker.getDiskresjonskode());
+        asboPenPerson.setStatus(søker.getPersonstatusFoo().getKode().name());
+        asboPenPerson.setStatusKode(søker.getPersonstatusFoo().getKode().name());
+        asboPenPerson.setDiskresjonskode(ofNullable(søker.getDiskresjonskode()).map(Diskresjonskoder::toString).orElse(null));
         asboPenPerson.setDodsdato(fetchDate(søker.getDødsdato()).orElse(null));
-        asboPenPerson.setSivilstand(søker.getSivilstand().getKode());
-        asboPenPerson.setSivilstandDato(fetchDate(søker.getSivilstand().getEndringstidspunkt())
+        asboPenPerson.setSivilstand(søker.getSivilstandFoo().getKode().name());
+        asboPenPerson.setSivilstandDato(fetchDate(søker.getSivilstandFoo().getEndringstidspunkt())
                 .orElse(fetchDate(søker.getFødselsdato())
                         .orElse(null)));
         asboPenPerson.setSprakKode(søker.getSpråk2Bokstaver());
@@ -63,7 +74,7 @@ public class PsakpselvPersonAdapter {
         return asboPenPerson;
     }
 
-    private static ASBOPenRelasjonListe fetchRelasjoner(Personopplysninger personopplysninger) {
+    private ASBOPenRelasjonListe fetchRelasjoner(Personopplysninger personopplysninger) {
         List<ASBOPenRelasjon> relasjonList =  personopplysninger.getFamilierelasjoner().stream()
                 .map(fr -> populateAsboPenRelasjon(personopplysninger, fr))
                 .collect(Collectors.toList());
@@ -73,14 +84,14 @@ public class PsakpselvPersonAdapter {
         return liste;
     }
 
-    private static ASBOPenRelasjon populateAsboPenRelasjon(Personopplysninger personopplysninger, FamilierelasjonModell fr) {
+    private ASBOPenRelasjon populateAsboPenRelasjon(Personopplysninger personopplysninger, FamilierelasjonModell fr) {
         ASBOPenRelasjon relasjon = new ASBOPenRelasjon();
         relasjon.setRelasjonsType(fr.getRolle().name());
         ASBOPenPerson annen = Stream.ofNullable(personopplysninger.getAnnenPart())
-                .filter(p -> p.getIdent().equals(fr.getTil().getIdent()))
+                .filter(p -> p.getIdent().equals(brukerModellRepository.findById(fr.getTil()).orElseThrow(() -> new RuntimeException("No person with ident " + fr.getTil())).getIdent()))
                 .map(PsakpselvPersonAdapter::populateAsboPenPerson)
-                .peek(p -> relasjon.setFom(fetchDate(personopplysninger.getSøker().getSivilstand().getFom()).orElse(null)))
-                .peek(p -> relasjon.setTom(fetchDate(personopplysninger.getSøker().getSivilstand().getTom()).orElse(null)))
+                .peek(p -> relasjon.setFom(fetchDate(personopplysninger.getSøker().getSivilstandFoo().getFom()).orElse(null)))
+                .peek(p -> relasjon.setTom(fetchDate(personopplysninger.getSøker().getSivilstandFoo().getTom()).orElse(null)))
                 .findFirst().orElseGet(() -> createShallowASBOPerson(fr));
         relasjon.setPerson(annen);
 
@@ -102,14 +113,14 @@ public class PsakpselvPersonAdapter {
         return relasjon;
     }
 
-    private static ASBOPenPerson createShallowASBOPerson(FamilierelasjonModell familierelasjon) {
+    private ASBOPenPerson createShallowASBOPerson(FamilierelasjonModell familierelasjon) {
         ASBOPenPerson annen = new ASBOPenPerson();
-        annen.setFodselsnummer(familierelasjon.getTil().getIdent());
+        annen.setFodselsnummer(brukerModellRepository.findById(familierelasjon.getTil()).orElseThrow(() -> new RuntimeException("No person with ident " + familierelasjon.getTil())).getIdent());
         return annen;
     }
 
     private static Optional<GregorianCalendar> fetchDate(LocalDate date) {
-        return Optional.ofNullable(date)
+        return ofNullable(date)
                 .map(d -> GregorianCalendar.from(d.atStartOfDay(ZoneId.systemDefault())));
     }
 

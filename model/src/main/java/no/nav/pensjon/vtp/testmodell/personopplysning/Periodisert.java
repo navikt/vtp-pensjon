@@ -2,7 +2,10 @@ package no.nav.pensjon.vtp.testmodell.personopplysning;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import no.nav.pensjon.vtp.testmodell.kodeverk.Endringstype;
 
 public abstract class Periodisert {
 
@@ -46,6 +49,11 @@ public abstract class Periodisert {
         return endringstype == null ? null : endringstype.name();
     }
 
+    @JsonIgnore
+    public Endringstype endringstypeType() {
+        return endringstype;
+    }
+
     public LocalDate getEndringstidspunkt() {
         return endringstidspunkt;
     }
@@ -58,11 +66,6 @@ public abstract class Periodisert {
             // skal ikke kunne skje
             throw new UnsupportedOperationException(e);
         }
-    }
-
-    public enum Endringstype {
-        /** matcher verdier i TPS Endringstype, derav lower-case */
-        ny, endret, utgaatt, slettet;
     }
 
 }

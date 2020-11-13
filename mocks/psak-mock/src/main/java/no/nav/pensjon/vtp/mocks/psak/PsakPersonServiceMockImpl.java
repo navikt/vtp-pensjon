@@ -22,9 +22,11 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
     private static final Logger LOG = LoggerFactory.getLogger(PsakPersonServiceMockImpl.class);
 
     private final PersonIndeks personIndeks;
+    private final PsakpselvPersonAdapter psakpselvPersonAdapter;
 
-    public PsakPersonServiceMockImpl(PersonIndeks personIndeks) {
+    public PsakPersonServiceMockImpl(PersonIndeks personIndeks, PsakpselvPersonAdapter psakpselvPersonAdapter) {
         this.personIndeks = personIndeks;
+        this.psakpselvPersonAdapter = psakpselvPersonAdapter;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
         ASBOPenFinnPersonResponse asboPenFinnPersonResponse = new ASBOPenFinnPersonResponse();
         ASBOPenPersonListe liste = new ASBOPenPersonListe();
         liste.setPersoner(personIndeks.getAlleSøkere()
-                .map(PsakpselvPersonAdapter::toASBOPerson)
+                .map(psakpselvPersonAdapter::toASBOPerson)
                 .toArray(ASBOPenPerson[]::new));
 
         asboPenFinnPersonResponse.setPersoner(liste);
@@ -205,8 +207,8 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
     }
 
     private Optional<ASBOPenPerson> getASBOPerson(String fodselsnummer) {
-        return personIndeks.findByFødselsnummer(fodselsnummer)
-                .map(PsakpselvPersonAdapter::toASBOPerson)
+        return personIndeks.findById(fodselsnummer)
+                .map(psakpselvPersonAdapter::toASBOPerson)
                 .or(() -> logIkkeFunnet(fodselsnummer));
     }
 

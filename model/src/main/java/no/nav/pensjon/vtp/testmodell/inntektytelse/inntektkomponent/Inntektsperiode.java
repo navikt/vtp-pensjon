@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonArbeidsgiver;
-
 @JsonInclude(Include.NON_EMPTY)
 public class Inntektsperiode {
 
@@ -28,7 +26,7 @@ public class Inntektsperiode {
     private String aktorId;
 
     @JsonProperty("arbeidsgiver")
-    private PersonArbeidsgiver arbeidsgiver;
+    private String arbeidsgiver;
 
     @JsonProperty("type")
     private InntektType type;
@@ -54,7 +52,7 @@ public class Inntektsperiode {
     public Inntektsperiode(){ }
 
     public Inntektsperiode(LocalDate fom, LocalDate tom, Integer beløp, String orgnr, InntektType inntektType, InntektFordel inntektFordel,
-                           String beskrivelse, String skatteOgAvgiftsregel, Boolean inngaarIGrunnlagForTrekk, Boolean utloeserArbeidsgiveravgift, PersonArbeidsgiver arbeidsgiver){
+                           String beskrivelse, String skatteOgAvgiftsregel, Boolean inngaarIGrunnlagForTrekk, Boolean utloeserArbeidsgiveravgift, String arbeidsgiver){
         this.fom = fom;
         this.tom = tom;
         this.beløp = beløp;
@@ -102,7 +100,7 @@ public class Inntektsperiode {
     }
 
     @JsonIgnore
-    public PersonArbeidsgiver getPersonligArbeidsgiver() {
+    public String getPersonligArbeidsgiver() {
         return arbeidsgiver;
     }
 

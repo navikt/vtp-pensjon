@@ -1,6 +1,5 @@
 {
 	"søker": {
-		"@type": "søker",
 		"ident": "${for1}",
 		"fornavn": "Donald",
 		"etternavn": "Duck",
@@ -31,7 +30,6 @@
 		]
 	},
 	"annenPart": {
-		"@type": "annenPart",
 		"ident": "${for2}",
 		"fornavn": "Dolly",
 		"etternavn": "Duck",
@@ -47,10 +45,7 @@
 	"familierelasjoner": [
 		{
 			"rolle": "EKTE",
-			"til": {
-				"@type": "annenPart",
-				"ident": "${for2}"
-			}
+			"til": "${for2}"
 		}
 	]
 }

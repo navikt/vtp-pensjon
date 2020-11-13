@@ -10,15 +10,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class BrukerModelRepositoryInMemory implements BrukerModellRepository {
-    private final Map<String, BrukerModell> byIdent = new ConcurrentHashMap<>();
+    private final Map<String, PersonModell> byIdent = new ConcurrentHashMap<>();
 
     @Override
-    public Optional<BrukerModell> findById(final String ident) {
+    public Optional<PersonModell> findById(final String ident) {
         return ofNullable(byIdent.get(ident));
     }
 
     @Override
-    public Optional<BrukerModell> findByAktørIdent(final String aktørIdent) {
+    public Optional<PersonModell> findByAktørIdent(final String aktørIdent) {
         return byIdent.values()
                 .stream()
                 .filter(b -> aktørIdent.equals(b.getAktørIdent()))
@@ -26,7 +26,7 @@ public class BrukerModelRepositoryInMemory implements BrukerModellRepository {
     }
 
     @Override
-    public BrukerModell save(final BrukerModell bruker) {
+    public PersonModell save(final PersonModell bruker) {
         byIdent.put(bruker.getIdent(), bruker);
         return bruker;
     }

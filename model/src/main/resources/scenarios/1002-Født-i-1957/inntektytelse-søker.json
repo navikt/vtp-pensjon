@@ -29,10 +29,7 @@
 				"fom": "2017-01-01",
 				"tom": "2018-09-30",
 				"beløp": 10000,
-				"arbeidsgiver": {
-				    "@type": "person",
-				    "ident": "${aktor1}"
-				},
+				"arbeidsgiver": "${aktor1}",
 				"type": "Lønnsinntekt",
 				"fordel": "kontantytelse",
 				"beskrivelse": "fastloenn",

@@ -19,10 +19,6 @@ public class InntektskomponentModell {
     @JsonProperty("frilansarbeidsforholdperioder")
     List<FrilansArbeidsforholdsperiode> frilansarbeidsforholdperioder = new ArrayList<>();
 
-    public List<FrilansArbeidsforholdsperiode> getFrilansarbeidsforholdperioder() {
-        return frilansarbeidsforholdperioder;
-    }
-
     @JsonIgnore
     public List<FrilansArbeidsforholdsperiode> getFrilansarbeidsforholdperioderSplittMånedlig() {
         return frilansarbeidsforholdperioder.stream().flatMap(ip -> splittFrilansArbeidsforholdTilMånedligeIntervall(ip).stream()).collect(Collectors.toList());

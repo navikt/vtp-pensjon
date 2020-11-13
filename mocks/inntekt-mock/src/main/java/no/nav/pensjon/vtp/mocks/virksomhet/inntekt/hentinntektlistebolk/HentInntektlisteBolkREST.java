@@ -30,9 +30,11 @@ import java.util.stream.Collectors;
 public class HentInntektlisteBolkREST {
     private static final Logger LOG = LoggerFactory.getLogger(HentInntektlisteBolkREST.class);
 
+    private final HentInntektlisteBolkMapperRest hentInntektlisteBolkMapperRest;
     private final InntektYtelseIndeks inntektYtelseIndeks;
 
-    public HentInntektlisteBolkREST(InntektYtelseIndeks inntektYtelseIndeks) {
+    public HentInntektlisteBolkREST(HentInntektlisteBolkMapperRest hentInntektlisteBolkMapperRest, InntektYtelseIndeks inntektYtelseIndeks) {
+        this.hentInntektlisteBolkMapperRest = hentInntektlisteBolkMapperRest;
         this.inntektYtelseIndeks = inntektYtelseIndeks;
     }
 
@@ -54,7 +56,7 @@ public class HentInntektlisteBolkREST {
             Optional<InntektYtelseModell> inntektYtelseModell = inntektYtelseIndeks.getInntektYtelseModellFraAktørId(aktoer.getIdentifikator());
             if(inntektYtelseModell.isPresent()) {
                 InntektskomponentModell inntektskomponentModell = inntektYtelseModell.get().getInntektskomponentModell();
-                ArbeidsInntektIdent arbeidsInntektIdent = HentInntektlisteBolkMapperRest.makeArbeidsInntektIdent(
+                ArbeidsInntektIdent arbeidsInntektIdent = hentInntektlisteBolkMapperRest.makeArbeidsInntektIdent(
                         inntektskomponentModell
                         , aktoer
                         , fom

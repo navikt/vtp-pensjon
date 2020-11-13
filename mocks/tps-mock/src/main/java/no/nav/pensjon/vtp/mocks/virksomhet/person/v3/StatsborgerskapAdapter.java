@@ -23,7 +23,7 @@ public class StatsborgerskapAdapter {
             StatsborgerskapPeriode periode1 = new StatsborgerskapPeriode();
             periode1.withEndretAv(ENDRET_AV);
             periode1.withEndringstidspunkt(ConversionUtils.convertToXMLGregorianCalendar(st.getFom() == null ? LocalDate.now() : st.getFom()));
-            periode1.withEndringstype(st.getEndringstype() == null ? Endringstyper.NY : Endringstyper.fromValue(st.getEndringstype()));
+            periode1.withEndringstype(st.getEndringstype() == null ? Endringstyper.NY : Endringstyper.fromValue(st.getEndringstype().name()));
 
             LocalDate fom = st.getFom() == null ? LocalDate.of(2000, 1, 1) : st.getFom();
             LocalDate tom = st.getTom() == null ? LocalDate.of(2050, 1, 1) : st.getTom();
@@ -46,7 +46,7 @@ public class StatsborgerskapAdapter {
 
         Landkoder land = new Landkoder();
         land.withKodeRef("Landkoder");
-        land.setValue(st.getLandkode());
+        land.setValue(st.getLand().getKode());
 
         statsborgerskap.withLand(land);
         return statsborgerskap;

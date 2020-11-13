@@ -44,14 +44,16 @@ public class PselvPersonServiceMockImpl implements PSELVPerson {
     private static final Logger logger = LoggerFactory.getLogger(PsakPersonServiceMockImpl.class);
 
     private final PersonIndeks personIndeks;
+    private final PsakpselvPersonAdapter psakpselvPersonAdapter;
 
-    public PselvPersonServiceMockImpl(PersonIndeks personIndeks) {
+    public PselvPersonServiceMockImpl(PersonIndeks personIndeks, PsakpselvPersonAdapter psakpselvPersonAdapter) {
         this.personIndeks = personIndeks;
+        this.psakpselvPersonAdapter = psakpselvPersonAdapter;
     }
 
     private Optional<ASBOPenPerson> getASBOPerson(String fodselsnummer) {
-        return personIndeks.findByFødselsnummer(fodselsnummer)
-                .map(PsakpselvPersonAdapter::toASBOPerson)
+        return personIndeks.findById(fodselsnummer)
+                .map(psakpselvPersonAdapter::toASBOPerson)
                 .or(() -> logIkkeFunnet(fodselsnummer));
     }
 

@@ -20,8 +20,8 @@ public class PersonstatusAdapter {
             PersonstatusPeriode personstatusPeriode = new PersonstatusPeriode();
             personstatusPeriode.withEndretAv(ENDRET_AV);
             personstatusPeriode.withEndringstidspunkt(ConversionUtils.convertToXMLGregorianCalendar(LocalDate.now()));
-            personstatusPeriode.withEndringstype(ps.getEndringstype() == null ? Endringstyper.NY : Endringstyper.fromValue(ps.getEndringstype()));
-            personstatusPeriode.withPersonstatus(lagPersonstatuser(ps.getStatus()));
+            personstatusPeriode.withEndringstype(ps.getEndringstype() == null ? Endringstyper.NY : Endringstyper.fromValue(ps.getEndringstype().name()));
+            personstatusPeriode.withPersonstatus(lagPersonstatuser(ps.getKode().name()));
 
             LocalDate fom = ps.getFom() == null ? LocalDate.of(2000, 1, 1) : ps.getFom();
             LocalDate tom = ps.getTom() == null ? LocalDate.of(2050, 1, 1) : ps.getTom();

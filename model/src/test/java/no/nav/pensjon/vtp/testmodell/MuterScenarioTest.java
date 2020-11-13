@@ -39,10 +39,10 @@ public class MuterScenarioTest {
         InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
         OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
 
-        TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(loadAdresser(), new IdenterIndeks());
+        TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper();
         TestscenarioRepository testscenarioRepository = new TestscenarioRepositoryImpl();
         TestscenarioServiceImpl testScenarioRepository = new TestscenarioServiceImpl(testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks,
-                organisasjonRepository, new BrukerModelRepositoryInMemory());
+                organisasjonRepository, new BrukerModelRepositoryInMemory(), loadAdresser(), new IdenterIndeks());
 
         List<TestscenarioTemplate> templates = templateRepository.getTemplates().collect(toList());
         assertFalse(templates.isEmpty());

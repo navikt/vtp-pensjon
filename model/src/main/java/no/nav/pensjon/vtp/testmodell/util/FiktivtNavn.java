@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import no.nav.pensjon.vtp.testmodell.kodeverk.Kjønn;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonNavn;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
 
 public class FiktivtNavn {
     
@@ -55,7 +55,7 @@ public class FiktivtNavn {
     }
 
     static public PersonNavn getRandomFemaleName(String lastName) {
-        return new PersonNavn(Navnelager.SINGLETON.getRandomFornavnKvinne(), lastName, BrukerModell.Kjønn.K);
+        return new PersonNavn(Navnelager.SINGLETON.getRandomFornavnKvinne(), lastName, Kjønn.K);
     }
 
     static public PersonNavn getRandomMaleName() {
@@ -63,7 +63,7 @@ public class FiktivtNavn {
     }
 
     static public PersonNavn getRandomMaleName(String lastName) {
-        return new PersonNavn(Navnelager.SINGLETON.getRandomFornavnMann(), lastName, BrukerModell.Kjønn.M);
+        return new PersonNavn(Navnelager.SINGLETON.getRandomFornavnMann(), lastName, Kjønn.M);
     }
 
 }

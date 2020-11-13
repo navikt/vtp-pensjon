@@ -2,6 +2,7 @@ package no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,6 +15,10 @@ public class ArbeidsforholdModell {
 
     public List<Arbeidsforhold> getArbeidsforhold() {
         return arbeidsforhold;
+    }
+
+    public Stream<Arbeidsforhold> stream() {
+        return arbeidsforhold.stream();
     }
 
     public void setArbeidsforhold(List<Arbeidsforhold> arbeidsforhold) {
