@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.ArbeidsforholdModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.ArenaModell;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.InfotrygdModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.sigrun.SigrunModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.trex.TRexModell;
@@ -16,9 +15,6 @@ public class InntektYtelseModell {
 
     @JsonProperty("arena")
     private ArenaModell arenaModell;
-
-    @JsonProperty("infotrygd")
-    private InfotrygdModell infotrygdModell;
 
     @JsonProperty("trex")
     private TRexModell tRexModell;
@@ -44,17 +40,6 @@ public class InntektYtelseModell {
 
     public void setArenaModell(ArenaModell arenaModell) {
         this.arenaModell = arenaModell;
-    }
-
-    public InfotrygdModell getInfotrygdModell() {
-        if (infotrygdModell == null) {
-            this.infotrygdModell = new InfotrygdModell();
-        }
-        return infotrygdModell;
-    }
-
-    public void setInfotrygdModell(InfotrygdModell infotrygdModell) {
-        this.infotrygdModell = infotrygdModell;
     }
 
     public TRexModell gettRexModell() {

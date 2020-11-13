@@ -7,7 +7,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,18 +20,6 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.ArenaSak;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.ArenaVedtak;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.SakStatus;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.VedtakStatus;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.InfotrygdBehandlingstema;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.InfotrygdModell;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.InfotrygdSakStatus;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.InfotrygdSakType;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.InfotrygdTema;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.beregningsgrunnlag.InfotrygdArbeidsforhold;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.beregningsgrunnlag.InfotrygdArbeidskategori;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.beregningsgrunnlag.InfotrygdBeregningsgrunnlag;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.beregningsgrunnlag.InfotrygdForeldrepengerBeregningsgrunnlag;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.beregningsgrunnlag.InfotrygdInntektsperiodeType;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.beregningsgrunnlag.InfotrygdVedtak;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.infotrygd.ytelse.InfotrygdYtelse;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.Inntektsperiode;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
@@ -53,7 +40,6 @@ public class InntektYtelseTest {
 
         InntektYtelseModell inntektYtelse = new InntektYtelseModell();
         initArenaModell(inntektYtelse);
-        initInfotrygdModell(inntektYtelse);
         initInntektskomponentModell(inntektYtelse);
 
         Testscenario scenario = new Testscenario("test3", null, identerIndeks.getIdenter("abc"), new ScenarioVirksomheter("test3", virksomhetIndeks));
@@ -85,66 +71,9 @@ public class InntektYtelseTest {
         return inntektsperiode;
     }
 
-    private void initInfotrygdModell(InntektYtelseModell inntektYtelse) {
-        InfotrygdModell infotrygdModell = inntektYtelse.getInfotrygdModell();
-        List<InfotrygdBeregningsgrunnlag> infotrygdBeregningsgrunnlag = lagInfotrygdBeregningsgrunnlag();
-        infotrygdModell.setGrunnlag(infotrygdBeregningsgrunnlag);
-        infotrygdModell.setYtelser(lagInfotrygdYtelser());
-    }
-
-    private List<InfotrygdYtelse> lagInfotrygdYtelser() {
-        List<InfotrygdYtelse> resultat = new ArrayList<>();
-        resultat.add(lagInfotrygdYtelse());
-        return resultat;
-    }
-
-    private InfotrygdYtelse lagInfotrygdYtelse() {
-        LocalDateTime now = LocalDateTime.now();
-        InfotrygdYtelse yt = new InfotrygdYtelse();
-        yt.setBehandlingTema(InfotrygdBehandlingstema.FORELDREPENGER_FØDSEL);
-        yt.setTema(InfotrygdTema.FA);
-        yt.setRegistrert(now);
-        yt.setIverksatt(now);
-        yt.setEndret(now);
-        yt.setOpphør(now.plusDays(100));
-        yt.setSakId("9999");
-        yt.setSaksbehandlerId("helloworld");
-        yt.setSakStatus(InfotrygdSakStatus.FERDIG_IVERKSATT);
-        yt.setResultat(null);
-        yt.setSakType(InfotrygdSakType.SØKNAD);
-        return yt;
-    }
-
     private void initArenaModell(InntektYtelseModell inntektYtelse) {
         ArenaSak arenaSak = lagArenaSak();
         inntektYtelse.getArenaModell().leggTil(arenaSak);
-    }
-
-    private List<InfotrygdBeregningsgrunnlag> lagInfotrygdBeregningsgrunnlag() {
-        List<InfotrygdBeregningsgrunnlag> resultat = new ArrayList<>();
-        LocalDate today = LocalDate.now();
-
-        InfotrygdForeldrepengerBeregningsgrunnlag fbg = new InfotrygdForeldrepengerBeregningsgrunnlag();
-        fbg.setBehandlingTema(InfotrygdBehandlingstema.FORELDREPENGER_FØDSEL);
-        fbg.setFom(today);
-        fbg.setDekningsgrad(100);
-        fbg.setFødselsdatoBarn(today);
-        fbg.setGradering(100);
-        fbg.setStartdato(today);
-        fbg.setArbeidskategori(InfotrygdArbeidskategori.ARBEIDSTAKER);
-
-        InfotrygdArbeidsforhold arbeidsforhold = new InfotrygdArbeidsforhold("1");
-        arbeidsforhold.setBeløp(new BigDecimal(10000));
-        arbeidsforhold.setInntektsPeriodeType(InfotrygdInntektsperiodeType.MÅNEDLIG);
-        fbg.setArbeidsforhold(arbeidsforhold);
-
-        InfotrygdVedtak vedtak = new InfotrygdVedtak();
-        vedtak.setFom(today);
-        vedtak.setUtbetalingsgrad(100);
-        fbg.setVedtak(vedtak);
-
-        resultat.add(fbg);
-        return resultat;
     }
 
     private ArenaSak lagArenaSak() {
