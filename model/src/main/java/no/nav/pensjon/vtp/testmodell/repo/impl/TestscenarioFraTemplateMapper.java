@@ -15,8 +15,6 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
-import no.nav.pensjon.vtp.testmodell.virksomhet.ScenarioVirksomheter;
-import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -30,12 +28,10 @@ import org.springframework.stereotype.Component;
 public class TestscenarioFraTemplateMapper {
     private final AdresseIndeks adresseIndeks;
     private final IdenterIndeks identerIndeks;
-    private final VirksomhetIndeks virksomhetIndeks;
 
-    public TestscenarioFraTemplateMapper(AdresseIndeks adresseIndeks, IdenterIndeks identerIndeks, VirksomhetIndeks virksomhetIndeks) {
+    public TestscenarioFraTemplateMapper(AdresseIndeks adresseIndeks, IdenterIndeks identerIndeks) {
         this.adresseIndeks = adresseIndeks;
         this.identerIndeks = identerIndeks;
-        this.virksomhetIndeks = virksomhetIndeks;
     }
 
     public Testscenario lagTestscenario(TestscenarioTemplate template) {
@@ -46,7 +42,7 @@ public class TestscenarioFraTemplateMapper {
 
     public Testscenario lagTestscenario(TestscenarioTemplate template, String unikTestscenarioId, Map<String, String> vars) {
         Testscenario testScenario = new Testscenario(template.getTemplateNavn(),
-                unikTestscenarioId, identerIndeks.getIdenter(unikTestscenarioId), new ScenarioVirksomheter(template.getTemplateNavn(), virksomhetIndeks));
+                unikTestscenarioId, identerIndeks.getIdenter(unikTestscenarioId));
         load(testScenario, template, vars);
         return testScenario;
     }
@@ -55,7 +51,7 @@ public class TestscenarioFraTemplateMapper {
         ObjectNode node = hentObjecetNodeForTestscenario(testscenarioJson);
         String templateNavn = hentTemplateNavnFraJsonString(node);
         Testscenario testscenario = new Testscenario(templateNavn,
-                unikTestscenarioId, identerIndeks.getIdenter(unikTestscenarioId), new ScenarioVirksomheter(templateNavn, virksomhetIndeks));
+                unikTestscenarioId, identerIndeks.getIdenter(unikTestscenarioId));
         loadTestscenarioFraJsonString(testscenario, node, vars);
         return testscenario;
     }
@@ -177,8 +173,6 @@ public class TestscenarioFraTemplateMapper {
 
         jsonMapper.addInjectable(LokalIdentIndeks.class, scenario.getIdenter());
         jsonMapper.addInjectable(AdresseIndeks.class, adresseIndeks);
-        jsonMapper.addInjectable(ScenarioVirksomheter.class, scenario.getVirksomheter());
-
     }
 
 }

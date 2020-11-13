@@ -32,19 +32,17 @@ import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioServiceImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateLoader;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
-import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
 public class AdresserTest {
 
     @Test
     public void sjekk_scenarios() throws Exception {
         AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
-        VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
         PersonIndeks personIndeks = new PersonIndeks(new PersonIdentFooRepositoryInMemory());
         InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
         OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
 
-        TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks(), virksomhetIndeks);
+        TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks());
         TestscenarioRepository testscenarioRepository = new TestscenarioRepositoryImpl();
         TestscenarioServiceImpl testScenarioRepository = new TestscenarioServiceImpl(testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks,
                 organisasjonRepository, new BrukerModelRepositoryInMemory());

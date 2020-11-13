@@ -23,18 +23,14 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.VedtakStatus;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.Inntektsperiode;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
-import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTilTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
-import no.nav.pensjon.vtp.testmodell.virksomhet.ScenarioVirksomheter;
-import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
 public class InntektYtelseTest {
     private static final JsonMapper jsonMapper =  new JsonMapper();
 
     @Test
     public void skal_skrive_scenario_til_inntektytelse_json() throws Exception {
-        VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
         IdenterIndeks identerIndeks = new IdenterIndeks();
         TestscenarioTilTemplateMapper mapper = new TestscenarioTilTemplateMapper();
 
@@ -42,7 +38,7 @@ public class InntektYtelseTest {
         initArenaModell(inntektYtelse);
         initInntektskomponentModell(inntektYtelse);
 
-        Testscenario scenario = new Testscenario("test3", null, identerIndeks.getIdenter("abc"), new ScenarioVirksomheter("test3", virksomhetIndeks));
+        Testscenario scenario = new Testscenario("test3", null, identerIndeks.getIdenter("abc"));
         scenario.setSøkerInntektYtelse(inntektYtelse);
 
         String json = skrivInntektYtelse(scenario, mapper);

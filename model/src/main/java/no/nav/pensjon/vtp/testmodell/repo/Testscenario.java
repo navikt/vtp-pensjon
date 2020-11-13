@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.Inntektsperiode;
@@ -17,8 +16,6 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonArbeidsgiver;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.util.VariabelContainer;
-import no.nav.pensjon.vtp.testmodell.virksomhet.ScenarioVirksomheter;
-import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
 public class Testscenario {
 
@@ -37,17 +34,13 @@ public class Testscenario {
 
     private final OrganisasjonModeller organisasjonModeller = new OrganisasjonModeller();
 
-    private final ScenarioVirksomheter scenarioVirksomheter;
-
-    /** Unik testscenario id. */
     private final String id;
 
     private final VariabelContainer vars = new VariabelContainer();
 
-    public Testscenario(final String templateNavn, final String id, LokalIdentIndeks identer, final ScenarioVirksomheter scenarioVirksomheter) {
+    public Testscenario(final String templateNavn, final String id, LokalIdentIndeks identer) {
         this.templateNavn = templateNavn;
         this.id = id;
-        this.scenarioVirksomheter = scenarioVirksomheter;
         this.identer = identer;
     }
 
@@ -86,10 +79,6 @@ public class Testscenario {
 
     public void leggTil(OrganisasjonModell organisasjonModell) {
         organisasjonModeller.leggTil(organisasjonModell);
-    }
-
-    public ScenarioVirksomheter getVirksomheter() {
-        return scenarioVirksomheter;
     }
 
     public VariabelContainer getVariabelContainer() {

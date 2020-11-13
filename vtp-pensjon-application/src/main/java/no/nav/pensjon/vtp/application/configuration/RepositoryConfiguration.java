@@ -3,7 +3,6 @@ package no.nav.pensjon.vtp.application.configuration;
 import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadAdresser;
 import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadAnsatte;
 import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadEnheter;
-import static no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadVirksomheter;
 
 import java.io.IOException;
 
@@ -19,7 +18,6 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateLoader;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
-import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
 @Configuration
 public class RepositoryConfiguration {
@@ -46,10 +44,5 @@ public class RepositoryConfiguration {
     @Bean
     public EnheterIndeks enheterIndeks() throws IOException {
         return loadEnheter();
-    }
-
-    @Bean
-    public VirksomhetIndeks virksomhetIndeks() throws IOException {
-        return loadVirksomheter();
     }
 }

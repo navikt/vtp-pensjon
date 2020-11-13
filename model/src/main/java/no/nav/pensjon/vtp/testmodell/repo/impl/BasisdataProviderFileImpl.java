@@ -15,8 +15,6 @@ import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseModell;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
-import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
-import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetModell;
 
 public class BasisdataProviderFileImpl {
     public static AdresseIndeks loadAdresser() throws IOException {
@@ -62,19 +60,6 @@ public class BasisdataProviderFileImpl {
         }
 
         return ansatteIndeks;
-    }
-
-    public static VirksomhetIndeks loadVirksomheter() throws IOException {
-        final JsonMapper jsonMapper = new JsonMapper();
-        final VirksomhetIndeks virksomhetIndeks = new VirksomhetIndeks();
-
-        try (InputStream is = BasisdataProviderFileImpl.class.getResourceAsStream("/basedata/virksomheter.json")) {
-            TypeReference<List<VirksomhetModell>> typeRef = new TypeReference<>() {
-            };
-            List<VirksomhetModell> virksomheter = jsonMapper.lagObjectMapper().readValue(is, typeRef);
-            virksomhetIndeks.leggTil(virksomheter);
-        }
-        return virksomhetIndeks;
     }
 
     public static void loadOrganisasjoner(final OrganisasjonRepository organisasjonRepository) throws IOException {

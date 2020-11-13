@@ -21,8 +21,6 @@ import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTilTemplateMapper;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.pensjon.vtp.testmodell.virksomhet.ScenarioVirksomheter;
-import no.nav.pensjon.vtp.testmodell.virksomhet.VirksomhetIndeks;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -39,14 +37,13 @@ public class PersonopplysningerTest {
 
     @Test
     public void skal_skrive_scenario_til_personopplysninger_json() throws Exception {
-        VirksomhetIndeks virksomhetIndeks = BasisdataProviderFileImpl.loadVirksomheter();
         AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
         IdenterIndeks identerIndeks = new IdenterIndeks();
         TestscenarioRepository testscenarioRepository = new TestscenarioRepositoryImpl();
 
         TestscenarioTilTemplateMapper mapper = new TestscenarioTilTemplateMapper();
 
-        Testscenario scenario = new Testscenario("test", "test-1", identerIndeks.getIdenter("test-1"), new ScenarioVirksomheter("test", virksomhetIndeks));
+        Testscenario scenario = new Testscenario("test", "test-1", identerIndeks.getIdenter("test-1"));
         JsonMapper jsonMapper =  new JsonMapper(scenario.getVariabelContainer());
         String lokalIdent = "#id1#";
         SøkerModell søker = new SøkerModell(lokalIdent, "Donald", LocalDate.now().minusYears(20), Kjønn.M);
@@ -70,7 +67,7 @@ public class PersonopplysningerTest {
 
         // Act - readback
 
-        TestscenarioFraTemplateMapper readMapper = new TestscenarioFraTemplateMapper(adresseIndeks, identerIndeks, virksomhetIndeks);
+        TestscenarioFraTemplateMapper readMapper = new TestscenarioFraTemplateMapper(adresseIndeks, identerIndeks);
         Testscenario scenario2 = readMapper.lagTestscenario(new StringTestscenarioTemplate("my-template", json, null, null));
         testscenarioRepository.save(scenario2);
 
