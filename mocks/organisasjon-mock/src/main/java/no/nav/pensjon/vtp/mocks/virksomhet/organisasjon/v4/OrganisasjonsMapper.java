@@ -1,8 +1,12 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.organisasjon.v4;
 
-import java.util.Arrays;
+import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
+
+import java.util.Collections;
 
 import no.nav.pensjon.vtp.felles.ConversionUtils;
+import no.nav.pensjon.vtp.testmodell.organisasjon.Navn;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonDetaljerModell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.informasjon.Organisasjon;
@@ -19,7 +23,7 @@ public class OrganisasjonsMapper {
         Virksomhet organisasjon = new Virksomhet();
         organisasjon.setOrgnummer(modell.getOrgnummer());
         UstrukturertNavn ustrukturertNavn = new UstrukturertNavn();
-        ustrukturertNavn.getNavnelinje().addAll(Arrays.asList(modell.getNavn().getNavnelinje()));
+        ustrukturertNavn.getNavnelinje().addAll(ofNullable(modell.getNavn()).map(Navn::getNavnelinje).orElseGet(Collections::emptyList));
         organisasjon.setNavn(ustrukturertNavn);
         organisasjon.setOrganisasjonDetaljer(mapOrganisasjonDetaljerFraModell(modell.getOrganisasjonDetaljer()));
         organisasjon.setVirksomhetDetaljer(new VirksomhetDetaljer());

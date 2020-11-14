@@ -5,5 +5,9 @@ cxf:
 pensjon:
   testdata:
     url: http://localhost:3000
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 verbose: false

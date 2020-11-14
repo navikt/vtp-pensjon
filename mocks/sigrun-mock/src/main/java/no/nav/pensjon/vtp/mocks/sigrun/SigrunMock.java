@@ -6,8 +6,7 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.sigrun.Inntektsår;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.sigrun.Oppføring;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 
@@ -31,13 +30,13 @@ import java.util.stream.Collectors;
 public class SigrunMock {
     private static final Logger LOG = LoggerFactory.getLogger(SigrunMock.class);
 
-    private final BrukerModellRepository brukerModellRepository;
+    private final PersonModellRepository personModellRepository;
     private final InntektYtelseIndeks inntektYtelseIndeks;
     private final PersonIndeks personIndeks;
 
-    public SigrunMock(BrukerModellRepository brukerModellRepository, InntektYtelseIndeks inntektYtelseIndeks,
+    public SigrunMock(PersonModellRepository personModellRepository, InntektYtelseIndeks inntektYtelseIndeks,
             PersonIndeks personIndeks) {
-        this.brukerModellRepository = brukerModellRepository;
+        this.personModellRepository = personModellRepository;
         this.inntektYtelseIndeks = inntektYtelseIndeks;
         this.personIndeks = personIndeks;
     }
@@ -50,7 +49,7 @@ public class SigrunMock {
         LOG.info("Sigrun for aktørId: {} ", aktørId);
 
         if (brukerFnr == null && aktørId != null) {
-            Optional<PersonModell> brukerModell = brukerModellRepository.findByAktørIdent(aktørId);
+            Optional<PersonModell> brukerModell = personModellRepository.findByAktørIdent(aktørId);
             if (brukerModell.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kunne ikke finne bruker");
             } else {

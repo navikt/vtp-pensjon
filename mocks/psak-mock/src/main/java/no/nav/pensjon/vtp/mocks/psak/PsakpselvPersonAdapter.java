@@ -5,7 +5,7 @@ import static java.util.Optional.ofNullable;
 import no.nav.lib.pen.psakpselv.asbo.person.*;
 import no.nav.pensjon.vtp.testmodell.kodeverk.Diskresjonskoder;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.GateadresseModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
@@ -21,10 +21,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PsakpselvPersonAdapter {
-    private final BrukerModellRepository brukerModellRepository;
+    private final PersonModellRepository personModellRepository;
 
-    public PsakpselvPersonAdapter(BrukerModellRepository brukerModellRepository) {
-        this.brukerModellRepository = brukerModellRepository;
+    public PsakpselvPersonAdapter(PersonModellRepository personModellRepository) {
+        this.personModellRepository = personModellRepository;
     }
 
     public ASBOPenPerson toASBOPerson(Personopplysninger personopplysninger) {
@@ -88,7 +88,7 @@ public class PsakpselvPersonAdapter {
         ASBOPenRelasjon relasjon = new ASBOPenRelasjon();
         relasjon.setRelasjonsType(fr.getRolle().name());
         ASBOPenPerson annen = Stream.ofNullable(personopplysninger.getAnnenPart())
-                .filter(p -> p.getIdent().equals(brukerModellRepository.findById(fr.getTil()).orElseThrow(() -> new RuntimeException("No person with ident " + fr.getTil())).getIdent()))
+                .filter(p -> p.getIdent().equals(personModellRepository.findById(fr.getTil()).orElseThrow(() -> new RuntimeException("No person with ident " + fr.getTil())).getIdent()))
                 .map(PsakpselvPersonAdapter::populateAsboPenPerson)
                 .peek(p -> relasjon.setFom(fetchDate(personopplysninger.getSøker().getSivilstandFoo().getFom()).orElse(null)))
                 .peek(p -> relasjon.setTom(fetchDate(personopplysninger.getSøker().getSivilstandFoo().getTom()).orElse(null)))
@@ -115,7 +115,8 @@ public class PsakpselvPersonAdapter {
 
     private ASBOPenPerson createShallowASBOPerson(FamilierelasjonModell familierelasjon) {
         ASBOPenPerson annen = new ASBOPenPerson();
-        annen.setFodselsnummer(brukerModellRepository.findById(familierelasjon.getTil()).orElseThrow(() -> new RuntimeException("No person with ident " + familierelasjon.getTil())).getIdent());
+        annen.setFodselsnummer(
+                personModellRepository.findById(familierelasjon.getTil()).orElseThrow(() -> new RuntimeException("No person with ident " + familierelasjon.getTil())).getIdent());
         return annen;
     }
 

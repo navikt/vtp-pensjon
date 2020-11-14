@@ -15,10 +15,6 @@ public class AdresseIndeks {
     }
 
     public synchronized AdresseModell finn(AdresseType adresseType, Landkode landkode) {
-        return finn(adresseType, landkode == null ? null : landkode.getKode());
-    }
-
-    public synchronized AdresseModell finn(AdresseType adresseType, String landkode) {
         return adresser.stream()
             .filter(a -> a.getAdresseType() == adresseType)
             .filter(a -> landkode.equals(a.getLandkode()))

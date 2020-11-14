@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.load.TestscenarioLoad;
-import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 
 public class TestscenarioTilTemplateMapper {
     public void skrivInntektYtelse(ObjectMapper objectMapper, OutputStream out, TestscenarioLoad scenario, InntektYtelseModell inntektYtelse) {

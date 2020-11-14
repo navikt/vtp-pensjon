@@ -12,7 +12,7 @@ import no.nav.pensjon.vtp.kontrakter.TestscenariodataDto;
 import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataService;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.ArbeidsforholdModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
@@ -40,14 +40,14 @@ public class TestscenarioRestTjeneste {
     private static final String TEMPLATE_KEY = "key";
     private static final String SCENARIO_ID = "id";
 
-    private final BrukerModellRepository brukerModellRepository;
+    private final PersonModellRepository personModellRepository;
     private final TestscenarioTemplateRepository templateRepository;
     private final TestscenarioService testscenarioService;
     private final PensjonTestdataService pensjonTestdataService;
 
-    public TestscenarioRestTjeneste(BrukerModellRepository brukerModellRepository, TestscenarioTemplateRepository templateRepository,
+    public TestscenarioRestTjeneste(PersonModellRepository personModellRepository, TestscenarioTemplateRepository templateRepository,
             TestscenarioService testscenarioService, PensjonTestdataService pensjonTestdataService) {
-        this.brukerModellRepository = brukerModellRepository;
+        this.personModellRepository = personModellRepository;
         this.templateRepository = templateRepository;
         this.testscenarioService = testscenarioService;
         this.pensjonTestdataService = pensjonTestdataService;
@@ -172,7 +172,7 @@ public class TestscenarioRestTjeneste {
                 .map(List::stream)
                 .flatMap(Stream::findFirst)
                 .map(FamilierelasjonModell::getTil)
-                .flatMap(brukerModellRepository::findById)
+                .flatMap(personModellRepository::findById)
                 .map(PersonModell::getFødselsdato);
     }
 }

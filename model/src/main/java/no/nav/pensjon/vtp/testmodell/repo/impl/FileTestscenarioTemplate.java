@@ -9,18 +9,18 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Set;
 
-import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
-import no.nav.pensjon.vtp.testmodell.util.FindTemplateVariables;
-import no.nav.pensjon.vtp.testmodell.util.VariabelContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.repo.TemplateVariable;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
+import no.nav.pensjon.vtp.testmodell.util.FindTemplateVariables;
+import no.nav.pensjon.vtp.testmodell.util.VariabelContainer;
 
 public class FileTestscenarioTemplate implements TestscenarioTemplate {
 

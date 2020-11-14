@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.felles.ConversionUtils;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
@@ -44,10 +44,10 @@ import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.IdentDetaljer;
 public class AktoerServiceMockImpl implements AktoerV2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(AktoerServiceMockImpl.class);
-    private final BrukerModellRepository brukerModellRepository;
+    private final PersonModellRepository personModellRepository;
 
-    public AktoerServiceMockImpl(BrukerModellRepository brukerModellRepository) {
-        this.brukerModellRepository = brukerModellRepository;
+    public AktoerServiceMockImpl(PersonModellRepository personModellRepository) {
+        this.personModellRepository = personModellRepository;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class AktoerServiceMockImpl implements AktoerV2 {
                                                              @WebParam(name = "hentIdentForAktoerIdRequest") HentIdentForAktoerIdRequest request)
             throws HentIdentForAktoerIdPersonIkkeFunnet {
         LOG.info("hentIdentForAktoerId: " + request.getAktoerId());
-        PersonModell brukerModell = brukerModellRepository.findByAktørIdent(request.getAktoerId())
+        PersonModell brukerModell = personModellRepository.findByAktørIdent(request.getAktoerId())
                 .orElseThrow(() -> new HentIdentForAktoerIdPersonIkkeFunnet("Fant ingen ident for aktoerid: " + request.getAktoerId(), new PersonIkkeFunnet()));
 
         HentIdentForAktoerIdResponse response = new HentIdentForAktoerIdResponse();
@@ -78,7 +78,7 @@ public class AktoerServiceMockImpl implements AktoerV2 {
             throws HentAktoerIdForIdentPersonIkkeFunnet {
         LOG.info("hentIdentForAktoerId: " + request.getIdent());
 
-        PersonModell brukerModell = brukerModellRepository.findById(request.getIdent())
+        PersonModell brukerModell = personModellRepository.findById(request.getIdent())
                 .orElseThrow(() -> new HentAktoerIdForIdentPersonIkkeFunnet("Fant ingen aktoerid for ident: " + request.getIdent(), new PersonIkkeFunnet()));
 
         HentAktoerIdForIdentResponse response = new HentAktoerIdForIdentResponse();
@@ -99,7 +99,7 @@ public class AktoerServiceMockImpl implements AktoerV2 {
         Map<String, String> identTilAktørId = new LinkedHashMap<>();
 
         hentAktoerIdForIdentListeRequest.getIdentListe()
-            .forEach(ident -> identTilAktørId.put(ident, brukerModellRepository.findById(ident).map(PersonModell::getAktørIdent).orElse(null)));
+            .forEach(ident -> identTilAktørId.put(ident, personModellRepository.findById(ident).map(PersonModell::getAktørIdent).orElse(null)));
 
         HentAktoerIdForIdentListeResponse response = new HentAktoerIdForIdentListeResponse();
         identTilAktørId.forEach((ident, aktørId) -> {

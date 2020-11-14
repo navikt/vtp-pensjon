@@ -8,8 +8,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import no.nav.pensjon.vtp.testmodell.personopplysning.Landkode;
-
 public class MedlemskapKildeType {
 
     private static List<String> VALID_KODER;
@@ -62,7 +60,7 @@ public class MedlemskapKildeType {
         } else if (obj == null || !obj.getClass().equals(this.getClass())) {
             return false;
         }
-        return Objects.equals(getKode(), ((Landkode) obj).getKode());
+        return Objects.equals(getKode(), ((MedlemskapKildeType) obj).getKode());
     }
 
     @Override

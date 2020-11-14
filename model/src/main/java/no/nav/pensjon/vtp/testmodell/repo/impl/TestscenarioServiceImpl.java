@@ -1,9 +1,11 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl;
 
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -15,9 +17,9 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.load.TestscenarioLoad;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
@@ -32,20 +34,20 @@ public class TestscenarioServiceImpl implements TestscenarioService {
     private final PersonIndeks personIndeks;
     private final InntektYtelseIndeks inntektYtelseIndeks;
     private final OrganisasjonRepository organisasjonRepository;
-    private final BrukerModellRepository brukerModellRepository;
+    private final PersonModellRepository personModellRepository;
     private final AdresseIndeks adresseIndeks;
     private final IdenterIndeks identerIndeks;
 
 
     public TestscenarioServiceImpl(TestscenarioFraTemplateMapper mapper, TestscenarioRepository testscenarioRepository,
             PersonIndeks personIndeks, InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonRepository organisasjonRepository,
-            BrukerModellRepository brukerModellRepository, AdresseIndeks adresseIndeks, IdenterIndeks identerIndeks) {
+            PersonModellRepository personModellRepository, AdresseIndeks adresseIndeks, IdenterIndeks identerIndeks) {
         this.mapper = mapper;
         this.testscenarioRepository = testscenarioRepository;
         this.personIndeks = personIndeks;
         this.inntektYtelseIndeks = inntektYtelseIndeks;
         this.organisasjonRepository = organisasjonRepository;
-        this.brukerModellRepository = brukerModellRepository;
+        this.personModellRepository = requireNonNull(personModellRepository);
         this.adresseIndeks = adresseIndeks;
         this.identerIndeks = identerIndeks;
     }
@@ -93,8 +95,7 @@ public class TestscenarioServiceImpl implements TestscenarioService {
 
     private Testscenario mapToTestscenario(final TestscenarioLoad load, final String testscenarioId, final Personopplysninger personopplysningerSave) {
         return new Testscenario(
-                load.getTemplateNavn(),
-                testscenarioId,
+                testscenarioId, load.getTemplateNavn(),
                 personopplysningerSave,
                 load.getSøkerInntektYtelse(),
                 load.getAnnenpartInntektYtelse(),
@@ -109,7 +110,7 @@ public class TestscenarioServiceImpl implements TestscenarioService {
             return;
         }
 
-        brukerModellRepository.save(bruker);
+        personModellRepository.save(bruker);
     }
 
     @Override
@@ -124,6 +125,6 @@ public class TestscenarioServiceImpl implements TestscenarioService {
 
     @Override
     public void slettScenario(String id) {
-        testscenarioRepository.delete(id);
+        testscenarioRepository.deleteById(id);
     }
 }

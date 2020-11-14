@@ -10,47 +10,19 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import org.junit.Test;
 
-import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
-import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModelRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.GateadresseModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Landkode;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIdentFooRepositoryInMemory;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.UstrukturertAdresseModell;
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioServiceImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateLoader;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
 
 public class AdresserTest {
-
     @Test
     public void sjekk_scenarios() throws Exception {
-        AdresseIndeks adresseIndeks = BasisdataProviderFileImpl.loadAdresser();
-        PersonIndeks personIndeks = new PersonIndeks(new PersonIdentFooRepositoryInMemory());
-        InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
-        OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
-
-        TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper();
-        TestscenarioRepository testscenarioRepository = new TestscenarioRepositoryImpl();
-        TestscenarioServiceImpl testScenarioRepository = new TestscenarioServiceImpl(testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks,
-                organisasjonRepository, new BrukerModelRepositoryInMemory(), adresseIndeks, new IdenterIndeks());
-        TestscenarioTemplateLoader loader = new TestscenarioTemplateLoader();
-        TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl(loader.load());
-        templateRepository.getTemplates().forEach(testscenarioTemplate -> {
-            testScenarioRepository.opprettTestscenario(testscenarioTemplate);
-            sjekkAdresseIndeks(adresseIndeks);
-        });
+        sjekkAdresseIndeks(BasisdataProviderFileImpl.loadAdresser());
     }
 
     @Test

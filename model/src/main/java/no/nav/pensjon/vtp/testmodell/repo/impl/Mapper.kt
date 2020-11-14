@@ -1,13 +1,12 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl
 
-import no.nav.pensjon.vtp.testmodell.kodeverk.Kjønn
 import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks
+import no.nav.pensjon.vtp.testmodell.kodeverk.Kjønn
 import no.nav.pensjon.vtp.testmodell.load.*
 import no.nav.pensjon.vtp.testmodell.personopplysning.*
 import no.nav.pensjon.vtp.testmodell.util.FiktivtNavn
 import no.nav.pensjon.vtp.testmodell.util.TestdataUtil
 import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
-import java.lang.RuntimeException
 
 class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, val vars: VariabelContainer) {
     fun mapFromLoad(l: PersonopplysningerTemplate): Personopplysninger {

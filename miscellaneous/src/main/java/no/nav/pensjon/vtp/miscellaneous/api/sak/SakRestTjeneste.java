@@ -19,7 +19,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import no.nav.pensjon.vtp.mocks.oppgave.gask.sak.v1.GsakRepo;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sak;
 
@@ -29,11 +29,11 @@ import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sak;
 public class SakRestTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(SakRestTjeneste.class);
 
-    private final BrukerModellRepository brukerModellRepository;
+    private final PersonModellRepository personModellRepository;
     private final GsakRepo gsakRepo;
 
-    public SakRestTjeneste(BrukerModellRepository brukerModellRepository, GsakRepo gsakRepo) {
-        this.brukerModellRepository = brukerModellRepository;
+    public SakRestTjeneste(PersonModellRepository personModellRepository, GsakRepo gsakRepo) {
+        this.personModellRepository = personModellRepository;
         this.gsakRepo = gsakRepo;
     }
 
@@ -50,7 +50,7 @@ public class SakRestTjeneste {
 
         List<PersonModell> brukere = requestDTO.getLokalIdent()
                 .stream()
-                .map(brukerModellRepository::findById)
+                .map(personModellRepository::findById)
                 .flatMap(Optional::stream)
                 .collect(toList());
 

@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.MedlemskapV2;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.PersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.Sikkerhetsbegrensning;
@@ -31,10 +31,10 @@ import no.nav.tjeneste.virksomhet.medlemskap.v2.meldinger.HentPeriodeResponse;
 public class MedlemServiceMockImpl implements MedlemskapV2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(MedlemServiceMockImpl.class);
-    private final BrukerModellRepository brukerModellRepository;
+    private final PersonModellRepository personModellRepository;
 
-    public MedlemServiceMockImpl(BrukerModellRepository brukerModellRepository){
-        this.brukerModellRepository = brukerModellRepository;
+    public MedlemServiceMockImpl(PersonModellRepository personModellRepository){
+        this.personModellRepository = personModellRepository;
     }
 
     @WebMethod
@@ -71,7 +71,7 @@ public class MedlemServiceMockImpl implements MedlemskapV2 {
         if (request.getIdent() != null) {
             String fnr = request.getIdent().getValue();
             HentPeriodeListeResponse response = new HentPeriodeListeResponse();
-            new MedlemskapperioderAdapter(brukerModellRepository)
+            new MedlemskapperioderAdapter(personModellRepository)
                     .finnMedlemsperioder(fnr)
                     .ifPresent(response::withPeriodeListe);
             return response;

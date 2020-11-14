@@ -23,8 +23,8 @@ public abstract class AdresseModell extends Periodisert implements Cloneable {
     }
 
     @JsonIgnore
-    public String getLandkode() {
-        return land!=null?land.getKode():null;
+    public Landkode getLandkode() {
+        return land;
     }
 
     public Landkode getLand() {

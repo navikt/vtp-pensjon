@@ -8,8 +8,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import no.nav.pensjon.vtp.testmodell.personopplysning.Landkode;
-
 public class SakStatus {
     private static Map<String, String> VALID_KODER;
     static {
@@ -60,7 +58,7 @@ public class SakStatus {
         } else if (obj == null || !obj.getClass().equals(this.getClass())) {
             return false;
         }
-        return Objects.equals(getKode(), ((Landkode) obj).getKode());
+        return Objects.equals(getKode(), ((SakStatus) obj).getKode());
     }
 
     @Override

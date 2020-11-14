@@ -37,12 +37,4 @@ data class OppgaveFoo(
     val isLest: Boolean,
     val mappeId: String?,
     val revurderingstype: String?
-) {
-    fun withIncrementedVersion(): OppgaveFoo {
-        return copy(version = version + 1)
-    }
-
-    fun hasDifferentVersion(other: OppgaveFoo): Boolean {
-        return version != other.version
-    }
-}
+)

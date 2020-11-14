@@ -1,9 +1,8 @@
 package no.nav.pensjon.vtp.mocks.oppgave.gask.oppgave.v3
 
 import no.nav.pensjon.vtp.core.annotations.SoapService
-import no.nav.pensjon.vtp.core.util.toNullable
 import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFoo
-import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFooBaseRepository
+import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFooRepository
 import no.nav.tjeneste.virksomhet.oppgave.v3.binding.HentOppgaveOppgaveIkkeFunnet
 import no.nav.tjeneste.virksomhet.oppgave.v3.binding.OppgaveV3
 import no.nav.tjeneste.virksomhet.oppgave.v3.feil.OppgaveIkkeFunnet
@@ -37,14 +36,14 @@ fun Collection<Oppgave>.asResponse(): FinnOppgaveListeResponse {
 @Addressing
 @WebService(name = "Oppgave_v3", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgave/v3")
 @HandlerChain(file = "/Handler-chain.xml")
-class OppgaveServiceMockImpl(private val oppgaveRepository: OppgaveFooBaseRepository) : OppgaveV3 {
+class OppgaveServiceMockImpl(private val oppgaveRepository: OppgaveFooRepository) : OppgaveV3 {
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/oppgave/v3/Oppgave_v3/hentOppgave")
     @WebResult(name = "response")
     @RequestWrapper(localName = "hentOppgave", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgave/v3", className = "no.nav.tjeneste.virksomhet.oppgave.v3.HentOppgave")
     @ResponseWrapper(localName = "hentOppgaveResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgave/v3", className = "no.nav.tjeneste.virksomhet.oppgave.v3.HentOppgaveResponse")
     @Throws(HentOppgaveOppgaveIkkeFunnet::class)
     override fun hentOppgave(@WebParam(name = "request") request: HentOppgaveRequest): HentOppgaveResponse =
-            oppgaveRepository.findById(request.oppgaveId).toNullable()
+            oppgaveRepository.findById(request.oppgaveId)
                     ?.asOppgave3()
                     ?.asResponse()
                     ?: throw HentOppgaveOppgaveIkkeFunnet("Fant ikke oppgave med id=${request.oppgaveId}", OppgaveIkkeFunnet())
