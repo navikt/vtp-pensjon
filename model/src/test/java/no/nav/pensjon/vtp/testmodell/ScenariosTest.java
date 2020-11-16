@@ -12,13 +12,13 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModelRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIdentFooRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
-import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
-import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioFraTemplateMapper;
+import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioServiceImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateLoader;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImpl;
@@ -35,25 +35,19 @@ public class ScenariosTest {
         InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
         OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
 
-        TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks());
+        TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper();
         TestscenarioRepository testscenarioRepository = new TestscenarioRepositoryImpl();
         TestscenarioServiceImpl testScenarioRepository = new TestscenarioServiceImpl(testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks,
-                organisasjonRepository, new BrukerModelRepositoryInMemory());
+                organisasjonRepository, new BrukerModelRepositoryInMemory(), adresseIndeks, new IdenterIndeks());
 
         templateRepository.getTemplates().forEach(sc -> {
             Testscenario testScenario = testScenarioRepository.opprettTestscenario(sc);
-            sjekkIdenterErInjisert(testScenario);
             Personopplysninger pers = testScenario.getPersonopplysninger();
             assertThat(pers).isNotNull();
-            SøkerModell søker = pers.getSøker();
+            PersonModell søker = pers.getSøker();
             assertThat(pers.getFamilierelasjoner()).isNotEmpty();
             assertThat(søker.getGeografiskTilknytning()).isNotNull();
         });
-    }
-
-    private void sjekkIdenterErInjisert(Testscenario sc) {
-        sc.getIdenter().getAlleIdenter().entrySet().forEach(System.out::println);
-        System.out.println("--------------");
     }
 
 }

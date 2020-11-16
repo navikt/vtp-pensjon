@@ -24,9 +24,11 @@ public class PenPersonServiceMockImpl implements PENPerson {
     private static final Logger LOG = LoggerFactory.getLogger(PenPersonServiceMockImpl.class);
 
     private final PersonIndeks personIndeks;
+    private final PsakpselvPersonAdapter psakpselvPersonAdapter;
 
-    public PenPersonServiceMockImpl(PersonIndeks personIndeks) {
+    public PenPersonServiceMockImpl(PersonIndeks personIndeks, PsakpselvPersonAdapter psakpselvPersonAdapter) {
         this.personIndeks = personIndeks;
+        this.psakpselvPersonAdapter = psakpselvPersonAdapter;
     }
 
     @Override
@@ -103,8 +105,8 @@ public class PenPersonServiceMockImpl implements PENPerson {
     }
 
     private Optional<ASBOPenPerson> getASBOPenPerson(String fodselsnummer) {
-        return personIndeks.findByFødselsnummer(fodselsnummer)
-                        .map(PsakpselvPersonAdapter::toASBOPerson)
+        return personIndeks.findById(fodselsnummer)
+                        .map(psakpselvPersonAdapter::toASBOPerson)
                         .or(() -> logIkkeFunnet(fodselsnummer));
     }
 

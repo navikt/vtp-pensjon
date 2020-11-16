@@ -1,15 +1,15 @@
 package no.nav.pensjon.vtp.testmodell.util;
 
-import no.nav.pensjon.vtp.testmodell.personopplysning.AnnenPartModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonNavn;
-import no.nav.pensjon.vtp.testmodell.personopplysning.SivilstandModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
+
+import no.nav.pensjon.vtp.testmodell.kodeverk.Kjønn;
+import no.nav.pensjon.vtp.testmodell.kodeverk.Sivilstander;
+import no.nav.pensjon.vtp.testmodell.load.PersonTemplate;
+import no.nav.pensjon.vtp.testmodell.load.SivilstandTemplate;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonNavn;
 
 public class TestdataUtil {
     static public LocalDate generateRandomPlausibleBirtdayParent() {
@@ -23,9 +23,7 @@ public class TestdataUtil {
 
         long randomEpochDay = startEpoch + (long) (random.nextDouble() * endEpoch - startEpoch);
 
-        LocalDate randomLocalDate = LocalDate.ofEpochDay(randomEpochDay);
-
-        return randomLocalDate;
+        return LocalDate.ofEpochDay(randomEpochDay);
 
     }
 
@@ -56,9 +54,7 @@ public class TestdataUtil {
 
         long randomEpochDay = startEpoch + (long) (random.nextDouble() * (endEpoch - startEpoch));
 
-        LocalDate randomLocalDate = LocalDate.ofEpochDay(randomEpochDay);
-
-        return randomLocalDate;
+        return LocalDate.ofEpochDay(randomEpochDay);
     }
 
     static public LocalDate generateBirthdayYoungerThanSixMonths() {
@@ -73,34 +69,21 @@ public class TestdataUtil {
 
         long randomEpochDay = startEpoch + (long) (random.nextDouble() * (endEpoch - startEpoch));
 
-        LocalDate randomLocalDate = LocalDate.ofEpochDay(randomEpochDay);
-
-        return randomLocalDate;
+        return LocalDate.ofEpochDay(randomEpochDay);
     }
-
-    static public PersonNavn getSokerName(SøkerModell søker) {
-        PersonNavn personNavn;
-        if (søker.getKjønn().equals(BrukerModell.Kjønn.K)) {
-            personNavn = FiktivtNavn.getRandomFemaleName();
-        } else {
-            personNavn = FiktivtNavn.getRandomMaleName();
-        }
-        return personNavn;
-    }
-
     /**
      *  Tar høyde for at gifte folk deler etternavn.
      */
-    static public PersonNavn getAnnenPartName(SøkerModell søker, AnnenPartModell annenPart) {
+    static public PersonNavn getAnnenPartName(PersonTemplate søker, PersonTemplate annenPart) {
         PersonNavn personNavn;
-        if (søker.getSivilstand().getKode().equals(SivilstandModell.Sivilstander.GIFT)) {
-            if (annenPart.getKjønn().equals(BrukerModell.Kjønn.K)) {
+        if (søker.getSivilstand().stream().map(SivilstandTemplate::getKode).map(Sivilstander::name).anyMatch(Sivilstander.GIFT.toString()::equals)) {
+            if (annenPart.getKjønn() == Kjønn.K) {
                 personNavn = FiktivtNavn.getRandomFemaleName(søker.getEtternavn());
             } else {
                 personNavn = FiktivtNavn.getRandomMaleName(søker.getEtternavn());
             }
         } else {
-            if (annenPart.getKjønn().equals(BrukerModell.Kjønn.K)) {
+            if (annenPart.getKjønn() == Kjønn.K) {
                 personNavn = FiktivtNavn.getRandomFemaleName();
             } else {
                 personNavn = FiktivtNavn.getRandomMaleName();

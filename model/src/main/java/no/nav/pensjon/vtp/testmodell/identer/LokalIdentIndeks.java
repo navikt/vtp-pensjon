@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.testmodell.identer;
 
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
+import no.nav.pensjon.vtp.testmodell.kodeverk.Kjønn;
 
 import java.util.Collections;
 import java.util.Map;
@@ -21,18 +21,18 @@ public class LokalIdentIndeks {
         return Collections.unmodifiableMap(identer);
     }
 
-    public String getVoksenIdentForLokalIdent(String lokalIdent, BrukerModell.Kjønn kjønn) {
+    public String getVoksenIdentForLokalIdent(String lokalIdent, Kjønn kjønn) {
         if (lokalIdent.matches("^\\d+$")) {
             return identer.computeIfAbsent(key(lokalIdent), i -> lokalIdent);
         }
-        return identer.computeIfAbsent(key(lokalIdent), i -> kjønn == BrukerModell.Kjønn.M ? identGenerator.tilfeldigMannFnr(null) : identGenerator.tilfeldigKvinneFnr(null));
+        return identer.computeIfAbsent(key(lokalIdent), i -> kjønn == Kjønn.M ? identGenerator.tilfeldigMannFnr(null) : identGenerator.tilfeldigKvinneFnr(null));
     }
 
-    public String getVoksenIdentForLokalIdent(String lokalIdent, BrukerModell.Kjønn kjønn, String foedselsdato) {
+    public String getVoksenIdentForLokalIdent(String lokalIdent, Kjønn kjønn, String foedselsdato) {
         if (lokalIdent.matches("^\\d+$")) {
             return identer.computeIfAbsent(key(lokalIdent), i -> lokalIdent);
         }
-        return identer.computeIfAbsent(key(lokalIdent), i -> kjønn == BrukerModell.Kjønn.M ? identGenerator.tilfeldigMannFnr(foedselsdato) : identGenerator.tilfeldigKvinneFnr(foedselsdato));
+        return identer.computeIfAbsent(key(lokalIdent), i -> kjønn == Kjønn.M ? identGenerator.tilfeldigMannFnr(foedselsdato) : identGenerator.tilfeldigKvinneFnr(foedselsdato));
     }
 
     public String getVoksenIdentForLokalIdent(String lokalIdent) {

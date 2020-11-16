@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonArbeidsgiver;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FrilansArbeidsforholdsperiode {
@@ -27,11 +26,11 @@ public class FrilansArbeidsforholdsperiode {
     private Integer stillingsprosent;
 
     @JsonProperty("arbeidsgiver")
-    private PersonArbeidsgiver arbeidsgiver;
+    private String arbeidsgiver;
 
     public FrilansArbeidsforholdsperiode(){}
 
-    public FrilansArbeidsforholdsperiode(LocalDate frilansFom, LocalDate frilansTom, String orgnr, Integer stillingsprosent, String aktorId, PersonArbeidsgiver arbeidsgiver){
+    public FrilansArbeidsforholdsperiode(LocalDate frilansFom, LocalDate frilansTom, String orgnr, Integer stillingsprosent, String aktorId, String arbeidsgiver){
         this.frilansFom = frilansFom;
         this.frilansTom = frilansTom;
         this.orgnr = orgnr;
@@ -40,7 +39,7 @@ public class FrilansArbeidsforholdsperiode {
         this.arbeidsgiver = arbeidsgiver;
     }
 
-    public PersonArbeidsgiver getPersonligArbeidsgiver(){
+    public String getPersonligArbeidsgiver(){
         return arbeidsgiver;
     }
 

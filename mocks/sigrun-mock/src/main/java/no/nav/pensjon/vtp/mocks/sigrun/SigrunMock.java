@@ -9,6 +9,8 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.sigrun.Oppføring;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -48,7 +50,7 @@ public class SigrunMock {
         LOG.info("Sigrun for aktørId: {} ", aktørId);
 
         if (brukerFnr == null && aktørId != null) {
-            Optional<BrukerModell> brukerModell = brukerModellRepository.findByAktørIdent(aktørId);
+            Optional<PersonModell> brukerModell = brukerModellRepository.findByAktørIdent(aktørId);
             if (brukerModell.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kunne ikke finne bruker");
             } else {

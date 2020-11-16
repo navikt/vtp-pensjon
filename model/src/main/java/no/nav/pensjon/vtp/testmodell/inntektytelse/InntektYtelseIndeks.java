@@ -3,6 +3,7 @@ package no.nav.pensjon.vtp.testmodell.inntektytelse;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,10 @@ public class InntektYtelseIndeks {
 
     public Optional<InntektYtelseModell> getInntektYtelseModell(String ident) {
         return Optional.ofNullable(byIdent.get(ident));
+    }
+
+    public Stream<Map.Entry<String, InntektYtelseModell>> entries() {
+        return byIdent.entrySet().stream();
     }
 
     public void leggTil(String ident, InntektYtelseModell iy) {

@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.miscellaneous.api.scenario;
 
+import static java.util.Optional.ofNullable;
+
 import static org.springframework.http.ResponseEntity.of;
 
 import io.swagger.annotations.Api;
@@ -10,8 +12,10 @@ import no.nav.pensjon.vtp.kontrakter.TestscenariodataDto;
 import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataService;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.ArbeidsforholdModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BarnModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioService;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
@@ -25,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @Api(tags = {"Testscenario"})
@@ -35,11 +40,14 @@ public class TestscenarioRestTjeneste {
     private static final String TEMPLATE_KEY = "key";
     private static final String SCENARIO_ID = "id";
 
+    private final BrukerModellRepository brukerModellRepository;
     private final TestscenarioTemplateRepository templateRepository;
     private final TestscenarioService testscenarioService;
     private final PensjonTestdataService pensjonTestdataService;
 
-    public TestscenarioRestTjeneste(TestscenarioTemplateRepository templateRepository, TestscenarioService testscenarioService, PensjonTestdataService pensjonTestdataService) {
+    public TestscenarioRestTjeneste(BrukerModellRepository brukerModellRepository, TestscenarioTemplateRepository templateRepository,
+            TestscenarioService testscenarioService, PensjonTestdataService pensjonTestdataService) {
+        this.brukerModellRepository = brukerModellRepository;
         this.templateRepository = templateRepository;
         this.testscenarioService = testscenarioService;
         this.pensjonTestdataService = pensjonTestdataService;
@@ -49,13 +57,7 @@ public class TestscenarioRestTjeneste {
     @ApiOperation(value = "", notes = "Henter alle templates som er initiert i minnet til VTP", responseContainer = "List", response = TestscenarioDto.class)
     public List<TestscenarioDto> hentInitialiserteCaser() {
         return testscenarioService.findAll()
-                .map(testscenario -> {
-                    if (testscenario.getTemplateNavn() != null) {
-                        return konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn());
-                    } else {
-                        return konverterTilTestscenarioDto(testscenario);
-                    }
-                })
+                .map(testscenario -> konverterTilTestscenarioDto(testscenario, testscenario.getTemplateNavn()))
                 .collect(Collectors.toList());
     }
 
@@ -113,11 +115,6 @@ public class TestscenarioRestTjeneste {
         return ResponseEntity.noContent().build();
     }
 
-
-    private TestscenarioDto konverterTilTestscenarioDto(Testscenario testscenario) {
-        return konverterTilTestscenarioDto(testscenario, null, null);
-    }
-
     private TestscenarioDto konverterTilTestscenarioDto(Testscenario testscenario, String templateNavn) {
         String templateKey = null;
         if (templateNavn != null) {
@@ -162,7 +159,7 @@ public class TestscenarioRestTjeneste {
                 templateKey,
                 templateName,
                 testscenario.getId(),
-                testscenario.getVariabelContainer().getVars(),
+                testscenario.getVars(),
                 scenarioPersonopplysninger,
                 scenariodata,
                 scenariodataAnnenpart);
@@ -170,12 +167,12 @@ public class TestscenarioRestTjeneste {
     }
 
     private Optional<LocalDate> fødselsdatoBarn(Testscenario testscenario) {
-        Optional<BarnModell> barnModell = testscenario.getPersonopplysninger().getFamilierelasjoner()
-                .stream()
-                .filter(modell -> modell.getTil() instanceof BarnModell)
-                .map(modell -> ((BarnModell) modell.getTil()))
-                .findFirst();
-
-        return barnModell.map(PersonModell::getFødselsdato);
+        return ofNullable(testscenario.getPersonopplysninger())
+                .map(Personopplysninger::getFamilierelasjonerBarn)
+                .map(List::stream)
+                .flatMap(Stream::findFirst)
+                .map(FamilierelasjonModell::getTil)
+                .flatMap(brukerModellRepository::findById)
+                .map(PersonModell::getFødselsdato);
     }
 }

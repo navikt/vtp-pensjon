@@ -3,7 +3,6 @@ package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsforhold.v3;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
@@ -22,7 +21,6 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.Arbeidsforhold;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.ArbeidsforholdModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidstakerUgyldigInput;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.HentArbeidsforholdHistorikkArbeidsforholdIkkeFunnet;
@@ -46,11 +44,9 @@ public class ArbeidsforholdMockImpl implements ArbeidsforholdV3 {
     private static final Logger LOG = LoggerFactory.getLogger(ArbeidsforholdMockImpl.class);
 
     private final InntektYtelseIndeks inntektYtelseIndeks;
-    private final PersonIndeks personIndeks;
 
-    public ArbeidsforholdMockImpl(InntektYtelseIndeks inntektYtelseIndeks, PersonIndeks personIndeks) {
+    public ArbeidsforholdMockImpl(InntektYtelseIndeks inntektYtelseIndeks) {
         this.inntektYtelseIndeks = inntektYtelseIndeks;
-        this.personIndeks = personIndeks;
     }
 
     @Override
@@ -139,33 +135,18 @@ public class ArbeidsforholdMockImpl implements ArbeidsforholdV3 {
         //TODO: Bruker arbeidsforholdsIdNav for videre oppslag.
         Long arbeidsforholdId = request.getArbeidsforholdId();
 
-        HentArbeidsforholdHistorikkResponse response = new HentArbeidsforholdHistorikkResponse();
-        List<String> identer = new ArrayList<>();
-        identer.addAll(identerSøkere());
-        identer.addAll(identerAnnenpart());
-
-        for (String fnr : identer) {
-            ArbeidsforholdModell arbeidsforholdModell = inntektYtelseIndeks.getInntektYtelseModell(fnr).orElse(new InntektYtelseModell()).getArbeidsforholdModell();
-            Optional<Arbeidsforhold> first = arbeidsforholdModell.getArbeidsforhold().stream().filter(t -> t.getArbeidsforholdIdnav().equals(arbeidsforholdId)).findFirst();
-            if (first.isPresent()) {
-                no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Arbeidsforhold responseArbeidsforhold = adapter.fra(fnr, first.get());
-                response.setArbeidsforhold(responseArbeidsforhold);
-                return response;
-            }
-        }
-
-        throw new HentArbeidsforholdHistorikkArbeidsforholdIkkeFunnet("Kunne ikke finne arbeidsforholdHistorikk med Id " + arbeidsforholdId, new ArbeidsforholdIkkeFunnet());
-    }
-
-    private List<String> identerSøkere() {
-        return personIndeks.getAlleSøkere()
-                .map(t -> t.getSøker().getIdent())
-                .collect(Collectors.toList());
-    }
-
-    private List<String> identerAnnenpart() {
-        return personIndeks.getAlleAnnenPart()
-                .map(t -> t.getAnnenPart().getIdent())
-                .collect(Collectors.toList());
+        return inntektYtelseIndeks.entries()
+                .flatMap(e ->
+                        e.getValue().finnArbeidsforhold(arbeidsforholdId)
+                                .map(a -> adapter.fra(e.getKey(), a))
+                                .stream()
+                )
+                .findAny()
+                .map(arbeidsforhold -> {
+                    HentArbeidsforholdHistorikkResponse response = new HentArbeidsforholdHistorikkResponse();
+                    response.setArbeidsforhold(arbeidsforhold);
+                    return response;
+                })
+                .orElseThrow(() -> new HentArbeidsforholdHistorikkArbeidsforholdIkkeFunnet("Kunne ikke finne arbeidsforholdHistorikk med Id " + arbeidsforholdId, new ArbeidsforholdIkkeFunnet()));
     }
 }

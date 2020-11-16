@@ -23,7 +23,6 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.Landkode;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIdentFooRepositoryInMemory;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.UstrukturertAdresseModell;
-import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl;
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioRepositoryImpl;
@@ -42,15 +41,16 @@ public class AdresserTest {
         InntektYtelseIndeks inntektYtelseIndeks = new InntektYtelseIndeks();
         OrganisasjonRepository organisasjonRepository = new OrganisasjonRepositoryInMemory();
 
-        TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper(adresseIndeks, new IdenterIndeks());
+        TestscenarioFraTemplateMapper testscenarioFraTemplateMapper = new TestscenarioFraTemplateMapper();
         TestscenarioRepository testscenarioRepository = new TestscenarioRepositoryImpl();
         TestscenarioServiceImpl testScenarioRepository = new TestscenarioServiceImpl(testscenarioFraTemplateMapper, testscenarioRepository, personIndeks, inntektYtelseIndeks,
-                organisasjonRepository, new BrukerModelRepositoryInMemory());
+                organisasjonRepository, new BrukerModelRepositoryInMemory(), adresseIndeks, new IdenterIndeks());
         TestscenarioTemplateLoader loader = new TestscenarioTemplateLoader();
         TestscenarioTemplateRepositoryImpl templateRepository = new TestscenarioTemplateRepositoryImpl(loader.load());
-        templateRepository.getTemplates().forEach(testscenarioTemplate ->
-            sjekkAdresseIndeks(testScenarioRepository.opprettTestscenario(testscenarioTemplate))
-        );
+        templateRepository.getTemplates().forEach(testscenarioTemplate -> {
+            testScenarioRepository.opprettTestscenario(testscenarioTemplate);
+            sjekkAdresseIndeks(adresseIndeks);
+        });
     }
 
     @Test
@@ -101,13 +101,12 @@ public class AdresserTest {
         assertThat(adresser2).hasSize(adresser.size());
     }
 
-    private void sjekkAdresseIndeks(Testscenario sc) {
-        assertThat(sc.getAdresseIndeks()).isNotNull();
-        AdresseModell bostedsadresse = sc.getAdresseIndeks().finn(AdresseType.BOSTEDSADRESSE, Landkode.NOR);
+    private void sjekkAdresseIndeks(AdresseIndeks sc) {
+        AdresseModell bostedsadresse = sc.finn(AdresseType.BOSTEDSADRESSE, Landkode.NOR);
         assertThat(bostedsadresse).isNotNull();
-        assertThat(sc.getAdresseIndeks().finn(AdresseType.MIDLERTIDIG_POSTADRESSE, Landkode.NOR)).isNotNull();
-        assertThat(sc.getAdresseIndeks().finn(AdresseType.MIDLERTIDIG_POSTADRESSE, Landkode.USA)).isNotNull();
-        assertThat(sc.getAdresseIndeks().finn(AdresseType.POSTADRESSE, Landkode.NOR)).isNotNull();
+        assertThat(sc.finn(AdresseType.MIDLERTIDIG_POSTADRESSE, Landkode.NOR)).isNotNull();
+        assertThat(sc.finn(AdresseType.MIDLERTIDIG_POSTADRESSE, Landkode.USA)).isNotNull();
+        assertThat(sc.finn(AdresseType.POSTADRESSE, Landkode.NOR)).isNotNull();
     }
 
 }

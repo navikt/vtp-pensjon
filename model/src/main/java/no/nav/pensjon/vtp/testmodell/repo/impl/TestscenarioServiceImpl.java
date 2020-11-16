@@ -1,38 +1,31 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl;
 
+import static java.util.Optional.ofNullable;
+
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
+import no.nav.pensjon.vtp.testmodell.load.TestscenarioLoad;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModeller;
-import no.nav.pensjon.vtp.testmodell.personopplysning.AnnenPartModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerIdent;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
-import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonNavn;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
-import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioRepository;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioService;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
-import no.nav.pensjon.vtp.testmodell.util.TestdataUtil;
 
 @Component
 public class TestscenarioServiceImpl implements TestscenarioService {
-    private static final Logger log = LoggerFactory.getLogger(TestscenarioServiceImpl.class);
 
     private final TestscenarioFraTemplateMapper mapper;
     private final TestscenarioRepository testscenarioRepository;
@@ -40,16 +33,21 @@ public class TestscenarioServiceImpl implements TestscenarioService {
     private final InntektYtelseIndeks inntektYtelseIndeks;
     private final OrganisasjonRepository organisasjonRepository;
     private final BrukerModellRepository brukerModellRepository;
+    private final AdresseIndeks adresseIndeks;
+    private final IdenterIndeks identerIndeks;
+
 
     public TestscenarioServiceImpl(TestscenarioFraTemplateMapper mapper, TestscenarioRepository testscenarioRepository,
             PersonIndeks personIndeks, InntektYtelseIndeks inntektYtelseIndeks, OrganisasjonRepository organisasjonRepository,
-            BrukerModellRepository brukerModellRepository) {
+            BrukerModellRepository brukerModellRepository, AdresseIndeks adresseIndeks, IdenterIndeks identerIndeks) {
         this.mapper = mapper;
         this.testscenarioRepository = testscenarioRepository;
         this.personIndeks = personIndeks;
         this.inntektYtelseIndeks = inntektYtelseIndeks;
         this.organisasjonRepository = organisasjonRepository;
         this.brukerModellRepository = brukerModellRepository;
+        this.adresseIndeks = adresseIndeks;
+        this.identerIndeks = identerIndeks;
     }
 
 
@@ -60,76 +58,58 @@ public class TestscenarioServiceImpl implements TestscenarioService {
 
     @Override
     public Testscenario opprettTestscenario(TestscenarioTemplate template, Map<String, String> variables) {
-        String unikTestscenarioId = UUID.randomUUID().toString();
-        return doSave(mapper.lagTestscenario(template, unikTestscenarioId, variables));
+        return doSave(mapper.lagTestscenario(template, variables));
     }
 
     @Override
     public Testscenario opprettTestscenarioFraJsonString(String testscenarioJson, Map<String, String> variables) {
-        String unikTestscenarioId = UUID.randomUUID().toString();
-        return doSave(mapper.lagTestscenarioFraJsonString(testscenarioJson, unikTestscenarioId, variables));
+        return doSave(mapper.lagTestscenarioFraJsonString(testscenarioJson, variables));
     }
 
-    private Testscenario doSave(Testscenario testScenario) {
-        Personopplysninger personopplysninger = testScenario.getPersonopplysninger();
-        if (personopplysninger == null) {
-            log.warn("TestscenarioImpl mangler innhold:" + testScenario);
-        } else {
-            SøkerModell søker = personopplysninger.getSøker();
-            PersonNavn sokerNavn = TestdataUtil.getSokerName(søker);
-            søker.setFornavn(sokerNavn.getFornavn());
-            søker.setEtternavn(sokerNavn.getEtternavn());
-            leggTil(søker);
+    private Testscenario doSave(TestscenarioLoad testScenario) {
+        final String testscenarioId = UUID.randomUUID().toString();
+        final Mapper mapper = new Mapper(identerIndeks.getIdenter(testscenarioId), adresseIndeks, testScenario.getVariabelContainer());
 
-            AnnenPartModell annenPart = personopplysninger.getAnnenPart();
-            if(annenPart != null){
-                PersonNavn annenPartNavn = TestdataUtil.getAnnenPartName(søker, annenPart);
-                annenPart.setFornavn(annenPartNavn.getFornavn());
-                annenPart.setEtternavn(annenPartNavn.getEtternavn());
-                leggTil(annenPart);
-            }
-            for (FamilierelasjonModell fr : personopplysninger.getFamilierelasjoner()) {
-                leggTil(fr.getTil());
-            }
+        Personopplysninger personopplysninger = mapper.mapFromLoad(testScenario.getPersonopplysninger());
 
-            personIndeks.indekserPersonopplysningerByIdent(personopplysninger);
-            testScenario.getPersonligArbeidsgivere().forEach(this::leggTil);
+        leggTil(personopplysninger.getSøker());
 
-            if (personopplysninger.getSøker().getIdent() != null && testScenario.getSøkerInntektYtelse() != null) {
-                inntektYtelseIndeks.leggTil(personopplysninger.getSøker().getIdent(), testScenario.getSøkerInntektYtelse());
-            }
-            if (personopplysninger.getAnnenPart() != null) {
-                inntektYtelseIndeks.leggTil(personopplysninger.getAnnenPart().getIdent(), testScenario.getAnnenpartInntektYtelse());
-            }
-        }
+        ofNullable(personopplysninger.getAnnenPart()).ifPresent(this::leggTil);
+        personIndeks.indekserPersonopplysningerByIdent(personopplysninger);
 
-        OrganisasjonModeller organisasjonModeller = testScenario.getOrganisasjonModeller();
-        if (organisasjonModeller != null) {
-            List<OrganisasjonModell> modeller = organisasjonModeller.getModeller();
-            organisasjonRepository.saveAll(modeller);
-        }
+        ofNullable(testScenario.getSøkerInntektYtelse())
+                .ifPresent(inntektYtelseModell -> inntektYtelseIndeks.leggTil(personopplysninger.getSøker().getIdent(), inntektYtelseModell));
 
-        return testscenarioRepository.save(testScenario);
+        ofNullable(personopplysninger.getAnnenPart())
+                .ifPresent(annenPart ->
+                    ofNullable(testScenario.getAnnenpartInntektYtelse())
+                            .ifPresent(inntektYtelseModell -> inntektYtelseIndeks.leggTil(annenPart.getIdent(), inntektYtelseModell))
+                );
+
+        organisasjonRepository.saveAll(testScenario.getOrganisasjonModeller());
+
+        return testscenarioRepository.save(mapToTestscenario(testScenario, testscenarioId, personopplysninger));
     }
 
-    public synchronized void leggTil(BrukerModell bruker) {
+    private Testscenario mapToTestscenario(final TestscenarioLoad load, final String testscenarioId, final Personopplysninger personopplysningerSave) {
+        return new Testscenario(
+                load.getTemplateNavn(),
+                testscenarioId,
+                personopplysningerSave,
+                load.getSøkerInntektYtelse(),
+                load.getAnnenpartInntektYtelse(),
+                load.getOrganisasjonModeller(),
+                load.getVariabelContainer().getVars()
+        );
+    }
+
+    public synchronized void leggTil(PersonModell bruker) {
         if (bruker == null) {
             // quiet escape
             return;
         }
-        String ident = bruker.getIdent();
-        if (bruker instanceof BrukerIdent && ident == null) {
-            // skip - er BrukerIdent, venter på full bruker
-            return;
-        }
 
-        Optional<BrukerModell> existingBruker = brukerModellRepository.findById(ident);
-        if (existingBruker.filter(BrukerIdent.class::isInstance).isPresent()) {
-            // overskriv
-            brukerModellRepository.save(bruker);
-        } else if (existingBruker.isEmpty()) {
-            brukerModellRepository.save(bruker);
-        }
+        brukerModellRepository.save(bruker);
     }
 
     @Override

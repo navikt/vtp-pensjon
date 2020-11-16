@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata;
 
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
-import no.nav.pensjon.vtp.testmodell.personopplysning.VoksenModell;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import org.slf4j.Logger;
 import org.springframework.http.HttpEntity;
@@ -26,13 +26,13 @@ public class PensjonTestdataServiceImpl implements PensjonTestdataService {
         of(testscenario)
                 .map(Testscenario::getPersonopplysninger)
                 .map(Personopplysninger::getSøker)
-                .map(VoksenModell::getIdent)
+                .map(PersonModell::getIdent)
                 .ifPresent(this::lagrePerson);
 
         of(testscenario)
                 .map(Testscenario::getPersonopplysninger)
                 .map(Personopplysninger::getAnnenPart)
-                .map(VoksenModell::getIdent)
+                .map(PersonModell::getIdent)
                 .ifPresent(this::lagrePerson);
     }
 

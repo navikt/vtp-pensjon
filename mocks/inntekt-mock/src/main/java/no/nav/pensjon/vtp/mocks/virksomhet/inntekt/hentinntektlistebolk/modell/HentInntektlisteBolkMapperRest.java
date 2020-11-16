@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.FrilansArbeidsforholdsperiode;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.Inntektsperiode;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
 import no.nav.tjenester.aordningen.inntektsinformasjon.Aktoer;
 import no.nav.tjenester.aordningen.inntektsinformasjon.ArbeidsInntektIdent;
 import no.nav.tjenester.aordningen.inntektsinformasjon.ArbeidsInntektInformasjon;
@@ -18,9 +21,15 @@ import no.nav.tjenester.aordningen.inntektsinformasjon.ArbeidsforholdFrilanser;
 import no.nav.tjenester.aordningen.inntektsinformasjon.inntekt.Inntekt;
 import no.nav.tjenester.aordningen.inntektsinformasjon.inntekt.InntektType;
 
+@Component
 public class HentInntektlisteBolkMapperRest {
+    private final BrukerModellRepository brukerModellRepository;
 
-    public static ArbeidsInntektIdent makeArbeidsInntektIdent(InntektskomponentModell modell, Aktoer aktoer, YearMonth fom, YearMonth tom) {
+    public HentInntektlisteBolkMapperRest(BrukerModellRepository brukerModellRepository) {
+        this.brukerModellRepository = brukerModellRepository;
+    }
+
+    public ArbeidsInntektIdent makeArbeidsInntektIdent(InntektskomponentModell modell, Aktoer aktoer, YearMonth fom, YearMonth tom) {
         ArbeidsInntektIdent arbeidsInntektIdent = new ArbeidsInntektIdent();
         arbeidsInntektIdent.setIdent(aktoer);
         arbeidsInntektIdent.setArbeidsInntektMaaned(new ArrayList<>());
@@ -38,7 +47,7 @@ public class HentInntektlisteBolkMapperRest {
         return arbeidsInntektIdent;
     }
 
-    private static ArbeidsInntektInformasjon makeArbeidsInntektInformasjonForMåned(InntektskomponentModell modell, YearMonth måned) {
+    private ArbeidsInntektInformasjon makeArbeidsInntektInformasjonForMåned(InntektskomponentModell modell, YearMonth måned) {
         ArbeidsInntektInformasjon arbeidsInntektInformasjon = new ArbeidsInntektInformasjon();
         arbeidsInntektInformasjon
             .setArbeidsforholdListe(arbeidsforholdFrilanserListeFraModellListeForMåned(modell.getFrilansarbeidsforholdperioderSplittMånedlig(), måned));
@@ -46,7 +55,7 @@ public class HentInntektlisteBolkMapperRest {
         return arbeidsInntektInformasjon;
     }
 
-    private static List<ArbeidsforholdFrilanser> arbeidsforholdFrilanserListeFraModellListeForMåned(List<FrilansArbeidsforholdsperiode> modellPeriode,
+    private List<ArbeidsforholdFrilanser> arbeidsforholdFrilanserListeFraModellListeForMåned(List<FrilansArbeidsforholdsperiode> modellPeriode,
                                                                                                     YearMonth måned) {
         List<FrilansArbeidsforholdsperiode> frilansArbeidsforholdsperiodeList = modellPeriode.stream()
             .filter(t -> localDateTimeInYearMonth(t.getFrilansFom(), måned)).collect(Collectors.toList());
@@ -57,13 +66,13 @@ public class HentInntektlisteBolkMapperRest {
             res.setArbeidsforholdstype(temp.getArbeidsforholdstype());
             res.setStillingsprosent((double) temp.getStillingsprosent());
             Aktoer arbeidsgiver = temp.getOrgnr() != null && !temp.getOrgnr().equals("") ? Aktoer.newOrganisasjon(temp.getOrgnr())
-                    : Aktoer.newAktoerId(temp.getPersonligArbeidsgiver().getAktørIdent());
+                    : Aktoer.newAktoerId(brukerModellRepository.findById(temp.getPersonligArbeidsgiver()).orElseThrow(() -> new RuntimeException("Unknown personlig arbeidsgiver")).getAktørIdent());
             res.setArbeidsgiver(arbeidsgiver);
             return res;
         }).collect(Collectors.toList());
     }
 
-    private static List<Inntekt> inntektListeFraModell(List<Inntektsperiode> modellPeriode, YearMonth måned) {
+    private List<Inntekt> inntektListeFraModell(List<Inntektsperiode> modellPeriode, YearMonth måned) {
         List<Inntektsperiode> inntektsperiodeList = modellPeriode.stream().filter(t -> localDateTimeInYearMonth(t.getTom(), måned))
             .collect(Collectors.toList());
         return inntektsperiodeList.stream().map(temp -> {
@@ -73,7 +82,7 @@ public class HentInntektlisteBolkMapperRest {
             inntekt.setBeskrivelse(temp.getBeskrivelse());
             inntekt.setFordel(temp.getFordel().getKode());
             Aktoer arbeidsgiver = temp.getOrgnr() != null && !temp.getOrgnr().equals("") ? Aktoer.newOrganisasjon(temp.getOrgnr())
-                : Aktoer.newAktoerId(temp.getPersonligArbeidsgiver().getAktørIdent());
+                :Aktoer.newAktoerId(brukerModellRepository.findById(temp.getPersonligArbeidsgiver()).orElseThrow(() -> new RuntimeException("Unknown personlig arbeidsgiver")).getAktørIdent());
             inntekt.setVirksomhet(arbeidsgiver);
             inntekt.setOpptjeningsperiodeFom(temp.getFom());
             inntekt.setOpptjeningsperiodeTom(temp.getTom());

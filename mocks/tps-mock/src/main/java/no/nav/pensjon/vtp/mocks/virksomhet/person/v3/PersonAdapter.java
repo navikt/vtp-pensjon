@@ -1,9 +1,10 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.person.v3;
 
+import static java.util.Optional.ofNullable;
+
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import no.nav.pensjon.vtp.felles.ConversionUtils;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.GeografiskTilknytningModell;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker;
@@ -27,16 +28,6 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.Sivilstander;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Spraak;
 
 public class PersonAdapter {
-
-    public Bruker fra(BrukerModell bruker) {
-        if (bruker instanceof PersonModell) {
-            return fra((PersonModell) bruker);
-        } else {
-            return mapFraBruker(bruker);
-        }
-    }
-
-
     public Bruker fra(PersonModell person) {
         Bruker bruker = mapFraBruker(person);
 
@@ -63,7 +54,7 @@ public class PersonAdapter {
         // PersonstatusModell
         Personstatus personstatus = new Personstatus();
         Personstatuser personstatuser = new Personstatuser();
-        personstatuser.setValue(person.getPersonstatus().getStatus());
+        personstatuser.setValue(person.getPersonstatusFoo().getKode().name());
         personstatus.setPersonstatus(personstatuser);
         bruker.setPersonstatus(personstatus);
 
@@ -78,23 +69,23 @@ public class PersonAdapter {
         // SivilstandModell
         Sivilstand sivilstand = new Sivilstand();
         Sivilstander sivilstander = new Sivilstander();
-        sivilstander.setValue(person.getSivilstand().getKode());
+        sivilstander.setValue(person.getSivilstandFoo().getKode().name());
         sivilstand.setSivilstand(sivilstander);
         bruker.setSivilstand(sivilstand);
 
         // Diskresjonskode
-        bruker.setDiskresjonskode(tilDiskresjonskode(person));
+        bruker.setDiskresjonskode(tilDiskresjonskode(person.getDiskresjonskode()));
 
         // statsborgerskap
 
-        bruker.setStatsborgerskap(new StatsborgerskapAdapter().fra(person.getStatsborgerskap()));
+        bruker.setStatsborgerskap(new StatsborgerskapAdapter().fra(person.getStatsborgerskapFoo()));
 
         new AdresseAdapter().setAdresser(bruker, person);
 
         return bruker;
     }
 
-    public Person mapTilPerson(BrukerModell modell) {
+    public Person mapTilPerson(PersonModell modell) {
         Person person = new Person();
         NorskIdent norskIdent = new NorskIdent();
         norskIdent.setIdent(modell.getIdent());
@@ -105,7 +96,7 @@ public class PersonAdapter {
         return person;
     }
 
-    private Bruker mapFraBruker(BrukerModell person) {
+    private Bruker mapFraBruker(PersonModell person) {
         Bruker bruker = new Bruker();
 
         // Ident
@@ -121,16 +112,17 @@ public class PersonAdapter {
         return bruker;
     }
 
-    public Diskresjonskoder tilDiskresjonskode(PersonModell bruker) {
-        String kode = bruker.getDiskresjonskode();
-        if (kode == null) {
-            return null;
-        }
-        Diskresjonskoder diskresjonskoder = new Diskresjonskoder();
-        diskresjonskoder.withKodeverksRef("Diskresjonskoder");
-        diskresjonskoder.withKodeRef(kode);
-        diskresjonskoder.withValue(kode);
-        return diskresjonskoder;
+    public Diskresjonskoder tilDiskresjonskode(no.nav.pensjon.vtp.testmodell.kodeverk.Diskresjonskoder diskresjonskoder) {
+        return ofNullable(diskresjonskoder)
+                .map(Enum::name)
+                .map(kode -> {
+                    Diskresjonskoder d = new Diskresjonskoder();
+                    d.withKodeverksRef("Diskresjonskoder");
+                    d.withKodeRef(kode);
+                    d.withValue(kode);
+                    return d;
+                })
+                .orElse(null);
     }
 
     public GeografiskTilknytning tilGeografiskTilknytning(PersonModell bruker) {
@@ -139,7 +131,7 @@ public class PersonAdapter {
             return null;
         } else {
             GeografiskTilknytning geo;
-            switch (tilknytning.getGeografiskTilknytningType()) {
+            switch (tilknytning.getType()) {
                 case Land:
                     geo = new Land();
                     break;

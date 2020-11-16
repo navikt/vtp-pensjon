@@ -29,9 +29,11 @@ public class PersonV2ServiceMockImpl implements no.nav.virksomhet.tjenester.pers
     private static final Logger LOG = LoggerFactory.getLogger(PersonV2ServiceMockImpl.class);
 
     private final PersonIndeks personIndeks;
+    private final PsakpselvPersonAdapter psakpselvPersonAdapter;
 
-    public PersonV2ServiceMockImpl(PersonIndeks personIndeks) {
+    public PersonV2ServiceMockImpl(PersonIndeks personIndeks, PsakpselvPersonAdapter psakpselvPersonAdapter) {
         this.personIndeks = personIndeks;
+        this.psakpselvPersonAdapter = psakpselvPersonAdapter;
     }
 
     @Override
@@ -70,8 +72,8 @@ public class PersonV2ServiceMockImpl implements no.nav.virksomhet.tjenester.pers
         String ident = hentPersonRequest.getIdent();
         LOG.info("Kall mot PersonV2ServiceMockImpl hentPerson med ident " + ident);
 
-        Person person = personIndeks.getAlleSøkere().filter(s -> ident.equalsIgnoreCase(s.getSøker().getIdent()))
-                .map(PsakpselvPersonAdapter::toASBOPerson).map(this::convertASBOPersonToPersonV2).findFirst().orElseThrow(HentPersonPersonIkkeFunnet::new);
+        Person person = personIndeks.findById(ident)
+                .map(psakpselvPersonAdapter::toASBOPerson).map(this::convertASBOPersonToPersonV2).orElseThrow(HentPersonPersonIkkeFunnet::new);
 
         HentPersonResponse hentPersonResponse = new HentPersonResponse();
         hentPersonResponse.setPerson(person);

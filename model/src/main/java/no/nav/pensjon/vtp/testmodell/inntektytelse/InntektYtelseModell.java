@@ -1,9 +1,14 @@
 package no.nav.pensjon.vtp.testmodell.inntektytelse;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.jetbrains.annotations.NotNull;
+
+import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.Arbeidsforhold;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.ArbeidsforholdModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.ArenaModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
@@ -84,5 +89,10 @@ public class InntektYtelseModell {
 
     public void setSigrunModell(SigrunModell sigrunModell) {
         this.sigrunModell = sigrunModell;
+    }
+
+    @NotNull
+    public Optional<Arbeidsforhold> finnArbeidsforhold(Long arbeidsforholdId) {
+        return getArbeidsforholdModell().stream().filter(t -> t.getArbeidsforholdIdnav().equals(arbeidsforholdId)).findAny();
     }
 }

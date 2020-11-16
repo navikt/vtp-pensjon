@@ -1,11 +1,10 @@
 package no.nav.pensjon.vtp.miscellaneous.api.sak;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import no.nav.pensjon.vtp.mocks.oppgave.gask.sak.v1.GsakRepo;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.SøkerModell;
-import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sak;
+import static java.util.stream.Collectors.toList;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,8 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+import no.nav.pensjon.vtp.mocks.oppgave.gask.sak.v1.GsakRepo;
+import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
+import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sak;
 
 @RestController
 @Api(tags = "Gsak repository")
@@ -25,16 +29,17 @@ import java.util.stream.Collectors;
 public class SakRestTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(SakRestTjeneste.class);
 
+    private final BrukerModellRepository brukerModellRepository;
     private final GsakRepo gsakRepo;
 
-    public SakRestTjeneste(GsakRepo gsakRepo) {
+    public SakRestTjeneste(BrukerModellRepository brukerModellRepository, GsakRepo gsakRepo) {
+        this.brukerModellRepository = brukerModellRepository;
         this.gsakRepo = gsakRepo;
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "", notes = ("Lager nytt saksnummer fra sekvens"), response = OpprettSakResponseDTO.class)
     public ResponseEntity foreldrepengesoknadErketype(@RequestBody OpprettSakRequestDTO requestDTO){
-
         if(requestDTO.getLokalIdent() == null || requestDTO.getLokalIdent().size() < 1 || requestDTO.getFagområde() == null ||
                 requestDTO.getFagsystem() == null || requestDTO.getSakstype() == null){
             return ResponseEntity
@@ -43,8 +48,11 @@ public class SakRestTjeneste {
                     .body("Request mangler påkrevde verdier");
         }
 
-        List<PersonModell> brukere = requestDTO.getLokalIdent().stream().map(p ->
-                new SøkerModell(p, "place holder", null, null)).collect(Collectors.toList());
+        List<PersonModell> brukere = requestDTO.getLokalIdent()
+                .stream()
+                .map(brukerModellRepository::findById)
+                .flatMap(Optional::stream)
+                .collect(toList());
 
         Sak sak = gsakRepo.leggTilSak(brukere, requestDTO.getFagområde(), requestDTO.getFagsystem(), requestDTO.getSakstype());
 

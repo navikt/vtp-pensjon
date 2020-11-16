@@ -1,5 +1,8 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.person.v3;
 
+import static java.util.Optional.ofNullable;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,11 +19,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.pensjon.vtp.testmodell.kodeverk.Rolle;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell.Rolle;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
@@ -64,10 +66,13 @@ public class PersonServiceMockImpl implements PersonV3 {
     private static final Logger LOG = LoggerFactory.getLogger(PersonServiceMockImpl.class);
 
     private final BrukerModellRepository brukerModellRepository;
+    private final FamilierelasjonAdapter familierelasjonAdapter;
     private final PersonIndeks personIndeks;
 
-    public PersonServiceMockImpl(BrukerModellRepository brukerModellRepository, PersonIndeks personIndeks) {
+    public PersonServiceMockImpl(BrukerModellRepository brukerModellRepository, FamilierelasjonAdapter familierelasjonAdapter,
+            PersonIndeks personIndeks) {
         this.brukerModellRepository = brukerModellRepository;
+        this.familierelasjonAdapter = familierelasjonAdapter;
         this.personIndeks = personIndeks;
     }
 
@@ -87,7 +92,7 @@ public class PersonServiceMockImpl implements PersonV3 {
         Bruker person = new PersonAdapter().fra(bruker);
 
 
-        Personopplysninger pers = personIndeks.finnPersonopplysningerByIdent(bruker.getIdent())
+        Personopplysninger pers = personIndeks.findById(bruker.getIdent())
                 .orElseThrow(() -> {
                     String message = "Person med ident " + bruker.getIdent() + " ikke funnet";
                     return new HentPersonPersonIkkeFunnet(message, new PersonIkkeFunnet().withFeilmelding("Person med ident " + bruker.getIdent() + " ikke funnet"));
@@ -95,22 +100,22 @@ public class PersonServiceMockImpl implements PersonV3 {
 
         boolean erBarnet = false;
         for (FamilierelasjonModell relasjon : pers.getFamilierelasjoner()) {
-            if(relasjon.getRolle().equals(Rolle.BARN) && relasjon.getTil().getAktørIdent().equals(bruker.getAktørIdent())) {
+            if(relasjon.getRolle().equals(Rolle.BARN) && brukerModellRepository.findById(relasjon.getTil()).orElseThrow(() -> new RuntimeException("Unable to locate child with ident " + relasjon.getTil())).getAktørIdent().equals(bruker.getAktørIdent())) {
                 erBarnet = true;
             }
         }
 
         List<Familierelasjon> familierelasjoner;
         if(pers.getAnnenPart() != null && pers.getAnnenPart().getAktørIdent().equals(bruker.getAktørIdent())) { //TODO HACK for annenpart (annenpart burde ha en egen personopplysning fil eller liknende)
-            familierelasjoner = new FamilierelasjonAdapter().tilFamilerelasjon(pers.getFamilierelasjonerForAnnenPart());
+            familierelasjoner = new FamilierelasjonAdapter(brukerModellRepository).tilFamilerelasjon(pers.getFamilierelasjonerAnnenPart());
             familierelasjoner.forEach(fr -> person.getHarFraRolleI().add(fr));
         }
         else if(erBarnet) { //TODO HACK Familierelasjon for barnet
-            familierelasjoner = new FamilierelasjonAdapter().tilFamilerelasjon(pers.getFamilierelasjonerForBarnet());
+            familierelasjoner = new FamilierelasjonAdapter(brukerModellRepository).tilFamilerelasjon(pers.getFamilierelasjonerBarn());
             familierelasjoner.forEach(fr -> person.getHarFraRolleI().add(fr));
         }
         else {
-            familierelasjoner = new FamilierelasjonAdapter().tilFamilerelasjon(pers.getFamilierelasjoner());
+            familierelasjoner = new FamilierelasjonAdapter(brukerModellRepository).tilFamilerelasjon(pers.getFamilierelasjoner());
             familierelasjoner.forEach(fr -> person.getHarFraRolleI().add(fr));
         }
 
@@ -124,7 +129,7 @@ public class PersonServiceMockImpl implements PersonV3 {
     }
 
     public PersonModell finnPerson(Aktoer aktoer) throws HentPersonPersonIkkeFunnet {
-        Optional<BrukerModell> optionalBrukerModell;
+        Optional<PersonModell> optionalBrukerModell;
         String ident;
         if (aktoer instanceof PersonIdent) {
             PersonIdent personIdent = (PersonIdent) aktoer;
@@ -136,13 +141,8 @@ public class PersonServiceMockImpl implements PersonV3 {
             optionalBrukerModell = brukerModellRepository.findByAktørIdent(ident);
         }
 
-        final BrukerModell brukerModell = optionalBrukerModell
+        return optionalBrukerModell
                 .orElseThrow(() -> new HentPersonPersonIkkeFunnet("BrukerModell ikke funnet:" + ident, new PersonIkkeFunnet()));
-
-        if (!(brukerModell instanceof PersonModell)) {
-            throw new IllegalStateException("Fant ikke bruker av type PersonModell for ident:" + ident + ", fikk:" + optionalBrukerModell);
-        }
-        return (PersonModell)brukerModell;
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/person/v3/Person_v3/hentGeografiskTilknytningRequest")
@@ -162,7 +162,7 @@ public class PersonServiceMockImpl implements PersonV3 {
 
         HentGeografiskTilknytningResponse response = new HentGeografiskTilknytningResponse();
         PersonAdapter personAdapter = new PersonAdapter();
-        Diskresjonskoder diskresjonskoder = personAdapter.tilDiskresjonskode(bruker);
+        Diskresjonskoder diskresjonskoder = personAdapter.tilDiskresjonskode(bruker.getDiskresjonskode());
         response.setDiskresjonskode(diskresjonskoder);
         response.setGeografiskTilknytning(personAdapter.tilGeografiskTilknytning(bruker));
         return response;
@@ -228,11 +228,11 @@ public class PersonServiceMockImpl implements PersonV3 {
     }
 
     private List<StatsborgerskapPeriode> hentStatsborgerskapPerioder(PersonModell bruker) {
-        return new StatsborgerskapAdapter().fra(bruker.getAlleStatsborgerskap());
+        return new StatsborgerskapAdapter().fra(ofNullable(bruker.getStatsborgerskap()).orElseGet(Collections::emptyList));
     }
 
     private List<PersonstatusPeriode> hentPersonstatusPerioder(PersonModell bruker) {
-        return new PersonstatusAdapter().fra(bruker.getAllePersonstatus());
+        return new PersonstatusAdapter().fra(ofNullable(bruker.getPersonstatus()).orElseGet(Collections::emptyList));
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/person/v3/Person_v3/pingRequest")
