@@ -8,7 +8,7 @@ import static org.junit.Assert.assertFalse;
 import java.util.List;
 import java.util.Objects;
 
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,7 +22,7 @@ import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 
 @SpringBootTest
-@Ignore
+@Disabled
 public class ScenariosTest {
     private final TestscenarioTemplateRepository testscenarioTemplateRepository;
     private final TestscenarioService testscenarioService;
