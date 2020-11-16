@@ -21,13 +21,13 @@ import no.nav.pensjon.vtp.testmodell.repo.TestscenarioService;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
 
-@SpringBootTest
+//@SpringBootTest
 @Disabled
 public class ScenariosTest {
-    private final TestscenarioTemplateRepository testscenarioTemplateRepository;
-    private final TestscenarioService testscenarioService;
-    private final TestscenarioRepository testscenarioRepository;
-
+    private TestscenarioTemplateRepository testscenarioTemplateRepository;
+    private TestscenarioService testscenarioService;
+    private TestscenarioRepository testscenarioRepository;
+/*
     @Autowired
     public ScenariosTest(TestscenarioTemplateRepository testscenarioTemplateRepository, TestscenarioService testscenarioService,
             TestscenarioRepository testscenarioRepository) {
@@ -35,8 +35,8 @@ public class ScenariosTest {
         this.testscenarioService = testscenarioService;
         this.testscenarioRepository = testscenarioRepository;
     }
-
-    @Test
+*/
+//    @Test
     public void validates_that_all_scenarios_can_be_loaded_from_disk_created_and_persisted() {
         testscenarioTemplateRepository.getTemplates()
                 .map(testscenarioService::opprettTestscenario)
@@ -53,7 +53,7 @@ public class ScenariosTest {
                 });
     }
 
-    @Test
+//    @Test
     public void scenarios_are_removed_from_TestscenarioRepository_when_deleted() {
         List<TestscenarioTemplate> templates = testscenarioTemplateRepository.getTemplates().collect(toList());
         assertFalse(templates.isEmpty());
