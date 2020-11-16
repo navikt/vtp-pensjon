@@ -11,11 +11,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.inf.pselv.person.HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg;
 import no.nav.inf.pselv.person.HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg;
 import no.nav.inf.pselv.person.HentKontoinformasjonFaultPenPersonIkkeFunnetMsg;
@@ -41,25 +37,14 @@ import no.nav.lib.pen.psakpselv.fault.ObjectFactory;
 @XmlSeeAlso({ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory.class, no.nav.inf.pselv.person.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.tjenestepensjon.ObjectFactory.class, no.nav.lib.pen.psakpselv.asbo.person.ObjectFactory.class, no.nav.lib.pen.psakpselv.fault.person.ObjectFactory.class})
 @HandlerChain(file = "/Handler-chain.xml")
 public class PselvPersonServiceMockImpl implements PSELVPerson {
-    private static final Logger logger = LoggerFactory.getLogger(PsakPersonServiceMockImpl.class);
-
-    private final PersonIndeks personIndeks;
     private final PsakpselvPersonAdapter psakpselvPersonAdapter;
 
-    public PselvPersonServiceMockImpl(PersonIndeks personIndeks, PsakpselvPersonAdapter psakpselvPersonAdapter) {
-        this.personIndeks = personIndeks;
+    public PselvPersonServiceMockImpl(final PsakpselvPersonAdapter psakpselvPersonAdapter) {
         this.psakpselvPersonAdapter = psakpselvPersonAdapter;
     }
 
     private Optional<ASBOPenPerson> getASBOPerson(String fodselsnummer) {
-        return personIndeks.findById(fodselsnummer)
-                .map(psakpselvPersonAdapter::toASBOPerson)
-                .or(() -> logIkkeFunnet(fodselsnummer));
-    }
-
-    private Optional<ASBOPenPerson> logIkkeFunnet(String fodselsnummer) {
-        logger.warn("Klarte ikke å finne person med fnr: " + fodselsnummer);
-        return Optional.empty();
+        return psakpselvPersonAdapter.getASBOPenPerson(fodselsnummer);
     }
 
     @WebMethod

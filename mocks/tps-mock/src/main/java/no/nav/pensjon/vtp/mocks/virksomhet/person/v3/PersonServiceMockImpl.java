@@ -66,13 +66,10 @@ public class PersonServiceMockImpl implements PersonV3 {
     private static final Logger LOG = LoggerFactory.getLogger(PersonServiceMockImpl.class);
 
     private final PersonModellRepository personModellRepository;
-    private final FamilierelasjonAdapter familierelasjonAdapter;
     private final PersonIndeks personIndeks;
 
-    public PersonServiceMockImpl(PersonModellRepository personModellRepository, FamilierelasjonAdapter familierelasjonAdapter,
-            PersonIndeks personIndeks) {
+    public PersonServiceMockImpl(PersonModellRepository personModellRepository, PersonIndeks personIndeks) {
         this.personModellRepository = personModellRepository;
-        this.familierelasjonAdapter = familierelasjonAdapter;
         this.personIndeks = personIndeks;
     }
 
@@ -100,8 +97,8 @@ public class PersonServiceMockImpl implements PersonV3 {
 
         boolean erBarnet = false;
         for (FamilierelasjonModell relasjon : pers.getFamilierelasjoner()) {
-            if(relasjon.getRolle().equals(Rolle.BARN) && personModellRepository
-                    .findById(relasjon.getTil()).orElseThrow(() -> new RuntimeException("Unable to locate child with ident " + relasjon.getTil())).getAktørIdent().equals(bruker.getAktørIdent())) {
+            if(relasjon.getRolle().equals(Rolle.BARN) && ofNullable(personModellRepository
+                    .findById(relasjon.getTil())).orElseThrow(() -> new RuntimeException("Unable to locate child with ident " + relasjon.getTil())).getAktørIdent().equals(bruker.getAktørIdent())) {
                 erBarnet = true;
             }
         }
@@ -135,11 +132,11 @@ public class PersonServiceMockImpl implements PersonV3 {
         if (aktoer instanceof PersonIdent) {
             PersonIdent personIdent = (PersonIdent) aktoer;
             ident = personIdent.getIdent().getIdent();
-            optionalBrukerModell = personModellRepository.findById(ident);
+            optionalBrukerModell = ofNullable(personModellRepository.findById(ident));
         } else {
             AktoerId aktoerId = (AktoerId) aktoer;
             ident = aktoerId.getAktoerId();
-            optionalBrukerModell = personModellRepository.findByAktørIdent(ident);
+            optionalBrukerModell = ofNullable(personModellRepository.findByAktørIdent(ident));
         }
 
         return optionalBrukerModell

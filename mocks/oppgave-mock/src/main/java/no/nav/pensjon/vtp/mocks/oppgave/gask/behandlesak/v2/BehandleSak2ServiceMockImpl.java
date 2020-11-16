@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.mocks.oppgave.gask.behandlesak.v2;
 
+import static java.util.Optional.ofNullable;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.mocks.oppgave.gask.sak.v1.GsakRepo;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.tjeneste.virksomhet.behandlesak.v2.BehandleSakV2;
 import no.nav.tjeneste.virksomhet.behandlesak.v2.WSAktor;
@@ -36,12 +37,10 @@ public class BehandleSak2ServiceMockImpl implements BehandleSakV2 {
 
     private final PersonModellRepository personModellRepository;
     private final GsakRepo gsakRepo;
-    private final PersonIndeks personIndeks;
 
-    public BehandleSak2ServiceMockImpl(PersonModellRepository personModellRepository, GsakRepo gsakRepo, PersonIndeks personIndeks) {
+    public BehandleSak2ServiceMockImpl(PersonModellRepository personModellRepository, GsakRepo gsakRepo) {
         this.personModellRepository = personModellRepository;
         this.gsakRepo = gsakRepo;
-        this.personIndeks = personIndeks;
     }
 
     @Override
@@ -54,7 +53,7 @@ public class BehandleSak2ServiceMockImpl implements BehandleSakV2 {
 
         Set<String> identer = request.getSak().getGjelderBrukerListe().stream().map(WSAktor::getIdent).collect(Collectors.toSet());
 
-        List<PersonModell> personer = identer.stream().map(i -> (PersonModell) personModellRepository.findById(i).orElseThrow(() -> new RuntimeException("Person ikke funnet")))
+        List<PersonModell> personer = identer.stream().map(i -> ofNullable(personModellRepository.findById(i)).orElseThrow(() -> new RuntimeException("Person ikke funnet")))
             .collect(Collectors.toList());
 
         WSSak wsSak = request.getSak();

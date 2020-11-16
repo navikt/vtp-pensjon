@@ -2,7 +2,8 @@ package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
 import no.nav.pensjon.vtp.felles.KeyStoreTool;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
+
 import org.jose4j.jwk.RsaJsonWebKey;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
@@ -27,18 +28,18 @@ import java.util.stream.Collectors;
 @Api(tags = {"LoginService"})
 @RequestMapping("/rest/loginservice")
 public class LoginService {
-    private final PersonIndeks personIndeks;
+    private final PersonModellRepository personModellRepository;
 
-    public LoginService(PersonIndeks personIndeks) {
-        this.personIndeks = personIndeks;
+    public LoginService(PersonModellRepository personModellRepository) {
+        this.personModellRepository = personModellRepository;
     }
 
     @GetMapping(value = "/login")
-    public ResponseEntity login(@RequestParam("redirect") String redirect) {
-        List<String> rows = personIndeks.getAlleSøkere()
+    public ResponseEntity<String> login(@RequestParam("redirect") String redirect) {
+        List<String> rows = personModellRepository.findAll().stream()
                 .map(p -> {
-                    String fnr = p.getSøker().getIdent();
-                    String navn = p.getSøker().getFornavn() + " " + p.getSøker().getEtternavn();
+                    String fnr = p.getIdent();
+                    String navn = p.getFornavn() + " " + p.getEtternavn();
                     return "<a href=\"login-redirect-with-cookie?fnr=" + fnr + "&redirect=" + URLEncoder.encode(redirect, StandardCharsets.UTF_8) + "\">" + navn + "</a> ("+fnr+")<br>";
                 }).collect(Collectors.toList());
 
@@ -63,7 +64,7 @@ public class LoginService {
     }
 
     @GetMapping(value = "/login-redirect-with-cookie")
-    public ResponseEntity doLogin(@RequestParam("redirect") String redirect, @RequestParam("fnr") String fnr) throws URISyntaxException, JoseException {
+    public ResponseEntity<?> doLogin(@RequestParam("redirect") String redirect, @RequestParam("fnr") String fnr) throws URISyntaxException, JoseException {
         NumericDate now = NumericDate.now();
         JwtClaims claims = new JwtClaims();
 

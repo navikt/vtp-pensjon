@@ -1,21 +1,30 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
-import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
-import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson;
-import no.nav.virksomhet.part.person.v2.*;
-import no.nav.virksomhet.tjenester.person.meldinger.v2.*;
-import no.nav.virksomhet.tjenester.person.v2.HentPersonPersonIkkeFunnet;
-import no.nav.virksomhet.tjenester.person.v2.HentUtenlandskIdentitetListePersonIkkeFunnet;
-import no.nav.virksomhet.tjenester.person.v2.RegistrereAdresseForDodsboKunneIkkeRegistrereAdresseForDodsbo;
-import no.nav.virksomhet.tjenester.person.v2.RegistrereAdresseForDodsboPersonHarUtlandsadresse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.jws.*;
+import javax.jws.HandlerChain;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
+import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.virksomhet.part.person.v2.Diskresjonskode;
+import no.nav.virksomhet.part.person.v2.Navn;
+import no.nav.virksomhet.part.person.v2.Person;
+import no.nav.virksomhet.part.person.v2.PersonIdent;
+import no.nav.virksomhet.part.person.v2.Personstatus;
+import no.nav.virksomhet.tjenester.person.meldinger.v2.HentPersonRequest;
+import no.nav.virksomhet.tjenester.person.meldinger.v2.HentPersonResponse;
+import no.nav.virksomhet.tjenester.person.meldinger.v2.HentUtenlandskIdentitetListeRequest;
+import no.nav.virksomhet.tjenester.person.meldinger.v2.HentUtenlandskIdentitetListeResponse;
+import no.nav.virksomhet.tjenester.person.meldinger.v2.RegistrereAdresseForDodsboRequest;
+import no.nav.virksomhet.tjenester.person.v2.HentPersonPersonIkkeFunnet;
 
 @SoapService(path = "/esb/nav-tjeneste-person_v2Web/sca/PersonWSEXP")
 @WebService(
@@ -28,11 +37,9 @@ public class PersonV2ServiceMockImpl implements no.nav.virksomhet.tjenester.pers
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonV2ServiceMockImpl.class);
 
-    private final PersonIndeks personIndeks;
     private final PsakpselvPersonAdapter psakpselvPersonAdapter;
 
-    public PersonV2ServiceMockImpl(PersonIndeks personIndeks, PsakpselvPersonAdapter psakpselvPersonAdapter) {
-        this.personIndeks = personIndeks;
+    public PersonV2ServiceMockImpl(PsakpselvPersonAdapter psakpselvPersonAdapter) {
         this.psakpselvPersonAdapter = psakpselvPersonAdapter;
     }
 
@@ -48,7 +55,7 @@ public class PersonV2ServiceMockImpl implements no.nav.virksomhet.tjenester.pers
             targetNamespace = "http://nav.no/virksomhet/tjenester/person/v2",
             className = "no.nav.virksomhet.tjenester.person.v2.RegistrereAdresseForDodsboResponse"
     )
-    public void registrereAdresseForDodsbo(@WebParam(name = "request",targetNamespace = "") RegistrereAdresseForDodsboRequest registrereAdresseForDodsboRequest) throws RegistrereAdresseForDodsboKunneIkkeRegistrereAdresseForDodsbo, RegistrereAdresseForDodsboPersonHarUtlandsadresse {
+    public void registrereAdresseForDodsbo(@WebParam(name = "request") RegistrereAdresseForDodsboRequest registrereAdresseForDodsboRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
@@ -65,15 +72,15 @@ public class PersonV2ServiceMockImpl implements no.nav.virksomhet.tjenester.pers
             className = "no.nav.virksomhet.tjenester.person.v2.HentPersonResponse"
     )
     @WebResult(
-            name = "response",
-            targetNamespace = ""
+            name = "response"
     )
-    public HentPersonResponse hentPerson(@WebParam(name = "request",targetNamespace = "") HentPersonRequest hentPersonRequest) throws HentPersonPersonIkkeFunnet {
+    public HentPersonResponse hentPerson(@WebParam(name = "request") HentPersonRequest hentPersonRequest) throws HentPersonPersonIkkeFunnet {
         String ident = hentPersonRequest.getIdent();
         LOG.info("Kall mot PersonV2ServiceMockImpl hentPerson med ident " + ident);
 
-        Person person = personIndeks.findById(ident)
-                .map(psakpselvPersonAdapter::toASBOPerson).map(this::convertASBOPersonToPersonV2).orElseThrow(HentPersonPersonIkkeFunnet::new);
+        Person person = psakpselvPersonAdapter.getASBOPenPerson(ident)
+                .map(this::convertASBOPersonToPersonV2)
+                .orElseThrow(HentPersonPersonIkkeFunnet::new);
 
         HentPersonResponse hentPersonResponse = new HentPersonResponse();
         hentPersonResponse.setPerson(person);
@@ -92,10 +99,9 @@ public class PersonV2ServiceMockImpl implements no.nav.virksomhet.tjenester.pers
             className = "no.nav.virksomhet.tjenester.person.v2.HentUtenlandskIdentitetListeResponse"
     )
     @WebResult(
-            name = "response",
-            targetNamespace = ""
+            name = "response"
     )
-    public HentUtenlandskIdentitetListeResponse hentUtenlandskIdentitetListe(@WebParam(name = "request", targetNamespace = "") HentUtenlandskIdentitetListeRequest hentUtenlandskIdentitetListeRequest) throws HentUtenlandskIdentitetListePersonIkkeFunnet {
+    public HentUtenlandskIdentitetListeResponse hentUtenlandskIdentitetListe(@WebParam(name = "request") HentUtenlandskIdentitetListeRequest hentUtenlandskIdentitetListeRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 

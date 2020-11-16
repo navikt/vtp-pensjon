@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.aktoer.v2;
 
+import static java.util.Optional.ofNullable;
+
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -59,7 +61,7 @@ public class AktoerServiceMockImpl implements AktoerV2 {
                                                              @WebParam(name = "hentIdentForAktoerIdRequest") HentIdentForAktoerIdRequest request)
             throws HentIdentForAktoerIdPersonIkkeFunnet {
         LOG.info("hentIdentForAktoerId: " + request.getAktoerId());
-        PersonModell brukerModell = personModellRepository.findByAktørIdent(request.getAktoerId())
+        PersonModell brukerModell = ofNullable(personModellRepository.findByAktørIdent(request.getAktoerId()))
                 .orElseThrow(() -> new HentIdentForAktoerIdPersonIkkeFunnet("Fant ingen ident for aktoerid: " + request.getAktoerId(), new PersonIkkeFunnet()));
 
         HentIdentForAktoerIdResponse response = new HentIdentForAktoerIdResponse();
@@ -78,7 +80,7 @@ public class AktoerServiceMockImpl implements AktoerV2 {
             throws HentAktoerIdForIdentPersonIkkeFunnet {
         LOG.info("hentIdentForAktoerId: " + request.getIdent());
 
-        PersonModell brukerModell = personModellRepository.findById(request.getIdent())
+        PersonModell brukerModell = ofNullable(personModellRepository.findById(request.getIdent()))
                 .orElseThrow(() -> new HentAktoerIdForIdentPersonIkkeFunnet("Fant ingen aktoerid for ident: " + request.getIdent(), new PersonIkkeFunnet()));
 
         HentAktoerIdForIdentResponse response = new HentAktoerIdForIdentResponse();
@@ -99,7 +101,7 @@ public class AktoerServiceMockImpl implements AktoerV2 {
         Map<String, String> identTilAktørId = new LinkedHashMap<>();
 
         hentAktoerIdForIdentListeRequest.getIdentListe()
-            .forEach(ident -> identTilAktørId.put(ident, personModellRepository.findById(ident).map(PersonModell::getAktørIdent).orElse(null)));
+            .forEach(ident -> identTilAktørId.put(ident, ofNullable(personModellRepository.findById(ident)).map(PersonModell::getAktørIdent).orElse(null)));
 
         HentAktoerIdForIdentListeResponse response = new HentAktoerIdForIdentListeResponse();
         identTilAktørId.forEach((ident, aktørId) -> {

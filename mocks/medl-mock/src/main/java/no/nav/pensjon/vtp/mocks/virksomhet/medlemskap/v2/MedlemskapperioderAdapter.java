@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.medlemskap.v2;
 
+import static java.util.Optional.ofNullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +9,6 @@ import java.util.Optional;
 import no.nav.pensjon.vtp.felles.ConversionUtils;
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapperiodeModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.Medlemsperiode;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.kodeverk.KildeMedTerm;
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.kodeverk.LandkodeMedTerm;
@@ -24,9 +25,7 @@ public class MedlemskapperioderAdapter {
     }
 
     public Optional<List<Medlemsperiode>> finnMedlemsperioder(String personIdent) {
-        return personModellRepository.findById(personIdent)
-                .filter(PersonModell.class::isInstance)
-                .map(PersonModell.class::cast)
+        return ofNullable(personModellRepository.findById(personIdent))
                 .map(pm -> {
                     List<Medlemsperiode> periodeListe = new ArrayList<>();
                     if(pm.getMedlemskap() != null) {

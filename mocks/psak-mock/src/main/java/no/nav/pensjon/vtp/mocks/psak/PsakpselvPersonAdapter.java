@@ -5,6 +5,7 @@ import static java.util.Optional.ofNullable;
 import no.nav.lib.pen.psakpselv.asbo.person.*;
 import no.nav.pensjon.vtp.testmodell.kodeverk.Diskresjonskoder;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
 import no.nav.pensjon.vtp.testmodell.personopplysning.GateadresseModell;
@@ -21,14 +22,22 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PsakpselvPersonAdapter {
+    private final PersonIndeks personIndeks;
     private final PersonModellRepository personModellRepository;
 
-    public PsakpselvPersonAdapter(PersonModellRepository personModellRepository) {
+    public PsakpselvPersonAdapter(PersonIndeks personIndeks, PersonModellRepository personModellRepository) {
+        this.personIndeks = personIndeks;
         this.personModellRepository = personModellRepository;
     }
 
-    public ASBOPenPerson toASBOPerson(Personopplysninger personopplysninger) {
-        ASBOPenPerson asboPenPerson = populateAsboPenPerson(personopplysninger.getSøker());
+    public Optional<ASBOPenPerson> getASBOPenPerson(String fodselsnummer) {
+        return ofNullable(personModellRepository.findById(fodselsnummer))
+                .flatMap(person -> personIndeks.findById(fodselsnummer)
+                        .map(personopplysninger -> toASBOPerson(person, personopplysninger)));
+    }
+
+    public ASBOPenPerson toASBOPerson(final PersonModell person, final Personopplysninger personopplysninger) {
+        ASBOPenPerson asboPenPerson = populateAsboPenPerson(person);
         asboPenPerson.setRelasjoner(fetchRelasjoner(personopplysninger));
         return asboPenPerson;
     }
@@ -88,7 +97,7 @@ public class PsakpselvPersonAdapter {
         ASBOPenRelasjon relasjon = new ASBOPenRelasjon();
         relasjon.setRelasjonsType(fr.getRolle().name());
         ASBOPenPerson annen = Stream.ofNullable(personopplysninger.getAnnenPart())
-                .filter(p -> p.getIdent().equals(personModellRepository.findById(fr.getTil()).orElseThrow(() -> new RuntimeException("No person with ident " + fr.getTil())).getIdent()))
+                .filter(p -> p.getIdent().equals(ofNullable(personModellRepository.findById(fr.getTil())).orElseThrow(() -> new RuntimeException("No person with ident " + fr.getTil())).getIdent()))
                 .map(PsakpselvPersonAdapter::populateAsboPenPerson)
                 .peek(p -> relasjon.setFom(fetchDate(personopplysninger.getSøker().getSivilstandFoo().getFom()).orElse(null)))
                 .peek(p -> relasjon.setTom(fetchDate(personopplysninger.getSøker().getSivilstandFoo().getTom()).orElse(null)))
@@ -116,7 +125,7 @@ public class PsakpselvPersonAdapter {
     private ASBOPenPerson createShallowASBOPerson(FamilierelasjonModell familierelasjon) {
         ASBOPenPerson annen = new ASBOPenPerson();
         annen.setFodselsnummer(
-                personModellRepository.findById(familierelasjon.getTil()).orElseThrow(() -> new RuntimeException("No person with ident " + familierelasjon.getTil())).getIdent());
+                ofNullable(personModellRepository.findById(familierelasjon.getTil())).orElseThrow(() -> new RuntimeException("No person with ident " + familierelasjon.getTil())).getIdent());
         return annen;
     }
 

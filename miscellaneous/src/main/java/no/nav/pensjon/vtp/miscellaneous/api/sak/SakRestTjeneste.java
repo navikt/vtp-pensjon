@@ -3,7 +3,7 @@ package no.nav.pensjon.vtp.miscellaneous.api.sak;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +51,7 @@ public class SakRestTjeneste {
         List<PersonModell> brukere = requestDTO.getLokalIdent()
                 .stream()
                 .map(personModellRepository::findById)
-                .flatMap(Optional::stream)
+                .filter(Objects::nonNull)
                 .collect(toList());
 
         Sak sak = gsakRepo.leggTilSak(brukere, requestDTO.getFagområde(), requestDTO.getFagsystem(), requestDTO.getSakstype());

@@ -1,8 +1,6 @@
 {
 	"søker": {
 		"ident": "${for1}",
-		"fornavn": "Donald",
-		"etternavn": "Duck",
 		"fødselsdato": "now()-P50Y",
 		"kjønn": "M",
 		"geografiskTilknytning": {
@@ -31,8 +29,6 @@
 	},
 	"annenPart": {
 		"ident": "${for2}",
-		"fornavn": "Dolly",
-		"etternavn": "Duck",
 		"fødselsdato": "now()-P50Y",
 		"kjønn": "K",
 		"personstatus": [

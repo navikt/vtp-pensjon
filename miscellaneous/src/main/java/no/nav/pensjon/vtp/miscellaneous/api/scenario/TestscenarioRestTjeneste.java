@@ -1,35 +1,38 @@
 package no.nav.pensjon.vtp.miscellaneous.api.scenario;
 
-import static java.util.Optional.ofNullable;
-
 import static org.springframework.http.ResponseEntity.of;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
 import no.nav.pensjon.vtp.kontrakter.TestscenarioDto;
 import no.nav.pensjon.vtp.kontrakter.TestscenarioPersonopplysningDto;
 import no.nav.pensjon.vtp.kontrakter.TestscenariodataDto;
 import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataService;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.ArbeidsforholdModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
-import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioService;
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @Api(tags = {"Testscenario"})
@@ -40,14 +43,11 @@ public class TestscenarioRestTjeneste {
     private static final String TEMPLATE_KEY = "key";
     private static final String SCENARIO_ID = "id";
 
-    private final PersonModellRepository personModellRepository;
     private final TestscenarioTemplateRepository templateRepository;
     private final TestscenarioService testscenarioService;
     private final PensjonTestdataService pensjonTestdataService;
 
-    public TestscenarioRestTjeneste(PersonModellRepository personModellRepository, TestscenarioTemplateRepository templateRepository,
-            TestscenarioService testscenarioService, PensjonTestdataService pensjonTestdataService) {
-        this.personModellRepository = personModellRepository;
+    public TestscenarioRestTjeneste(TestscenarioTemplateRepository templateRepository, TestscenarioService testscenarioService, PensjonTestdataService pensjonTestdataService) {
         this.templateRepository = templateRepository;
         this.testscenarioService = testscenarioService;
         this.pensjonTestdataService = pensjonTestdataService;
@@ -133,7 +133,7 @@ public class TestscenarioRestTjeneste {
 
         }
         String aktørIdSøker = testscenario.getPersonopplysninger().getSøker().getAktørIdent();
-        fødselsdatoBarn(testscenario);
+
         TestscenarioPersonopplysningDto scenarioPersonopplysninger = new TestscenarioPersonopplysningDto(
                 fnrSøker,
                 fnrAnnenPart,
@@ -164,15 +164,5 @@ public class TestscenarioRestTjeneste {
                 scenariodata,
                 scenariodataAnnenpart);
 
-    }
-
-    private Optional<LocalDate> fødselsdatoBarn(Testscenario testscenario) {
-        return ofNullable(testscenario.getPersonopplysninger())
-                .map(Personopplysninger::getFamilierelasjonerBarn)
-                .map(List::stream)
-                .flatMap(Stream::findFirst)
-                .map(FamilierelasjonModell::getTil)
-                .flatMap(personModellRepository::findById)
-                .map(PersonModell::getFødselsdato);
     }
 }

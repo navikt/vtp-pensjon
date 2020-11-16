@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.inntekt.hentinntektlistebolk.modell;
 
+import static java.util.Optional.ofNullable;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -66,7 +68,7 @@ public class HentInntektlisteBolkMapperRest {
             res.setArbeidsforholdstype(temp.getArbeidsforholdstype());
             res.setStillingsprosent((double) temp.getStillingsprosent());
             Aktoer arbeidsgiver = temp.getOrgnr() != null && !temp.getOrgnr().equals("") ? Aktoer.newOrganisasjon(temp.getOrgnr())
-                    : Aktoer.newAktoerId(personModellRepository.findById(temp.getPersonligArbeidsgiver()).orElseThrow(() -> new RuntimeException("Unknown personlig arbeidsgiver")).getAktørIdent());
+                    : Aktoer.newAktoerId(ofNullable(personModellRepository.findById(temp.getPersonligArbeidsgiver())).orElseThrow(() -> new RuntimeException("Unknown personlig arbeidsgiver")).getAktørIdent());
             res.setArbeidsgiver(arbeidsgiver);
             return res;
         }).collect(Collectors.toList());
@@ -82,7 +84,7 @@ public class HentInntektlisteBolkMapperRest {
             inntekt.setBeskrivelse(temp.getBeskrivelse());
             inntekt.setFordel(temp.getFordel().getKode());
             Aktoer arbeidsgiver = temp.getOrgnr() != null && !temp.getOrgnr().equals("") ? Aktoer.newOrganisasjon(temp.getOrgnr())
-                :Aktoer.newAktoerId(personModellRepository.findById(temp.getPersonligArbeidsgiver()).orElseThrow(() -> new RuntimeException("Unknown personlig arbeidsgiver")).getAktørIdent());
+                :Aktoer.newAktoerId(ofNullable(personModellRepository.findById(temp.getPersonligArbeidsgiver())).orElseThrow(() -> new RuntimeException("Unknown personlig arbeidsgiver")).getAktørIdent());
             inntekt.setVirksomhet(arbeidsgiver);
             inntekt.setOpptjeningsperiodeFom(temp.getFom());
             inntekt.setOpptjeningsperiodeTom(temp.getTom());

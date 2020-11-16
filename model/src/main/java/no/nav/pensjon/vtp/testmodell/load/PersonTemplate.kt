@@ -16,7 +16,7 @@ data class PersonTemplate(
         val dødsdato: LocalDate?,
         val diskresjonskode: Diskresjonskoder?,
         val språk: String?,
-        val kjønn: Kjønn?,
+        val kjønn: Kjønn,
         val gjeldendeAdresseType: AdresseType?,
         val geografiskTilknytning: GeografiskTilknytningTemplate?,
         val statsborgerskap: List<StatsborgerskapTemplate>?,

@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.person.v3;
 
+import static java.util.Optional.ofNullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,7 +33,7 @@ public class FamilierelasjonAdapter {
             familierelasjon.setTilRolle(familierelasjoner);
 
             Person tilBruker = new PersonAdapter().mapTilPerson(
-                    personModellRepository.findById(rel.getTil()).orElseThrow(() -> new RuntimeException("Unable to locate persion with ident " + rel.getTil())));
+                    ofNullable(personModellRepository.findById(rel.getTil())).orElseThrow(() -> new RuntimeException("Unable to locate persion with ident " + rel.getTil())));
             familierelasjon.setTilPerson(tilBruker);
             resultat.add(familierelasjon);
 

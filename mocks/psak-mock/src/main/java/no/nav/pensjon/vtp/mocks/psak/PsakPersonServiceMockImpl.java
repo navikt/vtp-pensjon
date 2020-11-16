@@ -1,31 +1,29 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
+import java.util.Optional;
+
 import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
 import no.nav.inf.psak.person.*;
 import no.nav.lib.pen.psakpselv.asbo.ASBOPenTomRespons;
 import no.nav.lib.pen.psakpselv.asbo.person.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 
 import javax.jws.*;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.Addressing;
-import java.util.Optional;
 
 @SoapService(path = "/esb/nav-cons-pen-psak-personWeb/sca/PSAKPersonWSEXP")
 @Addressing
 @WebService(targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", name = "PSAKPerson")
 @HandlerChain(file = "/Handler-chain.xml")
 public class PsakPersonServiceMockImpl implements PSAKPerson {
-    private static final Logger LOG = LoggerFactory.getLogger(PsakPersonServiceMockImpl.class);
-
-    private final PersonIndeks personIndeks;
+    private final PersonModellRepository personModellRepository;
     private final PsakpselvPersonAdapter psakpselvPersonAdapter;
 
-    public PsakPersonServiceMockImpl(PersonIndeks personIndeks, PsakpselvPersonAdapter psakpselvPersonAdapter) {
-        this.personIndeks = personIndeks;
+    public PsakPersonServiceMockImpl(PersonModellRepository personModellRepository, PsakpselvPersonAdapter psakpselvPersonAdapter) {
+        this.personModellRepository = personModellRepository;
         this.psakpselvPersonAdapter = psakpselvPersonAdapter;
     }
 
@@ -33,14 +31,16 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
     @WebMethod
     @RequestWrapper(localName = "finnPerson", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.FinnPerson")
     @ResponseWrapper(localName = "finnPersonResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.FinnPersonResponse")
-    @WebResult(name = "finnPersonResponse", targetNamespace = "")
+    @WebResult(name = "finnPersonResponse")
     public ASBOPenFinnPersonResponse finnPerson(
-            @WebParam(name = "finnPersonRequest", targetNamespace = "") no.nav.lib.pen.psakpselv.asbo.person.ASBOPenFinnPersonRequest finnPersonRequest
-    ) throws FinnPersonFaultPenGeneriskMsg {
+            @WebParam(name = "finnPersonRequest") no.nav.lib.pen.psakpselv.asbo.person.ASBOPenFinnPersonRequest finnPersonRequest
+    ) {
         ASBOPenFinnPersonResponse asboPenFinnPersonResponse = new ASBOPenFinnPersonResponse();
         ASBOPenPersonListe liste = new ASBOPenPersonListe();
-        liste.setPersoner(personIndeks.getAlleSøkere()
-                .map(psakpselvPersonAdapter::toASBOPerson)
+        liste.setPersoner(personModellRepository.findAll()
+                .stream().map(PersonModell::getIdent)
+                .map(psakpselvPersonAdapter::getASBOPenPerson)
+                .flatMap(Optional::stream)
                 .toArray(ASBOPenPerson[]::new));
 
         asboPenFinnPersonResponse.setPersoner(liste);
@@ -48,12 +48,12 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
     }
 
     @Override
-    public ASBOPenTomRespons lagreSprak(ASBOPenPerson lagreSprakRequest) throws LagreSprakFaultPenPersonIkkeFunnetMsg, LagreSprakFaultPenGeneriskMsg {
+    public ASBOPenTomRespons lagreSprak(ASBOPenPerson lagreSprakRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public ASBOPenTomRespons opprettSamboerforhold(ASBOPenPerson opprettSamboerforholdRequest) throws OpprettSamboerforholdFaultPenPersonIkkeFunnetMsg, OpprettSamboerforholdFaultPenSamboerDodMsg, OpprettSamboerforholdFaultPenSamboerIkkeFunnetMsg, OpprettSamboerforholdFaultPenSamboerValideringFeiletMsg, OpprettSamboerforholdFaultPenGeneriskMsg, OpprettSamboerforholdFaultPenSamboerIFamilieMsg, OpprettSamboerforholdFaultPenAlleredeRegistrertSamboerforholdMsg {
+    public ASBOPenTomRespons opprettSamboerforhold(ASBOPenPerson opprettSamboerforholdRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
@@ -61,26 +61,26 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
     @WebMethod
     @RequestWrapper(localName = "hentBrukerprofil", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentBrukerprofil")
     @ResponseWrapper(localName = "hentBrukerprofilResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentBrukerprofilResponse")
-    @WebResult(name = "hentBrukerprofilResponse", targetNamespace = "")
+    @WebResult(name = "hentBrukerprofilResponse")
     public no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson hentBrukerprofil(
-            @WebParam(name = "hentBrukerprofilRequest", targetNamespace = "")
+            @WebParam(name = "hentBrukerprofilRequest")
                     no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson hentBrukerprofilRequest
-    ) throws HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg, HentBrukerprofilFaultPenGeneriskMsg {
-        return getASBOPerson(hentBrukerprofilRequest.getFodselsnummer()).orElseThrow(HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg::new);
+    ) throws HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg {
+        return psakpselvPersonAdapter.getASBOPenPerson(hentBrukerprofilRequest.getFodselsnummer()).orElseThrow(HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg::new);
     }
 
     @Override
-    public ASBOPenPerson hentEnhetId(ASBOPenPerson hentEnhetIdRequest) throws HentEnhetIdFaultPenPersonIkkeFunnetMsg, HentEnhetIdFaultPenGeneriskMsg {
+    public ASBOPenPerson hentEnhetId(ASBOPenPerson hentEnhetIdRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public String slettAdresse(ASBOPenSlettAdresseRequest slettAdresseRequest) throws SlettAdresseFaultPenPersonIkkeFunnetMsg, SlettAdresseFaultPenGeneriskMsg {
+    public String slettAdresse(ASBOPenSlettAdresseRequest slettAdresseRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public ASBOPenTomRespons lagreEpost(ASBOPenPerson lagreEpostRequest) throws LagreEpostFaultPenPersonIkkeFunnetMsg, LagreEpostFaultPenGeneriskMsg {
+    public ASBOPenTomRespons lagreEpost(ASBOPenPerson lagreEpostRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
@@ -88,98 +88,98 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
     @WebMethod
     @RequestWrapper(localName = "hentFamilierelasjoner", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentFamilierelasjoner")
     @ResponseWrapper(localName = "hentFamilierelasjonerResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentFamilierelasjonerResponse")
-    @WebResult(name = "hentFamilierelasjonerResponse", targetNamespace = "")
+    @WebResult(name = "hentFamilierelasjonerResponse")
     public no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson hentFamilierelasjoner(
-            @WebParam(name = "hentFamilierelasjonerRequest", targetNamespace = "")
+            @WebParam(name = "hentFamilierelasjonerRequest")
                     no.nav.lib.pen.psakpselv.asbo.person.ASBOPenHentFamilierelasjonerRequest hentFamilierelasjonerRequest
-    ) throws HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg, HentFamilierelasjonerFaultPenGeneriskMsg{
-        return getASBOPerson(hentFamilierelasjonerRequest.getFodselsnummer()).orElseThrow(HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg::new);
+    ) throws HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg {
+        return psakpselvPersonAdapter.getASBOPenPerson(hentFamilierelasjonerRequest.getFodselsnummer()).orElseThrow(HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg::new);
     }
 
     @Override
     @WebMethod
     @RequestWrapper(localName = "hentSamboerforhold", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentSamboerforhold")
     @ResponseWrapper(localName = "hentSamboerforholdResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentSamboerforholdResponse")
-    @WebResult(name = "hentSamboerforholdResponse", targetNamespace = "")
+    @WebResult(name = "hentSamboerforholdResponse")
     public no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson hentSamboerforhold(
-            @WebParam(name = "hentSamboerforholdRequest", targetNamespace = "")
+            @WebParam(name = "hentSamboerforholdRequest")
                     no.nav.lib.pen.psakpselv.asbo.person.ASBOPenHentSamboerforholdRequest hentSamboerforholdRequest
-    ) throws HentSamboerforholdFaultPenPersonIkkeFunnetMsg, HentSamboerforholdFaultPenGeneriskMsg {
-        return getASBOPerson(hentSamboerforholdRequest.getFodselsnummer()).orElseThrow(HentSamboerforholdFaultPenGeneriskMsg::new);
+    ) throws HentSamboerforholdFaultPenGeneriskMsg {
+        return psakpselvPersonAdapter.getASBOPenPerson(hentSamboerforholdRequest.getFodselsnummer()).orElseThrow(HentSamboerforholdFaultPenGeneriskMsg::new);
     }
 
     @Override
-    public String lagreDodsdato(ASBOPenPerson lagreDodsdatoRequest) throws LagreDodsdatoFaultPenPersonIkkeFunnetMsg, LagreDodsdatoFaultPenGeneriskMsg {
+    public String lagreDodsdato(ASBOPenPerson lagreDodsdatoRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public ASBOPenTomRespons lagreAdresse(ASBOPenLagreAdresseRequest lagreAdresseRequest) throws LagreAdresseFaultPenPersonIkkeFunnetMsg, LagreAdresseFaultPenGeneriskMsg {
+    public ASBOPenTomRespons lagreAdresse(ASBOPenLagreAdresseRequest lagreAdresseRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public String lagreStatsborgerskap(ASBOPenPerson lagreStatsborgerskapRequest) throws LagreStatsborgerskapFaultPenPersonIkkeFunnetMsg, LagreStatsborgerskapFaultPenGeneriskMsg {
+    public String lagreStatsborgerskap(ASBOPenPerson lagreStatsborgerskapRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public ASBOPenTomRespons lagreTelefonnumre(ASBOPenLagreTelefonnumreRequest lagreTelefonnumreRequest) throws LagreTelefonnumreFaultPenPersonIkkeFunnetMsg, LagreTelefonnumreFaultPenGeneriskMsg {
+    public ASBOPenTomRespons lagreTelefonnumre(ASBOPenLagreTelefonnumreRequest lagreTelefonnumreRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public String lagreFamilierelasjon(ASBOPenPerson lagreFamilierelasjonRequest) throws LagreFamilierelasjonFaultPenPersonIkkeFunnetMsg, LagreFamilierelasjonFaultPenStatusIkkeUtvandretMsg, LagreFamilierelasjonFaultPenAlleredeRegistrertFostermorMsg, LagreFamilierelasjonFaultPenAlleredeRegistrertMorMsg, LagreFamilierelasjonFaultPenGeneriskMsg, LagreFamilierelasjonFaultPenAllerdeRegistrertFosterfarMsg, LagreFamilierelasjonFaultPenRelasjonTilSegSelvMsg {
+    public String lagreFamilierelasjon(ASBOPenPerson lagreFamilierelasjonRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public String opprettFamilierelasjon(ASBOPenPerson opprettFamilierelasjonRequest) throws OpprettFamilierelasjonFaultPenPersonIkkeFunnetMsg, OpprettFamilierelasjonFaultPenStatusIkkeUtvandretMsg, OpprettFamilierelasjonFaultPenAlleredeRegistrertFostermorMsg, OpprettFamilierelasjonFaultPenAlleredeRegistrertMorMsg, OpprettFamilierelasjonFaultPenGeneriskMsg, OpprettFamilierelasjonFaultPenAllerdeRegistrertFosterfarMsg, OpprettFamilierelasjonFaultPenRelasjonTilSegSelvMsg {
+    public String opprettFamilierelasjon(ASBOPenPerson opprettFamilierelasjonRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public String lagreNavn(ASBOPenPerson lagreNavnRequest) throws LagreNavnFaultPenPersonIkkeFunnetMsg, LagreNavnFaultPenGeneriskMsg {
+    public String lagreNavn(ASBOPenPerson lagreNavnRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public String lagreSivilstand(ASBOPenPerson lagreSivilstandRequest) throws LagreSivilstandFaultPenPersonIkkeFunnetMsg, LagreSivilstandFaultPenGeneriskMsg {
+    public String lagreSivilstand(ASBOPenPerson lagreSivilstandRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public String lagreHistoriskSamboerforhold(ASBOPenLagreHistoriskSamboerforholdRequest lagreHistoriskSamboerforholdRequest) throws LagreHistoriskSamboerforholdFaultPenKorrigertPersonIkkeFunnetMsg, LagreHistoriskSamboerforholdFaultPenSamboerforholdIkkeFunnetMsg, LagreHistoriskSamboerforholdFaultPenGeneriskMsg, LagreHistoriskSamboerforholdFaultPenDatoerStemmerIkkeMedRegistrertSamboerforholdMsg, LagreHistoriskSamboerforholdFaultPenAlleredeRegistrertSamboerforholdMsg {
+    public String lagreHistoriskSamboerforhold(ASBOPenLagreHistoriskSamboerforholdRequest lagreHistoriskSamboerforholdRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public ASBOPenUtlandHistorikk hentPersonUtlandHistorikkListe(ASBOPenHentPersonUtlandsHistorikkListeRequest hentPersonUtlandHistorikkListeRequest) throws HentPersonUtlandHistorikkListeFaultPenGeneriskMsg {
+    public ASBOPenUtlandHistorikk hentPersonUtlandHistorikkListe(ASBOPenHentPersonUtlandsHistorikkListeRequest hentPersonUtlandHistorikkListeRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public Boolean erEgenansatt(ASBOPenPerson erEgenansattRequest) throws ErEgenansattFaultPenPersonIkkeFunnetMsg, ErEgenansattFaultPenGeneriskMsg {
+    public Boolean erEgenansatt(ASBOPenPerson erEgenansattRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public ASBOPenPerson hentPersonUtland(ASBOPenPerson hentPersonUtlandRequest) throws HentPersonUtlandFaultPenPersonIkkeFunnetMsg, HentPersonUtlandFaultPenGeneriskMsg {
+    public ASBOPenPerson hentPersonUtland(ASBOPenPerson hentPersonUtlandRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public ASBOPenTomRespons lagreBrukerprofil(ASBOPenPerson lagreBrukerprofilRequest) throws LagreBrukerprofilFaultPenPersonIkkeFunnetMsg, LagreBrukerprofilFaultPenGeneriskMsg {
+    public ASBOPenTomRespons lagreBrukerprofil(ASBOPenPerson lagreBrukerprofilRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public ASBOPenTomRespons lagreKontoinformasjon(ASBOPenPerson lagreKontoinformasjonRequest) throws LagreKontoinformasjonFaultPenPersonIkkeFunnetMsg, LagreKontoinformasjonFaultPenGeneriskMsg {
+    public ASBOPenTomRespons lagreKontoinformasjon(ASBOPenPerson lagreKontoinformasjonRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public ASBOPenPerson hentHistorikk(ASBOPenHentHistorikkRequest hentHistorikkRequest) throws HentHistorikkFaultPenPersonIkkeFunnetMsg, HentHistorikkFaultPenGeneriskMsg {
+    public ASBOPenPerson hentHistorikk(ASBOPenHentHistorikkRequest hentHistorikkRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
@@ -187,43 +187,32 @@ public class PsakPersonServiceMockImpl implements PSAKPerson {
     @WebMethod
     @RequestWrapper(localName = "hentKontoinformasjon", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentKontoinformasjon")
     @ResponseWrapper(localName = "hentKontoinformasjonResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentKontoinformasjonResponse")
-    @WebResult(name = "hentKontoinformasjonsResponse", targetNamespace = "")
+    @WebResult(name = "hentKontoinformasjonsResponse")
     public no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson hentKontoinformasjon(
-            @WebParam(name = "hentKontoinformasjonRequest", targetNamespace = "")
+            @WebParam(name = "hentKontoinformasjonRequest")
                     no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson hentKontoinformasjonRequest
-    ) throws HentKontoinformasjonFaultPenPersonIkkeFunnetMsg, HentKontoinformasjonFaultPenGeneriskMsg {
-        return getASBOPerson(hentKontoinformasjonRequest.getFodselsnummer()).orElseThrow(HentKontoinformasjonFaultPenPersonIkkeFunnetMsg::new);
+    ) throws HentKontoinformasjonFaultPenPersonIkkeFunnetMsg {
+        return psakpselvPersonAdapter.getASBOPenPerson(hentKontoinformasjonRequest.getFodselsnummer()).orElseThrow(HentKontoinformasjonFaultPenPersonIkkeFunnetMsg::new);
     }
 
     @Override
     @WebMethod
     @RequestWrapper(localName = "hentPerson", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentPerson")
     @ResponseWrapper(localName = "hentPersonResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentPersonResponse")
-    @WebResult(name = "hentPersonResponse", targetNamespace = "")
+    @WebResult(name = "hentPersonResponse")
     public ASBOPenPerson hentPerson(
-            @WebParam(name = "hentPersonRequest", targetNamespace = "") no.nav.lib.pen.psakpselv.asbo.person.ASBOPenHentPersonRequest hentPersonRequest)
-            throws HentPersonFaultPenPersonIkkeFunnetMsg, HentPersonFaultPenGeneriskMsg {
-        return getASBOPerson(hentPersonRequest.getPerson().getFodselsnummer()).orElseThrow(HentPersonFaultPenPersonIkkeFunnetMsg::new);
-    }
-
-    private Optional<ASBOPenPerson> getASBOPerson(String fodselsnummer) {
-        return personIndeks.findById(fodselsnummer)
-                .map(psakpselvPersonAdapter::toASBOPerson)
-                .or(() -> logIkkeFunnet(fodselsnummer));
-    }
-
-    private Optional<ASBOPenPerson> logIkkeFunnet(String fodselsnummer) {
-        LOG.warn("Klarte ikke å finne person med fnr: " + fodselsnummer);
-        return Optional.empty();
+            @WebParam(name = "hentPersonRequest") no.nav.lib.pen.psakpselv.asbo.person.ASBOPenHentPersonRequest hentPersonRequest)
+            throws HentPersonFaultPenPersonIkkeFunnetMsg {
+        return psakpselvPersonAdapter.getASBOPenPerson(hentPersonRequest.getPerson().getFodselsnummer()).orElseThrow(HentPersonFaultPenPersonIkkeFunnetMsg::new);
     }
 
     @Override
-    public ASBOPenTomRespons lagreSamboerforhold(ASBOPenPerson lagreSamboerforholdRequest) throws LagreSamboerforholdFaultPenPersonIkkeFunnetMsg, LagreSamboerforholdFaultPenSamboerDodMsg, LagreSamboerforholdFaultPenSamboerIkkeFunnetMsg, LagreSamboerforholdFaultPenAlleredeRegistrertSamboerMsg, LagreSamboerforholdFaultPenGeneriskMsg, LagreSamboerforholdFaultPenSamboerIFamilieMsg {
+    public ASBOPenTomRespons lagreSamboerforhold(ASBOPenPerson lagreSamboerforholdRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 
     @Override
-    public ASBOPenTomRespons slettSamboerforhold(ASBOPenPerson slettSamboerforholdRequest) throws SlettSamboerforholdFaultPenPersonIkkeFunnetMsg, SlettSamboerforholdFaultPenSamboerIkkeFunnetMsg, SlettSamboerforholdFaultPenGeneriskMsg {
+    public ASBOPenTomRespons slettSamboerforhold(ASBOPenPerson slettSamboerforholdRequest) {
         throw new UnsupportedOperationException("Ikke implementert");
     }
 }
