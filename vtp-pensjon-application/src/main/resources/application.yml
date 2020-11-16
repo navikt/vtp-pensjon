@@ -5,6 +5,11 @@ cxf:
 pensjon:
   testdata:
     url: http://localhost:3000
+ldap:
+  server:
+    enabled: true
+    port: 8389
+    securePort: 8636
 management:
   endpoints:
     web:
