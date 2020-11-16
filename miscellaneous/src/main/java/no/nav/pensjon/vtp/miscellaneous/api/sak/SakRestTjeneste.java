@@ -3,7 +3,7 @@ package no.nav.pensjon.vtp.miscellaneous.api.sak;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import no.nav.pensjon.vtp.mocks.oppgave.gask.sak.v1.GsakRepo;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
 import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sak;
 
@@ -29,11 +29,11 @@ import no.nav.tjeneste.virksomhet.sak.v1.informasjon.Sak;
 public class SakRestTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(SakRestTjeneste.class);
 
-    private final BrukerModellRepository brukerModellRepository;
+    private final PersonModellRepository personModellRepository;
     private final GsakRepo gsakRepo;
 
-    public SakRestTjeneste(BrukerModellRepository brukerModellRepository, GsakRepo gsakRepo) {
-        this.brukerModellRepository = brukerModellRepository;
+    public SakRestTjeneste(PersonModellRepository personModellRepository, GsakRepo gsakRepo) {
+        this.personModellRepository = personModellRepository;
         this.gsakRepo = gsakRepo;
     }
 
@@ -50,8 +50,8 @@ public class SakRestTjeneste {
 
         List<PersonModell> brukere = requestDTO.getLokalIdent()
                 .stream()
-                .map(brukerModellRepository::findById)
-                .flatMap(Optional::stream)
+                .map(personModellRepository::findById)
+                .filter(Objects::nonNull)
                 .collect(toList());
 
         Sak sak = gsakRepo.leggTilSak(brukere, requestDTO.getFagområde(), requestDTO.getFagsystem(), requestDTO.getSakstype());

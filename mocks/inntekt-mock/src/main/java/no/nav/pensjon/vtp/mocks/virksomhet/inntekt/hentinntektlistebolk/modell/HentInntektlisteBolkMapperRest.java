@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.inntekt.hentinntektlistebolk.modell;
 
+import static java.util.Optional.ofNullable;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Component;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.FrilansArbeidsforholdsperiode;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.Inntektsperiode;
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 import no.nav.tjenester.aordningen.inntektsinformasjon.Aktoer;
 import no.nav.tjenester.aordningen.inntektsinformasjon.ArbeidsInntektIdent;
 import no.nav.tjenester.aordningen.inntektsinformasjon.ArbeidsInntektInformasjon;
@@ -23,10 +25,10 @@ import no.nav.tjenester.aordningen.inntektsinformasjon.inntekt.InntektType;
 
 @Component
 public class HentInntektlisteBolkMapperRest {
-    private final BrukerModellRepository brukerModellRepository;
+    private final PersonModellRepository personModellRepository;
 
-    public HentInntektlisteBolkMapperRest(BrukerModellRepository brukerModellRepository) {
-        this.brukerModellRepository = brukerModellRepository;
+    public HentInntektlisteBolkMapperRest(PersonModellRepository personModellRepository) {
+        this.personModellRepository = personModellRepository;
     }
 
     public ArbeidsInntektIdent makeArbeidsInntektIdent(InntektskomponentModell modell, Aktoer aktoer, YearMonth fom, YearMonth tom) {
@@ -66,7 +68,7 @@ public class HentInntektlisteBolkMapperRest {
             res.setArbeidsforholdstype(temp.getArbeidsforholdstype());
             res.setStillingsprosent((double) temp.getStillingsprosent());
             Aktoer arbeidsgiver = temp.getOrgnr() != null && !temp.getOrgnr().equals("") ? Aktoer.newOrganisasjon(temp.getOrgnr())
-                    : Aktoer.newAktoerId(brukerModellRepository.findById(temp.getPersonligArbeidsgiver()).orElseThrow(() -> new RuntimeException("Unknown personlig arbeidsgiver")).getAktørIdent());
+                    : Aktoer.newAktoerId(ofNullable(personModellRepository.findById(temp.getPersonligArbeidsgiver())).orElseThrow(() -> new RuntimeException("Unknown personlig arbeidsgiver")).getAktørIdent());
             res.setArbeidsgiver(arbeidsgiver);
             return res;
         }).collect(Collectors.toList());
@@ -82,7 +84,7 @@ public class HentInntektlisteBolkMapperRest {
             inntekt.setBeskrivelse(temp.getBeskrivelse());
             inntekt.setFordel(temp.getFordel().getKode());
             Aktoer arbeidsgiver = temp.getOrgnr() != null && !temp.getOrgnr().equals("") ? Aktoer.newOrganisasjon(temp.getOrgnr())
-                :Aktoer.newAktoerId(brukerModellRepository.findById(temp.getPersonligArbeidsgiver()).orElseThrow(() -> new RuntimeException("Unknown personlig arbeidsgiver")).getAktørIdent());
+                :Aktoer.newAktoerId(ofNullable(personModellRepository.findById(temp.getPersonligArbeidsgiver())).orElseThrow(() -> new RuntimeException("Unknown personlig arbeidsgiver")).getAktørIdent());
             inntekt.setVirksomhet(arbeidsgiver);
             inntekt.setOpptjeningsperiodeFom(temp.getFom());
             inntekt.setOpptjeningsperiodeTom(temp.getTom());

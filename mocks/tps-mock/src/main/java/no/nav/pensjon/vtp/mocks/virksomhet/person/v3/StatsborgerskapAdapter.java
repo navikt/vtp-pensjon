@@ -46,7 +46,7 @@ public class StatsborgerskapAdapter {
 
         Landkoder land = new Landkoder();
         land.withKodeRef("Landkoder");
-        land.setValue(st.getLand().getKode());
+        land.setValue(st.getLand().name());
 
         statsborgerskap.withLand(land);
         return statsborgerskap;

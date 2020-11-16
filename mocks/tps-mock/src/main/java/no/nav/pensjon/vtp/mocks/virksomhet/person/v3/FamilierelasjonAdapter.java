@@ -1,12 +1,14 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.person.v3;
 
+import static java.util.Optional.ofNullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import no.nav.pensjon.vtp.testmodell.personopplysning.BrukerModellRepository;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Familierelasjon;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Familierelasjoner;
@@ -14,10 +16,10 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.Person;
 
 @Component
 public class FamilierelasjonAdapter {
-    private final BrukerModellRepository brukerModellRepository;
+    private final PersonModellRepository personModellRepository;
 
-    public FamilierelasjonAdapter(BrukerModellRepository brukerModellRepository) {
-        this.brukerModellRepository = brukerModellRepository;
+    public FamilierelasjonAdapter(PersonModellRepository personModellRepository) {
+        this.personModellRepository = personModellRepository;
     }
 
     public List<Familierelasjon> tilFamilerelasjon(Collection<FamilierelasjonModell> relasjoner){
@@ -30,7 +32,8 @@ public class FamilierelasjonAdapter {
             familierelasjoner.setValue(rel.getRolleKode());
             familierelasjon.setTilRolle(familierelasjoner);
 
-            Person tilBruker = new PersonAdapter().mapTilPerson(brukerModellRepository.findById(rel.getTil()).orElseThrow(() -> new RuntimeException("Unable to locate persion with ident " + rel.getTil())));
+            Person tilBruker = new PersonAdapter().mapTilPerson(
+                    ofNullable(personModellRepository.findById(rel.getTil())).orElseThrow(() -> new RuntimeException("Unable to locate persion with ident " + rel.getTil())));
             familierelasjon.setTilPerson(tilBruker);
             resultat.add(familierelasjon);
 

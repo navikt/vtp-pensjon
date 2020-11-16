@@ -1,10 +1,10 @@
 package no.nav.pensjon.vtp.testmodell.identer;
 
-import no.nav.pensjon.vtp.testmodell.kodeverk.Kjønn;
-
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import no.nav.pensjon.vtp.testmodell.kodeverk.Kjønn;
 
 /** konverterer lokale identer brukt i testcase til utvalgte fødselsnummer hentet fra syntetisk liste. */
 public class LokalIdentIndeks {

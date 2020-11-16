@@ -41,7 +41,7 @@ public class JournalRepoTest {
         journalRepository.leggTilJournalpost(journalpostModell);
         List<JournalpostModell> journalpostModells = journalRepository.finnJournalposterMedSakId(sakId);
         assertThat(journalpostModells).size().isEqualTo(1);
-        assertThat(journalpostModells.get(0)).isEqualToComparingFieldByField(journalpostModell);
+        assertThat(journalpostModells.get(0)).usingRecursiveComparison().isEqualTo(journalpostModell);
     }
 
     @Test

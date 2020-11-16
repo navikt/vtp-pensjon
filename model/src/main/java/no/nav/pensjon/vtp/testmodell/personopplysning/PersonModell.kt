@@ -5,6 +5,8 @@ import no.nav.pensjon.vtp.testmodell.kodeverk.Kjønn
 import no.nav.pensjon.vtp.testmodell.kodeverk.Personstatuser.BOSA
 import no.nav.pensjon.vtp.testmodell.kodeverk.Sivilstander.UGIF
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapModell
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDate
 import java.util.*
 import java.util.Locale.getDefault
@@ -13,7 +15,9 @@ import java.util.Optional.ofNullable
 private const val NB = "NB"
 
 
+@Document
 data class PersonModell(
+        @Id
         val ident: String,
         val aktørIdent: String,
         val fornavn: String,

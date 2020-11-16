@@ -3,7 +3,7 @@ package no.nav.pensjon.vtp.mocks.oppgave.gask.oppgavebehandling.v2
 import no.nav.pensjon.vtp.core.annotations.SoapService
 import no.nav.pensjon.vtp.core.util.toLocalDate
 import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFoo
-import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveRepository
+import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFooRepository
 import no.nav.pensjon.vtp.mocks.oppgave.repository.Sporing
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell
@@ -11,6 +11,7 @@ import no.nav.virksomhet.tjenester.oppgavebehandling.feil.v2.ObjectFactory
 import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.*
 import no.nav.virksomhet.tjenester.oppgavebehandling.v2.LagreOppgaveOppgaveIkkeFunnet
 import no.nav.virksomhet.tjenester.oppgavebehandling.v2.Oppgavebehandling
+import org.springframework.dao.OptimisticLockingFailureException
 import javax.jws.*
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper
@@ -21,7 +22,7 @@ import javax.xml.ws.ResponseWrapper
 @WebService(targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2", name = "Oppgavebehandling")
 @XmlSeeAlso(ObjectFactory::class, no.nav.virksomhet.tjenester.oppgavebehandling.v2.ObjectFactory::class, no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.ObjectFactory::class)
 @HandlerChain(file = "/Handler-chain.xml")
-class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private val oppgaveRepository: OppgaveRepository) : Oppgavebehandling {
+class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private val oppgaveRepository: OppgaveFooRepository) : Oppgavebehandling {
     /**
      *
      * Tjenesten lagreOppgaveBolk leveres av FGSAK. *
@@ -78,7 +79,7 @@ class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private va
                     skannetDato = skannetDato?.toLocalDate(),
                     soknadsId = soknadsId,
                     underkategoriKode = underkategoriKode
-            )))
+            )).oppgaveId)
         }
     }
 
@@ -144,33 +145,38 @@ class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private va
                 ?: throw LagreOppgaveOppgaveIkkeFunnet("Oppgave med id=$request.endreOppgave.oppgaveId ikke funnet")
 
         with(request.endreOppgave) {
-            oppgaveRepository.save(oppgave.copy(
-                    version = versjon,
-                    endretSporing = Sporing("saksbeh", getNorg2Modell(request.endretAvEnhetId)), // XXX: Get actual user from security context
-                    aktivFra = aktivFra?.toLocalDate(),
-                    aktivTil = aktivTil?.toLocalDate(),
-                    ansvarligEnhetId = ansvarligEnhetId,
-                    ansvarligId = ansvarligId,
-                    beskrivelse = beskrivelse,
-                    brukerId = brukerId,
-                    brukertypeKode = brukertypeKode,
-                    dokumentId = dokumentId,
-                    fagomradeKode = fagomradeKode,
-                    henvendelseId = henvendelseId,
-                    kravId = kravId,
-                    isLest = lest,
-                    mappeId = mappeId,
-                    mottattDato = mottattDato?.toLocalDate(),
-                    normDato = normDato?.toLocalDate(),
-                    oppfolging = oppfolging,
-                    oppgavetypeKode = oppgavetypeKode,
-                    prioritetKode = prioritetKode,
-                    revurderingstype = revurderingstype,
-                    saksnummer = saksnummer,
-                    skannetDato = skannetDato?.toLocalDate(),
-                    soknadsId = soknadsId,
-                    underkategoriKode = underkategoriKode
-            ))
+            try {
+                oppgaveRepository.save(oppgave.copy(
+                        version = versjon,
+                        endretSporing = Sporing("saksbeh", getNorg2Modell(request.endretAvEnhetId)), // XXX: Get actual user from security context
+                        aktivFra = aktivFra?.toLocalDate(),
+                        aktivTil = aktivTil?.toLocalDate(),
+                        ansvarligEnhetId = ansvarligEnhetId,
+                        ansvarligId = ansvarligId,
+                        beskrivelse = beskrivelse,
+                        brukerId = brukerId,
+                        brukertypeKode = brukertypeKode,
+                        dokumentId = dokumentId,
+                        fagomradeKode = fagomradeKode,
+                        henvendelseId = henvendelseId,
+                        kravId = kravId,
+                        isLest = lest,
+                        mappeId = mappeId,
+                        mottattDato = mottattDato?.toLocalDate(),
+                        normDato = normDato?.toLocalDate(),
+                        oppfolging = oppfolging,
+                        oppgavetypeKode = oppgavetypeKode,
+                        prioritetKode = prioritetKode,
+                        revurderingstype = revurderingstype,
+                        saksnummer = saksnummer,
+                        skannetDato = skannetDato?.toLocalDate(),
+                        soknadsId = soknadsId,
+                        underkategoriKode = underkategoriKode
+                ))
+            } catch (e: OptimisticLockingFailureException) {
+                // Translate to one of the optimistic locking exceptions that are thrown by GSAK
+                throw IllegalArgumentException("Feil ved endring. Optimistic Lock.")
+            }
         }
     }
 

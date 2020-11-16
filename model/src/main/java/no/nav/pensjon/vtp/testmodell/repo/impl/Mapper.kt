@@ -1,20 +1,16 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl
 
-import no.nav.pensjon.vtp.testmodell.kodeverk.Kjønn
 import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks
 import no.nav.pensjon.vtp.testmodell.load.*
 import no.nav.pensjon.vtp.testmodell.personopplysning.*
-import no.nav.pensjon.vtp.testmodell.util.FiktivtNavn
-import no.nav.pensjon.vtp.testmodell.util.TestdataUtil
+import no.nav.pensjon.vtp.testmodell.util.FiktivtNavn.getAnnenPartName
+import no.nav.pensjon.vtp.testmodell.util.FiktivtNavn.getRandomName
 import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
-import java.lang.RuntimeException
 
 class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, val vars: VariabelContainer) {
     fun mapFromLoad(l: PersonopplysningerTemplate): Personopplysninger {
-        val fallbackName = if (l.søker.kjønn == Kjønn.K) FiktivtNavn.getRandomFemaleName() else FiktivtNavn.getRandomMaleName()
-        val fallbackAnnenPartName = TestdataUtil.getAnnenPartName(l.søker, l.annenPart)
-
-        val annenPart = l.annenPart?.let { personModell(it, fallbackAnnenPartName) }
+        val fallbackName = getRandomName(l.søker.kjønn)
+        val annenPart = l.annenPart?.let { personModell(it, getAnnenPartName(l.søker, l.søker.etternavn ?: fallbackName.etternavn, it.kjønn)) }
 
         return Personopplysninger(
                 søker = personModell(l.søker, fallbackName),

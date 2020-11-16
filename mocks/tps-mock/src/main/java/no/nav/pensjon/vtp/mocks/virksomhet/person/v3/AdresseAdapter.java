@@ -84,8 +84,8 @@ public class AdresseAdapter {
         UstrukturertAdresse adresse = new UstrukturertAdresse();
         Landkoder landkoder = new Landkoder();
         landkoder.setKodeverksRef("Landkoder");
-        landkoder.setKodeRef(adr.getLandkode());
-        landkoder.setValue(adr.getLandkode());
+        landkoder.setKodeRef(adr.getLandkode().name());
+        landkoder.setValue(adr.getLandkode().name());
 
         adresse.withLandkode(landkoder);
         adresse.withAdresselinje1(adr.getAdresseLinje1());
@@ -101,8 +101,8 @@ public class AdresseAdapter {
 
         Landkoder landkoder = new Landkoder();
         landkoder.setKodeverksRef("Landkoder");
-        landkoder.setKodeRef(adr.getLandkode());
-        landkoder.setValue(adr.getLandkode());
+        landkoder.setKodeRef(adr.getLandkode().name());
+        landkoder.setValue(adr.getLandkode().name());
 
         Postnummer postnummer = new Postnummer();
         postnummer.setKodeverksRef("Postnummer");
@@ -122,8 +122,8 @@ public class AdresseAdapter {
 
         Landkoder landkoder = new Landkoder();
         landkoder.setKodeverksRef("Landkoder");
-        landkoder.setKodeRef(gateaddresse.getLandkode());
-        landkoder.setValue(gateaddresse.getLandkode());
+        landkoder.setKodeRef(gateaddresse.getLandkode().name());
+        landkoder.setValue(gateaddresse.getLandkode().name());
 
         Gateadresse gt = new Gateadresse();
 
