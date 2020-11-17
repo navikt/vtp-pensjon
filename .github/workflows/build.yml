@@ -37,7 +37,6 @@ jobs:
           export VERSION="$TIME-$COMMIT$BRANCH_SUFFIX"
           echo "Building version $VERSION"
           echo "name=VERSION=$VERSION" >> $GITHUB_ENV
-          echo "::set-output VERSION::$VERSION"
       - uses: actions/cache@v2
         with:
           path: ~/.m2
