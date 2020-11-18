@@ -1,8 +1,12 @@
 package no.nav.pensjon.vtp.felles;
 
+import static java.lang.System.getProperty;
+import static java.nio.file.Files.deleteIfExists;
+import static java.nio.file.Paths.get;
+
+import static no.nav.pensjon.vtp.felles.KeyStoreTool.KEYSTORE_FORMAT;
+
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class KeyStoreToolMain {
 
@@ -18,14 +22,20 @@ public class KeyStoreToolMain {
      * 5. Lag en Pull-Request til pesys-master med oppdaterte lokale truststores
      * 6. Kopier og erstatt vtp truststore og keystore i keystore.jks og truststore med nye genererte
      * 7. Lag Pull-Request til vtp-master med oppdaterte truststore/keystore
-     * @param args
-     * @throws IOException
      */
     public static void main(String[] args) throws IOException {
+        final String keystorePath = getProperty("user.home", ".") + "/.modig/keystore.jks";
+        final String keystorePassword = "devillokeystore1234";
+
+        final String truststorePath = getProperty("user.home", ".") + "/.modig/truststore.jks";
+        final String truststorePassword = "changeit";
+
+        final String keyAndCertAlias = "localhost-ssl";
+
         System.out.println("------------GENERATING A NEW KEY-PAIR------------");
-        Files.deleteIfExists(Paths.get(KeystoreUtils.getKeystoreFilePath()));
-        Files.deleteIfExists(Paths.get(KeystoreUtils.getTruststoreFilePath()));
-        KeystoresGenerator.readKeystoresOrGenerateIfNotExists(KeyStoreTool.KEYSTORE_FORMAT, KeyStoreTool.getKeyAndCertAlias());
+        deleteIfExists(get(keystorePath));
+        deleteIfExists(get(truststorePath));
+        KeystoresGenerator.readKeystoresOrGenerateIfNotExists(keystorePath, keystorePassword, truststorePath, truststorePassword, KEYSTORE_FORMAT, keyAndCertAlias);
         System.out.println("------------DONE------------");
     }
 }

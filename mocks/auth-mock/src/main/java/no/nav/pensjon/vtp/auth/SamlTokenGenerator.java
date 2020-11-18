@@ -1,6 +1,8 @@
 package no.nav.pensjon.vtp.auth;
 
 import no.nav.pensjon.vtp.felles.KeyStoreTool;
+
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,8 +34,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+@Component
 public class SamlTokenGenerator {
     private static final DateTimeFormatter format = DateTimeFormatter.ISO_INSTANT;
+
+    private final KeyStoreTool keyStoreTool;
+
+    public SamlTokenGenerator(KeyStoreTool keyStoreTool) {
+        this.keyStoreTool = keyStoreTool;
+    }
 
     public String issueToken(String username) throws Exception {
         try {
@@ -58,8 +67,8 @@ public class SamlTokenGenerator {
                     signFac.newSignatureMethod(SignatureMethod.RSA_SHA1, null),
                     Collections.singletonList(ref));
 
-            X509Certificate cert = KeyStoreTool.getDefaultCredential().getEntityCertificate();
-            PrivateKey privateKey = KeyStoreTool.getDefaultCredential().getPrivateKey();
+            X509Certificate cert = keyStoreTool.getDefaultCredential().getEntityCertificate();
+            PrivateKey privateKey = keyStoreTool.getDefaultCredential().getPrivateKey();
             if(privateKey == null) {
                 throw new IllegalArgumentException("Failed to find PrivateKey in keystore");
             }

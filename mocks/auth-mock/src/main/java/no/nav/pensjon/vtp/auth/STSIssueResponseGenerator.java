@@ -1,16 +1,13 @@
 package no.nav.pensjon.vtp.auth;
 
-import java.io.IOException;
+import static java.util.Collections.singletonList;
+
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.UnsupportedCallbackException;
 
 import org.apache.cxf.security.SecurityContext;
 import org.apache.cxf.sts.StaticSTSProperties;
@@ -18,10 +15,8 @@ import org.apache.cxf.sts.operation.TokenIssueOperation;
 import org.apache.cxf.sts.request.ReceivedToken;
 import org.apache.cxf.sts.request.RequestRequirements;
 import org.apache.cxf.sts.request.TokenRequirements;
-import org.apache.cxf.sts.token.delegation.TokenDelegationHandler;
 import org.apache.cxf.sts.token.delegation.UsernameTokenDelegationHandler;
 import org.apache.cxf.sts.token.provider.SAMLTokenProvider;
-import org.apache.cxf.sts.token.provider.TokenProvider;
 import org.apache.cxf.sts.token.provider.TokenProviderParameters;
 import org.apache.cxf.ws.security.sts.provider.model.ObjectFactory;
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenCollectionType;
@@ -29,29 +24,40 @@ import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenRespons
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType;
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenType;
 import org.apache.wss4j.common.crypto.Crypto;
-import org.apache.wss4j.common.crypto.CryptoFactory;
 import org.apache.wss4j.common.ext.WSPasswordCallback;
-import org.apache.wss4j.common.ext.WSSecurityException;
 import org.apache.wss4j.common.principal.CustomTokenPrincipal;
-import org.apache.wss4j.dom.engine.WSSConfig;
+import org.springframework.stereotype.Component;
 
-import no.nav.pensjon.vtp.felles.KeyStoreTool;
-import no.nav.pensjon.vtp.felles.KeystoreUtils;
+import no.nav.pensjon.vtp.felles.CryptoConfigurationParameters;
 
+@Component
 public class STSIssueResponseGenerator {
 
     private static final String USERNAME = "goddagmannøkseskaft";
+    private final CryptoConfigurationParameters cryptoConfiguration;
+    private final TokenIssueOperation issueOperation;
+
+    public STSIssueResponseGenerator(Crypto crypto, final CryptoConfigurationParameters cryptoConfiguration) {
+        this.cryptoConfiguration = cryptoConfiguration;
+        this.issueOperation = createIssueOperation(initSTSProperties(crypto));
+    }
+
 
     static class PasswordCallbackHandler implements CallbackHandler {
 
+        private final CryptoConfigurationParameters cryptoConfigurationParameters;
+
+        public PasswordCallbackHandler(CryptoConfigurationParameters cryptoConfigurationParameters) {
+            this.cryptoConfigurationParameters = cryptoConfigurationParameters;
+        }
+
         @Override
-        public void handle(Callback[] callbacks) throws IOException,
-                UnsupportedCallbackException {
-            for (int i = 0; i < callbacks.length; i++) {
-                if (callbacks[i] instanceof WSPasswordCallback) { // CXF
-                    WSPasswordCallback pc = (WSPasswordCallback) callbacks[i];
-                    if (KeyStoreTool.getKeyAndCertAlias().equals(pc.getIdentifier())) {
-                        pc.setPassword(KeystoreUtils.getKeyStorePassword());
+        public void handle(Callback[] callbacks) {
+            for (Callback callback : callbacks) {
+                if (callback instanceof WSPasswordCallback) { // CXF
+                    WSPasswordCallback pc = (WSPasswordCallback) callback;
+                    if (cryptoConfigurationParameters.getKeyAndCertAlias().equals(pc.getIdentifier())) {
+                        pc.setPassword(cryptoConfigurationParameters.getKeyStorePassword());
                         break;
                     }
                 }
@@ -59,33 +65,36 @@ public class STSIssueResponseGenerator {
         }
     }
 
-    private static final Crypto CRYPTO = getCrypto();
-    private static final StaticSTSProperties STS_PROPERTIES = initSTSProperties(CRYPTO);
-
-    private final TokenIssueOperation issueOperation = new TokenIssueOperation() {
-        @Override
-        protected org.apache.cxf.sts.token.provider.TokenProviderParameters createTokenProviderParameters(RequestRequirements requestRequirements,
-                                                                                                          Principal principal,
-                                                                                                          Map<String, Object> messageContext) {
-            TokenProviderParameters providerParameters = super.createTokenProviderParameters(requestRequirements, principal, messageContext);
-            TokenRequirements tokenRequirements = providerParameters.getTokenRequirements();
-            tokenRequirements.setOnBehalfOf(null);
-            tokenRequirements.setActAs(null);
-            return providerParameters;
+    private static TokenIssueOperation createIssueOperation(StaticSTSProperties staticSTSProperties) {
+        TokenIssueOperation tokenIssueOperation = new TokenIssueOperation() {
+            @Override
+            protected TokenProviderParameters createTokenProviderParameters(RequestRequirements requestRequirements,
+                    Principal principal,
+                    Map<String, Object> messageContext) {
+                TokenProviderParameters providerParameters = super.createTokenProviderParameters(requestRequirements, principal, messageContext);
+                TokenRequirements tokenRequirements = providerParameters.getTokenRequirements();
+                tokenRequirements.setOnBehalfOf(null);
+                tokenRequirements.setActAs(null);
+                return providerParameters;
+            }
         };
-    };
 
-    public STSIssueResponseGenerator() {
-        initTokenProviders(issueOperation);
-        issueOperation.setStsProperties(STS_PROPERTIES);
+        // Add Token Provider
+        tokenIssueOperation.setTokenProviders(singletonList(new SAMLTokenProvider()));
 
-        // Add Service
-        // ServiceMBean service = new StaticService();
-        // service.setEndpoints(Collections.singletonList("http://dummy-service.com/dummy"));
-        // issueOperation.setServices(Collections.singletonList(service));
+        // Add TokenDelegationHandler for onBehalfOf
+        tokenIssueOperation.setDelegationHandlers(singletonList(
+                new UsernameTokenDelegationHandler() {
+                    @Override
+                    public boolean canHandleToken(ReceivedToken delegateTarget) {
+                        return true;
+                    }
+                }
+                ));
 
-        // Mock up a request
+        tokenIssueOperation.setStsProperties(staticSTSProperties);
 
+        return tokenIssueOperation;
     }
 
     private Map<String, Object> createMessageContext(Principal principal) {
@@ -142,53 +151,15 @@ public class STSIssueResponseGenerator {
         };
     }
 
-    private static Properties getEncryptionProperties() {
-        WSSConfig.init();
-        Properties properties = new Properties();
-        properties.put(
-            "org.apache.wss4j.crypto.provider", "org.apache.wss4j.common.crypto.Merlin");
-        properties.put("org.apache.wss4j.crypto.merlin.keystore.password", new String(KeystoreUtils.getKeyStorePassword()));
-        properties.put("org.apache.wss4j.crypto.merlin.keystore.file", KeystoreUtils.getKeystoreFilePath());
-
-        return properties;
-    }
-
-    private static synchronized Crypto getCrypto() {
-        try {
-            Crypto crypto = CryptoFactory.getInstance(getEncryptionProperties());
-            return crypto;
-        } catch (WSSecurityException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    private static StaticSTSProperties initSTSProperties(Crypto CRYPTO) {
+    private StaticSTSProperties initSTSProperties(Crypto crypto) {
         // Add STSProperties object
-        String alias = KeyStoreTool.getKeyAndCertAlias();
+        String alias = cryptoConfiguration.getKeyAndCertAlias();
         StaticSTSProperties stsProperties = new StaticSTSProperties();
-        stsProperties.setEncryptionCrypto(CRYPTO);
-        stsProperties.setSignatureCrypto(CRYPTO);
-        stsProperties.setCallbackHandler(new PasswordCallbackHandler());
+        stsProperties.setEncryptionCrypto(crypto);
+        stsProperties.setSignatureCrypto(crypto);
+        stsProperties.setCallbackHandler(new PasswordCallbackHandler(cryptoConfiguration));
         stsProperties.setSignatureUsername(alias);
         stsProperties.setIssuer("VTP");
         return stsProperties;
     }
-
-    private static void initTokenProviders(TokenIssueOperation issueOperation) {
-        // Add Token Provider
-        List<TokenProvider> providerList = new ArrayList<>();
-        providerList.add(new SAMLTokenProvider());
-        issueOperation.setTokenProviders(providerList);
-
-        // Add TokenDelegationHandler for onBehalfOf
-        List<TokenDelegationHandler> handlers = new ArrayList<>();
-        handlers.add(new UsernameTokenDelegationHandler() {
-            @Override
-            public boolean canHandleToken(ReceivedToken delegateTarget) {
-                return true;
-            }
-        });
-        issueOperation.setDelegationHandlers(handlers);
-    }
-
 }

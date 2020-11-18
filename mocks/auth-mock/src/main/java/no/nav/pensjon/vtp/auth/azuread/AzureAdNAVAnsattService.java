@@ -32,9 +32,11 @@ public class AzureAdNAVAnsattService {
     private static final Logger LOG = LoggerFactory.getLogger(AzureAdNAVAnsattService.class);
 
     private final AnsatteIndeks ansatteIndeks;
+    private final KeyStoreTool keyStoreTool;
 
-    public AzureAdNAVAnsattService(AnsatteIndeks ansatteIndeks) {
+    public AzureAdNAVAnsattService(AnsatteIndeks ansatteIndeks, KeyStoreTool keyStoreTool) {
         this.ansatteIndeks = ansatteIndeks;
+        this.keyStoreTool = keyStoreTool;
     }
 
     @GetMapping(value = "/isAlive" ,produces = MediaType.TEXT_HTML_VALUE)
@@ -56,7 +58,7 @@ public class AzureAdNAVAnsattService {
     @ApiOperation(value = "azureAd/discovery/keys", notes = ("Mock impl av Azure AD jwk_uri"))
     public ResponseEntity authorize(HttpServletRequest req) {
         LOG.info("kall på /oauth2/connect/jwk_uri");
-        String jwks = KeyStoreTool.getJwks();
+        String jwks = keyStoreTool.getJwks();
         LOG.info("JWKS: " + jwks);
         return ResponseEntity.ok(jwks);
     }
@@ -103,7 +105,7 @@ public class AzureAdNAVAnsattService {
             NAVAnsatt user = ansatteIndeks.hentNAVAnsatt(username).orElseThrow(() -> new RuntimeException("Fant ikke NAV-ansatt med brukernavn " + username));
 
             String issuer = getIssuer(tenant);
-            AzureOidcTokenGenerator tokenGenerator = new AzureOidcTokenGenerator(username, nonce).withIssuer(issuer);
+            AzureOidcTokenGenerator tokenGenerator = new AzureOidcTokenGenerator(keyStoreTool, username, nonce).withIssuer(issuer);
             tokenGenerator.setAud(clientId);
 
             tokenGenerator.withClaim("tid", tenant);

@@ -28,9 +28,11 @@ import java.util.stream.Collectors;
 @Api(tags = {"LoginService"})
 @RequestMapping("/rest/loginservice")
 public class LoginService {
+    private final KeyStoreTool keyStoreTool;
     private final PersonModellRepository personModellRepository;
 
-    public LoginService(PersonModellRepository personModellRepository) {
+    public LoginService(KeyStoreTool keyStoreTool, PersonModellRepository personModellRepository) {
+        this.keyStoreTool = keyStoreTool;
         this.personModellRepository = personModellRepository;
     }
 
@@ -81,10 +83,10 @@ public class LoginService {
         claims.setClaim("nonce", "hardcoded");
         claims.setClaim("at_hash", "unknown");
 
-        RsaJsonWebKey senderJwk = KeyStoreTool.getJsonWebKey();
+        RsaJsonWebKey senderJwk = keyStoreTool.getJsonWebKey();
         JsonWebSignature jws = new JsonWebSignature();
         jws.setPayload(claims.toJson());
-        jws.setKeyIdHeaderValue(KeyStoreTool.getJsonWebKey().getKeyId());
+        jws.setKeyIdHeaderValue(keyStoreTool.getJsonWebKey().getKeyId());
         jws.setAlgorithmHeaderValue("RS256");
         jws.setKey(senderJwk.getPrivateKey());
         jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA256);

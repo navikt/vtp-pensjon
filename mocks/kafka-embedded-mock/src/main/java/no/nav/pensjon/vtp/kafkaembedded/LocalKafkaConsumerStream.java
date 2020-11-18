@@ -15,14 +15,14 @@ import org.apache.kafka.streams.kstream.Consumed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import no.nav.pensjon.vtp.felles.KeystoreUtils;
+import no.nav.pensjon.vtp.felles.CryptoConfigurationParameters;
 
 public class LocalKafkaConsumerStream {
     private static final Logger LOG = LoggerFactory.getLogger(LocalKafkaConsumerStream.class);
     private KafkaStreams stream;
 
 
-    public LocalKafkaConsumerStream(String bootstrapServers, Collection<String> topics) {
+    public LocalKafkaConsumerStream(String bootstrapServers, Collection<String> topics, CryptoConfigurationParameters cryptoConfigurationParameters) {
         LOG.info("Starter konsumering av topics: {}", String.join(",", topics));
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "vtp");
@@ -31,10 +31,10 @@ public class LocalKafkaConsumerStream {
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         props.put(StreamsConfig.SECURITY_PROTOCOL_CONFIG, "SASL_SSL");
         props.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
-        props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, KeystoreUtils.getTruststoreFilePath());
-        props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, KeystoreUtils.getTruststorePassword());
-        props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, KeystoreUtils.getKeystoreFilePath());
-        props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, KeystoreUtils.getKeyStorePassword());
+        props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getTruststoreFilePath());
+        props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, cryptoConfigurationParameters.getTruststorePassword());
+        props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getKeystoreFilePath());
+        props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, cryptoConfigurationParameters.getKeyStorePassword());
         props.put(SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, "");
         String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
         props.put(SaslConfigs.SASL_JAAS_CONFIG, String.format(jaasTemplate, "vtp", "vtp"));

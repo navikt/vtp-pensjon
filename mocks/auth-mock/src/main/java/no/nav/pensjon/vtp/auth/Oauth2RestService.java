@@ -36,9 +36,11 @@ public class Oauth2RestService {
     private static final String DEFAULT_ISSUER = "http://localhost:8060/rest/isso/oauth2";
 
     private final AnsatteIndeks ansatteIndeks;
+    private final KeyStoreTool keyStoreTool;
 
-    public Oauth2RestService(AnsatteIndeks ansatteIndeks) {
+    public Oauth2RestService(AnsatteIndeks ansatteIndeks, KeyStoreTool keyStoreTool) {
         this.ansatteIndeks = ansatteIndeks;
+        this.keyStoreTool = keyStoreTool;
     }
 
     @GetMapping(value = "/oauth2/authorize", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE})
@@ -171,7 +173,7 @@ public class Oauth2RestService {
         String issuer = getIssuer();
         String state = req.getParameter("state");
         String nonce = nonceCache.get(state);
-        OidcTokenGenerator tokenGenerator = new OidcTokenGenerator(username, nonce).withIssuer(issuer);
+        OidcTokenGenerator tokenGenerator = new OidcTokenGenerator(keyStoreTool, username, nonce).withIssuer(issuer);
         if (clientIdCache.containsKey(state)) {
             String clientId = clientIdCache.get(state);
             tokenGenerator.addAud(clientId);
@@ -195,7 +197,7 @@ public class Oauth2RestService {
     @ApiOperation(value = "oauth2/connect/jwk_uri", notes = ("Mock impl av Oauth2 jwk_uri"))
     public ResponseEntity authorize(HttpServletRequest req) {
         LOG.info("kall på /oauth2/connect/jwk_uri");
-        String jwks = KeyStoreTool.getJwks();
+        String jwks = keyStoreTool.getJwks();
         LOG.info("JWKS: " + jwks);
         return ResponseEntity.ok(jwks);
     }
