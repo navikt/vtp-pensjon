@@ -1,6 +1,8 @@
 package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
+
+import no.nav.pensjon.vtp.felles.KeyStoreTool;
 import no.nav.pensjon.vtp.felles.OidcTokenGenerator;
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType;
 import org.springframework.http.HttpHeaders;
@@ -22,8 +24,15 @@ import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 @Api(tags = {"Security Token Service"})
 @RequestMapping("/rest/v1/sts")
 public class STSRestTjeneste {
-    private final STSIssueResponseGenerator generator = new STSIssueResponseGenerator();
-    private final SamlTokenGenerator samlTokenGenerator = new SamlTokenGenerator();
+    private final KeyStoreTool keyStoreTool;
+    private final STSIssueResponseGenerator generator;
+    private final SamlTokenGenerator samlTokenGenerator;
+
+    public STSRestTjeneste(KeyStoreTool keyStoreTool, STSIssueResponseGenerator generator, SamlTokenGenerator samlTokenGenerator) {
+        this.keyStoreTool = keyStoreTool;
+        this.generator = generator;
+        this.samlTokenGenerator = samlTokenGenerator;
+    }
 
     @PostMapping(value = "/token/exchange", produces = MediaType.APPLICATION_JSON_VALUE)
     public SAMLResponse dummySaml(@RequestParam String grant_type,
@@ -47,7 +56,7 @@ public class STSRestTjeneste {
     @GetMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserTokenResponse dummyToken(@RequestParam String grant_type,
                                         @RequestParam String scope) {
-        String token = new OidcTokenGenerator("dummyBruker", "").withIssuer(Oauth2RestService.getIssuer()).create();
+        String token = new OidcTokenGenerator(keyStoreTool, "dummyBruker", "").withIssuer(Oauth2RestService.getIssuer()).create();
         return new UserTokenResponse(token, 600000 * 1000L, "Bearer");
     }
 

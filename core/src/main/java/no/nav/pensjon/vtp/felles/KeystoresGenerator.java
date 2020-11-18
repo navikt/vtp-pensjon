@@ -9,6 +9,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -22,17 +23,24 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
+@Component
 class KeystoresGenerator {
     private static final Logger log = LoggerFactory.getLogger(KeystoresGenerator.class);
     // TODO: Maybe use PKCS12? Java 9 and onwards uses that, Java 8 or below uses JKS.
     // String outputFormat = "PKCS12";
 
-    static void copyKeystoreAndTruststore() throws IOException {
-        copyFile(KeystoreUtils.getKeystoreFilePath(), "keystore.jks");
-        copyFile(KeystoreUtils.getTruststoreFilePath(), "truststore.jks");
+    private final CryptoConfigurationParameters cryptoConfigurationParameters;
+
+    KeystoresGenerator(CryptoConfigurationParameters cryptoConfigurationParameters) {
+        this.cryptoConfigurationParameters = cryptoConfigurationParameters;
     }
 
-    private static void copyFile(String filePath, String fileName) throws IOException {
+    void copyKeystoreAndTruststore() throws IOException {
+        copyFile(cryptoConfigurationParameters.getKeystoreFilePath(), "keystore.jks");
+        copyFile(cryptoConfigurationParameters.getTruststoreFilePath(), "truststore.jks");
+    }
+
+    private void copyFile(String filePath, String fileName) throws IOException {
         String serverDir = Paths.get("").toAbsolutePath().toString();
 
         Path source = Paths.get(serverDir, fileName);
@@ -43,42 +51,45 @@ class KeystoresGenerator {
         log.info(String.format("Copied %s/%s from project to %s (with replacing existing)", serverDir, fileName, path.toAbsolutePath()));
     }
 
-    static void readKeystoresOrGenerateIfNotExists(String outputFormat, String keyAndCertAlias) {
-        String keystorePath = KeystoreUtils.getKeystoreFilePath();
-        String truststorePath = KeystoreUtils.getTruststoreFilePath();
+    public void readKeystoresOrGenerateIfNotExists(String outputFormat, String keyAndCertAlias) {
+        String keystorePath = cryptoConfigurationParameters.getKeystoreFilePath();
+        String truststorePath = cryptoConfigurationParameters.getTruststoreFilePath();
+        readKeystoresOrGenerateIfNotExists(keystorePath, cryptoConfigurationParameters.getKeyStorePassword(), truststorePath, cryptoConfigurationParameters.getTruststorePassword(), outputFormat, keyAndCertAlias);
+    }
 
+    public static void readKeystoresOrGenerateIfNotExists(String keystorePath, String keystorePassword, String truststorePath, String truststorePassword, String outputFormat, String keyAndCertAlias) {
         File keystoreFile = new File(keystorePath);
         keystoreFile.getParentFile().mkdirs();
 
         if (keystoreFile.length() == 0) {
             log.warn("Keystore keystoreFile {} does not exist - will auto-generate.", keystorePath);
             log.warn("OBS! Generated SAML signature from the new private key will be unknown/new for PEN/POPP and will not be accepted");
-            createKeystoreAndUpdateTrustStore(keyAndCertAlias, keystorePath, outputFormat, truststorePath);
+            createKeystoreAndUpdateTrustStore(keyAndCertAlias, keystorePath, keystorePassword, outputFormat, truststorePath, truststorePassword);
             return;
         }
 
         KeyStore.PrivateKeyEntry certEntry = null;
         try (FileInputStream keystoreFileIS = new FileInputStream(new File(keystorePath))) {
             KeyStore keyStore = KeyStore.getInstance(outputFormat);
-            keyStore.load(keystoreFileIS, KeystoreUtils.getKeyStorePassword().toCharArray());
-            KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(KeystoreUtils.getKeyStorePassword().toCharArray());
+            keyStore.load(keystoreFileIS, keystorePassword.toCharArray());
+            KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(keystorePassword.toCharArray());
             certEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(keyAndCertAlias, protParam);
         } catch (Exception e) {
             log.error("Could not read existing keystore. " + e.getMessage(), e);
         }
         if (certEntry == null) { //will not regenerate existing certificate
-            createKeystoreAndUpdateTrustStore(keyAndCertAlias, keystorePath, outputFormat, truststorePath);
+            createKeystoreAndUpdateTrustStore(keyAndCertAlias, keystorePath, keystorePassword, outputFormat, truststorePath, truststorePassword);
         }
     }
 
-    private static void createKeystoreAndUpdateTrustStore(String keyAndCertAlias, String keystorePath, String outputFormat, String
-            truststorePath) {
+    private static void createKeystoreAndUpdateTrustStore(String keyAndCertAlias, String keystorePath, String keystorePassword, String outputFormat, String
+            truststorePath, String truststorePassword) {
         log.info("Generating keystore {} with certificate for {}", keystorePath, keyAndCertAlias);
-        Certificate selfCert = generateKeystore(keystorePath, KeystoreUtils.getKeyStorePassword(), outputFormat, keyAndCertAlias);
-        updateTruststore(keyAndCertAlias, outputFormat, truststorePath, selfCert);
+        Certificate selfCert = generateKeystore(keystorePath, keystorePassword, outputFormat, keyAndCertAlias);
+        updateTruststore(keyAndCertAlias, outputFormat, truststorePath, truststorePassword, selfCert);
     }
 
-    private static void updateTruststore(String keyAndCertAlias, String outputFormat, String truststorePath, Certificate selfCert) {
+    private static void updateTruststore(String keyAndCertAlias, String outputFormat, String truststorePath, String truststorePassword, Certificate selfCert) {
         try {
             if (!Files.exists(Paths.get(truststorePath))) {
                 log.warn("Truststore file {} does not exist - will auto-generate.", truststorePath);
@@ -91,10 +102,10 @@ class KeystoresGenerator {
             KeyStore trustStore = KeyStore.getInstance(outputFormat);
             try (FileInputStream trustStoreFileIS = new FileInputStream(new File(truststorePath))) {
                 InputStream stream = new File(truststorePath).length() > 0 ? trustStoreFileIS : null;
-                trustStore.load(stream, KeystoreUtils.getTruststorePassword().toCharArray());
+                trustStore.load(stream, truststorePassword.toCharArray());
             }
             trustStore.setCertificateEntry(keyAndCertAlias, selfCert);
-            writeKeystoreToFile(trustStore, truststorePath, KeystoreUtils.getTruststorePassword());
+            writeKeystoreToFile(trustStore, truststorePath, truststorePassword);
         } catch (Exception e) {
             log.error("Could not add generated certificate to trustStore: " + e.getMessage(), e);
             throw new RuntimeException(e);

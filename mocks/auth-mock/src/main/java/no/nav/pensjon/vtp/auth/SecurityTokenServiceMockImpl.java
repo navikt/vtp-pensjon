@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.auth;
 
-import javax.annotation.Resource;
 import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -32,10 +31,15 @@ import org.slf4j.LoggerFactory;
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @Addressing()
 public class SecurityTokenServiceMockImpl implements SecurityTokenService {
-    Logger LOG = LoggerFactory.getLogger(SecurityTokenServiceMockImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(SecurityTokenServiceMockImpl.class);
 
-    @Resource
-    private WebServiceContext ws;
+    private final WebServiceContext ws;
+    private final STSIssueResponseGenerator stsIssueResponseGenerator;
+
+    public SecurityTokenServiceMockImpl(WebServiceContext ws, STSIssueResponseGenerator stsIssueResponseGenerator) {
+        this.ws = ws;
+        this.stsIssueResponseGenerator = stsIssueResponseGenerator;
+    }
 
     @Override
     @WebResult(name = "RequestSecurityTokenResponse", targetNamespace = "http://docs.oasis-open.org/ws-sx/ws-trust/200512", partName = "response")
@@ -45,7 +49,7 @@ public class SecurityTokenServiceMockImpl implements SecurityTokenService {
                                                              @WebParam(partName = "request", name = "RequestSecurityToken", targetNamespace = "http://docs.oasis-open.org/ws-sx/ws-trust/200512") RequestSecurityTokenType request) {
         // TODO - må verifisers dersom behov
         LOG.info("invoke: keyExchangeToken");
-        return new STSIssueResponseGenerator().buildRequestSecurityTokenResponseType(request);
+        return stsIssueResponseGenerator.buildRequestSecurityTokenResponseType(request);
     }
 
     @Override
@@ -56,7 +60,7 @@ public class SecurityTokenServiceMockImpl implements SecurityTokenService {
                                                             @WebParam(partName = "request", name = "RequestSecurityToken", targetNamespace = "http://docs.oasis-open.org/ws-sx/ws-trust/200512") RequestSecurityTokenType request) {
 
         LOG.info("invoke: issue");
-        return new STSIssueResponseGenerator().buildRequestSecurityTokenResponseCollectionType(request);
+        return stsIssueResponseGenerator.buildRequestSecurityTokenResponseCollectionType(request);
 
     }
 
@@ -67,7 +71,7 @@ public class SecurityTokenServiceMockImpl implements SecurityTokenService {
     public RequestSecurityTokenResponseType issueSingle(
                                                         @WebParam(partName = "request", name = "RequestSecurityToken", targetNamespace = "http://docs.oasis-open.org/ws-sx/ws-trust/200512") RequestSecurityTokenType request) {
         LOG.info("invoke: issueSingle");
-        return new STSIssueResponseGenerator().buildRequestSecurityTokenResponseType(request);
+        return stsIssueResponseGenerator.buildRequestSecurityTokenResponseType(request);
     }
 
     @Override
@@ -88,7 +92,7 @@ public class SecurityTokenServiceMockImpl implements SecurityTokenService {
                                                      @WebParam(partName = "request", name = "RequestSecurityToken", targetNamespace = "http://docs.oasis-open.org/ws-sx/ws-trust/200512") RequestSecurityTokenType request) {
         // TODO - må verifiseres dersom behov
         LOG.info("invoke: validate");
-        return new STSIssueResponseGenerator().buildRequestSecurityTokenResponseType(request);
+        return stsIssueResponseGenerator.buildRequestSecurityTokenResponseType(request);
     }
 
     @Override
@@ -98,7 +102,7 @@ public class SecurityTokenServiceMockImpl implements SecurityTokenService {
                                                                         @WebParam(partName = "requestCollection", name = "RequestSecurityTokenCollection", targetNamespace = "http://docs.oasis-open.org/ws-sx/ws-trust/200512") RequestSecurityTokenCollectionType requestCollection) {
 
         LOG.info("invoke: requestCollection");
-        return new STSIssueResponseGenerator().buildRequestSecurityTokenResponseCollectionType(requestCollection);
+        return stsIssueResponseGenerator.buildRequestSecurityTokenResponseCollectionType(requestCollection);
     }
 
     @Override
@@ -108,7 +112,7 @@ public class SecurityTokenServiceMockImpl implements SecurityTokenService {
     public RequestSecurityTokenResponseType renew(
                                                   @WebParam(partName = "request", name = "RequestSecurityToken", targetNamespace = "http://docs.oasis-open.org/ws-sx/ws-trust/200512") RequestSecurityTokenType request) {
         LOG.info("invoke: renew");
-        return new STSIssueResponseGenerator().buildRequestSecurityTokenResponseType(request);
+        return stsIssueResponseGenerator.buildRequestSecurityTokenResponseType(request);
     }
 
 }

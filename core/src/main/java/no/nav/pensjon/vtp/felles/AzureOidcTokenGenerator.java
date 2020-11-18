@@ -1,15 +1,18 @@
 package no.nav.pensjon.vtp.felles;
 
-import com.google.common.base.Strings;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.jose4j.jwk.RsaJsonWebKey;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.NumericDate;
 import org.jose4j.lang.JoseException;
-
-import java.util.*;
-
+import org.springframework.util.ObjectUtils;
 
 public class AzureOidcTokenGenerator {
 
@@ -21,11 +24,14 @@ public class AzureOidcTokenGenerator {
     private String issuer;
     private NumericDate issuedAt = NumericDate.now();
     private final String subject;
-    private String kid = KeyStoreTool.getJsonWebKey().getKeyId();
-    private String nonce;
+    private final KeyStoreTool keyStoreTool;
+    private final String kid;
+    private final String nonce;
     private Map<String, String> additionalClaims = new HashMap<>();
 
-    public AzureOidcTokenGenerator(String brukerId, String nonce) {
+    public AzureOidcTokenGenerator(final KeyStoreTool keyStoreTool, String brukerId, String nonce) {
+        this.keyStoreTool = keyStoreTool;
+        this.kid = keyStoreTool.getJsonWebKey().getKeyId();
         this.subject = brukerId;
         this.nonce = nonce;
     }
@@ -50,11 +56,6 @@ public class AzureOidcTokenGenerator {
         return this;
     }
 
-    AzureOidcTokenGenerator withKid(String kid) {
-        this.kid = kid;
-        return this;
-    }
-
     public AzureOidcTokenGenerator withGroups(List<String> groups) {
         this.groups = groups;
         return this;
@@ -74,7 +75,7 @@ public class AzureOidcTokenGenerator {
         claims.setNotBefore(issuedAt);
         claims.setSubject(subject);
         claims.setClaim("ver", "2.0");
-        if (!Strings.isNullOrEmpty(nonce)) {
+        if (!ObjectUtils.isEmpty(nonce)) {
             claims.setClaim("nonce", nonce);
         }
         if (aud.size() == 1) {
@@ -86,7 +87,7 @@ public class AzureOidcTokenGenerator {
             claims.setStringClaim(entry.getKey(), entry.getValue());
         }
         claims.setClaim("groups", groups);
-        RsaJsonWebKey senderJwk = KeyStoreTool.getJsonWebKey();
+        RsaJsonWebKey senderJwk = keyStoreTool.getJsonWebKey();
         JsonWebSignature jws = new JsonWebSignature();
         jws.setPayload(claims.toJson());
         jws.setKeyIdHeaderValue(kid);

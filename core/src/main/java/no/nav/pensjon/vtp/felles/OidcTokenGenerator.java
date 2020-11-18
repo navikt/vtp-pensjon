@@ -1,7 +1,8 @@
 package no.nav.pensjon.vtp.felles;
 
+import static java.util.Collections.singletonList;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,19 +19,19 @@ import com.google.common.base.Strings;
 
 public class OidcTokenGenerator {
 
-
-    private List<String> aud = Arrays.asList(
-            "OIDC"
-    );
+    private final KeyStoreTool keyStoreTool;
+    private List<String> aud = singletonList("OIDC");
     private NumericDate expiration = NumericDate.fromSeconds(NumericDate.now().getValue() + 3600*6);
     private String issuer;
     private NumericDate issuedAt = NumericDate.now();
     private final String subject;
-    private String kid = KeyStoreTool.getJsonWebKey().getKeyId();
+    private final String kid;
     private String nonce;
     private Map<String, String> additionalClaims = new HashMap<>();
 
-    public OidcTokenGenerator(String brukerId, String nonce) {
+    public OidcTokenGenerator(KeyStoreTool keyStoreTool, String brukerId, String nonce) {
+        this.keyStoreTool = keyStoreTool;
+        this.kid = keyStoreTool.getJsonWebKey().getKeyId();
         additionalClaims.put("azp", "OIDC");
         additionalClaims.put("acr", "Level4");
         this.subject = brukerId;
@@ -58,27 +59,6 @@ public class OidcTokenGenerator {
         return this;
     }
 
-    OidcTokenGenerator withIssuedAt(NumericDate issuedAt) {
-        this.issuedAt = issuedAt;
-        return this;
-    }
-
-    OidcTokenGenerator withKid(String kid) {
-        this.kid = kid;
-        return this;
-
-    }
-
-    OidcTokenGenerator withClaim(String name, String value) {
-        additionalClaims.put(name, value);
-        return this;
-    }
-
-    OidcTokenGenerator withAud(List<String> aud) {
-        this.aud = aud;
-        return this;
-    }
-
     public String create() {
         JwtClaims claims = new JwtClaims();
         claims.setIssuer(issuer);
@@ -97,7 +77,7 @@ public class OidcTokenGenerator {
         for (Map.Entry<String, String> entry : additionalClaims.entrySet()) {
             claims.setStringClaim(entry.getKey(), entry.getValue());
         }
-        RsaJsonWebKey senderJwk = KeyStoreTool.getJsonWebKey();
+        RsaJsonWebKey senderJwk = keyStoreTool.getJsonWebKey();
         JsonWebSignature jws = new JsonWebSignature();
         jws.setPayload(claims.toJson());
         jws.setKeyIdHeaderValue(kid);

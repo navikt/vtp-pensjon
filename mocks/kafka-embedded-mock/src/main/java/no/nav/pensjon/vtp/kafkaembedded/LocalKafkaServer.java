@@ -2,7 +2,7 @@ package no.nav.pensjon.vtp.kafkaembedded;
 
 import static java.util.Optional.ofNullable;
 
-import no.nav.pensjon.vtp.felles.KeystoreUtils;
+import no.nav.pensjon.vtp.felles.CryptoConfigurationParameters;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -26,6 +26,7 @@ public class LocalKafkaServer {
     final private static Logger log = LoggerFactory.getLogger(LocalKafkaServer.class);
     private static final String zookeeperAndKafkaTempInstanceDataDir = "" + System.currentTimeMillis(); //alltid ny zookeeper-node og ny kafka-cluster
     private final Collection<String> bootstrapTopics;
+    private final CryptoConfigurationParameters cryptoConfigurationParameters;
     private KafkaLocal kafka;
     private LocalKafkaProducer localProducer;
     private LocalKafkaConsumerStream localConsumer;
@@ -33,13 +34,14 @@ public class LocalKafkaServer {
     private int zookeeperPort;
     private int kafkaBrokerPort;
 
-    public LocalKafkaServer(final int zookeeperPort, final int kafkaBrokerPort, Collection<String> bootstrapTopics) {
+    public LocalKafkaServer(final int zookeeperPort, final int kafkaBrokerPort, Collection<String> bootstrapTopics, CryptoConfigurationParameters cryptoConfigurationParameters) {
         this.zookeeperPort = zookeeperPort;
         this.kafkaBrokerPort = kafkaBrokerPort;
         this.bootstrapTopics = bootstrapTopics;
+        this.cryptoConfigurationParameters = cryptoConfigurationParameters;
     }
 
-    private static Properties createAdminClientProps(String boostrapServer) {
+    private Properties createAdminClientProps(String boostrapServer) {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, boostrapServer);
         props.put(ProducerConfig.RETRIES_CONFIG, 15);
@@ -50,10 +52,10 @@ public class LocalKafkaServer {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(StreamsConfig.SECURITY_PROTOCOL_CONFIG, "SASL_SSL");
         props.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
-        props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, KeystoreUtils.getTruststoreFilePath());
-        props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, KeystoreUtils.getTruststorePassword());
-        props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, KeystoreUtils.getKeystoreFilePath());
-        props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, KeystoreUtils.getKeyStorePassword());
+        props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getTruststoreFilePath());
+        props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, cryptoConfigurationParameters.getTruststorePassword());
+        props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getKeystoreFilePath());
+        props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, cryptoConfigurationParameters.getKeyStorePassword());
         props.put(SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, "");
         String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
         props.put(SaslConfigs.SASL_JAAS_CONFIG, String.format(jaasTemplate, "vtp", "vtp"));
@@ -61,7 +63,7 @@ public class LocalKafkaServer {
         return props;
     }
 
-    private static Properties setupZookeperProperties(int zookeeperPort) {
+    private Properties setupZookeperProperties(int zookeeperPort) {
         Properties zkProperties = new Properties();
         zkProperties.put("dataDir", "target/zookeeper/" + zookeeperAndKafkaTempInstanceDataDir);
         zkProperties.put("clientPort", "" + zookeeperPort);
@@ -72,15 +74,15 @@ public class LocalKafkaServer {
         zkProperties.put("allow.everyone.if.no.acl.found", "true");
         zkProperties.put("ssl.client.auth", "none");
 
-        zkProperties.put("ssl.keystore.location", KeystoreUtils.getKeystoreFilePath());
-        zkProperties.put("ssl.keystore.password", KeystoreUtils.getKeyStorePassword());
-        zkProperties.put("ssl.truststore.location", KeystoreUtils.getTruststoreFilePath());
-        zkProperties.put("ssl.truststore.password", KeystoreUtils.getTruststorePassword());
+        zkProperties.put("ssl.keystore.location", cryptoConfigurationParameters.getKeystoreFilePath());
+        zkProperties.put("ssl.keystore.password", cryptoConfigurationParameters.getKeyStorePassword());
+        zkProperties.put("ssl.truststore.location", cryptoConfigurationParameters.getTruststoreFilePath());
+        zkProperties.put("ssl.truststore.password", cryptoConfigurationParameters.getTruststorePassword());
 
         return zkProperties;
     }
 
-    private static Properties setupKafkaProperties(int zookeeperPort, int kafkaBrokerPort) {
+    private Properties setupKafkaProperties(int zookeeperPort, int kafkaBrokerPort) {
         Properties kafkaProperties = new Properties();
 /*
         //TODO: Gjør dette om til kode når POC fungerer i VTP
@@ -112,10 +114,10 @@ public class LocalKafkaServer {
         kafkaProperties.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
 
         //SSL
-        kafkaProperties.put("ssl.keystore.location", KeystoreUtils.getKeystoreFilePath());
-        kafkaProperties.put("ssl.keystore.password", KeystoreUtils.getKeyStorePassword());
-        kafkaProperties.put("ssl.truststore.location", KeystoreUtils.getTruststoreFilePath());
-        kafkaProperties.put("ssl.truststore.password", KeystoreUtils.getTruststorePassword());
+        kafkaProperties.put("ssl.keystore.location", cryptoConfigurationParameters.getKeystoreFilePath());
+        kafkaProperties.put("ssl.keystore.password", cryptoConfigurationParameters.getKeyStorePassword());
+        kafkaProperties.put("ssl.truststore.location", cryptoConfigurationParameters.getTruststoreFilePath());
+        kafkaProperties.put("ssl.truststore.password", cryptoConfigurationParameters.getTruststorePassword());
         return kafkaProperties;
     }
 
@@ -155,9 +157,9 @@ public class LocalKafkaServer {
         kafkaAdminClient.createTopics(
                 bootstrapTopics.stream().map(
                         name -> new NewTopic(name, 1, (short) 1)).collect(Collectors.toList()));
-        localConsumer = new LocalKafkaConsumerStream(bootstrapServers, bootstrapTopics);
+        localConsumer = new LocalKafkaConsumerStream(bootstrapServers, bootstrapTopics, cryptoConfigurationParameters);
 
-        localProducer = new LocalKafkaProducer(bootstrapServers);
+        localProducer = new LocalKafkaProducer(bootstrapServers, cryptoConfigurationParameters);
         localConsumer.start();
     }
 

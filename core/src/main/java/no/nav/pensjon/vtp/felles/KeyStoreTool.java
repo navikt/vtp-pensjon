@@ -7,6 +7,7 @@ import org.jose4j.lang.JoseException;
 import org.opensaml.security.x509.impl.KeyStoreX509CredentialAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,34 +17,29 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.interfaces.RSAPublicKey;
 
-import static no.nav.pensjon.vtp.felles.KeystoresGenerator.copyKeystoreAndTruststore;
-import static no.nav.pensjon.vtp.felles.KeystoresGenerator.readKeystoresOrGenerateIfNotExists;
-
+@Component
 public class KeyStoreTool {
     private static final Logger log = LoggerFactory.getLogger(KeyStoreTool.class);
-    private static RsaJsonWebKey jwk = null;
-    private static KeyStore keystore = null;
+    private final CryptoConfigurationParameters cryptoConfigurationParameters;
+    private final RsaJsonWebKey jwk;
+    private final KeyStore keystore;
     static final String KEYSTORE_FORMAT = "JKS";
 
-    public static synchronized void init() {
-        if (keystore != null) {
-            return;
-        }
-
-
+    public KeyStoreTool(final CryptoConfigurationParameters cryptoConfigurationParameters, final KeystoresGenerator keystoresGenerator) {
+        this.cryptoConfigurationParameters = cryptoConfigurationParameters;
         org.apache.xml.security.Init.init();
 
         PublicKey myPublicKey;
         PrivateKey myPrivateKey;
-        char[] keystorePassword = getKeyStorePassword();
-        String keystorePath = getDefaultKeyStorePath();
-        String keyAndCertAlias = getKeyAndCertAlias();
+        char[] keystorePassword = this.cryptoConfigurationParameters.getKeyStorePassword().toCharArray();
+        String keystorePath = cryptoConfigurationParameters.getKeystoreFilePath();
+        String keyAndCertAlias = cryptoConfigurationParameters.getKeyAndCertAlias();
 
         try{
-            copyKeystoreAndTruststore();
+            keystoresGenerator.copyKeystoreAndTruststore();
         }
         catch(IOException e){
-            readKeystoresOrGenerateIfNotExists(KEYSTORE_FORMAT, keyAndCertAlias);
+            keystoresGenerator.readKeystoresOrGenerateIfNotExists(KEYSTORE_FORMAT, keyAndCertAlias);
         }
 
         try (FileInputStream keystoreFile = new FileInputStream(new File(keystorePath))) {
@@ -59,7 +55,7 @@ public class KeyStoreTool {
             Certificate cert = ks.getCertificate(keyAndCertAlias);
             myPublicKey = cert.getPublicKey();
 
-            KeyStoreTool.keystore = ks;
+            keystore = ks;
         } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException | UnrecoverableEntryException e) {
             log.error("Error during loading of keystore. Do you have your keystore in order, soldier?", e);
             throw new RuntimeException(e);
@@ -76,30 +72,15 @@ public class KeyStoreTool {
 
     }
 
-    public static String getDefaultKeyStorePath() {
-        return KeystoreUtils.getKeystoreFilePath();
+    public KeyStoreX509CredentialAdapter getDefaultCredential() {
+        return new KeyStoreX509CredentialAdapter(keystore, cryptoConfigurationParameters.getKeyAndCertAlias(), cryptoConfigurationParameters.getKeyStorePassword().toCharArray());
     }
 
-    public static char[] getKeyStorePassword() {
-        return KeystoreUtils.getKeyStorePassword().toCharArray();
-    }
-
-    public static String getKeyAndCertAlias() {
-        return System.getProperty("no.nav.modig.security.appkey", "localhost-ssl");
-    }
-
-
-    public static synchronized KeyStoreX509CredentialAdapter getDefaultCredential() {
-        init();
-        return new KeyStoreX509CredentialAdapter(keystore, getKeyAndCertAlias(), getKeyStorePassword());
-    }
-
-    public static synchronized RsaJsonWebKey getJsonWebKey() {
-        init();
+    public RsaJsonWebKey getJsonWebKey() {
         return jwk;
     }
 
-    public static String getJwks() {
+    public String getJwks() {
         String kty = "RSA";
         String kid = "1";
         String use = "sig";
