@@ -31,10 +31,10 @@ public class LocalKafkaProducer {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(StreamsConfig.SECURITY_PROTOCOL_CONFIG, "SASL_SSL");
         props.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
-        props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getTruststoreFilePath());
+        props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getTruststorePath());
         props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, cryptoConfigurationParameters.getTruststorePassword());
-        props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getKeystoreFilePath());
-        props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, cryptoConfigurationParameters.getKeyStorePassword());
+        props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getKeystorePath());
+        props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, cryptoConfigurationParameters.getKeystorePassword());
         String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
         props.put(SaslConfigs.SASL_JAAS_CONFIG, String.format(jaasTemplate, "vtp", "vtp"));
         props.put(SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, "");

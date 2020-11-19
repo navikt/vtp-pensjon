@@ -1,83 +1,19 @@
 package no.nav.pensjon.vtp.felles;
 
-import org.jose4j.base64url.Base64Url;
-import org.jose4j.jwk.PublicJsonWebKey;
-import org.jose4j.jwk.RsaJsonWebKey;
-import org.jose4j.lang.JoseException;
-import org.opensaml.security.x509.impl.KeyStoreX509CredentialAdapter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.security.*;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
 import java.security.interfaces.RSAPublicKey;
+
+import org.jose4j.base64url.Base64Url;
+import org.jose4j.jwk.RsaJsonWebKey;
+import org.jose4j.jws.AlgorithmIdentifiers;
+import org.jose4j.jws.JsonWebSignature;
+import org.springframework.stereotype.Component;
 
 @Component
 public class KeyStoreTool {
-    private static final Logger log = LoggerFactory.getLogger(KeyStoreTool.class);
-    private final CryptoConfigurationParameters cryptoConfigurationParameters;
     private final RsaJsonWebKey jwk;
-    private final KeyStore keystore;
-    static final String KEYSTORE_FORMAT = "JKS";
 
-    public KeyStoreTool(final CryptoConfigurationParameters cryptoConfigurationParameters, final KeystoresGenerator keystoresGenerator) {
-        this.cryptoConfigurationParameters = cryptoConfigurationParameters;
-        org.apache.xml.security.Init.init();
-
-        PublicKey myPublicKey;
-        PrivateKey myPrivateKey;
-        char[] keystorePassword = this.cryptoConfigurationParameters.getKeyStorePassword().toCharArray();
-        String keystorePath = cryptoConfigurationParameters.getKeystoreFilePath();
-        String keyAndCertAlias = cryptoConfigurationParameters.getKeyAndCertAlias();
-
-        try{
-            keystoresGenerator.copyKeystoreAndTruststore();
-        }
-        catch(IOException e){
-            keystoresGenerator.readKeystoresOrGenerateIfNotExists(KEYSTORE_FORMAT, keyAndCertAlias);
-        }
-
-        try (FileInputStream keystoreFile = new FileInputStream(new File(keystorePath))) {
-            KeyStore ks = KeyStore.getInstance(KEYSTORE_FORMAT);
-            ks.load(keystoreFile, keystorePassword);
-
-            log.info("Henter tilgjengelige cert-aliases");
-            ks.aliases().asIterator().forEachRemaining(log::info);
-
-            KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(keystorePassword);
-            KeyStore.PrivateKeyEntry pk = (KeyStore.PrivateKeyEntry) ks.getEntry(keyAndCertAlias, protParam);
-            myPrivateKey = pk.getPrivateKey();
-            Certificate cert = ks.getCertificate(keyAndCertAlias);
-            myPublicKey = cert.getPublicKey();
-
-            keystore = ks;
-        } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException | UnrecoverableEntryException e) {
-            log.error("Error during loading of keystore. Do you have your keystore in order, soldier?", e);
-            throw new RuntimeException(e);
-        }
-
-        try {
-            jwk = (RsaJsonWebKey) PublicJsonWebKey.Factory.newPublicJwk(myPublicKey);
-            jwk.setPrivateKey(myPrivateKey);
-            jwk.setKeyId("1");
-        } catch (JoseException e) {
-            log.error("Error during init of JWK: " + e);
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    public KeyStoreX509CredentialAdapter getDefaultCredential() {
-        return new KeyStoreX509CredentialAdapter(keystore, cryptoConfigurationParameters.getKeyAndCertAlias(), cryptoConfigurationParameters.getKeyStorePassword().toCharArray());
-    }
-
-    public RsaJsonWebKey getJsonWebKey() {
-        return jwk;
+    public KeyStoreTool(final RsaJsonWebKey rsaJsonWebKey) {
+        this.jwk = rsaJsonWebKey;
     }
 
     public String getJwks() {
@@ -85,9 +21,8 @@ public class KeyStoreTool {
         String kid = "1";
         String use = "sig";
         String alg = "RS256";
-        RsaJsonWebKey jsonWebKey = getJsonWebKey();
-        String e = Base64Url.encode(jsonWebKey.getRsaPublicKey().getPublicExponent().toByteArray());
-        RSAPublicKey publicKey = (RSAPublicKey) jsonWebKey.getPublicKey();
+        String e = Base64Url.encode(jwk.getRsaPublicKey().getPublicExponent().toByteArray());
+        RSAPublicKey publicKey = (RSAPublicKey) jwk.getPublicKey();
 
         byte[] bytes = publicKey.getModulus().toByteArray();
         String n = Base64Url.encode(bytes);
@@ -102,4 +37,13 @@ public class KeyStoreTool {
                 "}]}", kty, alg, use, kid, n, e);
     }
 
+    public JsonWebSignature createRS256Token(final String string) {
+        final JsonWebSignature jws = new JsonWebSignature();
+        jws.setPayload(string);
+        jws.setKeyIdHeaderValue(jwk.getKeyId());
+        jws.setAlgorithmHeaderValue("RS256");
+        jws.setKey(jwk.getPrivateKey());
+        jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA256);
+        return jws;
+    }
 }

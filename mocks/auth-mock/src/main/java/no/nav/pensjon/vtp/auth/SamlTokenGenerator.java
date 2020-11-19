@@ -1,15 +1,25 @@
 package no.nav.pensjon.vtp.auth;
 
-import no.nav.pensjon.vtp.felles.KeyStoreTool;
-
-import org.springframework.stereotype.Component;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.security.PrivateKey;
+import java.security.cert.X509Certificate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 import javax.xml.crypto.XMLStructure;
-import javax.xml.crypto.dsig.*;
+import javax.xml.crypto.dsig.CanonicalizationMethod;
+import javax.xml.crypto.dsig.DigestMethod;
+import javax.xml.crypto.dsig.Reference;
+import javax.xml.crypto.dsig.SignatureMethod;
+import javax.xml.crypto.dsig.SignedInfo;
+import javax.xml.crypto.dsig.Transform;
+import javax.xml.crypto.dsig.XMLSignature;
+import javax.xml.crypto.dsig.XMLSignatureFactory;
 import javax.xml.crypto.dsig.dom.DOMSignContext;
 import javax.xml.crypto.dsig.keyinfo.KeyInfo;
 import javax.xml.crypto.dsig.keyinfo.KeyInfoFactory;
@@ -23,25 +33,22 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+
+import org.opensaml.security.x509.X509Credential;
+import org.springframework.stereotype.Component;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 @Component
 public class SamlTokenGenerator {
     private static final DateTimeFormatter format = DateTimeFormatter.ISO_INSTANT;
 
-    private final KeyStoreTool keyStoreTool;
+    private final X509Credential x509Credential;
 
-    public SamlTokenGenerator(KeyStoreTool keyStoreTool) {
-        this.keyStoreTool = keyStoreTool;
+    public SamlTokenGenerator(final X509Credential x509Credential) {
+        this.x509Credential = x509Credential;
     }
 
     public String issueToken(String username) throws Exception {
@@ -67,8 +74,8 @@ public class SamlTokenGenerator {
                     signFac.newSignatureMethod(SignatureMethod.RSA_SHA1, null),
                     Collections.singletonList(ref));
 
-            X509Certificate cert = keyStoreTool.getDefaultCredential().getEntityCertificate();
-            PrivateKey privateKey = keyStoreTool.getDefaultCredential().getPrivateKey();
+            X509Certificate cert = x509Credential.getEntityCertificate();
+            PrivateKey privateKey = x509Credential.getPrivateKey();
             if(privateKey == null) {
                 throw new IllegalArgumentException("Failed to find PrivateKey in keystore");
             }

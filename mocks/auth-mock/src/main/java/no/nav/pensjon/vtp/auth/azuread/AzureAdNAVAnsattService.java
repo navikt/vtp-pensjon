@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 @RestController
 @Api(tags = {"AzureAd"})
 @RequestMapping("/rest/AzureAd")
@@ -42,7 +44,7 @@ public class AzureAdNAVAnsattService {
     @GetMapping(value = "/isAlive" ,produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity isAliveMock() {
         String isAlive = "Azure AD is OK";
-        return ResponseEntity.ok(isAlive);
+        return ok(isAlive);
     }
 
     @GetMapping(value = "/{tenant}/v2.0/.well-known/openid-configuration", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -51,16 +53,13 @@ public class AzureAdNAVAnsattService {
         String baseUrl = getBaseUrl(req);
         String graphUrl = getGraphUrl(req);
         WellKnownResponse wellKnownResponse = new WellKnownResponse(baseUrl, graphUrl, tenant, profile);
-        return ResponseEntity.ok(wellKnownResponse);
+        return ok(wellKnownResponse);
     }
 
     @GetMapping(value = "/{tenant}/discovery/v2.0/keys", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "azureAd/discovery/keys", notes = ("Mock impl av Azure AD jwk_uri"))
-    public ResponseEntity authorize(HttpServletRequest req) {
-        LOG.info("kall på /oauth2/connect/jwk_uri");
-        String jwks = keyStoreTool.getJwks();
-        LOG.info("JWKS: " + jwks);
-        return ResponseEntity.ok(jwks);
+    public ResponseEntity<String> authorize(HttpServletRequest req) {
+        return ok(keyStoreTool.getJwks());
     }
 
     @PostMapping(value = "/{tenant}/oauth2/v2.0/token", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -81,7 +80,7 @@ public class AzureAdNAVAnsattService {
             LOG.info("Fikk parametere:" + req.getParameterMap().toString());
             LOG.info("kall på /oauth2/access_token, opprettet token: " + token + " med redirect-url: " + redirectUri);
             Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken);
-            return ResponseEntity.ok(oauthResponse);
+            return ok(oauthResponse);
         } else if ("refresh_token".equals(grantType)) {
             String usernameWithNonce = refreshToken.substring(8);
             String token = createIdToken(usernameWithNonce /*+ ";"*/, tenant, clientId);
@@ -90,7 +89,7 @@ public class AzureAdNAVAnsattService {
             String generatedRefreshToken = "refresh:" + usernameWithNonce;
             String generatedAccessToken = "access:" + usernameWithNonce;
             Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken);
-            return ResponseEntity.ok(oauthResponse);
+            return ok(oauthResponse);
         } else {
             LOG.error("Unknown grant_type " + grantType);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown grant_type " + grantType);
@@ -196,7 +195,7 @@ public class AzureAdNAVAnsattService {
                 "</body>\n" +
                 "</html>";
 
-        return ResponseEntity.ok(html);
+        return ok(html);
     }
 
     private String getBaseUrl(HttpServletRequest req) {

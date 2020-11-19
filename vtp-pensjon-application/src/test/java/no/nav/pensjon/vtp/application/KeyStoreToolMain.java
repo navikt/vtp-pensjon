@@ -1,10 +1,8 @@
-package no.nav.pensjon.vtp.felles;
+package no.nav.pensjon.vtp.application;
 
 import static java.lang.System.getProperty;
 import static java.nio.file.Files.deleteIfExists;
 import static java.nio.file.Paths.get;
-
-import static no.nav.pensjon.vtp.felles.KeyStoreTool.KEYSTORE_FORMAT;
 
 import java.io.IOException;
 
@@ -35,7 +33,7 @@ public class KeyStoreToolMain {
         System.out.println("------------GENERATING A NEW KEY-PAIR------------");
         deleteIfExists(get(keystorePath));
         deleteIfExists(get(truststorePath));
-        KeystoresGenerator.readKeystoresOrGenerateIfNotExists(keystorePath, keystorePassword, truststorePath, truststorePassword, KEYSTORE_FORMAT, keyAndCertAlias);
+        KeystoresGenerator.readKeystoresOrGenerateIfNotExists(keystorePath, keystorePassword, truststorePath, truststorePassword, "JKS", keyAndCertAlias);
         System.out.println("------------DONE------------");
     }
 }

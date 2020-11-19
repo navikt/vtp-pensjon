@@ -57,7 +57,7 @@ public class STSIssueResponseGenerator {
                 if (callback instanceof WSPasswordCallback) { // CXF
                     WSPasswordCallback pc = (WSPasswordCallback) callback;
                     if (cryptoConfigurationParameters.getKeyAndCertAlias().equals(pc.getIdentifier())) {
-                        pc.setPassword(cryptoConfigurationParameters.getKeyStorePassword());
+                        pc.setPassword(cryptoConfigurationParameters.getKeystorePassword());
                         break;
                     }
                 }

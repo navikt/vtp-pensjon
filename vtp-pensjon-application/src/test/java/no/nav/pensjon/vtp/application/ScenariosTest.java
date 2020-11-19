@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.testmodell;
+package no.nav.pensjon.vtp.application;
 
 import static java.util.stream.Collectors.toList;
 

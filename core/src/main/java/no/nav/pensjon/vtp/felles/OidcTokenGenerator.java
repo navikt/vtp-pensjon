@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jose4j.jwk.RsaJsonWebKey;
-import org.jose4j.jws.AlgorithmIdentifiers;
-import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.NumericDate;
 import org.jose4j.lang.JoseException;
@@ -25,13 +22,11 @@ public class OidcTokenGenerator {
     private String issuer;
     private NumericDate issuedAt = NumericDate.now();
     private final String subject;
-    private final String kid;
     private String nonce;
     private Map<String, String> additionalClaims = new HashMap<>();
 
     public OidcTokenGenerator(KeyStoreTool keyStoreTool, String brukerId, String nonce) {
         this.keyStoreTool = keyStoreTool;
-        this.kid = keyStoreTool.getJsonWebKey().getKeyId();
         additionalClaims.put("azp", "OIDC");
         additionalClaims.put("acr", "Level4");
         this.subject = brukerId;
@@ -77,15 +72,8 @@ public class OidcTokenGenerator {
         for (Map.Entry<String, String> entry : additionalClaims.entrySet()) {
             claims.setStringClaim(entry.getKey(), entry.getValue());
         }
-        RsaJsonWebKey senderJwk = keyStoreTool.getJsonWebKey();
-        JsonWebSignature jws = new JsonWebSignature();
-        jws.setPayload(claims.toJson());
-        jws.setKeyIdHeaderValue(kid);
-        jws.setAlgorithmHeaderValue("RS256");
-        jws.setKey(senderJwk.getPrivateKey());
-        jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA256);
         try {
-            return jws.getCompactSerialization();
+            return keyStoreTool.createRS256Token(claims.toJson()).getCompactSerialization();
         } catch (JoseException e) {
             throw new RuntimeException(e);
         }
