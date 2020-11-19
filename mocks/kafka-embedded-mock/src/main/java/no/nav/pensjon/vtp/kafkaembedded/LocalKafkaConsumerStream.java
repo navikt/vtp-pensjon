@@ -31,9 +31,9 @@ public class LocalKafkaConsumerStream {
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         props.put(StreamsConfig.SECURITY_PROTOCOL_CONFIG, "SASL_SSL");
         props.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
-        props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getTruststoreFilePath());
+        props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getTruststoreResource());
         props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, cryptoConfigurationParameters.getTruststorePassword());
-        props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getKeystoreFilePath());
+        props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getKeystoreResource());
         props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, cryptoConfigurationParameters.getKeyStorePassword());
         props.put(SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, "");
         String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";

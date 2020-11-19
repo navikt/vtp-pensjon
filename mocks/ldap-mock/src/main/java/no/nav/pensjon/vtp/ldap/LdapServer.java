@@ -1,34 +1,34 @@
 package no.nav.pensjon.vtp.ldap;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.security.KeyStore;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.stream.Collectors;
 
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.KeyManagerFactory;
+import javax.annotation.PostConstruct;
 import javax.net.ssl.SSLContext;
-
-import com.unboundid.ldap.sdk.Entry;
-import com.unboundid.ldif.LDIFAddChangeRecord;
-
-import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
-import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.unboundid.ldap.listener.InMemoryDirectoryServer;
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
 import com.unboundid.ldap.listener.InMemoryListenerConfig;
+import com.unboundid.ldap.sdk.Entry;
 import com.unboundid.ldap.sdk.LDAPException;
+import com.unboundid.ldif.LDIFAddChangeRecord;
 import com.unboundid.ldif.LDIFChangeRecord;
 import com.unboundid.ldif.LDIFReader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
+
+import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
+import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
+
+@Component
+@ConditionalOnProperty("ldap.server.enabled")
 public class LdapServer {
 
     private static final Logger LOG = LoggerFactory.getLogger(LdapServer.class);
@@ -37,26 +37,20 @@ public class LdapServer {
     private final InMemoryDirectoryServer directoryServer;
 
     private final AnsatteIndeks ansatteIndeks;
-    private final File keystoreFile;
-    private final char[] password;
 
-
-    public LdapServer(AnsatteIndeks ansatteIndeks, File keystoreFile, char[] password, int listenerPortLdap, int listenerPortLdaps) throws Exception {
+    public LdapServer(
+            AnsatteIndeks ansatteIndeks,
+            @Value("${ldap.server.port}") int listenerPortLdap,
+            @Value("${ldap.server.securePort}") int listenerPortLdaps,
+            SSLContext tlsContext) throws Exception {
         this.ansatteIndeks = ansatteIndeks;
-        this.keystoreFile = keystoreFile;
-        this.password = password;
         InMemoryDirectoryServerConfig cfg = new InMemoryDirectoryServerConfig("DC=local");
 
         cfg.setEnforceAttributeSyntaxCompliance(false);
         cfg.setEnforceSingleStructuralObjectClass(false);
         cfg.setSchema(null); // dropper valider schema slik at vi slipper å definere alle object classes
 
-        SSLContext TLScontext = SSLContext.getInstance("TLS");
-
-        KeyManager[] km = loadKeyManagers();
-        TLScontext.init(km, null, null);
-
-        InMemoryListenerConfig ldapsConfig = InMemoryListenerConfig.createLDAPSConfig("LDAPS", listenerPortLdaps, TLScontext.getServerSocketFactory());
+        InMemoryListenerConfig ldapsConfig = InMemoryListenerConfig.createLDAPSConfig("LDAPS", listenerPortLdaps, tlsContext.getServerSocketFactory());
         InMemoryListenerConfig ldapConfig = InMemoryListenerConfig.createLDAPConfig("LDAP",listenerPortLdap );
 
         cfg.setListenerConfigs(ldapsConfig,ldapConfig);
@@ -102,16 +96,7 @@ public class LdapServer {
         }
     }
 
-    private KeyManager[] loadKeyManagers() throws Exception {
-        KeyStore ks = KeyStore.getInstance("JKS");
-        try (InputStream is = new FileInputStream(keystoreFile)) {
-            ks.load(is, password);
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-            kmf.init(ks, password);
-            return kmf.getKeyManagers();
-        }
-    }
-
+    @PostConstruct
     public void start() {
         try {
             directoryServer.startListening();

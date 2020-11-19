@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 @RestController
 @Api(tags = {"Openam"})
 @RequestMapping("/rest/isso")
@@ -118,7 +120,7 @@ public class Oauth2RestService {
                 "</body>\n" +
                 "</html>";
 
-        return ResponseEntity.ok(html);
+        return ok(html);
     }
 
     // TODO (FC): Trengs denne fortsatt?
@@ -138,7 +140,7 @@ public class Oauth2RestService {
             String generatedRefreshToken = "refresh:" + code;
             String generatedAccessToken = "access:" + code;
             Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken);
-            return ResponseEntity.ok(oauthResponse);
+            return ok(oauthResponse);
         } else if ("refresh_token".equals(grant_type)) {
             if (!refresh_token.startsWith("refresh:")) {
                 String message = "Invalid refresh token " + refresh_token;
@@ -152,7 +154,7 @@ public class Oauth2RestService {
                 String generatedRefreshToken = "refresh:" + username;
                 String generatedAccessToken = "access:" + username;
                 Oauth2AccessTokenResponse oauthResponse = new Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken);
-                return ResponseEntity.ok(oauthResponse);
+                return ok(oauthResponse);
             }
         } else {
             LOG.error("Unknown grant_type " + grant_type);
@@ -182,24 +184,19 @@ public class Oauth2RestService {
     }
 
     @GetMapping(value = "/isAlive.jsp" ,produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity isAliveMock() {
-        String isAlive = "Server is ALIVE";
-        return ResponseEntity.ok(isAlive);
+    public ResponseEntity<String> isAliveMock() {
+        return ok("Server is ALIVE");
     }
 
     @GetMapping(value = "/oauth2/../isAlive.jsp" ,produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity isAliveMockRassUrl() {
-        String isAlive = "Server is ALIVE";
-        return ResponseEntity.ok(isAlive);
+    public ResponseEntity<String> isAliveMockRassUrl() {
+        return ok("Server is ALIVE");
     }
 
     @GetMapping(value = "/oauth2/connect/jwk_uri", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "oauth2/connect/jwk_uri", notes = ("Mock impl av Oauth2 jwk_uri"))
-    public ResponseEntity authorize(HttpServletRequest req) {
-        LOG.info("kall på /oauth2/connect/jwk_uri");
-        String jwks = keyStoreTool.getJwks();
-        LOG.info("JWKS: " + jwks);
-        return ResponseEntity.ok(jwks);
+    public ResponseEntity<String> authorize(HttpServletRequest req) {
+        return ok(keyStoreTool.getJwks());
     }
 
     /**
@@ -227,7 +224,7 @@ public class Oauth2RestService {
 
             template.setCallbacks(Arrays.asList(nameCallback, passwordCallback));
 
-            return ResponseEntity.ok(template);
+            return ok(template);
         } else {
             // generer token som brukes til å bekrefte innlogging ovenfor openam
 
@@ -235,7 +232,7 @@ public class Oauth2RestService {
             // TODO generer unik session token?
 
             EndUserAuthenticateSuccess success = new EndUserAuthenticateSuccess("i-am-just-a-dummy-session-token-workaround", "/isso/console");
-            return ResponseEntity.ok(success);
+            return ok(success);
         }
 
     }
@@ -246,7 +243,7 @@ public class Oauth2RestService {
         LOG.info("kall på /oauth2/.well-known/openid-configuration");
         String baseUrl = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort();
         WellKnownResponse wellKnownResponse = new WellKnownResponse(baseUrl, getIssuer());
-        return ResponseEntity.ok(wellKnownResponse);
+        return ok(wellKnownResponse);
     }
 
 }

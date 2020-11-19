@@ -52,9 +52,9 @@ public class LocalKafkaServer {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(StreamsConfig.SECURITY_PROTOCOL_CONFIG, "SASL_SSL");
         props.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
-        props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getTruststoreFilePath());
+        props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getTruststoreResource());
         props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, cryptoConfigurationParameters.getTruststorePassword());
-        props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getKeystoreFilePath());
+        props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, cryptoConfigurationParameters.getKeystoreResource());
         props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, cryptoConfigurationParameters.getKeyStorePassword());
         props.put(SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, "");
         String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
@@ -74,9 +74,9 @@ public class LocalKafkaServer {
         zkProperties.put("allow.everyone.if.no.acl.found", "true");
         zkProperties.put("ssl.client.auth", "none");
 
-        zkProperties.put("ssl.keystore.location", cryptoConfigurationParameters.getKeystoreFilePath());
+        zkProperties.put("ssl.keystore.location", cryptoConfigurationParameters.getKeystoreResource());
         zkProperties.put("ssl.keystore.password", cryptoConfigurationParameters.getKeyStorePassword());
-        zkProperties.put("ssl.truststore.location", cryptoConfigurationParameters.getTruststoreFilePath());
+        zkProperties.put("ssl.truststore.location", cryptoConfigurationParameters.getTruststoreResource());
         zkProperties.put("ssl.truststore.password", cryptoConfigurationParameters.getTruststorePassword());
 
         return zkProperties;
@@ -114,9 +114,9 @@ public class LocalKafkaServer {
         kafkaProperties.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
 
         //SSL
-        kafkaProperties.put("ssl.keystore.location", cryptoConfigurationParameters.getKeystoreFilePath());
+        kafkaProperties.put("ssl.keystore.location", cryptoConfigurationParameters.getKeystoreResource());
         kafkaProperties.put("ssl.keystore.password", cryptoConfigurationParameters.getKeyStorePassword());
-        kafkaProperties.put("ssl.truststore.location", cryptoConfigurationParameters.getTruststoreFilePath());
+        kafkaProperties.put("ssl.truststore.location", cryptoConfigurationParameters.getTruststoreResource());
         kafkaProperties.put("ssl.truststore.password", cryptoConfigurationParameters.getTruststorePassword());
         return kafkaProperties;
     }

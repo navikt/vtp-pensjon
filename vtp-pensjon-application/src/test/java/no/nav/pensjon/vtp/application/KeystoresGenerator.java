@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.felles;
+package no.nav.pensjon.vtp.application;
 
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.cert.X509CertificateHolder;
@@ -9,53 +9,19 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.math.BigInteger;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
-@Component
 class KeystoresGenerator {
     private static final Logger log = LoggerFactory.getLogger(KeystoresGenerator.class);
-    // TODO: Maybe use PKCS12? Java 9 and onwards uses that, Java 8 or below uses JKS.
-    // String outputFormat = "PKCS12";
-
-    private final CryptoConfigurationParameters cryptoConfigurationParameters;
-
-    KeystoresGenerator(CryptoConfigurationParameters cryptoConfigurationParameters) {
-        this.cryptoConfigurationParameters = cryptoConfigurationParameters;
-    }
-
-    void copyKeystoreAndTruststore() throws IOException {
-        copyFile(cryptoConfigurationParameters.getKeystoreFilePath(), "keystore.jks");
-        copyFile(cryptoConfigurationParameters.getTruststoreFilePath(), "truststore.jks");
-    }
-
-    private void copyFile(String filePath, String fileName) throws IOException {
-        String serverDir = Paths.get("").toAbsolutePath().toString();
-
-        Path source = Paths.get(serverDir, fileName);
-        Path target = Paths.get(filePath);
-        Files.createDirectories(target.getParent());
-        Path path = Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
-
-        log.info(String.format("Copied %s/%s from project to %s (with replacing existing)", serverDir, fileName, path.toAbsolutePath()));
-    }
-
-    public void readKeystoresOrGenerateIfNotExists(String outputFormat, String keyAndCertAlias) {
-        String keystorePath = cryptoConfigurationParameters.getKeystoreFilePath();
-        String truststorePath = cryptoConfigurationParameters.getTruststoreFilePath();
-        readKeystoresOrGenerateIfNotExists(keystorePath, cryptoConfigurationParameters.getKeyStorePassword(), truststorePath, cryptoConfigurationParameters.getTruststorePassword(), outputFormat, keyAndCertAlias);
-    }
 
     public static void readKeystoresOrGenerateIfNotExists(String keystorePath, String keystorePassword, String truststorePath, String truststorePassword, String outputFormat, String keyAndCertAlias) {
         File keystoreFile = new File(keystorePath);

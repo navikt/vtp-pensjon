@@ -83,15 +83,7 @@ public class LoginService {
         claims.setClaim("nonce", "hardcoded");
         claims.setClaim("at_hash", "unknown");
 
-        RsaJsonWebKey senderJwk = keyStoreTool.getJsonWebKey();
-        JsonWebSignature jws = new JsonWebSignature();
-        jws.setPayload(claims.toJson());
-        jws.setKeyIdHeaderValue(keyStoreTool.getJsonWebKey().getKeyId());
-        jws.setAlgorithmHeaderValue("RS256");
-        jws.setKey(senderJwk.getPrivateKey());
-        jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA256);
-
-        String token = jws.getCompactSerialization();
+        String token = keyStoreTool.createRS256Token(claims.toJson()).getCompactSerialization();
 
         HttpCookie cookie = ResponseCookie.from("selvbetjening-idtoken", token)
                 .path("/").maxAge(-1L).httpOnly(false).secure(false).build();
