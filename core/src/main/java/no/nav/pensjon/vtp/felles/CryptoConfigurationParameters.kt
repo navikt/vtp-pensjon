@@ -5,9 +5,9 @@ import org.springframework.core.io.Resource
 data class CryptoConfigurationParameters(
         val keyAndCertAlias: String,
 
-        val keystoreResource: Resource,
-        val keyStorePassword: String,
+        val keystorePath: String,
+        val keystorePassword: String,
 
-        val truststoreResource: Resource,
+        val truststorePath: String,
         val truststorePassword: String
 )
