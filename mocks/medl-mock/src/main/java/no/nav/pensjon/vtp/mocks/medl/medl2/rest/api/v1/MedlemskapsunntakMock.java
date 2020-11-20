@@ -13,7 +13,7 @@ import java.util.Set;
 import static no.nav.pensjon.vtp.mocks.medl.medl2.rest.api.v1.MedlemskapsunntakApiParams.*;
 
 @RestController
-@RequestMapping(value = "medl2/api/v1/medlemskapsunntak", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "rest/medl2/api/v1/medlemskapsunntak", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = {"Medlemskapsunntak"})
 public class MedlemskapsunntakMock {
     @GetMapping(value = "/{unntakId}")
