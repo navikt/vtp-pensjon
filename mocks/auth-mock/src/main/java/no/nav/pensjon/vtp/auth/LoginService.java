@@ -1,12 +1,9 @@
 package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
-import no.nav.pensjon.vtp.felles.KeyStoreTool;
+import no.nav.pensjon.vtp.felles.JsonWebKeySupport;
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 
-import org.jose4j.jwk.RsaJsonWebKey;
-import org.jose4j.jws.AlgorithmIdentifiers;
-import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.NumericDate;
 import org.jose4j.lang.JoseException;
@@ -28,11 +25,11 @@ import java.util.stream.Collectors;
 @Api(tags = {"LoginService"})
 @RequestMapping("/rest/loginservice")
 public class LoginService {
-    private final KeyStoreTool keyStoreTool;
+    private final JsonWebKeySupport jsonWebKeySupport;
     private final PersonModellRepository personModellRepository;
 
-    public LoginService(KeyStoreTool keyStoreTool, PersonModellRepository personModellRepository) {
-        this.keyStoreTool = keyStoreTool;
+    public LoginService(JsonWebKeySupport jsonWebKeySupport, PersonModellRepository personModellRepository) {
+        this.jsonWebKeySupport = jsonWebKeySupport;
         this.personModellRepository = personModellRepository;
     }
 
@@ -83,7 +80,7 @@ public class LoginService {
         claims.setClaim("nonce", "hardcoded");
         claims.setClaim("at_hash", "unknown");
 
-        String token = keyStoreTool.createRS256Token(claims.toJson()).getCompactSerialization();
+        String token = jsonWebKeySupport.createRS256Token(claims.toJson()).getCompactSerialization();
 
         HttpCookie cookie = ResponseCookie.from("selvbetjening-idtoken", token)
                 .path("/").maxAge(-1L).httpOnly(false).secure(false).build();

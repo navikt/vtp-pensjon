@@ -6,6 +6,8 @@ import static java.util.Optional.ofNullable;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import static no.nav.pensjon.vtp.utilities.MethodsKt.description;
+
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
@@ -82,7 +84,7 @@ public class SoapWebServiceConfig {
         @Override
         protected Object invoke(Exchange exchange, Object serviceObject, Method m, List<Object> params) {
             getHttpServletResponse()
-                    .ifPresent(response -> response.addHeader("x-vtp-handler", formatHandlerString(m)));
+                    .ifPresent(response -> response.addHeader("x-vtp-handler", description(m)));
 
             try {
                 return super.invoke(exchange, serviceObject, m, params);
@@ -90,14 +92,6 @@ public class SoapWebServiceConfig {
                 logger.error("Error invoking soap web service", e);
                 throw e;
             }
-        }
-
-        @NotNull
-        private String formatHandlerString(Method method) {
-            final String classCanonicalName = method.getDeclaringClass().getCanonicalName();
-            final String methodName = method.getName();
-            final String parameters = join(",", (Iterable<String>) stream(method.getParameterTypes()).map(Class::getSimpleName)::iterator);
-            return classCanonicalName + "#" + methodName + "(" + parameters + ")";
         }
 
         @NotNull

@@ -1,8 +1,10 @@
 package no.nav.pensjon.vtp.utilities
 
+import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+
 
 /**
  * Adds the handler toString of the MVC Handler to the HTTP Response Header
@@ -11,8 +13,15 @@ import javax.servlet.http.HttpServletResponse
  * use in the access log.
  */
 class HandlerToResponseHeaderInterceptor : HandlerInterceptor {
+
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        response.addHeader("x-vtp-handler", handler.toString())
+        if (handler is HandlerMethod) {
+            response.addHeader("x-vtp-handler", description(handler.method))
+        } else {
+            response.addHeader("x-vtp-handler", handler.toString())
+        }
+
         return true
     }
+
 }

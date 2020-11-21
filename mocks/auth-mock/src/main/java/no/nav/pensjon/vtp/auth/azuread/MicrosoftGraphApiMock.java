@@ -49,7 +49,7 @@ public class MicrosoftGraphApiMock {
     }
 
     @GetMapping(value= "/v1.0/me", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity me(@RequestHeader("Authorization") String auth, @RequestParam String select) {
+    public ResponseEntity me(@RequestHeader("Authorization") String auth, @RequestParam(required = false) String select) {
         if (!auth.startsWith("Bearer access:")) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
