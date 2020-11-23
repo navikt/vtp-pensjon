@@ -1,24 +1,20 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
-import static java.util.Optional.ofNullable;
-
 import no.nav.lib.pen.psakpselv.asbo.person.*;
 import no.nav.pensjon.vtp.testmodell.kodeverk.Diskresjonskoder;
-import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
-import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.GateadresseModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
+import no.nav.pensjon.vtp.testmodell.personopplysning.*;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.stereotype.Component;
+import static java.util.Optional.ofNullable;
 
 @Component
 public class PsakpselvPersonAdapter {
@@ -68,8 +64,7 @@ public class PsakpselvPersonAdapter {
         personUtland.setStatsborgerKode("NOR");
         personUtland.setStatsborgerskap("NOR");
         asboPenPerson.setPersonUtland(personUtland);
-        ASBOPenHistorikk historikk = new ASBOPenHistorikk();
-        historikk.setBostedsadresser(null);
+        ASBOPenHistorikk historikk = createHistorikk();
         asboPenPerson.setHistorikk(historikk);
 
         ASBOPenUtbetalingsinformasjon utbetalingsinformasjon = new ASBOPenUtbetalingsinformasjon();
@@ -81,6 +76,26 @@ public class PsakpselvPersonAdapter {
         asboPenPerson.setUtbetalingsinformasjon(utbetalingsinformasjon);
 
         return asboPenPerson;
+    }
+
+    @NotNull
+    private static ASBOPenHistorikk createHistorikk() {
+        ASBOPenHistorikk historikk = new ASBOPenHistorikk();
+        historikk.setBostedsadresser(null);//må være enten være populert eller null
+
+        ASBOPenAnnenAdresseListe adresseLinjer = new ASBOPenAnnenAdresseListe();
+        adresseLinjer.setAdresseLinjer(new ASBOPenAnnenAdresse[0]);
+        historikk.setAdresseLinjer(adresseLinjer);
+
+        ASBOPenHistoriskFnrListe fnrListe = new ASBOPenHistoriskFnrListe();
+        fnrListe.setHistoriskeFnr(new ASBOPenHistoriskFnr[0]);
+        historikk.setHistoriskeFnr(fnrListe);
+
+        ASBOPenNavnEndringListe navnListe = new ASBOPenNavnEndringListe();
+        navnListe.setNavnEndringer(new ASBOPenNavnEndring[0]);
+        historikk.setNavnEndringer(navnListe);
+
+        return historikk;
     }
 
     private ASBOPenRelasjonListe fetchRelasjoner(Personopplysninger personopplysninger) {
