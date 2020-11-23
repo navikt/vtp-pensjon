@@ -225,7 +225,9 @@ class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private va
     @ResponseWrapper(localName = "ferdigstillOppgaveBolkResponse", targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2", className = "no.nav.virksomhet.tjenester.oppgavebehandling.v2.FerdigstillOppgaveBolkResponse")
     @WebResult(name = "response", targetNamespace = "")
     override fun ferdigstillOppgaveBolk(request: FerdigstillOppgaveBolkRequest): FerdigstillOppgaveBolkResponse {
-        throw UnsupportedOperationException("Ikke implementert")
+        val ferdigstillOppgaveBolkResponse = FerdigstillOppgaveBolkResponse()
+        ferdigstillOppgaveBolkResponse.transaksjonOk = true
+        return ferdigstillOppgaveBolkResponse
     }
 
     private fun getNorg2Modell(enhetId: Int): Norg2Modell =
