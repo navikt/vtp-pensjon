@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.felles
+package no.nav.pensjon.vtp.auth
 
 import org.jose4j.base64url.Base64Url.encode
 import org.jose4j.jwk.RsaJsonWebKey

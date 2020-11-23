@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.felles
+package no.nav.pensjon.vtp.auth
 
 import com.google.common.base.Strings
 import org.jose4j.jwt.JwtClaims

@@ -1,8 +1,8 @@
-package no.nav.pensjon.vtp.felles
+package no.nav.pensjon.vtp.auth.azuread
 
+import no.nav.pensjon.vtp.auth.JsonWebKeySupport
 import org.jose4j.jwt.JwtClaims
 import org.jose4j.jwt.NumericDate
-import org.jose4j.lang.JoseException
 import org.springframework.util.ObjectUtils
 import java.util.*
 import kotlin.collections.ArrayList

@@ -3,8 +3,7 @@ package no.nav.pensjon.vtp.auth.azuread
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse
-import no.nav.pensjon.vtp.felles.JsonWebKeySupport
-import no.nav.pensjon.vtp.felles.azureOidcToken
+import no.nav.pensjon.vtp.auth.JsonWebKeySupport
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.apache.http.client.utils.URIBuilder

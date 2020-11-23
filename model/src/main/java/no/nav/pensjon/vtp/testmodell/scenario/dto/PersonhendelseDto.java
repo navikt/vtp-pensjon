@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.kontrakter;
+package no.nav.pensjon.vtp.testmodell.scenario.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 

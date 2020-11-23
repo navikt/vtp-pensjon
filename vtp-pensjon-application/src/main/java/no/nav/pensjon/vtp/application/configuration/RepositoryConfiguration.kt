@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.application.configuration
 
-import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataService
-import no.nav.pensjon.vtp.miscellaneous.api.pensjon_testdata.PensjonTestdataServiceImpl
+import no.nav.pensjon.vtp.testmodell.pensjon_testdata.PensjonTestdataService
+import no.nav.pensjon.vtp.testmodell.pensjon_testdata.PensjonTestdataServiceImpl
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks

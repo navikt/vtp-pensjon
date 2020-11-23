@@ -1,8 +1,6 @@
 package no.nav.pensjon.vtp.auth
 
 import io.swagger.annotations.Api
-import no.nav.pensjon.vtp.felles.JsonWebKeySupport
-import no.nav.pensjon.vtp.felles.OidcTokenGenerator
 import org.apache.commons.codec.binary.Base64.encodeBase64String
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType
 import org.springframework.beans.factory.annotation.Value

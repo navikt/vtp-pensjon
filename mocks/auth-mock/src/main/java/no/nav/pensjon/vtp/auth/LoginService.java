@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.auth;
 
 import io.swagger.annotations.Api;
-import no.nav.pensjon.vtp.felles.JsonWebKeySupport;
+
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
 
 import org.jose4j.jwt.JwtClaims;

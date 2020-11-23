@@ -3,8 +3,6 @@ package no.nav.pensjon.vtp.auth
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
-import no.nav.pensjon.vtp.felles.JsonWebKeySupport
-import no.nav.pensjon.vtp.felles.OidcTokenGenerator
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.apache.http.client.utils.URIBuilder
