@@ -89,8 +89,7 @@ class STSRestTjeneste(private val jsonWebKeySupport: JsonWebKeySupport, private 
     data class UserTokenResponse(
             val access_token: String? = null,
             val expires_in: Long? = null,
-            val token_type: String? = null,
-            val issuedTime: LocalDateTime = LocalDateTime.now()
+            val token_type: String? = null
     ) {
         /**
          *
@@ -99,7 +98,7 @@ class STSRestTjeneste(private val jsonWebKeySupport: JsonWebKeySupport, private 
          */
         @Suppress("unused")
         fun isExpired(expirationLeeway: Long): Boolean {
-            return LocalDateTime.now().isAfter(issuedTime.plusSeconds(expires_in!!).minusSeconds(expirationLeeway))
+            return LocalDateTime.now().isAfter(LocalDateTime.now().plusSeconds(expires_in!!).minusSeconds(expirationLeeway))
         }
     }
 }
