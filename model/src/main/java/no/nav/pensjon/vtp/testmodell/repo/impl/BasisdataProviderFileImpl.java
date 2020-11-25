@@ -1,13 +1,9 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
 import com.fasterxml.jackson.core.type.TypeReference;
-
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks;
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt;
+import no.nav.pensjon.vtp.testmodell.brev.BrevMetadataIndeks;
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks;
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
@@ -15,6 +11,10 @@ import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks;
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseModell;
 import no.nav.pensjon.vtp.testmodell.util.JsonMapper;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 public class BasisdataProviderFileImpl {
     public static AdresseIndeks loadAdresser() throws IOException {
@@ -70,5 +70,11 @@ public class BasisdataProviderFileImpl {
             List<OrganisasjonModell> organisasjoner = jsonMapper.lagObjectMapper().readValue(is, typeRef);
             organisasjonRepository.saveAll(organisasjoner);
         }
+    }
+
+    public static BrevMetadataIndeks loadBrevMetadata() {
+        BrevMetadataIndeks brevMetadataIndeks = new BrevMetadataIndeks();
+        brevMetadataIndeks.init("/basedata/brevmetadata.json");
+        return brevMetadataIndeks;
     }
 }
