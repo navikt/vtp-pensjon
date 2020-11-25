@@ -3,6 +3,7 @@ package no.nav.pensjon.vtp.utilities
 import javassist.ClassPool
 import javassist.CtClass
 import javassist.LoaderClassPath
+import java.lang.Thread.currentThread
 import java.lang.reflect.Method
 
 /**
@@ -11,11 +12,11 @@ import java.lang.reflect.Method
  */
 fun description(method: Method): String {
     val classpool = ClassPool.getDefault();
-    classpool.appendClassPath(LoaderClassPath(Thread.currentThread().contextClassLoader));
+    classpool.appendClassPath(LoaderClassPath(currentThread().contextClassLoader));
 
     val cc: CtClass = classpool.get(method.declaringClass.canonicalName)
 
     val javassistMethod = cc.getDeclaredMethod(method.name)
     val linenumber = javassistMethod.methodInfo.getLineNumber(0)
-    return "at ${method.declaringClass.canonicalName}.${method.name}(${javassistMethod.declaringClass.classFile.sourceFile}:$linenumber)"
+    return "${method.declaringClass.canonicalName}.${method.name}(${javassistMethod.declaringClass.classFile.sourceFile}:$linenumber)"
 }

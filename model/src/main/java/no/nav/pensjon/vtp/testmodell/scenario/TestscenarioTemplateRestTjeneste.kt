@@ -18,7 +18,7 @@ import java.util.function.Consumer
 
 @RestController
 @Api(tags = ["Testscenario/templates"])
-@RequestMapping("/rest/api/testscenario/templates")
+@RequestMapping("/api/testscenario/templates")
 class TestscenarioTemplateRestTjeneste(private val templateRepository: TestscenarioTemplateRepository) {
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation(value = "templates", notes = "Liste av tilgjengelig Testscenario Templates", response = TemplateReferanse::class, responseContainer = "List")

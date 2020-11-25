@@ -1,0 +1,41 @@
+
+<div class="container">
+<div style="padding-top: 12px"></div>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="inputGroupSelect01">Template</label>
+  </div>
+  <select class="custom-select" id="inputGroupSelect01" [(ngModel)]="selectedTemplate">
+    <option *ngFor="let template of testScenarioTemplates" [ngValue]="template" >{{template.navn}}</option>
+  </select>
+  <div class="input-group-append">
+    <button class="btn btn-outline-secondary" type="button" [disabled]="selectedTemplate == null" (click)="onCreateTemplate(selectedTemplate)">Create</button>
+  </div>
+</div>
+
+<div class="pt-4" *ngFor="let testScenario of testScenarios">
+  <div class="card">
+    <div class="card-header">
+      <span>{{testScenario.templateNavn}}</span>
+      <button type="button" class="btn float-right btn-danger btn-sm" (click)="deleteTestScenario(testScenario)">Delete</button>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Åpne i PSAK</h5>
+      <div class="card-text">
+        <ul>
+          <li>
+            <a [href]="'http://localhost:9080/psak/brukeroversikt/fnr=' + soekerIdent(testScenario.personopplysninger)">{{ soekerIdent(testScenario.personopplysninger) }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Body</h5>
+      <div class="card-text scrollable">
+        <pre>{{ testScenario | json  }}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
