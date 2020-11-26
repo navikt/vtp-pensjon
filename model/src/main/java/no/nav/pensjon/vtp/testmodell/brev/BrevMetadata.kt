@@ -20,4 +20,5 @@ class BrevMetadata {
     val prioritet: Int = 0
     val brevsystem: String? = null
     val brevgruppe: String? = null
+    val dokumentmalId: String? = null
 }
