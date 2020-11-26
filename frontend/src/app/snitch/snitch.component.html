@@ -1,0 +1,22 @@
+<div class="container-fluid">
+  <div style="padding-top: 12px"></div>
+
+  <div class="row">
+    <div class="col-sm w-50 scrollable">
+      <app-access-log [requestResponses]="requestResponses" (selectRequestResponse)="onSelect($event)"></app-access-log>
+    </div>
+
+    <div class="col-sm w-50 scrollable">
+      <div *ngIf="selectedRequestResponse">
+        <app-summary [requestResponse]="selectedRequestResponse"></app-summary>
+
+        <div class="pt-4">
+          <app-payload [payload]="selectedRequestResponse.request" [header]="'Request'"></app-payload>
+        </div>
+        <div class="pt-4">
+          <app-payload [payload]="selectedRequestResponse.response" [header]="'Response'"></app-payload>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

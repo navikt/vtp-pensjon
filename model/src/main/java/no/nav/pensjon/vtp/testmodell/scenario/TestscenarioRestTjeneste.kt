@@ -11,7 +11,6 @@ import no.nav.pensjon.vtp.testmodell.repo.TestscenarioService
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus.CREATED
-import org.springframework.http.HttpStatus.NOT_IMPLEMENTED
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.*
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @Api(tags = ["Testscenario"])
-@RequestMapping("/rest/api/testscenarios")
+@RequestMapping("/api/testscenarios")
 class TestscenarioRestTjeneste(private val templateRepository: TestscenarioTemplateRepository, private val testscenarioService: TestscenarioService, private val pensjonTestdataService: PensjonTestdataService) {
     @GetMapping(produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "", notes = "Henter alle templates som er initiert i minnet til VTP", responseContainer = "List", response = TestscenarioDto::class)
@@ -29,26 +28,14 @@ class TestscenarioRestTjeneste(private val templateRepository: TestscenarioTempl
 
     @GetMapping(value = ["/{id}"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "", notes = "Returnerer testscenario som matcher id", response = TestscenarioDto::class)
-    fun hentScenario(@PathVariable(SCENARIO_ID) id: String) =
+    fun hentScenario(@PathVariable("id") id: String) =
             testscenarioService.getTestscenario(id)
                     ?.let { ok(konverterTilTestscenarioDto(it)) }
                     ?: notFound().build<TestscenarioDto>()
 
-    @PutMapping(value = ["/{id}"], produces = [APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "", notes = "Oppdaterer hele scenario som matcher id", response = TestscenarioDto::class)
-    fun oppdaterHeleScenario(@PathVariable(SCENARIO_ID) id: String?, @RequestBody testscenarioDto: TestscenarioDto?): ResponseEntity<*> {
-        return status(NOT_IMPLEMENTED).build<Any>()
-    }
-
-    @PatchMapping(value = ["/{id}"], produces = [APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "", notes = "Oppdaterer deler av et scenario som matcher id", response = TestscenarioDto::class)
-    fun endreScenario(@PathVariable(SCENARIO_ID) id: String?, @RequestBody patchArray: String?): ResponseEntity<*> {
-        return status(NOT_IMPLEMENTED).build<Any>()
-    }
-
     @PostMapping(value = ["/{key}"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "", notes = "Initialiserer et test scenario basert på angitt template key i VTPs eksempel templates", response = TestscenarioDto::class)
-    fun initialiserTestscenario(@PathVariable(TEMPLATE_KEY) templateKey: String) =
+    fun initialiserTestscenario(@PathVariable("key") templateKey: String) =
             templateRepository.finn(templateKey)
                     ?.let {
                         val testscenario = testscenarioService.opprettTestscenario(it)
@@ -66,7 +53,7 @@ class TestscenarioRestTjeneste(private val templateRepository: TestscenarioTempl
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "", notes = "Sletter et initialisert testscenario som matcher id")
-    fun slettScenario(@PathVariable(SCENARIO_ID) id: String): ResponseEntity<*> {
+    fun slettScenario(@PathVariable("id") id: String): ResponseEntity<*> {
         logger.info("Sletter testscenario med id: [{}]", id)
         testscenarioService.slettScenario(id)
         return noContent().build<Any>()
@@ -98,7 +85,5 @@ class TestscenarioRestTjeneste(private val templateRepository: TestscenarioTempl
 
     companion object {
         private val logger = LoggerFactory.getLogger(TestscenarioRestTjeneste::class.java)
-        private const val TEMPLATE_KEY = "key"
-        private const val SCENARIO_ID = "id"
     }
 }
