@@ -14,7 +14,7 @@ import {RequestResponse} from "./request-response";
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let requestResponse of requestResponses" (click)="select(requestResponse)" [ngClass]="rowClass(requestResponse.status)">
+      <tr *ngFor="let requestResponse of requestResponses" (click)="select(requestResponse)" [ngClass]="rowClass(requestResponse)">
         <td>{{requestResponse.timestamp | date:'HH:mm:ss.SSS'}}</td>
         <td>{{requestResponse.method}}</td>
         <td>{{requestResponse.path}}</td>
@@ -29,14 +29,19 @@ export class AccessLogComponent {
   @Input() requestResponses: RequestResponse[] = [];
   @Output() selectRequestResponse = new EventEmitter<RequestResponse>();
 
+  @Input() selectedRequestResponse?: RequestResponse;
+
   select(requestResponse: RequestResponse) {
+    this.selectedRequestResponse = requestResponse;
     this.selectRequestResponse.emit(requestResponse);
   }
 
-  rowClass(status: number): string {
-    if (status >= 400 && status <= 499) {
+  rowClass(requestResponses: RequestResponse): string {
+    if (requestResponses === this.selectedRequestResponse) {
+      return 'table-primary'
+    } else if (requestResponses.status >= 400 && requestResponses.status <= 499) {
       return 'table-warning'
-    } else if (status >= 500 && status <= 500) {
+    } else if (requestResponses.status >= 500 && requestResponses.status <= 500) {
       return 'table-danger'
     } else {
       return ''

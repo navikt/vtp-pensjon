@@ -3,7 +3,7 @@
 
   <div class="row">
     <div class="col-sm w-50 scrollable">
-      <app-access-log [requestResponses]="requestResponses" (selectRequestResponse)="onSelect($event)"></app-access-log>
+      <app-access-log [requestResponses]="requestResponses" (selectRequestResponse)="onSelect($event)" [selectedRequestResponse]="selectedRequestResponse"></app-access-log>
     </div>
 
     <div class="col-sm w-50 scrollable">

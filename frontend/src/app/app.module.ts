@@ -14,6 +14,7 @@ import {FormsModule} from '@angular/forms';
 import { PayloadComponent } from './snitch/payload.component';
 import { SummaryComponent } from './snitch/summary.component';
 import { HeadersComponent } from './snitch/headers.component';
+import { XmlformatterPipe } from './xmlformatter.pipe';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { HeadersComponent } from './snitch/headers.component';
     PayloadComponent,
     HeadersComponent,
     SummaryComponent,
+    XmlformatterPipe,
   ],
   imports: [
     BrowserModule,

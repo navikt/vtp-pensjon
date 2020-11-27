@@ -4,9 +4,9 @@ import {Payload} from "./request-response";
 @Component({
   selector: 'app-headers',
   template: `
-    <table class="table table-sm table-borderless">
+    <table class="table table-sm table-borderless table-responsive">
       <tr *ngFor="let header of headers | keyvalue">
-        <th style="width: 200px">{{header.key}}</th>
+        <th>{{header.key}}</th>
         <td>{{header.value}}</td>
       </tr>
     </table>
