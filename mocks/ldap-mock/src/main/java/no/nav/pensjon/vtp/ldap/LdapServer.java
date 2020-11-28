@@ -74,7 +74,7 @@ public class LdapServer {
             entry.addAttribute("mail", ansatt.email);
             entry.addAttribute("memberOf", ansatt.groups.stream().map(group -> "CN=" + group + ",OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local").collect(Collectors.toList()));
 
-            LOG.info("Added NAV-ansatt to LDAP: {}", Arrays.toString(entry.toLDIF()));
+            LOG.debug("Added NAV-ansatt to LDAP: {}", Arrays.toString(entry.toLDIF()));
             new LDIFAddChangeRecord(entry).processChange(server);
         }
     }

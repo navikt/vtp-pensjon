@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/snitch")
-class SnitchController(
-        private val requestResponseRepository: RequestResponseRepository
-) {
+class SnitchController(private val requestResponseRepository: RequestResponseRepository) {
     @GetMapping
-    fun findAll() = requestResponseRepository.findAll()
+    fun findAll(): Iterable<RequestResponse> = requestResponseRepository.findAll()
 }

@@ -1,20 +1,28 @@
 package no.nav.pensjon.vtp.snitch
 
+import org.springframework.data.mongodb.core.CollectionOptions.empty
+import org.springframework.data.mongodb.core.MongoOperations
+import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
-import java.util.concurrent.CopyOnWriteArrayList
+import javax.annotation.PostConstruct
+
+
+interface RequestResponseCustom
+
+interface RequestResponseRepository : CrudRepository<RequestResponse, String>, RequestResponseCustom
 
 @Repository
-class RequestResponseRepository {
-    private val requestResponses: MutableList<RequestResponse> = CopyOnWriteArrayList()
-
-    fun save(requestResponse: RequestResponse): RequestResponse {
-        while (requestResponses.size >= 100) {
-            requestResponses.removeAt(0)
+class RequestResponseImpl(
+        val mongoOperations: MongoOperations
+) : RequestResponseCustom {
+    @PostConstruct
+    fun setupCappedCollection() {
+        if (!mongoOperations.collectionExists(RequestResponse::class.java)) {
+            val collectionOptions = empty()
+                    .size(10_000_000)
+                    .capped()
+                    .maxDocuments(100)
+            mongoOperations.createCollection<RequestResponse>(RequestResponse::class.java, collectionOptions)
         }
-
-        requestResponses.add(requestResponse)
-        return requestResponse
     }
-
-    fun findAll(): List<RequestResponse> = requestResponses
 }
