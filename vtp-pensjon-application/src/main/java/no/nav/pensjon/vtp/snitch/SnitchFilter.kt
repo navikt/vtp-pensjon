@@ -1,8 +1,10 @@
 package no.nav.pensjon.vtp.snitch
 
-import org.springframework.core.Ordered
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
 import org.springframework.core.annotation.Order
+import org.springframework.messaging.simp.SimpMessagingTemplate
+import org.springframework.messaging.support.GenericMessage
 import org.springframework.stereotype.Component
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
@@ -45,18 +47,23 @@ fun asHeadersMap(namesProducer: () -> Iterator<String>, headersFunction: (String
 @Component
 @Order(HIGHEST_PRECEDENCE)
 class SnitchFilter(
-        private val requestResponseRepository: RequestResponseRepository
+        private val requestResponseRepository: RequestResponseRepository,
+        private val simpMessagingTemplate: SimpMessagingTemplate
 ) : Filter {
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, filterChain: FilterChain) {
         if (request is HttpServletRequest && response is HttpServletResponse &&
-                (request.servletPath.startsWith("/rest") || request.servletPath.startsWith("/soap"))) {
+                (request.servletPath.startsWith("/rest") || request.servletPath.startsWith("/soap"))
+        ) {
             val requestWrapper = ContentCachingRequestWrapper(request)
             val responseWrapper = ContentCachingResponseWrapper(response)
 
             try {
                 filterChain.doFilter(requestWrapper, responseWrapper)
 
-                requestResponseRepository.save(requestResponse(requestWrapper, responseWrapper))
+                val reqres = requestResponse(requestWrapper, responseWrapper)
+                requestResponseRepository.save(reqres)
+
+                simpMessagingTemplate.send("/topic/snitch", GenericMessage(jacksonObjectMapper().writeValueAsBytes(reqres)))
 
                 responseWrapper.copyBodyToResponse()
             } catch (e: Exception) {
