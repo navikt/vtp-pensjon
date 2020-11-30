@@ -61,10 +61,8 @@ class SnitchFilter(
             try {
                 filterChain.doFilter(requestWrapper, responseWrapper)
 
-                val reqres = requestResponse(requestWrapper, responseWrapper)
-                requestResponseRepository.save(reqres)
-
-                simpMessagingTemplate.send("/topic/snitch", GenericMessage(objectMapper.writeValueAsBytes(reqres)))
+                val requestResponse = requestResponseRepository.save(requestResponse(requestWrapper, responseWrapper))
+                simpMessagingTemplate.send("/topic/snitch", GenericMessage(objectMapper.writeValueAsBytes(requestResponse)))
 
                 responseWrapper.copyBodyToResponse()
             } catch (e: Exception) {
