@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.snitch
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
 import org.springframework.core.annotation.Order
 import org.springframework.messaging.simp.SimpMessagingTemplate
@@ -48,7 +48,8 @@ fun asHeadersMap(namesProducer: () -> Iterator<String>, headersFunction: (String
 @Order(HIGHEST_PRECEDENCE)
 class SnitchFilter(
         private val requestResponseRepository: RequestResponseRepository,
-        private val simpMessagingTemplate: SimpMessagingTemplate
+        private val simpMessagingTemplate: SimpMessagingTemplate,
+        private val objectMapper: ObjectMapper
 ) : Filter {
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, filterChain: FilterChain) {
         if (request is HttpServletRequest && response is HttpServletResponse &&
@@ -63,7 +64,7 @@ class SnitchFilter(
                 val reqres = requestResponse(requestWrapper, responseWrapper)
                 requestResponseRepository.save(reqres)
 
-                simpMessagingTemplate.send("/topic/snitch", GenericMessage(jacksonObjectMapper().writeValueAsBytes(reqres)))
+                simpMessagingTemplate.send("/topic/snitch", GenericMessage(objectMapper.writeValueAsBytes(reqres)))
 
                 responseWrapper.copyBodyToResponse()
             } catch (e: Exception) {
