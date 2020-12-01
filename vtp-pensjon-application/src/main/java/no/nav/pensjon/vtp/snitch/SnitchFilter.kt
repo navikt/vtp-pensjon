@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
 import org.springframework.core.annotation.Order
 import org.springframework.messaging.simp.SimpMessagingTemplate
-import org.springframework.messaging.support.GenericMessage
 import org.springframework.stereotype.Component
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
@@ -48,8 +47,7 @@ fun asHeadersMap(namesProducer: () -> Iterator<String>, headersFunction: (String
 @Order(HIGHEST_PRECEDENCE)
 class SnitchFilter(
         private val requestResponseRepository: RequestResponseRepository,
-        private val simpMessagingTemplate: SimpMessagingTemplate,
-        private val objectMapper: ObjectMapper
+        private val simpMessagingTemplate: SimpMessagingTemplate
 ) : Filter {
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, filterChain: FilterChain) {
         if (request is HttpServletRequest && response is HttpServletResponse &&
@@ -62,7 +60,7 @@ class SnitchFilter(
                 filterChain.doFilter(requestWrapper, responseWrapper)
 
                 val requestResponse = requestResponseRepository.save(requestResponse(requestWrapper, responseWrapper))
-                simpMessagingTemplate.send("/topic/snitch", GenericMessage(objectMapper.writeValueAsBytes(requestResponse)))
+                simpMessagingTemplate.convertAndSend("/topic/snitch", requestResponse)
 
                 responseWrapper.copyBodyToResponse()
             } catch (e: Exception) {
