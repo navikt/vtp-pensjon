@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.snitch
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
 import org.springframework.core.annotation.Order
 import org.springframework.messaging.simp.SimpMessagingTemplate

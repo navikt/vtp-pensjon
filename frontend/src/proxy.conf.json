@@ -4,6 +4,11 @@
     "secure": false,
     "logLevel": "debug"
   },
+  "/data": {
+    "target": "http://localhost:8060",
+    "secure": false,
+    "logLevel": "debug"
+  },
   "/rest": {
     "target": "http://localhost:8060",
     "secure": false,
