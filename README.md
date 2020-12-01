@@ -1,11 +1,7 @@
 Virtuell Tjeneste Plattform (VTP) for pensjonsområdet
 =================================
 
-
-
-
-
-![alt text](vtp.png "Logo Title Text 1")
+![alt text](vtp.png "VTP Logo")
 
 
 #### vtp-pensjon hjelper deg med å: 
@@ -23,19 +19,16 @@ Virtuell Tjeneste Plattform (VTP) for pensjonsområdet
 Interne henvendelser kan sendes via Slack i kanalen #vtp-chatten
 
 ## Teknologi som må installeres
-- Java (https://adoptopenjdk.net/)
-- Node.js (https://nodejs.org/en/download/)
-- Yarn (https://classic.yarnpkg.com/)
-- Maven (http://maven.apache.org/)
+- Java 11 (https://adoptopenjdk.net/)
+- Node.js 14 (https://nodejs.org/en/download/)
+- Maven 3.6 (http://maven.apache.org/)
 
 ## Starte applikasjon
 For utvikling på vtp-pensjon benytt oppsett for å starte server gjennom IDE.
 I verdikjedetester benyttes oftest Docker-image av vtp-pensjon. Dette bygges i vtp-pensjon sin pipeline. 
 
 #### Starte backend-server via IDE
-* IntelliJ må konfigureres med å sette classpath of module til server, og sette working directory til `$MODULE_WORKING_DIR$` i run/debug-konfiguration.
-* Start mock serveren ved å kjøre MockServer (lokalt).
-* Trenger parameter `-Dscenarios.dir="../model/scenarios"` dersom denne ikke ligger under working dir (dvs. i IDE).
+* IntelliJ naviger til klassen VtpPensjonApplication og start main-metoden
 
 #### Kjøre via docker run / docker-compose
 ##### For å bygge docker image lokalt: 
@@ -45,10 +38,10 @@ Imaget blir da tilgjengelig som vtp-pensjon:latest
 ##### Hente docker-image bygget i pipe: 
 docker pull docker.pkg.github.com/navikt/vtp-pensjon/vtp-pensjon
 
-#### Starte front-end
-* I modulen frontend (/frontend), kjør `yarn run serve`. Når vtp-pensjon bygges så pakkes det også med en statisk versjon av front-end som er tilgjengelig på rot av localhost:8060 eller https://localhost:8063.
-* Dersom bygg feiler på utviklerimage, forsøk å oppdater node / yarn. Oppdaterte versjoner ligger på http://a34apvl063.devillo.no:81/software/.  
-
+#### Utvikle front-end separat
+I modulen frontend (/frontend)
+* installer avhengigheter med `npm install`
+* Bygg og kjør utvikling med `npm run dev`.
 
 ## Opprette testdata 
 * Opprett testdata ved å legge scenario i /model/scenarios. Innledende tall brukes som referanse for å få instansiert scenario.
