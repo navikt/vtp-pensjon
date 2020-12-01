@@ -20,7 +20,6 @@
         <module>dokdist-mock</module>
         <module>enonic-mock</module>
         <module>egenansatt-mock</module>
-        <module>innsynjournal-mock</module>
         <module>inntekt-mock</module>
         <module>joark-mock</module>
         <module>kafka-embedded-mock</module>

@@ -237,12 +237,6 @@
 
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>innsynjournal-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>psak-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
