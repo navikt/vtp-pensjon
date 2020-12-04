@@ -121,6 +121,8 @@ export default () => {
     const [selectedRequest, setSelectedRequest] = useState<RequestResponse | null>(null);
 
     useEffect(() => {
+        fetch('/data/requestResponses').then(response => response.json()).then(result => setRequests(state => [...state, ...result._embedded.requestResponses.reverse()]));
+
         const websocketUrl = `${window.location.protocol.replace('http', 'ws')}//${window.location.hostname}:${window.location.port}/api/ws`;
 
         const client = Stomp.client(websocketUrl);
@@ -131,7 +133,7 @@ export default () => {
         client.onConnect = () => {
             subscription = client.subscribe('/topic/snitch', message => {
                 const reqres = JSON.parse(message.body);
-                setRequests(state => [...state, reqres]);
+                setRequests(state => [reqres, ...state]);
             });
         };
         client.onStompError = error => {
