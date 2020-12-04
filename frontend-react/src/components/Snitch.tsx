@@ -36,7 +36,7 @@ function decodeBody(value: string | null) {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
     } else {
-        return null
+        return ''
     }
 }
 
@@ -72,6 +72,20 @@ function Summary(props: SummaryProps) {
     );
 }
 
+interface PayloadBodyProps {
+    payload: Payload
+}
+function PayloadBody(props: PayloadBodyProps) {
+    const message = props.payload;
+
+    const contentType: string | null = message.contentType;
+
+    switch (contentType) {
+        case 'application/json': return <pre>{JSON.stringify(JSON.parse(decodeBody(message.content)), null, '  ')}</pre>;
+        default: return <pre>{decodeBody(message.content)}</pre>;
+    }
+}
+
 interface PayloadProps {
     title: string,
     message: Payload
@@ -94,7 +108,7 @@ function Payload(props: PayloadProps) {
                 </dl>
             </Card.Body>
             <Card.Body>
-                <pre>{decodeBody(message.content)}</pre>
+                <PayloadBody payload={message} />
             </Card.Body>
         </Card>
     );
