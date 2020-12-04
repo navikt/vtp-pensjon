@@ -2,6 +2,7 @@ import React, {CSSProperties, useEffect, useState} from 'react';
 import {Stomp, StompSubscription} from '@stomp/stompjs';
 import {DateTimeFormatter, LocalDateTime, Month} from '@js-joda/core';
 import {Card, Col, Container, Row, Table} from "react-bootstrap";
+import xmlFormatter from 'xml-formatter';
 
 interface Payload {
     headers: Map<string, string[]>;
@@ -82,6 +83,7 @@ function PayloadBody(props: PayloadBodyProps) {
 
     switch (contentType) {
         case 'application/json': return <pre>{JSON.stringify(JSON.parse(decodeBody(message.content)), null, '  ')}</pre>;
+        case 'application/xml': return <pre>{xmlFormatter(decodeBody(message.content))}</pre>;
         default: return <pre>{decodeBody(message.content)}</pre>;
     }
 }
