@@ -17,16 +17,4 @@ class WebMvcConfiguration : WebMvcConfigurer {
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(HandlerToResponseHeaderInterceptor())
     }
-
-    // Typical Single-Page App configuration: handle not found (404) by returning the index.html page.
-    override fun addViewControllers(registry: ViewControllerRegistry) {
-        registry.addViewController("/notFound").setStatusCode(HttpStatus.OK).setViewName("forward:/index.html")
-    }
-    @Bean
-    fun containerCustomizer(): WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
-        return WebServerFactoryCustomizer { container ->
-            container.addErrorPages(ErrorPage(HttpStatus.NOT_FOUND,
-                    "/notFound"))
-        }
-    }
 }
