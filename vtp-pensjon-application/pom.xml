@@ -118,7 +118,7 @@
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>frontend</artifactId>
+            <artifactId>frontend-react</artifactId>
             <scope>provided</scope>
        </dependency>
         <dependency>
@@ -209,7 +209,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>no.nav.pensjon.vtp</groupId>
-                                    <artifactId>frontend</artifactId>
+                                    <artifactId>frontend-react</artifactId>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.outputDirectory}</outputDirectory>

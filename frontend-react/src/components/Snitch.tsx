@@ -105,16 +105,16 @@ export default () => {
     const [selectedRequest, setSelectedRequest] = useState<RequestResponse | null>(null);
 
     useEffect(() => {
-        console.log('Running effect');
+        const websocketUrl = `${window.location.protocol.replace('http', 'ws')}//${window.location.hostname}:${window.location.port}/api/ws`;
 
-        const url = 'ws://localhost:8060/api/ws';
-        const client = Stomp.client(url);
+        const client = Stomp.client(websocketUrl);
+
+        client.debug = () => {}; // do nothing
 
         let subscription: StompSubscription;
         client.onConnect = () => {
             subscription = client.subscribe('/topic/snitch', message => {
                 const reqres = JSON.parse(message.body);
-                console.log('got reqres', reqres);
                 setRequests(state => [...state, reqres]);
             });
         };

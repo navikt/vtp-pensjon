@@ -1,6 +1,9 @@
 module.exports = {
     proxy: {
-        "/api": "http://localhost:8060/api"
+        "/api": {
+            target: "http://localhost:8061/",
+            ws: true
+        }
     },
     plugins: [
         "@snowpack/plugin-typescript",

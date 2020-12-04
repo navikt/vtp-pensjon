@@ -1,27 +1,94 @@
-import React, { useEffect, useState } from 'react';
-import {Container, InputGroup, Form, Button} from "react-bootstrap";
+import React, {useEffect, useReducer, useState} from 'react';
+import {Button, Card, Container, Form, InputGroup} from "react-bootstrap";
 
-export interface TestScenarioTemplate {
+interface TestScenarioTemplate {
     key: string
     navn: string
 }
+interface TestScenario {
+    id: string
+    templateKey?: string
+    templateNavn?: string
+    testscenarioId?: string
+    personopplysninger?: any
+}
 
-async function fetchScenarios(): Promise<TestScenarioTemplate[]> {
+
+interface TestScenarioState {
+    templatesLoading: boolean
+    templates: TestScenarioTemplate[],
+    scenariosLoading: boolean,
+    scenarios: TestScenario[]
+}
+type TestscenarioAction = {
+    type: 'TEMPLATES_LOADING'
+} | {
+    type: 'TEMPLATES_LOADED'
+    templates: TestScenarioTemplate[]
+} | {
+    type: 'SCENARIOS_LOADING'
+} | {
+    type: 'SCENARIOS_LOADED',
+    scenarios: TestScenario[]
+}
+
+const initialState: TestScenarioState = {
+    templatesLoading: false,
+    templates: [],
+    scenariosLoading: false,
+    scenarios: []
+};
+
+function reducer(state: TestScenarioState, action: TestscenarioAction): TestScenarioState {
+    switch (action.type) {
+        case 'TEMPLATES_LOADING': return {
+            ...state,
+            templatesLoading: true
+        };
+        case 'TEMPLATES_LOADED': return {
+            ...state,
+            templatesLoading: false,
+            templates: action.templates
+        };
+        case 'SCENARIOS_LOADING': return {
+            ...state,
+            scenariosLoading: true
+        };
+        case 'SCENARIOS_LOADED': return {
+            ...state,
+            scenariosLoading: false,
+            scenarios: action.scenarios
+        };
+        default: return state;
+    }
+}
+
+async function fetchTemplates(): Promise<TestScenarioTemplate[]> {
     const response = await fetch('/api/testscenario/templates');
     return response.json();
 }
 
-async function createScenario(scenario: string): Promise<void> {
-    const response = await fetch('/api/testscenarios/' + scenario, { method: 'post' });
+async function fetchScenarios(): Promise<TestScenario[]> {
+    const response = await fetch('/api/testscenarios');
     return response.json();
 }
 
+async function createScenario(templateId: string): Promise<void> {
+    const response = await fetch('/api/testscenarios/' + templateId, { method: 'post' });
+    return response.json();
+}
+
+async function deleteScenario(scenarioId: string): Promise<void> {
+    await fetch('/api/testscenarios/' + scenarioId, { method: 'delete' });
+}
+
 interface ScenarioChooserProps {
-    scenarios: TestScenarioTemplate[]
+    templates: TestScenarioTemplate[]
     onCreate: (key: string) => void
 }
+
 function ScenarioChooser(props: ScenarioChooserProps) {
-    const { scenarios, onCreate } = props;
+    const { templates, onCreate } = props;
     const [selectedScenario, setSelectedScenario] = useState<string | null>(null);
     return (
         <InputGroup className="mb-3">
@@ -30,9 +97,9 @@ function ScenarioChooser(props: ScenarioChooserProps) {
                     Template
                 </InputGroup.Text>
             </InputGroup.Prepend>
-            <Form.Control as="select" onChange={ev => setSelectedScenario(ev.target.value)}>
+            <Form.Control as="select" onChange={ev => setSelectedScenario(ev.target.value)} defaultValue="...">
                 <option disabled>...</option>
-                {scenarios.map(s => <option key={s.key} value={s.key}>{s.navn}</option>)}
+                {templates.map(tmpl => <option key={tmpl.key} value={tmpl.key}>{tmpl.navn}</option>)}
             </Form.Control>
             <InputGroup.Append>
                 <Button variant="outline-secondary" disabled={selectedScenario == null} onClick={() => selectedScenario != null && onCreate(selectedScenario)}>
@@ -43,18 +110,65 @@ function ScenarioChooser(props: ScenarioChooserProps) {
     );
 }
 
-export default () => {
-    const [scenarios, setScenarios] = useState<TestScenarioTemplate[]>([]);
+interface ActiveScenarioProps {
+    scenario: TestScenario,
+    onDelete: () => any
+}
+function ActiveScenarios(props: ActiveScenarioProps) {
+    const { scenario, onDelete } = props;
+    return (
+        <Card>
+            <Card.Header>
+                {scenario.templateNavn} <Button size="sm" variant="danger" className="float-right" onClick={onDelete}>Delete</Button>
+            </Card.Header>
+            <Card.Body>
+                <Card.Title>Åpne i PSAK</Card.Title>
 
+                    <ul>
+                        <li>
+                            <a href={"http://localhost:9080/psak/brukeroversikf/fnr=" + scenario.personopplysninger?.søkerIdent}>{scenario.personopplysninger?.søkerIdent}</a>
+                        </li>
+                    </ul>
+
+            </Card.Body>
+            <Card.Body>
+                <Card.Title>Body</Card.Title>
+                <div style={{ overflowY: 'scroll', height: '500px' }}>
+
+                    <pre>{JSON.stringify(scenario, null, '  ')}</pre>
+
+                </div>
+            </Card.Body>
+        </Card>
+    );
+}
+
+export default () => {
+    const [state, dispatch] = useReducer(reducer, initialState);
+
+    async function handleCreateScenario(templateKey: string) {
+        await createScenario(templateKey);
+        const scenarios = await fetchScenarios();
+        dispatch({ type: 'SCENARIOS_LOADED', scenarios });
+    }
+
+    async function handleDelete(id: string) {
+        await deleteScenario(id);
+        const scenarios = await fetchScenarios();
+        dispatch({ type: 'SCENARIOS_LOADED', scenarios });
+    }
 
     useEffect(() => {
-        fetchScenarios().then(data => setScenarios(data));
+        dispatch({type: 'TEMPLATES_LOADING'});
+        fetchTemplates().then((templates) => dispatch({ type: 'TEMPLATES_LOADED', templates }));
+        fetchScenarios().then(scenarios => dispatch({ type: 'SCENARIOS_LOADED', scenarios }));
         return () => {}
     }, []);
 
     return (
         <Container  style={{ paddingTop: '12px' }}>
-            <ScenarioChooser scenarios={scenarios} onCreate={createScenario} />
+            <ScenarioChooser templates={state.templates} onCreate={handleCreateScenario} />
+            {state.scenarios.map(scenario => <ActiveScenarios key={scenario.id} scenario={scenario} onDelete={() => handleDelete(scenario.id)}/>)}
         </Container>
     );
 }

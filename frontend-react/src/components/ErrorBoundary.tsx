@@ -7,12 +7,7 @@ type ErrorState = {
     hasError: true,
     error: Error
 }
-/*
-interface ErrorState {
-    hasError: boolean,
-    error: Error | null
-}
- */
+
 export default class ErrorBoundary extends React.Component<{}, ErrorState> {
     constructor(props: {}) {
         super(props);
