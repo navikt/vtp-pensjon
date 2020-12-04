@@ -1,7 +1,7 @@
 module.exports = {
     proxy: {
         "/api": {
-            target: "http://localhost:8061/",
+            target: "http://localhost:8060/",
             ws: true
         }
     },
