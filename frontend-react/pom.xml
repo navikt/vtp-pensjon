@@ -75,7 +75,7 @@
                             <outputDirectory>${project.build.outputDirectory}/public</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/dist/vtp-pensjon</directory>
+                                    <directory>${project.basedir}/build</directory>
                                 </resource>
                             </resources>
                         </configuration>

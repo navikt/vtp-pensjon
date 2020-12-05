@@ -1,37 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { Stomp } from '@stomp/stompjs';
+import React, {CSSProperties, useEffect, useState} from 'react';
+import {Stomp, StompSubscription} from '@stomp/stompjs';
 import {DateTimeFormatter, LocalDateTime, Month} from '@js-joda/core';
 import {Card, Col, Container, Row, Table} from "react-bootstrap";
+import xmlFormatter from 'xml-formatter';
 
-function parseDate(input): LocalDateTime {
-    return LocalDateTime.parse(input);
-    /*
-    return LocalDateTime.of(
-        input.year,
-        input.monthValue,
-        input.dayOfMonth,
-        input.hour,
-        input.minute,
-        input.second,
-        input.nano
-    );
-     */
+interface Payload {
+    headers: Map<string, string[]>;
+    contentType: string | null;
+    contentLength: number | null;
+    content: string | null;
 }
 
-function decodeBody(value) {
+interface RequestResponse {
+    id: string;
+    timestamp: string;
+    path: string;
+    url: string;
+    method: string;
+    status: number;
+    handler: string | null;
+    exception: string | null;
+    stackTrace: string | null;
+
+    request: Payload;
+
+    response: Payload;
+}
+
+function parseDate(input: string): LocalDateTime {
+    return LocalDateTime.parse(input);
+}
+
+function decodeBody(value: string | null) {
     if (value != null) {
         return  decodeURIComponent(atob(value).split('').map(function(c) {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
     } else {
-        return null
+        return ''
     }
 }
 
 const dateFormatter = DateTimeFormatter.ofPattern('HH:mm:ss.SSS');
 
-function Summary({request}) {
-return (
+interface SummaryProps {
+    request: RequestResponse
+}
+function Summary(props: SummaryProps) {
+    const { request } = props;
+    return (
         <Card>
             <div className="card-header">
                 {request.method} {request.path}
@@ -56,7 +73,27 @@ return (
     );
 }
 
-function Payload({ title, message }) {
+interface PayloadBodyProps {
+    payload: Payload
+}
+function PayloadBody(props: PayloadBodyProps) {
+    const message = props.payload;
+
+    const contentType: string | null = message.contentType;
+
+    switch (contentType) {
+        case 'application/json': return <pre>{JSON.stringify(JSON.parse(decodeBody(message.content)), null, '  ')}</pre>;
+        case 'application/xml': return <pre>{xmlFormatter(decodeBody(message.content))}</pre>;
+        default: return <pre>{decodeBody(message.content)}</pre>;
+    }
+}
+
+interface PayloadProps {
+    title: string,
+    message: Payload
+}
+function Payload(props: PayloadProps) {
+    const { title, message } = props;
     return (
         <Card>
             <div className="card-header">
@@ -73,28 +110,30 @@ function Payload({ title, message }) {
                 </dl>
             </Card.Body>
             <Card.Body>
-                <pre>{decodeBody(message.content)}</pre>
+                <PayloadBody payload={message} />
             </Card.Body>
         </Card>
     );
 }
 
 export default () => {
-    const [requests, setRequests] = useState([]);
-    const [selectedRequest, setSelectedRequest] = useState(null);
+    const [requests, setRequests] = useState<RequestResponse[]>([]);
+    const [selectedRequest, setSelectedRequest] = useState<RequestResponse | null>(null);
 
     useEffect(() => {
-        console.log('Running effect');
+        fetch('/data/requestResponses').then(response => response.json()).then(result => setRequests(state => [...state, ...result._embedded.requestResponses.reverse()]));
 
-        const url = 'ws://localhost:8060/api/ws';
-        const client = Stomp.client(url);
+        const websocketUrl = `${window.location.protocol.replace('http', 'ws')}//${window.location.hostname}:${window.location.port}/api/ws`;
 
-        let subscription;
+        const client = Stomp.client(websocketUrl);
+
+        client.debug = () => {}; // do nothing
+
+        let subscription: StompSubscription;
         client.onConnect = () => {
             subscription = client.subscribe('/topic/snitch', message => {
                 const reqres = JSON.parse(message.body);
-                console.log('got reqres', reqres);
-                setRequests(state => [...state, reqres]);
+                setRequests(state => [reqres, ...state]);
             });
         };
         client.onStompError = error => {
@@ -108,7 +147,7 @@ export default () => {
             client.deactivate();
         }
     }, []);
-    const scrollable = {
+    const scrollable: CSSProperties = {
         overflowX: 'scroll',
         height: 'calc(100vh - 70px)'
     };

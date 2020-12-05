@@ -24,6 +24,7 @@
 
     <modules>
         <module>frontend</module>
+        <module>frontend-react</module>
         <module>core</module>
         <module>model</module>
         <module>mocks</module>
@@ -260,7 +261,7 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>frontend</artifactId>
+                <artifactId>frontend-react</artifactId>
                 <scope>provided</scope>
                 <version>${project.version}</version>
             </dependency>

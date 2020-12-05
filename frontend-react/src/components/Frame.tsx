@@ -2,7 +2,10 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import {Navbar, Nav, Button, FormControl, Form, NavDropdown} from "react-bootstrap";
 
-export default props => (
+interface Props {
+    children?: React.ReactNode
+}
+export default (props: Props) => (
     <><Navbar variant="dark" bg="dark" expand="lg">
         <Navbar.Brand href="/">VTP Pensjon</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
