@@ -3,6 +3,10 @@ module.exports = {
         "/api": {
             target: "http://localhost:8060/",
             ws: true
+        },
+        "/data": {
+            target: "http://localhost:8060/",
+            ws: false
         }
     },
     plugins: [
