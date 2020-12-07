@@ -11,12 +11,24 @@ import java.lang.reflect.Method
  * IntelliJ console identifies and creates into a link.
  */
 fun description(method: Method): String {
-    val classpool = ClassPool.getDefault();
-    classpool.appendClassPath(LoaderClassPath(currentThread().contextClassLoader));
+    try {
+        val classpool = ClassPool.getDefault();
+        classpool.appendClassPath(LoaderClassPath(currentThread().contextClassLoader));
 
-    val cc: CtClass = classpool.get(method.declaringClass.canonicalName)
+        val declaringClass = method.declaringClass
 
-    val javassistMethod = cc.getDeclaredMethod(method.name)
-    val linenumber = javassistMethod.methodInfo.getLineNumber(0)
-    return "${method.declaringClass.canonicalName}.${method.name}(${javassistMethod.declaringClass.classFile.sourceFile}:$linenumber)"
+        val name: String = if (declaringClass.isMemberClass) {
+            val index = declaringClass.canonicalName.lastIndexOf(".")
+            declaringClass.canonicalName.replaceRange(index, index + 1, "$")
+        } else {
+            declaringClass.canonicalName
+        }
+        val cc: CtClass = classpool.get(name)
+
+        val javassistMethod = cc.getDeclaredMethod(method.name)
+        val linenumber = javassistMethod.methodInfo.getLineNumber(0)
+        return "${declaringClass.canonicalName}.${method.name}(${javassistMethod.declaringClass.classFile.sourceFile}:$linenumber)"
+    } catch (e: Exception) {
+        return method.toString()
+    }
 }
