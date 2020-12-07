@@ -23,7 +23,6 @@
     </scm>
 
     <modules>
-        <module>frontend</module>
         <module>frontend-react</module>
         <module>core</module>
         <module>model</module>
