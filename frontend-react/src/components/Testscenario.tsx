@@ -157,7 +157,7 @@ function ActiveScenarios(props: ActiveScenarioProps) {
           <li>
             <a
               href={
-                "http://localhost:9080/psak/brukeroversikf/fnr=" +
+                "http://localhost:9080/psak/brukeroversikt/fnr=" +
                 scenario.personopplysninger?.søkerIdent
               }
             >

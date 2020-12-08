@@ -97,6 +97,10 @@ function Summary(props: SummaryProps) {
             </>
           )}
         </dl>
+        {request.stackTrace != null && <>
+          <h5>Stacktrace</h5>
+          <pre>{request.stackTrace}</pre>
+        </>}
       </Card.Body>
     </Card>
   );
