@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "snowpack dev",
+    "lint": "prettier --check .",
     "build": "snowpack build"
   },
   "author": "",

@@ -42,6 +42,22 @@
                     </execution>
 
                     <execution>
+                        <id>lint</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <skip>${frontend.skip}</skip>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>lint</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
                         <id>npm build</id>
                         <goals>
                             <goal>exec</goal>
