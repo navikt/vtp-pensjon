@@ -1,10 +1,11 @@
 import React, {useEffect, useReducer, useState} from 'react';
-import {Button, Card, Container, Form, InputGroup} from "react-bootstrap";
+import {Button, Card, Container, InputGroup} from "react-bootstrap";
 
 interface TestScenarioTemplate {
     key: string
     navn: string
 }
+
 interface TestScenario {
     id: string
     templateKey?: string
@@ -13,13 +14,13 @@ interface TestScenario {
     personopplysninger?: any
 }
 
-
 interface TestScenarioState {
     templatesLoading: boolean
     templates: TestScenarioTemplate[],
     scenariosLoading: boolean,
     scenarios: TestScenario[]
 }
+
 type TestscenarioAction = {
     type: 'TEMPLATES_LOADING'
 } | {
@@ -92,15 +93,10 @@ function ScenarioChooser(props: ScenarioChooserProps) {
     const [selectedScenario, setSelectedScenario] = useState<string | null>(null);
     return (
         <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-                <InputGroup.Text>
-                    Template
-                </InputGroup.Text>
-            </InputGroup.Prepend>
-            <Form.Control as="select" onChange={ev => setSelectedScenario(ev.target.value)} defaultValue="...">
+            <select className="custom-select" onChange={ev => setSelectedScenario(ev.target.value)} defaultValue="...">
                 <option disabled>...</option>
                 {templates.map(tmpl => <option key={tmpl.key} value={tmpl.key}>{tmpl.navn}</option>)}
-            </Form.Control>
+            </select>
             <InputGroup.Append>
                 <Button variant="outline-secondary" disabled={selectedScenario == null} onClick={() => selectedScenario != null && onCreate(selectedScenario)}>
                     Create
@@ -123,13 +119,11 @@ function ActiveScenarios(props: ActiveScenarioProps) {
             </Card.Header>
             <Card.Body>
                 <Card.Title>Åpne i PSAK</Card.Title>
-
                     <ul>
                         <li>
                             <a href={"http://localhost:9080/psak/brukeroversikf/fnr=" + scenario.personopplysninger?.søkerIdent}>{scenario.personopplysninger?.søkerIdent}</a>
                         </li>
                     </ul>
-
             </Card.Body>
             <Card.Body>
                 <Card.Title>Body</Card.Title>
