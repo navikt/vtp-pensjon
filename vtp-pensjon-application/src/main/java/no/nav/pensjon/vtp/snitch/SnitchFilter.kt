@@ -63,9 +63,9 @@ class SnitchFilter(
 
                 responseWrapper.copyBodyToResponse()
             } catch (e: Exception) {
-                val pw = PrintWriter(StringWriter())
-                e.printStackTrace(pw)
-                requestResponseRepository.save(requestResponse(requestWrapper, responseWrapper).copy(exception = e.message, stackTrace = pw.toString()))
+                val stringWriter = StringWriter()
+                e.printStackTrace(PrintWriter(stringWriter))
+                requestResponseRepository.save(requestResponse(requestWrapper, responseWrapper).copy(exception = e.message, stackTrace = stringWriter.toString()))
                 throw e
             }
         } else {

@@ -5,10 +5,10 @@ import io.swagger.annotations.ApiOperation
 import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
-import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.apache.http.client.utils.URIBuilder
 import org.slf4j.LoggerFactory
-import org.springframework.http.MediaType
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.http.MediaType.TEXT_HTML_VALUE
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.badRequest
 import org.springframework.http.ResponseEntity.ok
@@ -22,24 +22,24 @@ import javax.servlet.http.HttpServletResponse
 @Api(tags = ["AzureAd"])
 @RequestMapping("/rest/AzureAd")
 class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private val jsonWebKeySupport: JsonWebKeySupport) {
-    @GetMapping(value = ["/isAlive"], produces = [MediaType.TEXT_HTML_VALUE])
+    @GetMapping(value = ["/isAlive"], produces = [TEXT_HTML_VALUE])
     fun isAliveMock() = ok("Azure AD is OK")
 
-    @GetMapping(value = ["/{tenant}/v2.0/.well-known/openid-configuration"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(value = ["/{tenant}/v2.0/.well-known/openid-configuration"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "Azure AD Discovery url", notes = "Mock impl av Azure AD discovery urlen. ")
     fun wellKnown(req: HttpServletRequest, @PathVariable("tenant") tenant: String, @RequestParam("p") profile: String?) =
-            ok(WellKnownResponse(
+            WellKnownResponse(
                     baseUrl = getBaseUrl(req),
                     graphUrl = getGraphUrl(req),
                     tenant = tenant,
                     profile = profile
-            ))
+            )
 
-    @GetMapping(value = ["/{tenant}/discovery/v2.0/keys"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(value = ["/{tenant}/discovery/v2.0/keys"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "azureAd/discovery/keys", notes = "Mock impl av Azure AD jwk_uri")
-    fun authorize() = ok(jsonWebKeySupport.jwks())
+    fun authorize() = jsonWebKeySupport.jwks()
 
-    @PostMapping(value = ["/{tenant}/oauth2/v2.0/token"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(value = ["/{tenant}/oauth2/v2.0/token"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "azureAd/access_token", notes = "Mock impl av Azure AD access_token")
     fun accessToken(
             req: HttpServletRequest,
@@ -54,7 +54,7 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
         return when (grantType) {
             "authorization_code" -> {
                 val token = createIdToken(code, tenant, clientId)
-                LOG.info("kall på /oauth2/access_token, opprettet token: $token med redirect-url: $redirectUri")
+                logger.info("kall på /oauth2/access_token, opprettet token: $token med redirect-url: $redirectUri")
                 ok(Oauth2AccessTokenResponse(idToken = token, refreshToken = "refresh:$code", accessToken = "access:$code"))
             }
             "refresh_token" -> {
@@ -63,13 +63,13 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
                 } else {
                     val usernameWithNonce = refreshToken.substring(8)
                     val token = createIdToken(usernameWithNonce /*+ ";"*/, tenant, clientId)
-                    LOG.info("Fikk parametere:" + req.parameterMap.toString())
-                    LOG.info("refresh-token-kall på /oauth2/access_token, opprettet nytt token: $token")
+                    logger.info("Fikk parametere:" + req.parameterMap.toString())
+                    logger.info("refresh-token-kall på /oauth2/access_token, opprettet nytt token: $token")
                     ok(Oauth2AccessTokenResponse(idToken = token, refreshToken = "refresh:$usernameWithNonce", accessToken = "access:$usernameWithNonce"))
                 }
             }
             else -> {
-                LOG.error("Unknown grant_type $grantType")
+                logger.error("Unknown grant_type $grantType")
                 badRequest().body("Unknown grant_type $grantType")
             }
         }
@@ -77,7 +77,7 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
 
     private fun createIdToken(code: String, tenant: String, clientId: String): String {
         val codeData = code.split(";".toRegex()).toTypedArray()
-        val user = ansatteIndeks.hentNAVAnsatt(codeData[0]).orElseThrow { RuntimeException("Fant ikke NAV-ansatt med brukernavn ${codeData[0]}") }
+        val user = ansatteIndeks.findByCn(codeData[0]) ?: throw RuntimeException("Fant ikke NAV-ansatt med brukernavn ${codeData[0]}")
 
         return azureOidcToken(
                 jsonWebKeySupport = jsonWebKeySupport,
@@ -104,7 +104,7 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
     // &state=PpZ9uI3drAWm7vfLM1rvb-ev4fvzc9RmHqQxW725wWE
     // &nonce=xJDu2DjmaiFY8ivIakELFLVZDY6OivuE1GAUJ0fIEf0
     // &prompt=select_account
-    @GetMapping(value = ["/{tenant}/v2.0/authorize"], produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE])
+    @GetMapping(value = ["/{tenant}/v2.0/authorize"], produces = [APPLICATION_JSON_VALUE, TEXT_HTML_VALUE])
     @ApiOperation(value = "AzureAD/v2.0/authorize", notes = "Mock impl av Azure AD authorize")
     @Throws(Exception::class)
     fun authorize(
@@ -117,8 +117,8 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
             @RequestParam("state") state: String,
             @RequestParam("nonce") nonce: String,
             @RequestParam("redirect_uri") redirectUri: String
-    ): ResponseEntity<*> {
-        LOG.info("kall mot AzureAD authorize med redirecturi $redirectUri")
+    ): String {
+        logger.info("kall mot AzureAD authorize med redirecturi $redirectUri")
 
         val validScopes = Arrays.asList("openid", "profile", "offline_access")
         val scopes = scope.split("\\s+".toRegex()).toTypedArray()
@@ -127,23 +127,26 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
             require(validScopes.contains(it)) { "Unsupported scope [$it], supported scopes are: ${validScopes.joinToString(separator = ", ")}" }
         }
 
-        Objects.requireNonNull(responseType, "Missing the ?responseType=xxx query parameter")
         require(responseType == "code") { "Unsupported responseType [$responseType], should be 'code'" }
-        Objects.requireNonNull(clientId, "Missing the ?client_id=xxx query parameter")
-        Objects.requireNonNull(state, "Missing the ?state=xxx query parameter")
-        Objects.requireNonNull(redirectUri, "Missing the ?redirect_uri=xxx query parameter")
-        val uriBuilder = URIBuilder(redirectUri)
-        uriBuilder.addParameter("scope", scope)
-        uriBuilder.addParameter("state", state)
-        uriBuilder.addParameter("client_id", clientId)
-        val issuer = getIssuer(tenant)
-        uriBuilder.addParameter("iss", issuer)
-        uriBuilder.addParameter("redirect_uri", redirectUri)
+
+        val uriBuilder = URIBuilder(redirectUri).apply {
+            addParameter("scope", scope)
+            addParameter("state", state)
+            addParameter("client_id", clientId)
+            addParameter("iss", getIssuer(tenant))
+            addParameter("redirect_uri", redirectUri)
+        }
         return authorizeHtmlPage(uriBuilder, nonce)
     }
 
-    private fun authorizeHtmlPage(location: URIBuilder, nonce: String): ResponseEntity<*> {
-        val html = ("""<!DOCTYPE html>
+    private fun authorizeHtmlPage(location: URIBuilder, nonce: String): String {
+        val userRows = ansatteIndeks.findAll()
+                .sortedBy { it.displayName }
+                .joinToString(separator = "\n                ") {
+                    """<tr><a href="$location&code=${it.cn};$nonce"><h1>${it.displayName}</h1></a></tr>""".trimIndent()
+                }
+
+        return """<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -154,23 +157,12 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
        <caption><h3>Velg bruker:</h3></caption>
         <table>
             <tbody>
-""" +
-                ansatteIndeks.hentAlleAnsatte()
-                        .sorted(Comparator.comparing { obj: NAVAnsatt -> obj.getDisplayName() })
-                        .map { username: NAVAnsatt ->
-                            """
-     <tr><a href="$location&code=${username.cn};$nonce"><h1>${username.displayName}</h1></a></tr>
-     
-     """.trimIndent()
-                        }
-                        .collect(Collectors.joining("\n"))
-                +
-                "            </tbody>\n" +
-                "        </table>\n" +
-                "    </div>\n" +
-                "</body>\n" +
-                "</html>")
-        return ok(html)
+                $userRows
+            </tbody>
+        </table>
+    </div>
+    </body>
+</html>"""
     }
 
     private fun getBaseUrl(req: HttpServletRequest): String {
@@ -186,6 +178,6 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
     }
 
     companion object {
-        private val LOG = LoggerFactory.getLogger(AzureAdNAVAnsattService::class.java)
+        private val logger = LoggerFactory.getLogger(AzureAdNAVAnsattService::class.java)
     }
 }

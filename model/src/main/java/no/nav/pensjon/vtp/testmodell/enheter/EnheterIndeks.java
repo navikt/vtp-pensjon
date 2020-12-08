@@ -1,11 +1,8 @@
 package no.nav.pensjon.vtp.testmodell.enheter;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+
+import static java.util.stream.Collectors.toSet;
 
 public class EnheterIndeks {
 
@@ -21,6 +18,14 @@ public class EnheterIndeks {
 
     public Collection<Norg2Modell> getAlleEnheter() {
         return Collections.unmodifiableCollection(byDiskresjonskode.values());
+    }
+
+    public Set<Norg2Modell> findByEnhetIdIn(Collection<String> enhetIds) {
+        return enhetIds
+                .stream()
+                .map(this::finnByEnhetId)
+                .flatMap(Optional::stream)
+                .collect(toSet());
     }
 
     public Optional<Norg2Modell> finnByEnhetId(String enhetId) {

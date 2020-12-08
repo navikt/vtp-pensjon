@@ -29,7 +29,7 @@ object BasisdataProviderFileImpl {
 
     fun loadAnsatte(): AnsatteIndeks {
         val ansatteIndeks = AnsatteIndeks()
-        ansatteIndeks.leggTil(mapper.readValue(javaClass.getResource("/basedata/navansatte.json").openStream()))
+        ansatteIndeks.saveAll(mapper.readValue(javaClass.getResource("/basedata/navansatte.json").openStream()))
         return ansatteIndeks
     }
 

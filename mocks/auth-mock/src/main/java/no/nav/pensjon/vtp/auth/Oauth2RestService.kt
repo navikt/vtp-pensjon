@@ -8,16 +8,15 @@ import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.apache.http.client.utils.URIBuilder
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
+import org.springframework.http.HttpStatus.*
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.http.MediaType.TEXT_HTML_VALUE
 import org.springframework.http.ResponseEntity
-import org.springframework.http.ResponseEntity.badRequest
-import org.springframework.http.ResponseEntity.ok
+import org.springframework.http.ResponseEntity.*
 import org.springframework.web.bind.annotation.*
 import java.net.URISyntaxException
 import java.util.*
 import java.util.UUID.randomUUID
-import java.util.stream.Collectors
 import javax.servlet.http.HttpServletRequest
 
 @RestController
@@ -28,7 +27,7 @@ class Oauth2RestService(private val ansatteIndeks: AnsatteIndeks, private val js
     private val nonceCache: MutableMap<String, String> = HashMap()
     private val clientIdCache: MutableMap<String, String> = HashMap()
 
-    @GetMapping(value = ["/oauth2/authorize"], produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE])
+    @GetMapping(value = ["/oauth2/authorize"], produces = [APPLICATION_JSON_VALUE, TEXT_HTML_VALUE])
     @ApiOperation(value = "oauth2/authorize", notes = "Mock impl av Oauth2 authorize")
     @Throws(URISyntaxException::class)
     fun authorize(
@@ -43,8 +42,6 @@ class Oauth2RestService(private val ansatteIndeks: AnsatteIndeks, private val js
             @RequestParam redirect_uri: String,
             @RequestParam(required = false) nonce: String?
     ): ResponseEntity<*> {
-        logger.info("kall mot oauth2/authorize med redirecturi $redirect_uri")
-
         require(scope == "openid") { "Unsupported scope [$scope], should be 'openid'" }
         require(responseType == "code") { "Unsupported responseType [$responseType], should be 'code'" }
 
@@ -60,7 +57,7 @@ class Oauth2RestService(private val ansatteIndeks: AnsatteIndeks, private val js
         }
         val acceptHeader: String? = req.getHeader("Accept-Header")
         return if ((null == req.contentType || req.contentType == "text/html") && (acceptHeader == null || !acceptHeader.contains("json"))) {
-            authorizeHtmlPage(uriBuilder)
+            ok(authorizeHtmlPage(uriBuilder))
         } else {
             authorizeRedirect(uriBuilder)
         }
@@ -70,11 +67,17 @@ class Oauth2RestService(private val ansatteIndeks: AnsatteIndeks, private val js
     private fun authorizeRedirect(location: URIBuilder): ResponseEntity<*> {
         // SEND JSON RESPONSE TIL OPENAM HELPER
         location.addParameter("code", "im-just-a-fake-code")
-        return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(location.build()).build<Any>()
+        return status(TEMPORARY_REDIRECT).location(location.build()).build<Any>()
     }
 
-    private fun authorizeHtmlPage(location: URIBuilder): ResponseEntity<*> {
-        val html = ("""<!DOCTYPE html>
+    private fun authorizeHtmlPage(location: URIBuilder): String {
+        val users = ansatteIndeks.findAll()
+                .sortedBy { it.displayName }
+                .joinToString(separator = "\n                ") { username: NAVAnsatt ->
+                    """<tr><a href="$location&code=${username.cn}"><h1>${username.displayName}</h1></a></tr>"""
+                }
+
+        return """<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -85,27 +88,16 @@ class Oauth2RestService(private val ansatteIndeks: AnsatteIndeks, private val js
        <caption><h3>Velg bruker:</h3></caption>
         <table>
             <tbody>
-""" +
-                ansatteIndeks.hentAlleAnsatte()
-                        .sorted(Comparator.comparing { obj: NAVAnsatt -> obj.getDisplayName() })
-                        .map { username: NAVAnsatt ->
-                            """
-     <tr><a href="$location&code=${username.cn}"><h1>${username.displayName}</h1></a></tr>
-     
-     """.trimIndent()
-                        }
-                        .collect(Collectors.joining("\n"))
-                +
-                "            </tbody>\n" +
-                "        </table>\n" +
-                "    </div>\n" +
-                "</body>\n" +
-                "</html>")
-        return ok(html)
+                $users
+            </tbody>
+        </table>
+    </div>
+    </body>
+</html>"""
     }
 
     // TODO (FC): Trengs denne fortsatt?
-    @PostMapping(value = ["/oauth2/access_token"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(value = ["/oauth2/access_token"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "oauth2/access_token", notes = "Mock impl av Oauth2 access_token")
     fun accessToken(
             req: HttpServletRequest,
@@ -115,36 +107,34 @@ class Oauth2RestService(private val ansatteIndeks: AnsatteIndeks, private val js
             @RequestParam(required = false) refresh_token: String?,
             @RequestParam redirect_uri: String
     ): ResponseEntity<*> {
-        return if ("authorization_code" == grant_type) {
-            val token = createIdToken(req, code)
-            logger.info("Fikk parametere:" + req.parameterMap.toString())
-            logger.info("kall på /oauth2/access_token, opprettet token: $token med redirect-url: $redirect_uri")
-            val generatedRefreshToken = "refresh:$code"
-            val generatedAccessToken = "access:$code"
-            val oauthResponse = Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken)
-            ok(oauthResponse)
-        } else if ("refresh_token" == grant_type) {
-            if (refresh_token == null) {
-                badRequest().body("Missing required parameter 'request_token'")
-            } else {
-                if (!refresh_token.startsWith("refresh:")) {
-                    val message = "Invalid refresh token $refresh_token"
-                    logger.error(message)
-                    ResponseEntity.status(HttpStatus.FORBIDDEN).body(message)
-                } else {
-                    val username = refresh_token.substring(8)
-                    val token = createIdToken(req, username)
-                    logger.info("Fikk parametere:" + req.parameterMap.toString())
-                    logger.info("refresh-token-kall på /oauth2/access_token, opprettet nytt token: $token")
-                    val generatedRefreshToken = "refresh:$username"
-                    val generatedAccessToken = "access:$username"
-                    val oauthResponse = Oauth2AccessTokenResponse(token, generatedRefreshToken, generatedAccessToken)
-                    ok(oauthResponse)
-                }
+        return when (grant_type) {
+            "authorization_code" -> {
+                ok(Oauth2AccessTokenResponse(
+                        idToken = createIdToken(req, code),
+                        refreshToken = "refresh:$code",
+                        accessToken = "access:$code"))
             }
-        } else {
-            logger.error("Unknown grant_type $grant_type")
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown grant_type $grant_type")
+            "refresh_token" -> {
+                return refresh_token
+                        ?.let {
+                            if (!refresh_token.startsWith("refresh:")) {
+                                status(FORBIDDEN).body("Invalid refresh token $refresh_token")
+                            } else {
+                                ok(Oauth2AccessTokenResponse(
+                                        idToken = createIdToken(req, refresh_token.substring(8)),
+                                        refreshToken = "refresh:${refresh_token.substring(8)}",
+                                        accessToken = "access:${refresh_token.substring(8)}"
+                                ))
+                            }
+
+                        }
+                        ?:
+                        badRequest().body("Missing required parameter 'request_token'")
+            }
+            else -> {
+                logger.error("Unknown grant_type $grant_type")
+                status(BAD_REQUEST).body("Unknown grant_type $grant_type")
+            }
         }
     }
 
@@ -162,28 +152,26 @@ class Oauth2RestService(private val ansatteIndeks: AnsatteIndeks, private val js
         return tokenGenerator.create()
     }
 
-    @GetMapping(value = ["/isAlive.jsp"], produces = [MediaType.TEXT_HTML_VALUE])
-    fun isAliveMock() = ok("Server is ALIVE")
+    @GetMapping(value = ["/isAlive.jsp"], produces = [TEXT_HTML_VALUE])
+    fun isAliveMock() = "Server is ALIVE"
 
-    @GetMapping(value = ["/oauth2/../isAlive.jsp"], produces = [MediaType.TEXT_HTML_VALUE])
-    fun isAliveMockRassUrl() = ok("Server is ALIVE")
+    @GetMapping(value = ["/oauth2/../isAlive.jsp"], produces = [TEXT_HTML_VALUE])
+    fun isAliveMockRassUrl() = "Server is ALIVE"
 
-    @GetMapping(value = ["/oauth2/connect/jwk_uri"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(value = ["/oauth2/connect/jwk_uri"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "oauth2/connect/jwk_uri", notes = "Mock impl av Oauth2 jwk_uri")
-    fun authorize(req: HttpServletRequest?): ResponseEntity<String> {
-        return ok(jsonWebKeySupport.jwks())
-    }
+    fun authorize(req: HttpServletRequest?) = jsonWebKeySupport.jwks()
 
     /**
      * brukes til autentisere bruker slik at en slipper å autentisere senere. OpenAM mikk-makk .
      */
-    @PostMapping(value = ["/json/authenticate"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(value = ["/json/authenticate"], produces = [APPLICATION_JSON_VALUE], consumes = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "json/authenticate", notes = "Mock impl av OpenAM autenticate for service bruker innlogging")
     fun serviceBrukerAuthenticate(
             @ApiParam("Liste over aksjonspunkt som skal bekreftes, inklusiv data som trengs for å løse de.") enduserTemplate: EndUserAuthenticateTemplate?
-    ): ResponseEntity<*> =
-            if (enduserTemplate == null) {
-                ok(EndUserAuthenticateTemplate(
+    ) = enduserTemplate
+            ?.let {
+                EndUserAuthenticateTemplate(
                         authId = randomUUID().toString(),
                         header = "Sign in to VTP",
                         stage = "DataStore1",
@@ -200,20 +188,18 @@ class Oauth2RestService(private val ansatteIndeks: AnsatteIndeks, private val js
                                         output = Name("prompt", "Password:")
                                 )
                         )
-                ))
-            } else {
-                // generer token som brukes til å bekrefte innlogging ovenfor openam
-
-                // TODO ingen validering av authId?
-                // TODO generer unik session token?
-                ok(EndUserAuthenticateSuccess("i-am-just-a-dummy-session-token-workaround", "/isso/console"))
+                )
             }
+            // TODO ingen validering av authId?
+            // TODO generer unik session token?
+            // generer token som brukes til å bekrefte innlogging ovenfor openam
+            ?: EndUserAuthenticateSuccess("i-am-just-a-dummy-session-token-workaround", "/isso/console")
 
-    @GetMapping(value = ["/oauth2/.well-known/openid-configuration"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(value = ["/oauth2/.well-known/openid-configuration"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "Discovery url", notes = "Mock impl av discovery urlen. ")
     fun wellKnown(req: HttpServletRequest) =
-            ok(WellKnownResponse(
+            WellKnownResponse(
                     baseUrl = req.scheme + "://" + req.serverName + ":" + req.serverPort,
-                    issuer = issuer)
+                    issuer = issuer
             )
 }
