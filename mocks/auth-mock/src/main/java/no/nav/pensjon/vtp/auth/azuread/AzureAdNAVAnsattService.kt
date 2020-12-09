@@ -8,6 +8,7 @@ import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.apache.http.client.utils.URIBuilder
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.MediaType.TEXT_HTML_VALUE
 import org.springframework.http.ResponseEntity
@@ -158,6 +159,12 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
 
     private fun getIssuer(tenant: String): String {
         return "https://login.microsoftonline.com/$tenant/v2.0"
+    }
+
+    data class JsonResponse(val message: String)
+    @ExceptionHandler(value = [Exception::class])
+    fun handleException(e: Exception): ResponseEntity<JsonResponse> {
+        return ResponseEntity(JsonResponse(e.message?: ""), HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     companion object {
