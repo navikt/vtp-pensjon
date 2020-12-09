@@ -83,13 +83,13 @@ data class WellKnownResponse(
         @JsonProperty("token_endpoint")
         val tokenEndpoint: String
 ) {
-    constructor(baseUrl: String, issuer: String) : this(
+    constructor(frontendUrl: String, baseUrl: String, issuer: String) : this(
             issuer = issuer,
             endSessionEndpoint = "$baseUrl/rest/isso/oauth2/connect/endSession",
             checkSessionIframe = "$baseUrl/rest/isso/oauth2/connect/checkSession",
             jwksUri = "$baseUrl/rest/isso/oauth2/connect/jwk_uri",
             registrationEndpoint = "$baseUrl/rest/isso/oauth2/connect/register",
             tokenEndpoint = "$baseUrl/rest/isso/oauth2/access_token",
-            authorizationEndpoint = "$baseUrl/rest/isso/oauth2/authorize"
+            authorizationEndpoint = "$frontendUrl/openam/authorize"
     )
 }

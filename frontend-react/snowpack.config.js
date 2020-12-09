@@ -1,11 +1,16 @@
+const target = "http://localhost:8060/";
 module.exports = {
   proxy: {
     "/api": {
-      target: "http://localhost:8060/",
+      target,
       ws: true,
     },
     "/data": {
-      target: "http://localhost:8060/",
+      target,
+      ws: false,
+    },
+    "/rest": {
+      target,
       ws: false,
     },
   },

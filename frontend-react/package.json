@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "snowpack dev",
     "lint": "prettier --check .",
+    "lint-fix": "prettier --write .",
     "build": "snowpack build"
   },
   "author": "",

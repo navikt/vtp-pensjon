@@ -8,6 +8,7 @@ import Frame from "./components/Frame";
 import Snitch from "./components/Snitch";
 import Testscenario from "./components/Testscenario";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { AzureADLogin, OpenAMLogin } from "./components/AzureADLogin";
 
 function App() {
   return (
@@ -18,6 +19,11 @@ function App() {
             <Route path="/snitch">
               <Snitch />
             </Route>
+            <Route
+              path="/azuread/:tenant/v2.0/authorize"
+              component={AzureADLogin}
+            />
+            <Route path="/openam/authorize" component={OpenAMLogin} />
             <Route exact path="/">
               <Testscenario />
             </Route>

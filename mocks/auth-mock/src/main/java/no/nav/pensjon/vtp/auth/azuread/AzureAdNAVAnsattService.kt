@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation
 import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
+import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.apache.http.client.utils.URIBuilder
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
@@ -29,6 +30,7 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
     @ApiOperation(value = "Azure AD Discovery url", notes = "Mock impl av Azure AD discovery urlen. ")
     fun wellKnown(req: HttpServletRequest, @PathVariable("tenant") tenant: String, @RequestParam("p") profile: String?) =
             WellKnownResponse(
+                    frontendUrl = getFrontendUrl(req),
                     baseUrl = getBaseUrl(req),
                     graphUrl = getGraphUrl(req),
                     tenant = tenant,
@@ -95,19 +97,11 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
         )
     }
 
-    // Authorize URL:
-    // https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/oauth2/v2.0/authorize
-    // ?response_type=code
-    // &client_id=15f01fee-bd6d-4427-bb70-fc9e75caa13a
-    // &redirect_uri=http%3A%2F%2Flocalhost%3A9080%2Fpsak%2Foidc%2Fcallback
-    // &scope=openid+profile+user.read
-    // &state=PpZ9uI3drAWm7vfLM1rvb-ev4fvzc9RmHqQxW725wWE
-    // &nonce=xJDu2DjmaiFY8ivIakELFLVZDY6OivuE1GAUJ0fIEf0
-    // &prompt=select_account
-    @GetMapping(value = ["/{tenant}/v2.0/authorize"], produces = [APPLICATION_JSON_VALUE, TEXT_HTML_VALUE])
-    @ApiOperation(value = "AzureAD/v2.0/authorize", notes = "Mock impl av Azure AD authorize")
+    data class UserEntry(val username: String, val displayName: String, val redirect: String)
+    @GetMapping(value = ["/{tenant}/v2.0/users"], produces = [APPLICATION_JSON_VALUE])
+    @ApiOperation(value = "/v2.0/users", notes = "Hent brukere/saksbehandlere man kan logge inn som")
     @Throws(Exception::class)
-    fun authorize(
+    fun users(
             req: HttpServletRequest?,
             resp: HttpServletResponse?,
             @PathVariable("tenant") tenant: String,
@@ -117,7 +111,7 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
             @RequestParam("state") state: String,
             @RequestParam("nonce") nonce: String,
             @RequestParam("redirect_uri") redirectUri: String
-    ): String {
+    ): ResponseEntity<List<UserEntry>> {
         logger.info("kall mot AzureAD authorize med redirecturi $redirectUri")
 
         val validScopes = Arrays.asList("openid", "profile", "offline_access")
@@ -129,40 +123,29 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
 
         require(responseType == "code") { "Unsupported responseType [$responseType], should be 'code'" }
 
-        val uriBuilder = URIBuilder(redirectUri).apply {
-            addParameter("scope", scope)
-            addParameter("state", state)
-            addParameter("client_id", clientId)
-            addParameter("iss", getIssuer(tenant))
-            addParameter("redirect_uri", redirectUri)
-        }
-        return authorizeHtmlPage(uriBuilder, nonce)
+        Objects.requireNonNull(clientId, "Missing the ?client_id=xxx query parameter")
+        Objects.requireNonNull(state, "Missing the ?state=xxx query parameter")
+        Objects.requireNonNull(redirectUri, "Missing the ?redirect_uri=xxx query parameter")
+
+        return ok(
+                ansatteIndeks.findAll()
+                        .sortedBy { it.displayName }
+                        .map { user: NAVAnsatt ->
+                            val redirect = URIBuilder(redirectUri).apply {
+                                addParameter("scope", scope)
+                                addParameter("state", state)
+                                addParameter("client_id", clientId)
+                                addParameter("iss", getIssuer(tenant))
+                                addParameter("redirect_uri", redirectUri)
+                                addParameter("code", "${user.cn};${nonce ?: ""}")
+                            }.toString()
+                            UserEntry(username = user.cn, displayName = user.displayName, redirect = redirect)
+                        }
+        )
     }
 
-    private fun authorizeHtmlPage(location: URIBuilder, nonce: String): String {
-        val userRows = ansatteIndeks.findAll()
-                .sortedBy { it.displayName }
-                .joinToString(separator = "\n                ") {
-                    """<tr><a href="$location&code=${it.cn};$nonce"><h1>${it.displayName}</h1></a></tr>""".trimIndent()
-                }
-
-        return """<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Velg bruker</title>
-</head>
-    <body>
-    <div style="text-align:center;width:100%;">
-       <caption><h3>Velg bruker:</h3></caption>
-        <table>
-            <tbody>
-                $userRows
-            </tbody>
-        </table>
-    </div>
-    </body>
-</html>"""
+    private fun getFrontendUrl(req: HttpServletRequest): String {
+        return req.scheme + "://" + req.serverName + ":" + req.serverPort + "/#"
     }
 
     private fun getBaseUrl(req: HttpServletRequest): String {
