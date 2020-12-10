@@ -5,7 +5,7 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Frame from "./components/Frame";
-import Snitch from "./components/Snitch";
+import Snitch from "./components/Snitch/Snitch";
 import Testscenario from "./components/Testscenario";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { AzureADLogin, OpenAMLogin } from "./components/AzureADLogin";
