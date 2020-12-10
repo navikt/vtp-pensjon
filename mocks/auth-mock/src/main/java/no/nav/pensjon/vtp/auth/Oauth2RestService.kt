@@ -8,6 +8,7 @@ import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.apache.http.client.utils.URIBuilder
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.*
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.MediaType.TEXT_HTML_VALUE
@@ -24,76 +25,45 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("/rest/isso")
 class Oauth2RestService(private val ansatteIndeks: AnsatteIndeks, private val jsonWebKeySupport: JsonWebKeySupport, @Value("\${ISSO_OAUTH2_ISSUER}") val issuer: String) {
     private val logger = getLogger(Oauth2RestService::class.java)
-    private val nonceCache: MutableMap<String, String> = HashMap()
     private val clientIdCache: MutableMap<String, String> = HashMap()
 
-    @GetMapping(value = ["/oauth2/authorize"], produces = [APPLICATION_JSON_VALUE, TEXT_HTML_VALUE])
-    @ApiOperation(value = "oauth2/authorize", notes = "Mock impl av Oauth2 authorize")
+    data class UserEntry(val username: String, val displayName: String, val redirect: String)
+
+    @GetMapping(value = ["/oauth2/users"], produces = [APPLICATION_JSON_VALUE])
+    @ApiOperation(value = "oauth2/users", notes = "Liste over brukere til OpenAM-innlogging")
     @Throws(URISyntaxException::class)
-    fun authorize(
+    fun users(
             req: HttpServletRequest,
             @RequestParam(defaultValue = "winssochain") session: String?,
             @RequestParam(defaultValue = "service") authIndexType: String?,
             @RequestParam(defaultValue = "winssochain") authIndexValue: String?,
             @RequestParam(defaultValue = "code") responseType: String,
             @RequestParam(defaultValue = "openid") scope: String,
-            @RequestParam client_id: String,
+            @RequestParam("client_id") clientId: String,
             @RequestParam state: String,
-            @RequestParam redirect_uri: String,
+            @RequestParam("redirect_uri") redirectUri: String,
             @RequestParam(required = false) nonce: String?
-    ): ResponseEntity<*> {
+    ): List<UserEntry> {
+        logger.info("kall mot oauth2/users med redirecturi $redirectUri")
+
         require(scope == "openid") { "Unsupported scope [$scope], should be 'openid'" }
         require(responseType == "code") { "Unsupported responseType [$responseType], should be 'code'" }
 
-        val uriBuilder = URIBuilder(redirect_uri)
-        uriBuilder.addParameter("scope", scope)
-        uriBuilder.addParameter("state", state)
-        uriBuilder.addParameter("client_id", client_id)
-        uriBuilder.addParameter("iss", issuer)
-        uriBuilder.addParameter("redirect_uri", redirect_uri)
-        clientIdCache[state] = client_id
-        if (nonce != null && nonce != "") {
-            nonceCache[state] = nonce
-        }
-        val acceptHeader: String? = req.getHeader("Accept-Header")
-        return if ((null == req.contentType || req.contentType == "text/html") && (acceptHeader == null || !acceptHeader.contains("json"))) {
-            ok(authorizeHtmlPage(uriBuilder))
-        } else {
-            authorizeRedirect(uriBuilder)
-        }
-    }
+        clientIdCache[state] = clientId
 
-    @Throws(URISyntaxException::class)
-    private fun authorizeRedirect(location: URIBuilder): ResponseEntity<*> {
-        // SEND JSON RESPONSE TIL OPENAM HELPER
-        location.addParameter("code", "im-just-a-fake-code")
-        return status(TEMPORARY_REDIRECT).location(location.build()).build<Any>()
-    }
-
-    private fun authorizeHtmlPage(location: URIBuilder): String {
-        val users = ansatteIndeks.findAll()
+        return ansatteIndeks.findAll()
                 .sortedBy { it.displayName }
-                .joinToString(separator = "\n                ") { username: NAVAnsatt ->
-                    """<tr><a href="$location&code=${username.cn}"><h1>${username.displayName}</h1></a></tr>"""
+                .map { user: NAVAnsatt ->
+                    val uriBuilder = URIBuilder(redirectUri)
+                    uriBuilder.addParameter("scope", scope)
+                    uriBuilder.addParameter("state", state)
+                    uriBuilder.addParameter("client_id", clientId)
+                    uriBuilder.addParameter("iss", issuer)
+                    uriBuilder.addParameter("redirect_uri", redirectUri)
+                    uriBuilder.addParameter("code", "${user.cn};${nonce ?: ""}")
+                    val redirect = uriBuilder.toString()
+                    UserEntry(username = user.cn, displayName = user.displayName, redirect = redirect)
                 }
-
-        return """<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Velg bruker</title>
-</head>
-    <body>
-    <div style="text-align:center;width:100%;">
-       <caption><h3>Velg bruker:</h3></caption>
-        <table>
-            <tbody>
-                $users
-            </tbody>
-        </table>
-    </div>
-    </body>
-</html>"""
     }
 
     // TODO (FC): Trengs denne fortsatt?
@@ -128,8 +98,7 @@ class Oauth2RestService(private val ansatteIndeks: AnsatteIndeks, private val js
                             }
 
                         }
-                        ?:
-                        badRequest().body("Missing required parameter 'request_token'")
+                        ?: badRequest().body("Missing required parameter 'request_token'")
             }
             else -> {
                 logger.error("Unknown grant_type $grant_type")
@@ -138,13 +107,14 @@ class Oauth2RestService(private val ansatteIndeks: AnsatteIndeks, private val js
         }
     }
 
-    private fun createIdToken(req: HttpServletRequest, username: String): String {
+    private fun createIdToken(req: HttpServletRequest, code: String): String {
+        val codeData = code.split(";".toRegex()).toTypedArray()
         val state = req.getParameter("state")
 
         val tokenGenerator = OidcTokenGenerator(
                 jsonWebKeySupport = jsonWebKeySupport,
-                subject = username,
-                nonce = nonceCache[state],
+                subject = codeData[0],
+                nonce = if (codeData.size > 1) codeData[1] else null,
                 issuer = issuer
         )
         clientIdCache[state]?.let { tokenGenerator.addAud(it) }
@@ -190,16 +160,27 @@ class Oauth2RestService(private val ansatteIndeks: AnsatteIndeks, private val js
                         )
                 )
             }
-            // TODO ingen validering av authId?
-            // TODO generer unik session token?
-            // generer token som brukes til å bekrefte innlogging ovenfor openam
+    // TODO ingen validering av authId?
+    // TODO generer unik session token?
+    // generer token som brukes til å bekrefte innlogging ovenfor openam
             ?: EndUserAuthenticateSuccess("i-am-just-a-dummy-session-token-workaround", "/isso/console")
+
+    private fun getFrontendUrl(req: HttpServletRequest): String {
+        return req.scheme + "://" + req.serverName + ":" + req.serverPort + "/#"
+    }
 
     @GetMapping(value = ["/oauth2/.well-known/openid-configuration"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "Discovery url", notes = "Mock impl av discovery urlen. ")
     fun wellKnown(req: HttpServletRequest) =
             WellKnownResponse(
+                    frontendUrl = getFrontendUrl(req),
                     baseUrl = req.scheme + "://" + req.serverName + ":" + req.serverPort,
                     issuer = issuer
             )
+
+    data class JsonResponse(val message: String)
+    @ExceptionHandler(value = [Exception::class])
+    fun handleException(e: Exception): ResponseEntity<JsonResponse> {
+        return ResponseEntity(JsonResponse(e.message?: ""), HttpStatus.INTERNAL_SERVER_ERROR)
+    }
 }
