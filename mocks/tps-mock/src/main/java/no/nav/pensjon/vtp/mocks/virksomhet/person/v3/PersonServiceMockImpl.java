@@ -89,7 +89,7 @@ public class PersonServiceMockImpl implements PersonV3 {
         Bruker person = new PersonAdapter().fra(bruker);
 
 
-        Personopplysninger pers = personIndeks.findById(bruker.getIdent())
+        Personopplysninger pers = Optional.ofNullable(personIndeks.findById(bruker.getIdent()))
                 .orElseThrow(() -> {
                     String message = "Person med ident " + bruker.getIdent() + " ikke funnet";
                     return new HentPersonPersonIkkeFunnet(message, new PersonIkkeFunnet().withFeilmelding("Person med ident " + bruker.getIdent() + " ikke funnet"));

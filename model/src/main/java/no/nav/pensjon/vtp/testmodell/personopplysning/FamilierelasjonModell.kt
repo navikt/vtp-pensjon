@@ -7,7 +7,7 @@ data class FamilierelasjonModell(
     val til: String,
     val sammeBosted: Boolean?
 ) {
-    fun getRolleKode(): String? {
+    fun getRolleKode(): String {
         return rolle.name
     }
 }

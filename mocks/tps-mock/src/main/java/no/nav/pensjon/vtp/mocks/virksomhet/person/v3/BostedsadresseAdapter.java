@@ -11,6 +11,8 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.BostedsadressePeriode;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Periode;
 import no.nav.tjeneste.virksomhet.person.v3.metadata.Endringstyper;
 
+import static java.util.Optional.ofNullable;
+
 public class BostedsadresseAdapter {
     public static final String ENDRET_AV = "vtp";
 
@@ -23,12 +25,12 @@ public class BostedsadresseAdapter {
             BostedsadressePeriode adr1 = new BostedsadressePeriode();
             adr1.withEndretAv(ENDRET_AV);
             adr1.withEndringstidspunkt(ConversionUtils.convertToXMLGregorianCalendar(adr.getFom()==null?LocalDate.now():adr.getFom()));
-            adr1.withEndringstype(adr.getEndringstype() == null ? Endringstyper.NY : Endringstyper.fromValue(adr.getEndringstype()));
+            adr1.withEndringstype(adr.getEndringstype() == null ? Endringstyper.NY : Endringstyper.fromValue(ofNullable(adr.getEndringstype()).map(Enum::name).orElse(null)));
 
             Bostedsadresse bostedsadresse = new Bostedsadresse();
             bostedsadresse.withEndretAv(ENDRET_AV);
             bostedsadresse.withEndringstidspunkt(ConversionUtils.convertToXMLGregorianCalendar(adr.getFom()==null?LocalDate.now():adr.getFom()));
-            bostedsadresse.withEndringstype(adr.getEndringstype() == null ? Endringstyper.NY : Endringstyper.fromValue(adr.getEndringstype()));
+            bostedsadresse.withEndringstype(adr.getEndringstype() == null ? Endringstyper.NY : Endringstyper.fromValue(ofNullable(adr.getEndringstype()).map(Enum::name).orElse(null)));
 
             bostedsadresse.withStrukturertAdresse(AdresseAdapter.tilStrukturert(adr));
 

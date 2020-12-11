@@ -8,9 +8,7 @@ import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapModell
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDate
-import java.util.*
 import java.util.Locale.getDefault
-import java.util.Optional.ofNullable
 
 private const val NB = "NB"
 
@@ -34,18 +32,18 @@ data class PersonModell(
     val adresser: List<AdresseModell>,
     val medlemskap: MedlemskapModell?
 ) {
-    fun getAdresse(adresseType: AdresseType): Optional<AdresseModell> {
-        return ofNullable(adresser.firstOrNull { it.adresseType == adresseType })
+    fun getAdresse(adresseType: AdresseType): AdresseModell? {
+        return adresser.firstOrNull { it.adresseType == adresseType }
     }
 
     fun getAdresser(type: AdresseType): List<AdresseModell> {
         return adresser.filter { a: AdresseModell -> a.adresseType == type }
     }
 
-    fun getGjeldendeadresseType(): String? {
-        return if (gjeldendeAdresseType != null && getAdresse(gjeldendeAdresseType).isPresent) {
+    fun getGjeldendeadresseType(): String {
+        return if (gjeldendeAdresseType != null && getAdresse(gjeldendeAdresseType) != null) {
             // hvis satt bruk det
-            gjeldendeAdresseType.getTpsKode(getAdresse(gjeldendeAdresseType).get().land)
+            gjeldendeAdresseType.getTpsKode(getAdresse(gjeldendeAdresseType)!!.land)
         } else if (adresser.isNotEmpty()) {
             // plukk første hvis finnes
             val adresseModell: AdresseModell = adresser[0]
@@ -60,18 +58,18 @@ data class PersonModell(
         return kjønn?.name
     }
     fun getSivilstandFoo(): SivilstandModell {
-        return if (sivilstand == null || sivilstand.isEmpty()) SivilstandModell(UGIF) else sivilstand[0]
+        return sivilstand?.firstOrNull() ?: SivilstandModell(UGIF)
     }
 
     fun getPersonstatusFoo(): PersonstatusModell {
-        return if (personstatus == null || personstatus.isEmpty()) PersonstatusModell(BOSA) else personstatus[0]
+        return personstatus?.firstOrNull() ?: PersonstatusModell(BOSA)
     }
 
     fun getStatsborgerskapFoo(): StatsborgerskapModell {
-        return if (statsborgerskap == null || statsborgerskap.isEmpty()) StatsborgerskapModell(Landkode.NOR) else statsborgerskap[0]
+        return statsborgerskap?.firstOrNull() ?: StatsborgerskapModell(Landkode.NOR)
     }
 
-    fun getSpråk2Bokstaver(): String? {
+    fun getSpråk2Bokstaver(): String {
         return språk?.substring(0, 2)?.toUpperCase(getDefault()) ?: NB
     }
 }

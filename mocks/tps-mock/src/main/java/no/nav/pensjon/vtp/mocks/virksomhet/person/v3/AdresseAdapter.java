@@ -27,6 +27,8 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.StrukturertAdresse;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.UstrukturertAdresse;
 import no.nav.tjeneste.virksomhet.person.v3.metadata.Endringstyper;
 
+import static java.util.Optional.ofNullable;
+
 public class AdresseAdapter {
     public static final String ENDRET_AV = "vtp";
 
@@ -53,7 +55,7 @@ public class AdresseAdapter {
         LocalDate fom = getFom(adr);
         LocalDate tom = getTom(adr);
         annenAdresse.withEndringstidspunkt(ConversionUtils.convertToXMLGregorianCalendar(fom));
-        annenAdresse.withEndringstype(adr.getEndringstype() == null ? Endringstyper.NY : Endringstyper.fromValue(adr.getEndringstype()));
+        annenAdresse.withEndringstype(adr.getEndringstype() == null ? Endringstyper.NY : Endringstyper.fromValue(ofNullable(adr.getEndringstype()).map(Enum::name).orElse(null)));
         annenAdresse.withPeriode(lagPeriode(fom, tom));
 
         Postadresse postadresse = tilPostadresse(adr);
@@ -75,7 +77,7 @@ public class AdresseAdapter {
         Postadresse postadresse = new Postadresse();
         postadresse.withEndretAv(ENDRET_AV);
         postadresse.withEndringstidspunkt(ConversionUtils.convertToXMLGregorianCalendar(dt));
-        postadresse.withEndringstype(adr.getEndringstype() == null ? Endringstyper.NY : Endringstyper.fromValue(adr.getEndringstype()));
+        postadresse.withEndringstype(adr.getEndringstype() == null ? Endringstyper.NY : Endringstyper.fromValue(ofNullable(adr.getEndringstype()).map(Enum::name).orElse(null)));
         postadresse.withUstrukturertAdresse(tilUstrukturert(adr));
         return postadresse;
     }
@@ -84,8 +86,8 @@ public class AdresseAdapter {
         UstrukturertAdresse adresse = new UstrukturertAdresse();
         Landkoder landkoder = new Landkoder();
         landkoder.setKodeverksRef("Landkoder");
-        landkoder.setKodeRef(adr.getLandkode().name());
-        landkoder.setValue(adr.getLandkode().name());
+        landkoder.setKodeRef(adr.getLand().name());
+        landkoder.setValue(adr.getLand().name());
 
         adresse.withLandkode(landkoder);
         adresse.withAdresselinje1(adr.getAdresseLinje1());
@@ -101,8 +103,8 @@ public class AdresseAdapter {
 
         Landkoder landkoder = new Landkoder();
         landkoder.setKodeverksRef("Landkoder");
-        landkoder.setKodeRef(adr.getLandkode().name());
-        landkoder.setValue(adr.getLandkode().name());
+        landkoder.setKodeRef(adr.getLand().name());
+        landkoder.setValue(adr.getLand().name());
 
         Postnummer postnummer = new Postnummer();
         postnummer.setKodeverksRef("Postnummer");
@@ -122,8 +124,8 @@ public class AdresseAdapter {
 
         Landkoder landkoder = new Landkoder();
         landkoder.setKodeverksRef("Landkoder");
-        landkoder.setKodeRef(gateaddresse.getLandkode().name());
-        landkoder.setValue(gateaddresse.getLandkode().name());
+        landkoder.setKodeRef(gateaddresse.getLand().name());
+        landkoder.setValue(gateaddresse.getLand().name());
 
         Gateadresse gt = new Gateadresse();
 
@@ -194,7 +196,7 @@ public class AdresseAdapter {
 
     private MidlertidigPostadresse tilMidlertidigPostadresse(AdresseModell a) {
         MidlertidigPostadresse midlertidig;
-        if ("NOR".equals(a.getLandkode())) {
+        if ("NOR".equals(a.getLand())) {
             MidlertidigPostadresseNorge midl = new MidlertidigPostadresseNorge();
             midl.setEndretAv(ENDRET_AV);
             midl.setEndringstidspunkt(ConversionUtils.convertToXMLGregorianCalendar(a.getFom()));
