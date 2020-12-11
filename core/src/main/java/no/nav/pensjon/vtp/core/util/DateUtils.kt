@@ -26,7 +26,6 @@ private val datatypeFactory = datetypeFactoryFun()
 
 fun LocalDate.asXMLGregorianCalendar(): XMLGregorianCalendar = datatypeFactory.newXMLGregorianCalendar(GregorianCalendar.from(atStartOfDay(ZoneId.systemDefault())))
 
-
 fun Calendar.toLocalDate(): LocalDate? {
     return LocalDateTime.ofInstant(this.toInstant(), this.timeZone.toZoneId()).toLocalDate()
 }

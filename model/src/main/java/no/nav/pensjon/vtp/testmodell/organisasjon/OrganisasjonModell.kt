@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.core.mapping.Document
 
 @Document
 data class OrganisasjonModell(
-        @Id
-        val orgnummer: String,
-        val navn: Navn?,
-        val organisasjonDetaljer: OrganisasjonDetaljerModell?
+    @Id
+    val orgnummer: String,
+    val navn: Navn?,
+    val organisasjonDetaljer: OrganisasjonDetaljerModell?
 )

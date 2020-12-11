@@ -1,10 +1,10 @@
 package no.nav.pensjon.vtp.testmodell.identer
 
-import no.nav.pensjon.vtp.testmodell.util.TestdataUtil.generateRandomPlausibleBirtdayParent
-import no.nav.pensjon.vtp.testmodell.enums.Kjonn
 import no.nav.pensjon.vtp.testmodell.enums.IdentType
+import no.nav.pensjon.vtp.testmodell.enums.Kjonn
 import no.nav.pensjon.vtp.testmodell.enums.Kjonn.KVINNE
 import no.nav.pensjon.vtp.testmodell.enums.Kjonn.MANN
+import no.nav.pensjon.vtp.testmodell.util.TestdataUtil.generateRandomPlausibleBirtdayParent
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -71,7 +71,7 @@ class FoedselsnummerGenerator(
         }
 
         return if (control1 == 10 || control2 == 10) {
-            //Invalid number. Get a new one
+            // Invalid number. Get a new one
             generate()
         } else withoutControlDigits + control1 + control2
     }

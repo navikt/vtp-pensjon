@@ -2,10 +2,10 @@ package no.nav.pensjon.vtp.testmodell.scenario
 
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import no.nav.pensjon.vtp.testmodell.scenario.dto.TemplateDto
-import no.nav.pensjon.vtp.testmodell.scenario.dto.TemplateReferanse
 import no.nav.pensjon.vtp.testmodell.repo.TemplateVariable
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository
+import no.nav.pensjon.vtp.testmodell.scenario.dto.TemplateDto
+import no.nav.pensjon.vtp.testmodell.scenario.dto.TemplateReferanse
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity.notFound
 import org.springframework.http.ResponseEntity.ok

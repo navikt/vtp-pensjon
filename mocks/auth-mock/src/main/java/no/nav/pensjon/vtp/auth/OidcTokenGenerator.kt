@@ -9,17 +9,17 @@ import org.jose4j.lang.JoseException
 import java.util.*
 
 class OidcTokenGenerator(
-        private val jsonWebKeySupport: JsonWebKeySupport,
-        private val subject: String,
-        private val nonce: String?,
-        private val issuer: String,
-        private val aud: MutableList<String> = ArrayList(listOf("OIDC")),
-        private var expiration: NumericDate = fromSeconds(now().value + 3600 * 6),
-        private val issuedAt: NumericDate = now(),
-        private val additionalClaims: Map<String, String> = mapOf(
-                "azp" to "OIDC",
-                "acr" to "Level4"
-        )
+    private val jsonWebKeySupport: JsonWebKeySupport,
+    private val subject: String,
+    private val nonce: String?,
+    private val issuer: String,
+    private val aud: MutableList<String> = ArrayList(listOf("OIDC")),
+    private var expiration: NumericDate = fromSeconds(now().value + 3600 * 6),
+    private val issuedAt: NumericDate = now(),
+    private val additionalClaims: Map<String, String> = mapOf(
+        "azp" to "OIDC",
+        "acr" to "Level4"
+    )
 ) {
     fun addAud(e: String) {
         aud.add(e)

@@ -5,8 +5,8 @@ import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.Arbeidsforhold
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell
 
 data class TestscenariodataDto(
-        @JsonProperty("inntektskomponent")
-        val inntektskomponentModell: InntektskomponentModell?,
-        @JsonProperty("aareg")
-        val arbeidsforholdModell: ArbeidsforholdModell?
+    @JsonProperty("inntektskomponent")
+    val inntektskomponentModell: InntektskomponentModell?,
+    @JsonProperty("aareg")
+    val arbeidsforholdModell: ArbeidsforholdModell?
 )

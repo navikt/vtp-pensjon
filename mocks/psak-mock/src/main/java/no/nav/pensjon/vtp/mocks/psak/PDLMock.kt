@@ -29,12 +29,12 @@ class PDLMock {
         return false
     }
 
-    @GetMapping(path = ["/api/v1/personer/kontaktinformasjon"],  produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(path = ["/api/v1/personer/kontaktinformasjon"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getIdenter(@RequestHeader("Nav-Personidenter") requestIdenter: String?): DkifResponse {
         val kontakt = requestIdenter
-                ?.split(",")
-                ?.map { it to Kontaktinfo(personident = it, kanVarsles = true, reservert = false) }
-                ?.toMap()
+            ?.split(",")
+            ?.map { it to Kontaktinfo(personident = it, kanVarsles = true, reservert = false) }
+            ?.toMap()
 
         return DkifResponse(kontaktinfo = kontakt, feil = emptyMap())
     }
@@ -43,30 +43,28 @@ class PDLMock {
         private val LOG = LoggerFactory.getLogger(PDLMock::class.java)
     }
 
-
     data class DkifResponse(
-            val kontaktinfo: Map<String, Kontaktinfo>?,
-            val feil: Map<String, Feil>?
+        val kontaktinfo: Map<String, Kontaktinfo>?,
+        val feil: Map<String, Feil>?
     )
 
     data class Kontaktinfo(
-            val personident: String,
-            val kanVarsles: Boolean,
-            val reservert: Boolean,
-            val epostadresse: String? = null,
-            val mobiltelefonnummer: String? = null,
-            val sikkerDigitalPostkasse: SikkerDigitalPostkasse? = null,
-            val spraak: String? = null
+        val personident: String,
+        val kanVarsles: Boolean,
+        val reservert: Boolean,
+        val epostadresse: String? = null,
+        val mobiltelefonnummer: String? = null,
+        val sikkerDigitalPostkasse: SikkerDigitalPostkasse? = null,
+        val spraak: String? = null
     )
 
     data class SikkerDigitalPostkasse(
-            val adresse: String,
-            val leverandoerAdresse: String,
-            val leverandoerSertifikat: String
+        val adresse: String,
+        val leverandoerAdresse: String,
+        val leverandoerSertifikat: String
     )
 
     data class Feil(
-            val melding: String
+        val melding: String
     )
-
 }

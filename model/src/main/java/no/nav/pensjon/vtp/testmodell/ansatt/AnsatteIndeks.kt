@@ -23,6 +23,5 @@ class AnsatteIndeks {
 
     fun findByEnhetsId(enhetsId: String): List<NAVAnsatt> {
         return ansatte.filter { it.enheter.contains(enhetsId) }
-
     }
 }

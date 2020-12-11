@@ -1,9 +1,8 @@
 package no.nav.pensjon.vtp.application.configuration
 
-import org.apache.cxf.Bus
-import javax.annotation.PostConstruct
 import no.nav.pensjon.vtp.core.annotations.SoapService
 import no.nav.pensjon.vtp.utilities.description
+import org.apache.cxf.Bus
 import org.apache.cxf.jaxws.EndpointImpl
 import org.apache.cxf.jaxws.JAXWSMethodInvoker
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean
@@ -18,6 +17,7 @@ import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import java.lang.Exception
 import java.lang.reflect.Method
+import javax.annotation.PostConstruct
 
 @Configuration
 class SoapWebServiceConfig(private val applicationContext: ApplicationContext, private val bus: Bus) {

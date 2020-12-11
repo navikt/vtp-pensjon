@@ -15,8 +15,8 @@ class PersonIndeks(private val personIdentFooRepository: PersonIdentFooRepositor
 
     fun findById(id: String): Optional<Personopplysninger> {
         return personIdentFooRepository.findById(id)
-                ?.personopplysninger
-                ?.let { ofNullable(it) }
-                ?: empty()
+            ?.personopplysninger
+            ?.let { ofNullable(it) }
+            ?: empty()
     }
 }

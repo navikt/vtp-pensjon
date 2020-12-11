@@ -2,8 +2,8 @@ package no.nav.pensjon.vtp.auth.azuread
 
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport
+import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.apache.http.client.utils.URIBuilder
@@ -30,13 +30,13 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
     @GetMapping(value = ["/{tenant}/v2.0/.well-known/openid-configuration"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "Azure AD Discovery url", notes = "Mock impl av Azure AD discovery urlen. ")
     fun wellKnown(req: HttpServletRequest, @PathVariable("tenant") tenant: String, @RequestParam("p") profile: String?) =
-            WellKnownResponse(
-                    frontendUrl = getFrontendUrl(req),
-                    baseUrl = getBaseUrl(req),
-                    graphUrl = getGraphUrl(req),
-                    tenant = tenant,
-                    profile = profile
-            )
+        WellKnownResponse(
+            frontendUrl = getFrontendUrl(req),
+            baseUrl = getBaseUrl(req),
+            graphUrl = getGraphUrl(req),
+            tenant = tenant,
+            profile = profile
+        )
 
     @GetMapping(value = ["/{tenant}/discovery/v2.0/keys"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "azureAd/discovery/keys", notes = "Mock impl av Azure AD jwk_uri")
@@ -45,14 +45,14 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
     @PostMapping(value = ["/{tenant}/oauth2/v2.0/token"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "azureAd/access_token", notes = "Mock impl av Azure AD access_token")
     fun accessToken(
-            req: HttpServletRequest,
-            @PathVariable("tenant") tenant: String,
-            @RequestParam("grant_type") grantType: String,
-            @RequestParam("client_id") clientId: String,
-            @RequestParam("realm") realm: String?,
-            @RequestParam("code") code: String,
-            @RequestParam("refresh_token", required = false) refreshToken: String?,
-            @RequestParam("redirect_uri") redirectUri: String
+        req: HttpServletRequest,
+        @PathVariable("tenant") tenant: String,
+        @RequestParam("grant_type") grantType: String,
+        @RequestParam("client_id") clientId: String,
+        @RequestParam("realm") realm: String?,
+        @RequestParam("code") code: String,
+        @RequestParam("refresh_token", required = false) refreshToken: String?,
+        @RequestParam("redirect_uri") redirectUri: String
     ): ResponseEntity<*> {
         return when (grantType) {
             "authorization_code" -> {
@@ -83,18 +83,18 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
         val user = ansatteIndeks.findByCn(codeData[0]) ?: throw RuntimeException("Fant ikke NAV-ansatt med brukernavn ${codeData[0]}")
 
         return azureOidcToken(
-                jsonWebKeySupport = jsonWebKeySupport,
-                subject = codeData[0],
-                nonce = if (codeData.size > 1) codeData[1] else null,
-                issuer = getIssuer(tenant),
-                groups = user.groups.stream().map { ldapGroupName: String? -> AzureADGroupMapping.toAzureGroupId(ldapGroupName) }.collect(Collectors.toList()),
-                aud = listOf(clientId),
-                additionalClaims = mapOf(
-                        "tid" to tenant,
-                        "oid" to UUID.nameUUIDFromBytes(user.cn.toByteArray()).toString(), // user id - which is normally a UUID in Azure AD
-                        "name" to user.displayName,
-                        "preferred_username" to user.email
-                )
+            jsonWebKeySupport = jsonWebKeySupport,
+            subject = codeData[0],
+            nonce = if (codeData.size > 1) codeData[1] else null,
+            issuer = getIssuer(tenant),
+            groups = user.groups.stream().map { ldapGroupName: String? -> AzureADGroupMapping.toAzureGroupId(ldapGroupName) }.collect(Collectors.toList()),
+            aud = listOf(clientId),
+            additionalClaims = mapOf(
+                "tid" to tenant,
+                "oid" to UUID.nameUUIDFromBytes(user.cn.toByteArray()).toString(), // user id - which is normally a UUID in Azure AD
+                "name" to user.displayName,
+                "preferred_username" to user.email
+            )
         )
     }
 
@@ -103,15 +103,15 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
     @ApiOperation(value = "/v2.0/users", notes = "Hent brukere/saksbehandlere man kan logge inn som")
     @Throws(Exception::class)
     fun users(
-            req: HttpServletRequest?,
-            resp: HttpServletResponse?,
-            @PathVariable("tenant") tenant: String,
-            @RequestParam(value = "response_type", defaultValue = "code") responseType: String,
-            @RequestParam(value = "scope", defaultValue = "openid") scope: String,
-            @RequestParam("client_id") clientId: String,
-            @RequestParam("state") state: String,
-            @RequestParam("nonce") nonce: String,
-            @RequestParam("redirect_uri") redirectUri: String
+        req: HttpServletRequest?,
+        resp: HttpServletResponse?,
+        @PathVariable("tenant") tenant: String,
+        @RequestParam(value = "response_type", defaultValue = "code") responseType: String,
+        @RequestParam(value = "scope", defaultValue = "openid") scope: String,
+        @RequestParam("client_id") clientId: String,
+        @RequestParam("state") state: String,
+        @RequestParam("nonce") nonce: String,
+        @RequestParam("redirect_uri") redirectUri: String
     ): ResponseEntity<List<UserEntry>> {
         logger.info("kall mot AzureAD authorize med redirecturi $redirectUri")
 
@@ -129,19 +129,19 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
         Objects.requireNonNull(redirectUri, "Missing the ?redirect_uri=xxx query parameter")
 
         return ok(
-                ansatteIndeks.findAll()
-                        .sortedBy { it.displayName }
-                        .map { user: NAVAnsatt ->
-                            val redirect = URIBuilder(redirectUri).apply {
-                                addParameter("scope", scope)
-                                addParameter("state", state)
-                                addParameter("client_id", clientId)
-                                addParameter("iss", getIssuer(tenant))
-                                addParameter("redirect_uri", redirectUri)
-                                addParameter("code", "${user.cn};${nonce ?: ""}")
-                            }.toString()
-                            UserEntry(username = user.cn, displayName = user.displayName, redirect = redirect)
-                        }
+            ansatteIndeks.findAll()
+                .sortedBy { it.displayName }
+                .map { user: NAVAnsatt ->
+                    val redirect = URIBuilder(redirectUri).apply {
+                        addParameter("scope", scope)
+                        addParameter("state", state)
+                        addParameter("client_id", clientId)
+                        addParameter("iss", getIssuer(tenant))
+                        addParameter("redirect_uri", redirectUri)
+                        addParameter("code", "${user.cn};${nonce ?: ""}")
+                    }.toString()
+                    UserEntry(username = user.cn, displayName = user.displayName, redirect = redirect)
+                }
         )
     }
 
@@ -164,7 +164,7 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
     data class JsonResponse(val message: String)
     @ExceptionHandler(value = [Exception::class])
     fun handleException(e: Exception): ResponseEntity<JsonResponse> {
-        return ResponseEntity(JsonResponse(e.message?: ""), HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity(JsonResponse(e.message ?: ""), HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     companion object {

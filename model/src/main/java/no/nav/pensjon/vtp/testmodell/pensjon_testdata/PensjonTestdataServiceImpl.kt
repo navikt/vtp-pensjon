@@ -1,10 +1,10 @@
 package no.nav.pensjon.vtp.testmodell.pensjon_testdata
 
-import org.springframework.web.client.RestTemplate
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
+import org.springframework.web.client.RestTemplate
 import java.lang.RuntimeException
 
 class PensjonTestdataServiceImpl(private val baseUrl: String) : PensjonTestdataService {

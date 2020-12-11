@@ -27,11 +27,11 @@ token_endpoint_auth_methods_supported: ["client_secret_post", "private_key_jwt",
 userinfo_endpoint: "https://graph.microsoft.com/oidc/userinfo"
 * */
 data class WellKnownResponse(
-        val frontendUrl: String,
-        val baseUrl: String,
-        val graphUrl: String,
-        val tenant: String,
-        val profile: String?
+    val frontendUrl: String,
+    val baseUrl: String,
+    val graphUrl: String,
+    val tenant: String,
+    val profile: String?
 ) {
     @get:JsonProperty("authorization_endpoint")
     val authorizationEndpoint: String
@@ -39,25 +39,25 @@ data class WellKnownResponse(
 
     @JsonProperty("claims_supported")
     val claimsSupported = Arrays.asList(
-            "sub",
-            "iss",
-            "cloud_instance_name",
-            "cloud_instance_host_name",
-            "cloud_graph_host_name",
-            "msgraph_host",
-            "aud",
-            "exp",
-            "iat",
-            "auth_time",
-            "acr",
-            "nonce",
-            "preferred_username",
-            "name",
-            "tid",
-            "ver",
-            "at_hash",
-            "c_hash",
-            "email"
+        "sub",
+        "iss",
+        "cloud_instance_name",
+        "cloud_instance_host_name",
+        "cloud_graph_host_name",
+        "msgraph_host",
+        "aud",
+        "exp",
+        "iat",
+        "auth_time",
+        "acr",
+        "nonce",
+        "preferred_username",
+        "name",
+        "tid",
+        "ver",
+        "at_hash",
+        "c_hash",
+        "email"
     )
 
     @JsonProperty("cloud_graph_host_name")
@@ -84,9 +84,9 @@ data class WellKnownResponse(
     // for en del problemer andre steder (f.eks. LoginService sin issuer)
     @get:JsonProperty("issuer")
     val issuer: String
-        get() =// Spesialhåndtering for Azure AD B2C.
-        // Veldig rart at Azure AD gjør det sånn, men vi får mocke det realistisk, det sparer oss
-                // for en del problemer andre steder (f.eks. LoginService sin issuer)
+        get() = // Spesialhåndtering for Azure AD B2C.
+            // Veldig rart at Azure AD gjør det sånn, men vi får mocke det realistisk, det sparer oss
+            // for en del problemer andre steder (f.eks. LoginService sin issuer)
             if (tenant == "NAVtestB2C.onmicrosoft.com") {
                 "https://login.microsoftonline.com/d38f25aa-eab8-4c50-9f28-ebf92c1256f2/v2.0" + if ("B2C_1A_idporten_ver1" == profile) "/" else ""
             } else "https://login.microsoftonline.com/$tenant/v2.0"

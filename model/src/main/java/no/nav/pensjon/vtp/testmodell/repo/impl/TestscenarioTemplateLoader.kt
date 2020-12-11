@@ -2,11 +2,11 @@ package no.nav.pensjon.vtp.testmodell.repo.impl
 
 import com.fasterxml.jackson.core.type.TypeReference
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate
+import no.nav.pensjon.vtp.testmodell.util.JsonMapper
+import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
+import org.springframework.core.io.Resource
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import java.net.URLDecoder
-import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
-import no.nav.pensjon.vtp.testmodell.util.JsonMapper
-import org.springframework.core.io.Resource
 import java.nio.charset.StandardCharsets
 import java.util.*
 

@@ -17,7 +17,6 @@ import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-
 fun fullURL(request: HttpServletRequest): String {
     val requestURL = StringBuilder(request.requestURL.toString())
     val queryString = request.queryString
@@ -97,7 +96,8 @@ class SnitchFilter(
         request = Payload(
             headers = asHeadersMap(
                 { requestWrapper.headerNames.asIterator() },
-                { header -> requestWrapper.getHeaders(header).asIterator() }),
+                { header -> requestWrapper.getHeaders(header).asIterator() }
+            ),
             contentLength = requestWrapper.contentLength,
             contentType = requestWrapper.contentType,
             content = requestWrapper.contentAsByteArray
@@ -106,7 +106,8 @@ class SnitchFilter(
         response = Payload(
             headers = asHeadersMap(
                 { responseWrapper.headerNames.iterator() },
-                { header -> responseWrapper.getHeaders(header).iterator() }),
+                { header -> responseWrapper.getHeaders(header).iterator() }
+            ),
             contentLength = responseWrapper.contentSize,
             contentType = responseWrapper.contentType,
             content = responseWrapper.contentAsByteArray

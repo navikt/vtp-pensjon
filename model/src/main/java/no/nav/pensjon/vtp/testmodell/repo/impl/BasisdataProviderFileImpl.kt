@@ -16,7 +16,7 @@ object BasisdataProviderFileImpl {
 
     fun loadAdresser(): AdresseIndeks {
         val adresseIndeks = AdresseIndeks()
-        val adresseMaler : Iterable<AdresseModell> = mapper.readValue(javaClass.getResource("/basedata/adresse-maler.json").openStream())
+        val adresseMaler: Iterable<AdresseModell> = mapper.readValue(javaClass.getResource("/basedata/adresse-maler.json").openStream())
         adresseMaler.forEach(adresseIndeks::leggTil)
         return adresseIndeks
     }

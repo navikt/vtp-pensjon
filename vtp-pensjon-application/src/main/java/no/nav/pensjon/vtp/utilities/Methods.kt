@@ -12,8 +12,8 @@ import java.lang.reflect.Method
  */
 fun description(method: Method): String {
     try {
-        val classpool = ClassPool.getDefault();
-        classpool.appendClassPath(LoaderClassPath(currentThread().contextClassLoader));
+        val classpool = ClassPool.getDefault()
+        classpool.appendClassPath(LoaderClassPath(currentThread().contextClassLoader))
 
         val declaringClass = method.declaringClass
 

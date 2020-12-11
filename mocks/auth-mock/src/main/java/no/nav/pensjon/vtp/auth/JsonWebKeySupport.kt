@@ -22,7 +22,7 @@ class JsonWebKeySupport(private val jwk: RsaJsonWebKey) {
                         }
                 ]
             }
-            """.trimIndent()
+    """.trimIndent()
 
     fun createRS256Token(string: String?): JsonWebSignature {
         with(JsonWebSignature()) {

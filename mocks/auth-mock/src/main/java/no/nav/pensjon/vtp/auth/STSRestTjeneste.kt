@@ -23,34 +23,34 @@ import javax.xml.bind.JAXB
 class STSRestTjeneste(private val jsonWebKeySupport: JsonWebKeySupport, private val generator: STSIssueResponseGenerator, private val samlTokenGenerator: SamlTokenGenerator, @Value("\${ISSO_OAUTH2_ISSUER}") private val issuer: String) {
     @PostMapping(value = ["/token/exchange"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun dummySaml(
-            @RequestParam grant_type: String,
-            @RequestParam subject_token_type: String,
-            @RequestParam subject_token: String
+        @RequestParam grant_type: String,
+        @RequestParam subject_token_type: String,
+        @RequestParam subject_token: String
     ): SAMLResponse {
         val xmlString = xmlMarshal(generator.buildRequestSecurityTokenResponseType("urn:oasis:names:tc:SAML:2.0:assertion"))
 
         return SAMLResponse(
-                access_token = getUrlEncoder().withoutPadding().encodeToString(xmlString.toByteArray()),
-                decodedToken = xmlString,
-                token_type = "Bearer",
-                issued_token_type = subject_token_type,
-                expires_in = of(MAX, systemDefault())
+            access_token = getUrlEncoder().withoutPadding().encodeToString(xmlString.toByteArray()),
+            decodedToken = xmlString,
+            token_type = "Bearer",
+            issued_token_type = subject_token_type,
+            expires_in = of(MAX, systemDefault())
         )
     }
     @GetMapping(value = ["/token"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun dummyToken(
-            @RequestParam grant_type: String?,
-            @RequestParam scope: String?
+        @RequestParam grant_type: String?,
+        @RequestParam scope: String?
     ): UserTokenResponse {
         return UserTokenResponse(
-                access_token = OidcTokenGenerator(
-                        jsonWebKeySupport = jsonWebKeySupport,
-                        subject = "dummyBruker",
-                        nonce = "",
-                        issuer = issuer
-                ).create(),
-                expires_in = 600000 * 1000L,
-                token_type = "Bearer"
+            access_token = OidcTokenGenerator(
+                jsonWebKeySupport = jsonWebKeySupport,
+                subject = "dummyBruker",
+                nonce = "",
+                issuer = issuer
+            ).create(),
+            expires_in = 600000 * 1000L,
+            token_type = "Bearer"
         )
     }
 
@@ -60,16 +60,18 @@ class STSRestTjeneste(private val jsonWebKeySupport: JsonWebKeySupport, private 
         val samlToken = samlTokenGenerator.issueToken("CN=InternBruker,OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local")
 
         return ResponseEntity
-                .status(OK)
-                .header("Cache-Control", "no-store")
-                .header("Pragma", "no-cache")
-                .body(SAMLResponse(
-                        access_token = encodeBase64String(samlToken.toByteArray()),
-                        decodedToken = samlToken,
-                        token_type = "Bearer",
-                        issued_token_type = "urn:ietf:params:oauth:token-type:saml2",
-                        expires_in = of(MAX, systemDefault())
-                ))
+            .status(OK)
+            .header("Cache-Control", "no-store")
+            .header("Pragma", "no-cache")
+            .body(
+                SAMLResponse(
+                    access_token = encodeBase64String(samlToken.toByteArray()),
+                    decodedToken = samlToken,
+                    token_type = "Bearer",
+                    issued_token_type = "urn:ietf:params:oauth:token-type:saml2",
+                    expires_in = of(MAX, systemDefault())
+                )
+            )
     }
 
     private fun xmlMarshal(buildRequestSecurityTokenResponseType: RequestSecurityTokenResponseType?): String {
@@ -87,9 +89,9 @@ class STSRestTjeneste(private val jsonWebKeySupport: JsonWebKeySupport, private 
     )
 
     data class UserTokenResponse(
-            val access_token: String? = null,
-            val expires_in: Long? = null,
-            val token_type: String? = null
+        val access_token: String? = null,
+        val expires_in: Long? = null,
+        val token_type: String? = null
     ) {
         /**
          *

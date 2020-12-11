@@ -1,20 +1,20 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl
 
 import com.fasterxml.jackson.core.type.TypeReference
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate
-import no.nav.pensjon.vtp.testmodell.load.TestscenarioLoad
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
+import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell
+import no.nav.pensjon.vtp.testmodell.load.PersonopplysningerTemplate
+import no.nav.pensjon.vtp.testmodell.load.TestscenarioLoad
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModeller
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate
+import no.nav.pensjon.vtp.testmodell.util.JsonMapper
+import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
+import org.springframework.stereotype.Component
 import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
-import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
-import no.nav.pensjon.vtp.testmodell.load.PersonopplysningerTemplate
-import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModeller
-import no.nav.pensjon.vtp.testmodell.util.JsonMapper
-import org.springframework.stereotype.Component
 
 @Component
 class TestscenarioFraTemplateMapper {

@@ -40,7 +40,7 @@ object TestdataUtil {
     }
 
     fun generateBirthdayYoungerThanSixMonths(): LocalDate {
-        //Note: this actually returns younger than five months, but ok since it's also younger than six months...
+        // Note: this actually returns younger than five months, but ok since it's also younger than six months...
         val endRange = LocalDateTime.now().toLocalDate()
         val startRange = endRange.minus(5, ChronoUnit.MONTHS)
         val startEpoch = startRange.toEpochDay()

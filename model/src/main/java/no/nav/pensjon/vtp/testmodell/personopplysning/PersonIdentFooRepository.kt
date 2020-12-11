@@ -6,5 +6,5 @@ import java.util.stream.Stream
 interface PersonIdentFooRepository : Repository<PersonIdentFoo, String> {
     fun findById(id: String): PersonIdentFoo?
     fun findAll(): Stream<PersonIdentFoo>
-    fun save(personIdentFoo: PersonIdentFoo) : PersonIdentFoo
+    fun save(personIdentFoo: PersonIdentFoo): PersonIdentFoo
 }

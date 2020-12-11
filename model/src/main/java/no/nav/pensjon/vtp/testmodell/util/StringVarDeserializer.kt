@@ -1,11 +1,11 @@
 package no.nav.pensjon.vtp.testmodell.util
 
 import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.deser.ContextualDeserializer
-import com.fasterxml.jackson.databind.deser.ResolvableDeserializer
 import com.fasterxml.jackson.databind.BeanProperty
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.deser.ContextualDeserializer
+import com.fasterxml.jackson.databind.deser.ResolvableDeserializer
 
 class StringVarDeserializer(private val delegate: JsonDeserializer<*>, private val vars: VariabelContainer) : JsonDeserializer<String>(), ContextualDeserializer, ResolvableDeserializer {
     override fun resolve(ctxt: DeserializationContext) {
@@ -36,7 +36,7 @@ class StringVarDeserializer(private val delegate: JsonDeserializer<*>, private v
         }
         if (reformatted == text) {
             // har ikke funnet deklarasjon for påkrevd variabel.
-            vars.computeIfAbsent(matcher.group(1),  java.util.function.Function { n: String -> null })
+            vars.computeIfAbsent(matcher.group(1), java.util.function.Function { n: String -> null })
 //            throw IllegalStateException("Mangler variabel deklarasjon for [" + text + "], path=" + FindTemplateVariables.getPath(p.parsingContext))
         }
         return reformatted

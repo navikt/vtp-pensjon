@@ -6,7 +6,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import javax.annotation.PostConstruct
 
-
 interface RequestResponseCustom
 
 interface RequestResponseRepository : CrudRepository<RequestResponse, String>, RequestResponseCustom

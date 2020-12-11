@@ -14,20 +14,20 @@ import javax.xml.ws.RequestWrapper
 import javax.xml.ws.ResponseWrapper
 import javax.xml.ws.soap.Addressing
 
-fun Oppgave.asResponse() : HentOppgaveResponse {
+fun Oppgave.asResponse(): HentOppgaveResponse {
     val hentOppgaveResponse = HentOppgaveResponse()
     hentOppgaveResponse.oppgave = this
     return hentOppgaveResponse
 }
 
-fun Collection<OppgaveFoo>.asOppgave3() : List<Oppgave> {
+fun Collection<OppgaveFoo>.asOppgave3(): List<Oppgave> {
     return this.map { it.asOppgave3() }
 }
 
 fun Collection<Oppgave>.asResponse(): FinnOppgaveListeResponse {
     val response = FinnOppgaveListeResponse()
     response.oppgaveListe
-            .addAll(this)
+        .addAll(this)
     response.totaltAntallTreff = this.size
     return response
 }
@@ -43,28 +43,28 @@ class OppgaveServiceMockImpl(private val oppgaveRepository: OppgaveFooRepository
     @ResponseWrapper(localName = "hentOppgaveResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgave/v3", className = "no.nav.tjeneste.virksomhet.oppgave.v3.HentOppgaveResponse")
     @Throws(HentOppgaveOppgaveIkkeFunnet::class)
     override fun hentOppgave(@WebParam(name = "request") request: HentOppgaveRequest): HentOppgaveResponse =
-            oppgaveRepository.findById(request.oppgaveId)
-                    ?.asOppgave3()
-                    ?.asResponse()
-                    ?: throw HentOppgaveOppgaveIkkeFunnet("Fant ikke oppgave med id=${request.oppgaveId}", OppgaveIkkeFunnet())
+        oppgaveRepository.findById(request.oppgaveId)
+            ?.asOppgave3()
+            ?.asResponse()
+            ?: throw HentOppgaveOppgaveIkkeFunnet("Fant ikke oppgave med id=${request.oppgaveId}", OppgaveIkkeFunnet())
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/oppgave/v3/Oppgave_v3/finnOppgaveListeRequest")
     @WebResult(name = "response")
     @RequestWrapper(localName = "finnOppgaveListe", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgave/v3", className = "no.nav.tjeneste.virksomhet.oppgave.v3.FinnOppgaveListe")
     @ResponseWrapper(localName = "finnOppgaveListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgave/v3", className = "no.nav.tjeneste.virksomhet.oppgave.v3.FinnOppgaveListeResponse")
     override fun finnOppgaveListe(@WebParam(name = "request") finnOppgaveListeRequest: FinnOppgaveListeRequest): FinnOppgaveListeResponse =
-            oppgaveRepository.findAll()
-                    .filter {
-                        finnOppgaveListeRequest.sok == null ||
-                                filterOppgave(finnOppgaveListeRequest.sok, it)
-                    }
-                    .asOppgave3()
-                    .asResponse()
+        oppgaveRepository.findAll()
+            .filter {
+                finnOppgaveListeRequest.sok == null ||
+                    filterOppgave(finnOppgaveListeRequest.sok, it)
+            }
+            .asOppgave3()
+            .asResponse()
 
     private fun filterOppgave(sok: FinnOppgaveListeSok, oppgave: OppgaveFoo): Boolean {
         return with(sok) {
             (sakId == null || sakId == oppgave.saksnummer) &&
-                    (brukerId == null || brukerId == oppgave.brukerId)
+                (brukerId == null || brukerId == oppgave.brukerId)
         }
     }
 
@@ -73,8 +73,10 @@ class OppgaveServiceMockImpl(private val oppgaveRepository: OppgaveFooRepository
     @RequestWrapper(localName = "finnFerdigstiltOppgaveListe", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgave/v3", className = "no.nav.tjeneste.virksomhet.oppgave.v3.FinnFerdigstiltOppgaveListe")
     @ResponseWrapper(localName = "finnFerdigstiltOppgaveListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgave/v3", className = "no.nav.tjeneste.virksomhet.oppgave.v3.FinnFerdigstiltOppgaveListeResponse")
     override fun finnFerdigstiltOppgaveListe(@WebParam(name = "request") finnFerdigstiltOppgaveListeRequest: FinnFerdigstiltOppgaveListeRequest): FinnFerdigstiltOppgaveListeResponse {
-        LOG.info("finnFerdigstiltOppgaveListe. Søk: ansvarligEnhetId: {}, brukerId: {}, sakId: {}, søknadsId: {}", finnFerdigstiltOppgaveListeRequest.sok.ansvarligEnhetId, finnFerdigstiltOppgaveListeRequest.sok.brukerId,
-                finnFerdigstiltOppgaveListeRequest.sok.sakId, finnFerdigstiltOppgaveListeRequest.sok.soknadsId)
+        LOG.info(
+            "finnFerdigstiltOppgaveListe. Søk: ansvarligEnhetId: {}, brukerId: {}, sakId: {}, søknadsId: {}", finnFerdigstiltOppgaveListeRequest.sok.ansvarligEnhetId, finnFerdigstiltOppgaveListeRequest.sok.brukerId,
+            finnFerdigstiltOppgaveListeRequest.sok.sakId, finnFerdigstiltOppgaveListeRequest.sok.soknadsId
+        )
         return FinnFerdigstiltOppgaveListeResponse()
     }
 
@@ -83,8 +85,10 @@ class OppgaveServiceMockImpl(private val oppgaveRepository: OppgaveFooRepository
     @RequestWrapper(localName = "finnFeilregistrertOppgaveListe", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgave/v3", className = "no.nav.tjeneste.virksomhet.oppgave.v3.FinnFeilregistrertOppgaveListe")
     @ResponseWrapper(localName = "finnFeilregistrertOppgaveListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgave/v3", className = "no.nav.tjeneste.virksomhet.oppgave.v3.FinnFeilregistrertOppgaveListeResponse")
     override fun finnFeilregistrertOppgaveListe(@WebParam(name = "request") finnFeilregistrertOppgaveListeRequest: FinnFeilregistrertOppgaveListeRequest): FinnFeilregistrertOppgaveListeResponse {
-        LOG.info("finnFeilregistrertOppgaveListe. Søk: ansvarligEnhetId: {}, brukerId: {}, sakId: {}, aøknadsId{}", finnFeilregistrertOppgaveListeRequest.sok.ansvarligEnhetId, finnFeilregistrertOppgaveListeRequest.sok.brukerId,
-                finnFeilregistrertOppgaveListeRequest.sok.sakId, finnFeilregistrertOppgaveListeRequest.sok.soknadsId)
+        LOG.info(
+            "finnFeilregistrertOppgaveListe. Søk: ansvarligEnhetId: {}, brukerId: {}, sakId: {}, aøknadsId{}", finnFeilregistrertOppgaveListeRequest.sok.ansvarligEnhetId, finnFeilregistrertOppgaveListeRequest.sok.brukerId,
+            finnFeilregistrertOppgaveListeRequest.sok.sakId, finnFeilregistrertOppgaveListeRequest.sok.soknadsId
+        )
         return FinnFeilregistrertOppgaveListeResponse()
     }
 
@@ -108,4 +112,3 @@ class OppgaveServiceMockImpl(private val oppgaveRepository: OppgaveFooRepository
         private val LOG = LoggerFactory.getLogger(OppgaveServiceMockImpl::class.java)
     }
 }
-
