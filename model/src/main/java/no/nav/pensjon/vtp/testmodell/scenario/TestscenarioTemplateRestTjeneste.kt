@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
+import java.util.function.BiConsumer
 import java.util.function.Consumer
 
 @RestController
@@ -21,21 +22,30 @@ import java.util.function.Consumer
 @RequestMapping("/api/testscenario/templates")
 class TestscenarioTemplateRestTjeneste(private val templateRepository: TestscenarioTemplateRepository) {
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "templates", notes = "Liste av tilgjengelig Testscenario Templates", response = TemplateReferanse::class, responseContainer = "List")
+    @ApiOperation(
+        value = "templates",
+        notes = "Liste av tilgjengelig Testscenario Templates",
+        response = TemplateReferanse::class,
+        responseContainer = "List"
+    )
     fun listTestscenarioTemplates() =
-            templateRepository.templates()
-                    .map { TemplateReferanse(it.templateKey, it.templateNavn) }
-                    .sortedWith( compareBy { it.navn } )
+        templateRepository.templates()
+            .map { TemplateReferanse(it.templateKey, it.templateName) }
+            .sortedWith(compareBy { it.navn })
 
     @GetMapping(value = ["/{key}"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "templates", notes = "Beskrivelse av template, inklusiv påkrevde variable (og evt. default verdier", response = TemplateDto::class)
+    @ApiOperation(
+        value = "templates",
+        notes = "Beskrivelse av template, inklusiv påkrevde variable (og evt. default verdier",
+        response = TemplateDto::class
+    )
     fun beskrivTestscenarioTemplate(@PathVariable("key") key: String) =
-            templateRepository.finn(key)
-                    ?.let {
-                        val map = TreeMap<String, String?>()
-                        it.defaultVars.forEach { key: String, value: String? -> map.putIfAbsent(key, value) }
-                        it.expectedVars.forEach(Consumer { v: TemplateVariable -> map.putIfAbsent(v.name, null) })
-                        ok(TemplateDto(key, it.templateNavn, map))
-                    }
-                    ?: notFound().build<TemplateDto>()
+        templateRepository.finn(key)
+            ?.let {
+                val map = TreeMap<String, String?>()
+                it.vars.forEach(BiConsumer { key: String, value: String? -> map.putIfAbsent(key, value) })
+                it.getExpectedVars().forEach(Consumer { v: TemplateVariable -> map.putIfAbsent(v.name, null) })
+                ok(TemplateDto(key, it.templateName, map))
+            }
+            ?: notFound().build<TemplateDto>()
 }
