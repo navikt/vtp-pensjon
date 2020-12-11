@@ -1,12 +1,12 @@
 import * as React from "react";
 import ReactDOM from "react-dom";
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Frame from "./components/Frame";
 import Snitch from "./components/Snitch/Snitch";
-import Testscenario from "./components/Testscenario";
+import Testscenario from "./components/Testscenario/Testscenario";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { AzureADLogin, OpenAMLogin } from "./components/AzureADLogin";
 
