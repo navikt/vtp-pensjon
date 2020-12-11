@@ -15,5 +15,5 @@ data class Testscenario(
         val søkerInntektYtelse: InntektYtelseModell?,
         val annenpartInntektYtelse: InntektYtelseModell?,
         val organisasjonModeller: List<OrganisasjonModell>,
-        val vars: Map<String, String>
+        val vars: Map<String, String?>
 )

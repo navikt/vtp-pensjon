@@ -14,25 +14,31 @@ import java.util.UUID.randomUUID
 
 @Component
 class TestscenarioServiceImpl(
-        private val mapper: TestscenarioFraTemplateMapper,
-        private val testscenarioRepository: TestscenarioRepository,
-        private val personIndeks: PersonIndeks,
-        private val inntektYtelseIndeks: InntektYtelseIndeks,
-        private val organisasjonRepository: OrganisasjonRepository,
-        private val personModellRepository: PersonModellRepository,
-        private val adresseIndeks: AdresseIndeks,
-        private val identerIndeks: IdenterIndeks
+    private val mapper: TestscenarioFraTemplateMapper,
+    private val testscenarioRepository: TestscenarioRepository,
+    private val personIndeks: PersonIndeks,
+    private val inntektYtelseIndeks: InntektYtelseIndeks,
+    private val organisasjonRepository: OrganisasjonRepository,
+    private val personModellRepository: PersonModellRepository,
+    private val adresseIndeks: AdresseIndeks,
+    private val identerIndeks: IdenterIndeks
 
 ) : TestscenarioService {
     override fun opprettTestscenario(template: TestscenarioTemplate): Testscenario {
         return opprettTestscenario(template, emptyMap())
     }
 
-    override fun opprettTestscenario(template: TestscenarioTemplate, userSuppliedVariables: Map<String, String>): Testscenario {
+    override fun opprettTestscenario(
+        template: TestscenarioTemplate,
+        userSuppliedVariables: Map<String, String>
+    ): Testscenario {
         return doSave(mapper.lagTestscenario(template, userSuppliedVariables))
     }
 
-    override fun opprettTestscenarioFraJsonString(testscenarioJson: String, userSuppliedVariables: Map<String, String>): Testscenario {
+    override fun opprettTestscenarioFraJsonString(
+        testscenarioJson: String,
+        userSuppliedVariables: Map<String, String>
+    ): Testscenario {
         return doSave(mapper.lagTestscenarioFraJsonString(testscenarioJson, userSuppliedVariables))
     }
 
@@ -42,40 +48,39 @@ class TestscenarioServiceImpl(
         val personopplysninger = mapper.mapFromLoad(testScenario.personopplysninger)
 
         leggTil(personopplysninger.søker)
-        personopplysninger.annenPart?.let{ leggTil(it) }
+        personopplysninger.annenPart?.let { leggTil(it) }
 
         personIndeks.indekserPersonopplysningerByIdent(personopplysninger)
         testScenario.søkerInntektYtelse
-                ?.let { inntektYtelseIndeks.leggTil(personopplysninger.søker.ident, it) }
+            ?.let { inntektYtelseIndeks.leggTil(personopplysninger.søker.ident, it) }
 
         personopplysninger.annenPart
-                ?.let { (ident) ->
-                    testScenario.annenpartInntektYtelse
-                            ?.let { inntektYtelseIndeks.leggTil(ident, it) }
-                }
+            ?.let { (ident) ->
+                testScenario.annenpartInntektYtelse
+                    ?.let { inntektYtelseIndeks.leggTil(ident, it) }
+            }
 
         organisasjonRepository.saveAll(testScenario.organisasjonModeller)
 
         return testscenarioRepository.save(mapToTestscenario(testScenario, testscenarioId, personopplysninger))
     }
 
-    private fun mapToTestscenario(load: TestscenarioLoad, testscenarioId: String, personopplysningerSave: Personopplysninger): Testscenario {
+    private fun mapToTestscenario(
+        load: TestscenarioLoad,
+        testscenarioId: String,
+        personopplysningerSave: Personopplysninger
+    ): Testscenario {
         return Testscenario(
-                testscenarioId, load.templateNavn,
-                personopplysningerSave,
-                load.søkerInntektYtelse,
-                load.annenpartInntektYtelse,
-                load.organisasjonModeller,
-                load.variabelContainer.vars
+            testscenarioId, load.templateNavn,
+            personopplysningerSave,
+            load.søkerInntektYtelse,
+            load.annenpartInntektYtelse,
+            load.organisasjonModeller,
+            load.variabelContainer.getVars()
         )
     }
 
-    @Synchronized
-    fun leggTil(bruker: PersonModell?) {
-        if (bruker == null) {
-            // quiet escape
-            return
-        }
+    fun leggTil(bruker: PersonModell) {
         personModellRepository.save(bruker)
     }
 
