@@ -24,12 +24,18 @@ class SoapWebServiceConfig(private val applicationContext: ApplicationContext, p
     @PostConstruct
     fun registerSoapServices() {
         applicationContext.getBeansWithAnnotation(SoapService::class.java)
-                .values
-                .parallelStream()
-                .forEach { service ->
-                    service.javaClass.getAnnotation(SoapService::class.java)
-                            ?.path?.forEach { EndpointImpl(bus, service, JaxWsMethodInspectingInvokerServerFactoryBean()).publish(it) }
-                }
+            .values
+            .parallelStream()
+            .forEach { service ->
+                service.javaClass.getAnnotation(SoapService::class.java)
+                    ?.path?.forEach {
+                        EndpointImpl(
+                            bus,
+                            service,
+                            JaxWsMethodInspectingInvokerServerFactoryBean()
+                        ).publish(it)
+                    }
+            }
     }
 }
 

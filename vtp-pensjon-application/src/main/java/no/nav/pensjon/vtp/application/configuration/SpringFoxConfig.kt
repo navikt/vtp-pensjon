@@ -14,14 +14,15 @@ import springfox.documentation.spring.web.plugins.Docket
 class SpringFoxConfig {
     @Bean
     fun api(): Docket =
-            Docket(DocumentationType.OAS_30)
-                    .apiInfo(ApiInfoBuilder()
-                            .title("VTP-pensjon REST-API Documentasjon")
-                            .description("Oversikt over støttede SOAP-tjenester finnes her: <a href=\"http://localhost:8060/soap\">http://localhost:8060/soap</a>")
-                            .build()
-                    )
-                    .select()
-                    .apis(RequestHandlerSelectors.any())
-                    .paths(PathSelectors.any())
+        Docket(DocumentationType.OAS_30)
+            .apiInfo(
+                ApiInfoBuilder()
+                    .title("VTP-pensjon REST-API Documentasjon")
+                    .description("Oversikt over støttede SOAP-tjenester finnes her: <a href=\"http://localhost:8060/soap\">http://localhost:8060/soap</a>")
                     .build()
+            )
+            .select()
+            .apis(RequestHandlerSelectors.any())
+            .paths(PathSelectors.any())
+            .build()
 }
