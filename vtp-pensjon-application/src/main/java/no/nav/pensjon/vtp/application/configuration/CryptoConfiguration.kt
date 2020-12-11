@@ -22,17 +22,17 @@ import javax.net.ssl.SSLContext
 private fun copyToTempFile(resource: Resource, prefix: String): File {
     val tempFile = createTempFile(prefix, ".jks")
     resource.inputStream
-            .use { i -> tempFile.outputStream().use { o -> i.copyTo(o) } }
+        .use { i -> tempFile.outputStream().use { o -> i.copyTo(o) } }
     return tempFile
 }
 
 @Configuration
 class CryptoConfiguration(
-        @Value("\${no.nav.modig.security.appkey}") val keyAndCertAlias: String,
-        @Value("\${no.nav.modig.security.appcert.keystore}") val keystoreResource: Resource,
-        @Value("\${no.nav.modig.security.appcert.password}") val keystorePassword: String,
-        @Value("\${no.nav.modig.security.truststore.path}") val truststoreResource: Resource,
-        @Value("\${no.nav.modig.security.truststore.password}") val truststorePassword: String
+    @Value("\${no.nav.modig.security.appkey}") val keyAndCertAlias: String,
+    @Value("\${no.nav.modig.security.appcert.keystore}") val keystoreResource: Resource,
+    @Value("\${no.nav.modig.security.appcert.password}") val keystorePassword: String,
+    @Value("\${no.nav.modig.security.truststore.path}") val truststoreResource: Resource,
+    @Value("\${no.nav.modig.security.truststore.password}") val truststorePassword: String
 ) {
     val keystorePath: String by lazy { copyToTempFile(keystoreResource, "keystore").absolutePath }
     val truststorePath: String by lazy { copyToTempFile(truststoreResource, "truststore").absolutePath }
@@ -50,13 +50,13 @@ class CryptoConfiguration(
 
     @Bean
     fun cryptoConfigurationParameters() = CryptoConfigurationParameters(
-            keyAndCertAlias = keyAndCertAlias,
+        keyAndCertAlias = keyAndCertAlias,
 
-            keystorePath = keystorePath,
-            keystorePassword = keystorePassword,
+        keystorePath = keystorePath,
+        keystorePassword = keystorePassword,
 
-            truststorePath = truststorePath,
-            truststorePassword = truststorePassword
+        truststorePath = truststorePath,
+        truststorePassword = truststorePassword
     )
 
     @Bean
@@ -85,9 +85,12 @@ class CryptoConfiguration(
     }
 
     @Bean
-    fun rsaJsonWebKey(keyStore: KeyStore) : RsaJsonWebKey {
+    fun rsaJsonWebKey(keyStore: KeyStore): RsaJsonWebKey {
         val jwk = newPublicJwk(keyStore.getCertificate(this.keyAndCertAlias).publicKey) as RsaJsonWebKey
-        jwk.privateKey = (keyStore.getEntry(this.keyAndCertAlias, PasswordProtection(keystorePassword.toCharArray())) as KeyStore.PrivateKeyEntry).privateKey
+        jwk.privateKey = (keyStore.getEntry(
+            this.keyAndCertAlias,
+            PasswordProtection(keystorePassword.toCharArray())
+        ) as KeyStore.PrivateKeyEntry).privateKey
         jwk.keyId = "1"
         return jwk
     }

@@ -34,18 +34,18 @@ data class Payload(
 
 @Document
 data class RequestResponse(
-        @Id
-        val id: String = randomUUID().toString(),
-        val timestamp: LocalDateTime,
-        val method: String,
-        val path: String,
-        val url: String,
-        val status: Int,
-        val handler: String?,
-        val exception: String?,
-        val stackTrace: String?,
+    @Id
+    val id: String = randomUUID().toString(),
+    val timestamp: LocalDateTime,
+    val method: String,
+    val path: String,
+    val url: String,
+    val status: Int,
+    val handler: String?,
+    val exception: String?,
+    val stackTrace: String?,
 
-        val request: Payload,
+    val request: Payload,
 
-        val response: Payload
+    val response: Payload
 )

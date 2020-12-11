@@ -28,7 +28,10 @@ fun fullURL(request: HttpServletRequest): String {
     }
 }
 
-fun asHeadersMap(namesProducer: () -> Iterator<String>, headersFunction: (String) -> Iterator<String>): Map<String, List<String>> {
+fun asHeadersMap(
+    namesProducer: () -> Iterator<String>,
+    headersFunction: (String) -> Iterator<String>
+): Map<String, List<String>> {
     val headers = HashMap<String, List<String>>()
 
     namesProducer().forEach { headerName ->
@@ -45,12 +48,12 @@ fun asHeadersMap(namesProducer: () -> Iterator<String>, headersFunction: (String
 @Component
 @Order(HIGHEST_PRECEDENCE)
 class SnitchFilter(
-        private val requestResponseRepository: RequestResponseRepository,
-        private val simpMessagingTemplate: SimpMessagingTemplate
+    private val requestResponseRepository: RequestResponseRepository,
+    private val simpMessagingTemplate: SimpMessagingTemplate
 ) : Filter {
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, filterChain: FilterChain) {
         if (request is HttpServletRequest && response is HttpServletResponse &&
-                (request.servletPath.startsWith("/rest") || request.servletPath.startsWith("/soap"))
+            (request.servletPath.startsWith("/rest") || request.servletPath.startsWith("/soap"))
         ) {
             val requestWrapper = ContentCachingRequestWrapper(request)
             val responseWrapper = ContentCachingResponseWrapper(response)
@@ -65,7 +68,12 @@ class SnitchFilter(
             } catch (e: Exception) {
                 val stringWriter = StringWriter()
                 e.printStackTrace(PrintWriter(stringWriter))
-                requestResponseRepository.save(requestResponse(requestWrapper, responseWrapper).copy(exception = e.message, stackTrace = stringWriter.toString()))
+                requestResponseRepository.save(
+                    requestResponse(
+                        requestWrapper,
+                        responseWrapper
+                    ).copy(exception = e.message, stackTrace = stringWriter.toString())
+                )
                 throw e
             }
         } else {
@@ -73,29 +81,36 @@ class SnitchFilter(
         }
     }
 
-    private fun requestResponse(requestWrapper: ContentCachingRequestWrapper, responseWrapper: ContentCachingResponseWrapper) = RequestResponse(
-            timestamp = now(),
-            path = URL(requestWrapper.requestURL.toString()).path,
-            url = fullURL(requestWrapper),
-            method = requestWrapper.method,
-            status = responseWrapper.status,
-            handler = findHandler(responseWrapper),
-            exception = null,
-            stackTrace = null,
+    private fun requestResponse(
+        requestWrapper: ContentCachingRequestWrapper,
+        responseWrapper: ContentCachingResponseWrapper
+    ) = RequestResponse(
+        timestamp = now(),
+        path = URL(requestWrapper.requestURL.toString()).path,
+        url = fullURL(requestWrapper),
+        method = requestWrapper.method,
+        status = responseWrapper.status,
+        handler = findHandler(responseWrapper),
+        exception = null,
+        stackTrace = null,
 
-            request = Payload(
-                    headers = asHeadersMap({ requestWrapper.headerNames.asIterator() }, { header -> requestWrapper.getHeaders(header).asIterator() }),
-                    contentLength = requestWrapper.contentLength,
-                    contentType = requestWrapper.contentType,
-                    content = requestWrapper.contentAsByteArray
-            ),
+        request = Payload(
+            headers = asHeadersMap(
+                { requestWrapper.headerNames.asIterator() },
+                { header -> requestWrapper.getHeaders(header).asIterator() }),
+            contentLength = requestWrapper.contentLength,
+            contentType = requestWrapper.contentType,
+            content = requestWrapper.contentAsByteArray
+        ),
 
-            response = Payload(
-                    headers = asHeadersMap({ responseWrapper.headerNames.iterator() }, { header -> responseWrapper.getHeaders(header).iterator() }),
-                    contentLength = responseWrapper.contentSize,
-                    contentType = responseWrapper.contentType,
-                    content = responseWrapper.contentAsByteArray
-            )
+        response = Payload(
+            headers = asHeadersMap(
+                { responseWrapper.headerNames.iterator() },
+                { header -> responseWrapper.getHeaders(header).iterator() }),
+            contentLength = responseWrapper.contentSize,
+            contentType = responseWrapper.contentType,
+            content = responseWrapper.contentAsByteArray
+        )
     )
 
     private fun findHandler(responseWrapper: ContentCachingResponseWrapper): String? {

@@ -13,15 +13,15 @@ interface RequestResponseRepository : CrudRepository<RequestResponse, String>, R
 
 @Repository
 class RequestResponseImpl(
-        val mongoOperations: MongoOperations
+    val mongoOperations: MongoOperations
 ) : RequestResponseCustom {
     @PostConstruct
     fun setupCappedCollection() {
         if (!mongoOperations.collectionExists(RequestResponse::class.java)) {
             val collectionOptions = empty()
-                    .size(10_000_000)
-                    .capped()
-                    .maxDocuments(100)
+                .size(10_000_000)
+                .capped()
+                .maxDocuments(100)
             mongoOperations.createCollection<RequestResponse>(RequestResponse::class.java, collectionOptions)
         }
     }
