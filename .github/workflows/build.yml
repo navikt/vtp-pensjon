@@ -53,7 +53,7 @@ jobs:
       - name: Build artifacts
         shell: bash
         run: |
-          mvn clean install --settings maven-settings.xml -Dfile.encoding=UTF-8
+          mvn clean install --settings maven-settings.xml -Dfile.encoding=UTF-8 -Dkotlin.format.skip=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

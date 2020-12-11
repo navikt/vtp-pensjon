@@ -11,22 +11,22 @@ object FiktivtNavn {
     private val fornavnKvinner = loadNames("/basedata/fornavn-kvinner.txt")
     private val fornavnMenn = loadNames("/basedata/fornavn-menn.txt")
 
-    fun getRandomFornavnMann(): String
-        = getRandom(fornavnMenn)
-    fun getRandomFornavnKvinne(): String
-        = getRandom(fornavnKvinner)
-    fun getRandomEtternavn(): String
-         = getRandom(etternavn)
+    fun getRandomFornavnMann(): String =
+        getRandom(fornavnMenn)
+    fun getRandomFornavnKvinne(): String =
+        getRandom(fornavnKvinner)
+    fun getRandomEtternavn(): String =
+        getRandom(etternavn)
 
     private fun getRandom(liste: List<String>): String {
         return liste[Random().nextInt(liste.size)]
     }
 
     private fun loadNames(resourceName: String): List<String> =
-            FiktivtNavn::class.java.getResourceAsStream(resourceName)
-                    .bufferedReader()
-                    .readLines()
-                    .map { it.capitalize() }
+        FiktivtNavn::class.java.getResourceAsStream(resourceName)
+            .bufferedReader()
+            .readLines()
+            .map { it.capitalize() }
 
     fun getRandomName(kjønn: Kjønn): PersonNavn {
         return if (kjønn == Kjønn.K) {

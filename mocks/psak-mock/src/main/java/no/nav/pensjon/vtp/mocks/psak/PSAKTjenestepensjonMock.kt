@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlSeeAlso
 @WebService(targetNamespace = "http://nav-cons-pen-psak-tjenestepensjon/no/nav/inf", name = "PSAKTjenestepensjon")
 @XmlSeeAlso(no.nav.lib.pen.psakpselv.fault.ObjectFactory::class, no.nav.lib.pen.psakpselv.asbo.ObjectFactory::class, no.nav.lib.pen.psakpselv.fault.tjenestepensjon.ObjectFactory::class, no.nav.lib.pen.psakpselv.asbo.tjenestepensjon.ObjectFactory::class, ObjectFactory::class)
 @HandlerChain(file = "/Handler-chain.xml")
-class PSAKTjenestepensjonMock : PSAKTjenestepensjon{
+class PSAKTjenestepensjonMock : PSAKTjenestepensjon {
 
     @WebMethod
     @WebResult(name = "finnTjenestepensjonsForholdResponse", targetNamespace = "http://nav-cons-pen-psak-tjenestepensjon/no/nav/inf", partName = "finnTjenestepensjonsForholdResult")
@@ -40,5 +40,4 @@ class PSAKTjenestepensjonMock : PSAKTjenestepensjon{
     override fun opprettTjenestepensjonForhold(@WebParam(partName = "opprettTjenestepensjonForholdParameters", name = "opprettTjenestepensjonForhold", targetNamespace = "http://nav-cons-pen-psak-tjenestepensjon/no/nav/inf") request: OpprettTjenestepensjonForhold): OpprettTjenestepensjonForholdResponse {
         TODO("Not yet implemented")
     }
-
 }

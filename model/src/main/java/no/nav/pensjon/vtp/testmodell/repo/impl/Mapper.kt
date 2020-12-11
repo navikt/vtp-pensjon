@@ -95,7 +95,6 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
             ?: emptyList()
     }
 
-
     private fun personstatusModell(it: PersonstatusTemplate): PersonstatusModell {
         return PersonstatusModell(
             fom = it.fom,

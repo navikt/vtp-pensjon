@@ -1,26 +1,27 @@
 package no.nav.pensjon.vtp.ldap
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import com.unboundid.ldap.listener.InMemoryDirectoryServer
-import com.unboundid.ldif.LDIFAddChangeRecord
-import com.unboundid.ldif.LDIFReader
-import javax.annotation.PostConstruct
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig
 import com.unboundid.ldap.listener.InMemoryListenerConfig
 import com.unboundid.ldap.sdk.Entry
+import com.unboundid.ldif.LDIFAddChangeRecord
+import com.unboundid.ldif.LDIFReader
+import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Component
+import javax.annotation.PostConstruct
 import javax.net.ssl.SSLContext
 
 @Component
 @ConditionalOnProperty("ldap.server.enabled")
 class LdapServer(
-        private val ansatteIndeks: AnsatteIndeks,
-        @Value("\${ldap.server.port}") listenerPortLdap: Int,
-        @Value("\${ldap.server.securePort}") listenerPortLdaps: Int,
-        tlsContext: SSLContext) {
+    private val ansatteIndeks: AnsatteIndeks,
+    @Value("\${ldap.server.port}") listenerPortLdap: Int,
+    @Value("\${ldap.server.securePort}") listenerPortLdaps: Int,
+    tlsContext: SSLContext
+) {
     private val directoryServer: InMemoryDirectoryServer
 
     private fun readNAVAnsatte(server: InMemoryDirectoryServer) {

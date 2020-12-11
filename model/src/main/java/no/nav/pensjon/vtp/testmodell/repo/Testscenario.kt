@@ -8,12 +8,12 @@ import org.springframework.data.mongodb.core.mapping.Document
 
 @Document
 data class Testscenario(
-        @Id
-        val id: String,
-        val templateNavn: String,
-        val personopplysninger: Personopplysninger,
-        val søkerInntektYtelse: InntektYtelseModell?,
-        val annenpartInntektYtelse: InntektYtelseModell?,
-        val organisasjonModeller: List<OrganisasjonModell>,
-        val vars: Map<String, String?>
+    @Id
+    val id: String,
+    val templateNavn: String,
+    val personopplysninger: Personopplysninger,
+    val søkerInntektYtelse: InntektYtelseModell?,
+    val annenpartInntektYtelse: InntektYtelseModell?,
+    val organisasjonModeller: List<OrganisasjonModell>,
+    val vars: Map<String, String?>
 )

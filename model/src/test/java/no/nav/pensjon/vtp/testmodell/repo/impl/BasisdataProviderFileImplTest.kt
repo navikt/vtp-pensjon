@@ -11,7 +11,5 @@ internal class BasisdataProviderFileImplTest {
         val ansatte = BasisdataProviderFileImpl.loadAnsatte()
 
         assertFalse(ansatte.findAll().isEmpty())
-
     }
-
 }

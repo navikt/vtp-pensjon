@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class AdresserTest {
     @Test
     fun sjekk_scenarios() {
-        sjekkAdresseIndeks(BasisdataProviderFileImpl.loadAdresser());
+        sjekkAdresseIndeks(BasisdataProviderFileImpl.loadAdresser())
     }
 
     private fun sjekkAdresseIndeks(sc: AdresseIndeks) {

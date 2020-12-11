@@ -4,7 +4,6 @@ import no.nav.pensjon.vtp.core.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFoo
 import no.nav.tjeneste.virksomhet.oppgave.v3.informasjon.oppgave.*
 
-
 fun enhet(enhetId: String, enhetNavn: String): Enhet {
     val enhet = Enhet()
     enhet.id = enhetId
@@ -25,7 +24,7 @@ fun String.asFagomrade(): Fagomrade {
     return fagomrade
 }
 
-fun OppgaveFoo.asSporing() : Sporing {
+fun OppgaveFoo.asSporing(): Sporing {
     val sporing = Sporing()
     sporing.opprettetInfo = this.opprettetSporing?.asSporingsdetalj()
     sporing.endretInfo = this.endretSporing?.asSporingsdetalj()
@@ -67,15 +66,15 @@ fun OppgaveFoo.asOppgave3(): Oppgave {
     o.aktivFra = this.aktivFra?.asXMLGregorianCalendar()
     o.aktivTil = this.aktivTil?.asXMLGregorianCalendar()
     o.ansvarligEnhetId = this.ansvarligEnhetId
-    //o.setAnsvarligEnhetNavn(this.ansv);
+    // o.setAnsvarligEnhetNavn(this.ansv);
     o.ansvarligId = this.ansvarligId
-    //o.setAnsvarligNavn();
+    // o.setAnsvarligNavn();
     o.beskrivelse = this.beskrivelse
     o.dokumentId = this.dokumentId
     o.fagomrade = this.fagomradeKode?.asFagomrade()
     o.gjelder = this.brukerId?.asBruker()
     o.henvendelseId = this.henvendelseId
-    //o.setHenvendelsetype(this.getH);
+    // o.setHenvendelsetype(this.getH);
     o.kravId = this.kravId
     o.isLest = this.isLest
     o.mappe = this.mappeId?.asMappe()
@@ -90,9 +89,9 @@ fun OppgaveFoo.asOppgave3(): Oppgave {
     o.skannetDato = this.skannetDato?.asXMLGregorianCalendar()
     o.soknadsId = this.soknadsId
     o.sporing = this.asSporing()
-    //o.setStatus();
+    // o.setStatus();
     o.versjon = this.version
     o.underkategori = this.underkategoriKode?.asUnderkategori()
-    //o.setUtvidelse(this.ut);
+    // o.setUtvidelse(this.ut);
     return o
 }

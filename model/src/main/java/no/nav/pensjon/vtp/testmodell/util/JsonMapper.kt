@@ -1,8 +1,5 @@
 package no.nav.pensjon.vtp.testmodell.util
 
-import java.time.temporal.ChronoField
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.*
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE
 import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY
@@ -12,9 +9,12 @@ import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.DeserializationFeature.*
 import com.fasterxml.jackson.databind.SerializationFeature.*
 import com.fasterxml.jackson.databind.module.SimpleModule
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import java.time.LocalDate
 import java.time.LocalDate.parse
 import java.time.format.DateTimeFormatterBuilder
+import java.time.temporal.ChronoField
 import java.util.*
 
 /** NB - Single-use only. Variable lest/skrevet caches internt i modul. Variable som brukes vil deles på tvers av invokeringer. */
@@ -29,22 +29,31 @@ class JsonMapper constructor(vars: VariabelContainer = VariabelContainer()) {
 
             when {
                 date.matches("\\d{4}".toRegex()) -> {
-                    return parse(date, DateTimeFormatterBuilder()
-                        .appendPattern("uuuu")
-                        .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
-                        .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-                        .toFormatter())
+                    return parse(
+                        date,
+                        DateTimeFormatterBuilder()
+                            .appendPattern("uuuu")
+                            .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
+                            .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                            .toFormatter()
+                    )
                 }
                 date.matches("\\d{4}-\\d{2}".toRegex()) -> {
-                    return parse(date, DateTimeFormatterBuilder()
-                        .appendPattern("uuuu-MM")
-                        .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-                        .toFormatter())
+                    return parse(
+                        date,
+                        DateTimeFormatterBuilder()
+                            .appendPattern("uuuu-MM")
+                            .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                            .toFormatter()
+                    )
                 }
                 date.matches("\\d{4}-\\d{2}-\\d{2}".toRegex()) -> {
-                    return parse(date, DateTimeFormatterBuilder()
-                        .appendPattern("uuuu-MM-dd")
-                        .toFormatter())
+                    return parse(
+                        date,
+                        DateTimeFormatterBuilder()
+                            .appendPattern("uuuu-MM-dd")
+                            .toFormatter()
+                    )
                 }
                 else -> {
                     return null
@@ -54,11 +63,14 @@ class JsonMapper constructor(vars: VariabelContainer = VariabelContainer()) {
 
         init {
             val birthdateModule = SimpleModule().apply {
-                addDeserializer(LocalDate::class.java, object : JsonDeserializer<LocalDate?>() {
-                    override fun deserialize(jp: JsonParser, ctxt: DeserializationContext): LocalDate? {
-                        return parseLocalDateOrNull(jp.readValueAs(String::class.java))
+                addDeserializer(
+                    LocalDate::class.java,
+                    object : JsonDeserializer<LocalDate?>() {
+                        override fun deserialize(jp: JsonParser, ctxt: DeserializationContext): LocalDate? {
+                            return parseLocalDateOrNull(jp.readValueAs(String::class.java))
+                        }
                     }
-                })
+                )
             }
 
             OBJECT_MAPPER = ObjectMapper().apply {

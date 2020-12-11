@@ -1,21 +1,21 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl
 
-import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
-import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate
-import java.lang.IllegalArgumentException
-import no.nav.pensjon.vtp.testmodell.util.FindTemplateVariables
-import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell
+import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger
 import no.nav.pensjon.vtp.testmodell.repo.TemplateVariable
-import java.io.IOException
-import java.lang.IllegalStateException
+import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplate
+import no.nav.pensjon.vtp.testmodell.util.FindTemplateVariables
+import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.Resource
 import org.springframework.core.io.UrlResource
 import org.springframework.util.ObjectUtils
+import java.io.IOException
 import java.io.InputStreamReader
 import java.io.Reader
+import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
 
 class FileTestscenarioTemplate(
     val templateDir: String,
@@ -25,8 +25,8 @@ class FileTestscenarioTemplate(
 
     override fun toString(): String {
         return "FileTestscenarioTemplate{" +
-                ", templateName='" + templateName + '\'' +
-                '}'
+            ", templateName='" + templateName + '\'' +
+            '}'
     }
 
     private fun notEmpty(string: String, name: String) {

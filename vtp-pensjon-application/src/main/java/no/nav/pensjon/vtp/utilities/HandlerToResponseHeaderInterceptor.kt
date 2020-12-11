@@ -5,7 +5,6 @@ import org.springframework.web.servlet.HandlerInterceptor
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-
 /**
  * Adds the handler toString of the MVC Handler to the HTTP Response Header
  * so that it can be added to the access log. This is to make it easier to
@@ -23,5 +22,4 @@ class HandlerToResponseHeaderInterceptor : HandlerInterceptor {
 
         return true
     }
-
 }

@@ -87,10 +87,12 @@ class CryptoConfiguration(
     @Bean
     fun rsaJsonWebKey(keyStore: KeyStore): RsaJsonWebKey {
         val jwk = newPublicJwk(keyStore.getCertificate(this.keyAndCertAlias).publicKey) as RsaJsonWebKey
-        jwk.privateKey = (keyStore.getEntry(
-            this.keyAndCertAlias,
-            PasswordProtection(keystorePassword.toCharArray())
-        ) as KeyStore.PrivateKeyEntry).privateKey
+        jwk.privateKey = (
+            keyStore.getEntry(
+                this.keyAndCertAlias,
+                PasswordProtection(keystorePassword.toCharArray())
+            ) as KeyStore.PrivateKeyEntry
+            ).privateKey
         jwk.keyId = "1"
         return jwk
     }

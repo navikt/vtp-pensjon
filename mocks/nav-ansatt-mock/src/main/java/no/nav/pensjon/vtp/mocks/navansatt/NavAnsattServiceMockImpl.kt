@@ -1,27 +1,27 @@
 package no.nav.pensjon.vtp.mocks.navansatt
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
-import javax.xml.ws.soap.Addressing
-import javax.jws.WebService
-import javax.jws.HandlerChain
-import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
-import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
-import no.nav.inf.psak.navansatt.PSAKNAVAnsatt
-import javax.jws.WebMethod
-import javax.jws.WebResult
 import no.nav.inf.psak.navansatt.HentNAVAnsattEnhetListeFaultPenGeneriskMsg
 import no.nav.inf.psak.navansatt.HentNAVAnsattEnhetListeFaultPenNAVAnsattIkkeFunnetMsg
-import javax.jws.WebParam
-import no.nav.lib.pen.psakpselv.asbo.navansatt.ASBOPenNAVAnsatt
-import no.nav.lib.pen.psakpselv.asbo.ASBOPenFagomradeListe
-import no.nav.lib.pen.psakpselv.asbo.navansatt.ASBOPenNAVAnsattListe
 import no.nav.inf.psak.navansatt.HentNAVAnsattFaultPenNAVAnsattIkkeFunnetMsg
+import no.nav.inf.psak.navansatt.PSAKNAVAnsatt
 import no.nav.lib.pen.psakpselv.asbo.ASBOPenFagomrade
+import no.nav.lib.pen.psakpselv.asbo.ASBOPenFagomradeListe
+import no.nav.lib.pen.psakpselv.asbo.navansatt.ASBOPenNAVAnsatt
+import no.nav.lib.pen.psakpselv.asbo.navansatt.ASBOPenNAVAnsattListe
 import no.nav.lib.pen.psakpselv.asbo.navorgenhet.ASBOPenNAVEnhet
 import no.nav.lib.pen.psakpselv.asbo.navorgenhet.ASBOPenNAVEnhetListe
+import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
+import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell
+import javax.jws.HandlerChain
+import javax.jws.WebMethod
+import javax.jws.WebParam
+import javax.jws.WebResult
+import javax.jws.WebService
 import javax.xml.ws.RequestWrapper
 import javax.xml.ws.ResponseWrapper
+import javax.xml.ws.soap.Addressing
 
 @SoapService(path = ["/esb/nav-cons-pen-psak-navansattWeb/sca/PSAKNAVAnsattWSEXP"])
 @Addressing
@@ -55,12 +55,14 @@ class NavAnsattServiceMockImpl(private val ansatteIndeks: AnsatteIndeks, private
     @WebResult(name = "hentNAVAnsattFagomradeListeResponse")
     override fun hentNAVAnsattFagomradeListe(@WebParam(name = "hentNAVAnsattFagomradeListeRequest") asboPenNAVAnsatt: ASBOPenNAVAnsatt): ASBOPenFagomradeListe {
         return ASBOPenFagomradeListe().apply {
-            fagomrader = arrayOf(ASBOPenFagomrade().apply {
-                fagomradeBeskrivelse = "Spesialkompetanse for pepperkakebaking"
-                fagomradeKode = "424242"
-                gyldig = true
-                trekkgruppeKode = "567890"
-            })
+            fagomrader = arrayOf(
+                ASBOPenFagomrade().apply {
+                    fagomradeBeskrivelse = "Spesialkompetanse for pepperkakebaking"
+                    fagomradeKode = "424242"
+                    gyldig = true
+                    trekkgruppeKode = "567890"
+                }
+            )
         }
     }
 
@@ -71,15 +73,15 @@ class NavAnsattServiceMockImpl(private val ansatteIndeks: AnsatteIndeks, private
     override fun hentNAVAnsattListe(@WebParam(name = "hentNAVAnsattListeRequest") enhet: ASBOPenNAVEnhet): ASBOPenNAVAnsattListe {
         return ASBOPenNAVAnsattListe().apply {
             navAnsatte = ansatteIndeks.findByEnhetsId(enhet.enhetsId)
-                    .map {
-                        ASBOPenNAVAnsatt().apply {
-                            ansattId = it.cn
-                            ansattNavn = it.displayName
-                            fornavn = it.givenname
-                            etternavn = it.sn
-                        }
+                .map {
+                    ASBOPenNAVAnsatt().apply {
+                        ansattId = it.cn
+                        ansattNavn = it.displayName
+                        fornavn = it.givenname
+                        etternavn = it.sn
                     }
-                    .toTypedArray()
+                }
+                .toTypedArray()
         }
     }
 
@@ -90,8 +92,8 @@ class NavAnsattServiceMockImpl(private val ansatteIndeks: AnsatteIndeks, private
     @Throws(HentNAVAnsattFaultPenNAVAnsattIkkeFunnetMsg::class)
     override fun hentNAVAnsatt(@WebParam(name = "hentNAVAnsattRequest") asboPenNAVAnsatt: ASBOPenNAVAnsatt): ASBOPenNAVAnsatt {
         val ansatt = ansatteIndeks.findByCn(asboPenNAVAnsatt.ansattId)
-                ?: ansatteIndeks.findBySnIgnoreCase("PensjonSaksbehandler")
-                ?: throw HentNAVAnsattFaultPenNAVAnsattIkkeFunnetMsg("NAV-ansatt '" + asboPenNAVAnsatt.ansattId + "' ikke funnet")
+            ?: ansatteIndeks.findBySnIgnoreCase("PensjonSaksbehandler")
+            ?: throw HentNAVAnsattFaultPenNAVAnsattIkkeFunnetMsg("NAV-ansatt '" + asboPenNAVAnsatt.ansattId + "' ikke funnet")
 
         asboPenNAVAnsatt.ansattNavn = ansatt.displayName
         asboPenNAVAnsatt.fornavn = ansatt.givenname

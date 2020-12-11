@@ -21,17 +21,19 @@ class PsakPersonServiceMockImpl(private val personModellRepository: PersonModell
     @ResponseWrapper(localName = "finnPersonResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.FinnPersonResponse")
     @WebResult(name = "finnPersonResponse")
     override fun finnPerson(
-            @WebParam(name = "finnPersonRequest") finnPersonRequest: ASBOPenFinnPersonRequest
+        @WebParam(name = "finnPersonRequest") finnPersonRequest: ASBOPenFinnPersonRequest
     ): ASBOPenFinnPersonResponse {
         val asboPenFinnPersonResponse = ASBOPenFinnPersonResponse()
         val liste = ASBOPenPersonListe()
 
-        liste.setPersoner(personModellRepository.findAll()
+        liste.setPersoner(
+            personModellRepository.findAll()
                 .map(PersonModell::ident)
                 .map { ident -> psakpselvPersonAdapter.getASBOPenPerson(ident) }
                 .filter { i -> i.isPresent }
                 .map { o -> o.get() }
-                .toTypedArray())
+                .toTypedArray()
+        )
 
         asboPenFinnPersonResponse.personer = liste
         return asboPenFinnPersonResponse
@@ -51,7 +53,7 @@ class PsakPersonServiceMockImpl(private val personModellRepository: PersonModell
     @WebResult(name = "hentBrukerprofilResponse")
     @Throws(HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg::class)
     override fun hentBrukerprofil(
-            @WebParam(name = "hentBrukerprofilRequest") hentBrukerprofilRequest: ASBOPenPerson
+        @WebParam(name = "hentBrukerprofilRequest") hentBrukerprofilRequest: ASBOPenPerson
     ): ASBOPenPerson {
         return psakpselvPersonAdapter.getASBOPenPerson(hentBrukerprofilRequest.fodselsnummer).orElseThrow({ HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg() })
     }
@@ -78,7 +80,7 @@ class PsakPersonServiceMockImpl(private val personModellRepository: PersonModell
     @WebResult(name = "hentFamilierelasjonerResponse")
     @Throws(HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg::class)
     override fun hentFamilierelasjoner(
-            @WebParam(name = "hentFamilierelasjonerRequest") hentFamilierelasjonerRequest: ASBOPenHentFamilierelasjonerRequest
+        @WebParam(name = "hentFamilierelasjonerRequest") hentFamilierelasjonerRequest: ASBOPenHentFamilierelasjonerRequest
     ): ASBOPenPerson {
         return psakpselvPersonAdapter.getASBOPenPerson(hentFamilierelasjonerRequest.fodselsnummer).orElseThrow({ HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg() })
     }
@@ -89,7 +91,7 @@ class PsakPersonServiceMockImpl(private val personModellRepository: PersonModell
     @WebResult(name = "hentSamboerforholdResponse")
     @Throws(HentSamboerforholdFaultPenGeneriskMsg::class)
     override fun hentSamboerforhold(
-            @WebParam(name = "hentSamboerforholdRequest") hentSamboerforholdRequest: ASBOPenHentSamboerforholdRequest
+        @WebParam(name = "hentSamboerforholdRequest") hentSamboerforholdRequest: ASBOPenHentSamboerforholdRequest
     ): ASBOPenPerson {
         return psakpselvPersonAdapter.getASBOPenPerson(hentSamboerforholdRequest.fodselsnummer).orElseThrow({ HentSamboerforholdFaultPenGeneriskMsg() })
     }
@@ -174,7 +176,7 @@ class PsakPersonServiceMockImpl(private val personModellRepository: PersonModell
     @WebResult(name = "hentKontoinformasjonsResponse")
     @Throws(HentKontoinformasjonFaultPenPersonIkkeFunnetMsg::class)
     override fun hentKontoinformasjon(
-            @WebParam(name = "hentKontoinformasjonRequest") hentKontoinformasjonRequest: ASBOPenPerson
+        @WebParam(name = "hentKontoinformasjonRequest") hentKontoinformasjonRequest: ASBOPenPerson
     ): ASBOPenPerson {
         return psakpselvPersonAdapter.getASBOPenPerson(hentKontoinformasjonRequest.fodselsnummer).orElseThrow({ HentKontoinformasjonFaultPenPersonIkkeFunnetMsg() })
     }
@@ -185,7 +187,8 @@ class PsakPersonServiceMockImpl(private val personModellRepository: PersonModell
     @WebResult(name = "hentPersonResponse")
     @Throws(HentPersonFaultPenPersonIkkeFunnetMsg::class)
     override fun hentPerson(
-            @WebParam(name = "hentPersonRequest") hentPersonRequest: ASBOPenHentPersonRequest): ASBOPenPerson {
+        @WebParam(name = "hentPersonRequest") hentPersonRequest: ASBOPenHentPersonRequest
+    ): ASBOPenPerson {
         return psakpselvPersonAdapter.getASBOPenPerson(hentPersonRequest.person.fodselsnummer).orElseThrow({ HentPersonFaultPenPersonIkkeFunnetMsg() })
     }
 

@@ -1,17 +1,17 @@
 package no.nav.pensjon.vtp.testmodell.util
 
 import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer
-import java.io.IOException
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.core.Version
 import com.fasterxml.jackson.databind.BeanDescription
-import org.threeten.extra.PeriodDuration
-import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier
 import com.fasterxml.jackson.databind.DeserializationConfig
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier
+import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer
+import com.fasterxml.jackson.databind.module.SimpleModule
+import org.threeten.extra.PeriodDuration
+import java.io.IOException
 import java.time.LocalDateTime
 import java.util.function.Function
 import java.util.regex.Pattern

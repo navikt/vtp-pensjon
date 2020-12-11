@@ -1,18 +1,18 @@
 package no.nav.pensjon.vtp.testmodell.util
 
-import java.io.IOException
-import java.lang.IllegalArgumentException
-import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier
-import com.fasterxml.jackson.databind.deser.ContextualDeserializer
-import com.fasterxml.jackson.databind.deser.ResolvableDeserializer
-import com.fasterxml.jackson.core.JsonStreamContext
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.core.JsonStreamContext
 import com.fasterxml.jackson.databind.*
+import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier
+import com.fasterxml.jackson.databind.deser.ContextualDeserializer
+import com.fasterxml.jackson.databind.deser.ResolvableDeserializer
+import com.fasterxml.jackson.databind.module.SimpleModule
 import no.nav.pensjon.vtp.testmodell.repo.TemplateVariable
+import java.io.IOException
 import java.io.Reader
+import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 import java.util.*
 import java.util.regex.Pattern

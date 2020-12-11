@@ -39,8 +39,9 @@ class InntektMockImpl(private val inntektYtelseIndeks: InntektYtelseIndeks) : In
             throw HentInntektListeBolkUgyldigInput("Formål eller A-inntektsfilter mangler", UgyldigInput())
         }
         val response = HentInntektListeBolkResponse()
-        if (request.identListe != null && !request.identListe.isEmpty()
-                && request.uttrekksperiode != null) {
+        if (request.identListe != null && !request.identListe.isEmpty() &&
+            request.uttrekksperiode != null
+        ) {
             val fom = ConversionUtils.convertToLocalDate(request.uttrekksperiode.maanedFom)
             var tom = ConversionUtils.convertToLocalDate(request.uttrekksperiode.maanedTom)
             tom = if (tom == null) {
@@ -131,7 +132,7 @@ class InntektMockImpl(private val inntektYtelseIndeks: InntektYtelseIndeks) : In
         return if (aktoer is PersonIdent) {
             aktoer.personIdent
         } else if (aktoer is AktoerId) {
-            //TODO: Konverter AktoerId til PersonIdent
+            // TODO: Konverter AktoerId til PersonIdent
             aktoer.aktoerId
         } else {
             throw UnsupportedOperationException("Aktoertype ikke støttet")

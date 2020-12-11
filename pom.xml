@@ -38,6 +38,7 @@
         <java.version>11</java.version>
         <kotlin.version>1.3.72</kotlin.version>
         <kotlin.code.style>official</kotlin.code.style>
+        <kotlin.format.skip>false</kotlin.format.skip>
 
         <kafka.version>2.6.0</kafka.version>
         <cxf.version>3.4.1</cxf.version>
@@ -614,6 +615,29 @@
         </pluginManagement>
 
         <plugins>
+            <plugin>
+                <groupId>com.github.gantsign.maven</groupId>
+                <artifactId>ktlint-maven-plugin</artifactId>
+                <version>1.7.0</version>
+                <executions>
+                    <execution>
+                        <id>format-kotlin-code</id>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${kotlin.format.skip}</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>check-kotlin-code</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>

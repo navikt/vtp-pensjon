@@ -14,26 +14,25 @@ import java.util.Optional.ofNullable
 
 private const val NB = "NB"
 
-
 @Document
 data class PersonModell(
-        @Id
-        val ident: String,
-        val aktørIdent: String,
-        val fornavn: String,
-        val etternavn: String,
-        val fødselsdato: LocalDate?,
-        val dødsdato: LocalDate?,
-        val diskresjonskode: Diskresjonskoder?,
-        val språk: String?,
-        val kjønn: Kjønn?,
-        val gjeldendeAdresseType: AdresseType?,
-        val geografiskTilknytning: GeografiskTilknytningModell?,
-        val statsborgerskap: List<StatsborgerskapModell>?,
-        val sivilstand: List<SivilstandModell>?,
-        val personstatus: List<PersonstatusModell>?,
-        val adresser: List<AdresseModell>,
-        val medlemskap: MedlemskapModell?
+    @Id
+    val ident: String,
+    val aktørIdent: String,
+    val fornavn: String,
+    val etternavn: String,
+    val fødselsdato: LocalDate?,
+    val dødsdato: LocalDate?,
+    val diskresjonskode: Diskresjonskoder?,
+    val språk: String?,
+    val kjønn: Kjønn?,
+    val gjeldendeAdresseType: AdresseType?,
+    val geografiskTilknytning: GeografiskTilknytningModell?,
+    val statsborgerskap: List<StatsborgerskapModell>?,
+    val sivilstand: List<SivilstandModell>?,
+    val personstatus: List<PersonstatusModell>?,
+    val adresser: List<AdresseModell>,
+    val medlemskap: MedlemskapModell?
 ) {
     fun getAdresse(adresseType: AdresseType): Optional<AdresseModell> {
         return ofNullable(adresser.firstOrNull { it.adresseType == adresseType })

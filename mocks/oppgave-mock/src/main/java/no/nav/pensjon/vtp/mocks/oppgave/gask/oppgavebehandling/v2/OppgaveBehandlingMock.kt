@@ -17,7 +17,6 @@ import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper
 import javax.xml.ws.ResponseWrapper
 
-
 @SoapService(path = ["/esb/nav-tjeneste-oppgavebehandling_v2Web/sca/OppgavebehandlingWSEXP"])
 @WebService(targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2", name = "Oppgavebehandling")
 @XmlSeeAlso(ObjectFactory::class, no.nav.virksomhet.tjenester.oppgavebehandling.v2.ObjectFactory::class, no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.ObjectFactory::class)
@@ -53,33 +52,37 @@ class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private va
         val sporing = Sporing("saksbeh", getNorg2Modell(request.opprettetAvEnhetId)) // XXX: Get actual user from security context
 
         return with(request.opprettOppgave) {
-            wrap(oppgaveRepository.save(OppgaveFoo(
-                    opprettetSporing = sporing,
-                    endretSporing = sporing,
-                    aktivFra = aktivFra?.toLocalDate(),
-                    aktivTil = aktivTil?.toLocalDate(),
-                    ansvarligEnhetId = ansvarligEnhetId,
-                    ansvarligId = ansvarligId,
-                    beskrivelse = beskrivelse,
-                    brukerId = brukerId,
-                    brukertypeKode = brukertypeKode,
-                    dokumentId = dokumentId,
-                    fagomradeKode = fagomradeKode,
-                    henvendelseId = henvendelseId,
-                    kravId = kravId,
-                    isLest = lest,
-                    mappeId = mappeId,
-                    mottattDato = mottattDato?.toLocalDate(),
-                    normDato = normDato?.toLocalDate(),
-                    oppfolging = oppfolging,
-                    oppgavetypeKode = oppgavetypeKode,
-                    prioritetKode = prioritetKode,
-                    revurderingstype = revurderingstype,
-                    saksnummer = saksnummer,
-                    skannetDato = skannetDato?.toLocalDate(),
-                    soknadsId = soknadsId,
-                    underkategoriKode = underkategoriKode
-            )).oppgaveId)
+            wrap(
+                oppgaveRepository.save(
+                    OppgaveFoo(
+                        opprettetSporing = sporing,
+                        endretSporing = sporing,
+                        aktivFra = aktivFra?.toLocalDate(),
+                        aktivTil = aktivTil?.toLocalDate(),
+                        ansvarligEnhetId = ansvarligEnhetId,
+                        ansvarligId = ansvarligId,
+                        beskrivelse = beskrivelse,
+                        brukerId = brukerId,
+                        brukertypeKode = brukertypeKode,
+                        dokumentId = dokumentId,
+                        fagomradeKode = fagomradeKode,
+                        henvendelseId = henvendelseId,
+                        kravId = kravId,
+                        isLest = lest,
+                        mappeId = mappeId,
+                        mottattDato = mottattDato?.toLocalDate(),
+                        normDato = normDato?.toLocalDate(),
+                        oppfolging = oppfolging,
+                        oppgavetypeKode = oppgavetypeKode,
+                        prioritetKode = prioritetKode,
+                        revurderingstype = revurderingstype,
+                        saksnummer = saksnummer,
+                        skannetDato = skannetDato?.toLocalDate(),
+                        soknadsId = soknadsId,
+                        underkategoriKode = underkategoriKode
+                    )
+                ).oppgaveId
+            )
         }
     }
 
@@ -142,11 +145,12 @@ class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private va
     @ResponseWrapper(localName = "lagreOppgaveResponse", targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2", className = "no.nav.virksomhet.tjenester.oppgavebehandling.v2.LagreOppgaveResponse")
     override fun lagreOppgave(request: LagreOppgaveRequest) {
         val oppgave = oppgaveRepository.findById(request.endreOppgave.oppgaveId)
-                ?: throw LagreOppgaveOppgaveIkkeFunnet("Oppgave med id=$request.endreOppgave.oppgaveId ikke funnet")
+            ?: throw LagreOppgaveOppgaveIkkeFunnet("Oppgave med id=$request.endreOppgave.oppgaveId ikke funnet")
 
         with(request.endreOppgave) {
             try {
-                oppgaveRepository.save(oppgave.copy(
+                oppgaveRepository.save(
+                    oppgave.copy(
                         version = versjon,
                         endretSporing = Sporing("saksbeh", getNorg2Modell(request.endretAvEnhetId)), // XXX: Get actual user from security context
                         aktivFra = aktivFra?.toLocalDate(),
@@ -172,7 +176,8 @@ class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private va
                         skannetDato = skannetDato?.toLocalDate(),
                         soknadsId = soknadsId,
                         underkategoriKode = underkategoriKode
-                ))
+                    )
+                )
             } catch (e: OptimisticLockingFailureException) {
                 // Translate to one of the optimistic locking exceptions that are thrown by GSAK
                 throw IllegalArgumentException("Feil ved endring. Optimistic Lock.")
@@ -231,8 +236,8 @@ class OppgaveBehandlingMock(private val enheterIndeks: EnheterIndeks, private va
     }
 
     private fun getNorg2Modell(enhetId: Int): Norg2Modell =
-            enheterIndeks.finnByEnhetId("" + enhetId)
-                    .orElseThrow { IllegalArgumentException("Unknown enhet $enhetId") }
+        enheterIndeks.finnByEnhetId("" + enhetId)
+            .orElseThrow { IllegalArgumentException("Unknown enhet $enhetId") }
 
     private fun wrap(oppgaveId: String): OpprettOppgaveResponse {
         val response = OpprettOppgaveResponse()

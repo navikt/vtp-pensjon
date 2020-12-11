@@ -11,7 +11,7 @@ class BrevMetadata {
     val dokType: String? = null
     val sprak: List<String> = emptyList()
     val visIPselv: Boolean = false
-    val utland:String? = null
+    val utland: String? = null
     val brevregeltype: String? = null
     val brevkravtype: String? = null
     val brevkontekst: String? = null

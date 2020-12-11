@@ -1,11 +1,11 @@
 package no.nav.pensjon.vtp.application
 
 import org.bouncycastle.asn1.x500.X500Name
-import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.cert.X509v1CertificateBuilder
-import org.bouncycastle.cert.jcajce.JcaX509v1CertificateBuilder
-import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter
+import org.bouncycastle.cert.jcajce.JcaX509v1CertificateBuilder
+import org.bouncycastle.jce.provider.BouncyCastleProvider
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder
 import java.io.*
 import java.math.BigInteger.valueOf
 import java.nio.file.Files
@@ -66,9 +66,9 @@ fun generateKeystore(keystoreFile: File, keystorePassword: CharArray, outputForm
 
     // Generate public/private keypair and self-signed certificate
     val keyPair = KeyPairGenerator
-            .getInstance("RSA").apply {
-                initialize(2048)
-            }.generateKeyPair()
+        .getInstance("RSA").apply {
+            initialize(2048)
+        }.generateKeyPair()
     val selfCert = createMasterCert(keyPair.public, keyPair.private)
 
     // Create the keystore, add the two entries
@@ -97,23 +97,25 @@ private fun createMasterCert(pubKey: PublicKey, privKey: PrivateKey): Certificat
     val validUntil = Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 3650)
 
     val builder: X509v1CertificateBuilder = JcaX509v1CertificateBuilder(
-            X500Name(issuer),
-            valueOf(1),
-            validFrom,
-            validUntil,
-            X500Name(subject),
-            pubKey
+        X500Name(issuer),
+        valueOf(1),
+        validFrom,
+        validUntil,
+        X500Name(subject),
+        pubKey
     )
 
     return JcaX509CertificateConverter()
-            .setProvider("BC")
-            .getCertificate(builder.build(
-                    JcaContentSignerBuilder("SHA1WithRSA")
-                            .setProvider("BC")
-                            .build(privKey)
-            ))
-            .apply {
-                checkValidity(Date())
-                verify(pubKey)
-            }
+        .setProvider("BC")
+        .getCertificate(
+            builder.build(
+                JcaContentSignerBuilder("SHA1WithRSA")
+                    .setProvider("BC")
+                    .build(privKey)
+            )
+        )
+        .apply {
+            checkValidity(Date())
+            verify(pubKey)
+        }
 }

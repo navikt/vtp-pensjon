@@ -1,14 +1,14 @@
 package no.nav.pensjon.vtp.auth.azuread
 
-import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
-import java.lang.RuntimeException
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.annotations.Api
+import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import java.lang.RuntimeException
 
 @RestController
 @Api(tags = ["AzureAd"])
@@ -33,9 +33,9 @@ class MicrosoftGraphApiMock(private val ansatteIndeks: AnsatteIndeks) {
         val (ident, ansatt) = getAnsatt(auth)
 
         return User(
-                context = "https://graph.microsoft.com/v1.0/\$metadata#users($select)/\$entity",
-                onPremisesSamAccountName = ident,
-                memberOf = ansatt.groups.map { Group(it) }
+            context = "https://graph.microsoft.com/v1.0/\$metadata#users($select)/\$entity",
+            onPremisesSamAccountName = ident,
+            memberOf = ansatt.groups.map { Group(it) }
         )
     }
 
@@ -45,24 +45,24 @@ class MicrosoftGraphApiMock(private val ansatteIndeks: AnsatteIndeks) {
         } else {
             val ident = auth.substring(14).split(";".toRegex()).toTypedArray()[0]
             val ansatt = ansatteIndeks.findByCn(ident)
-                    ?: throw RuntimeException("Ansatt med ident $ident ikke funnet i VTP.")
+                ?: throw RuntimeException("Ansatt med ident $ident ikke funnet i VTP.")
             return Pair(ident, ansatt)
         }
     }
 
     data class UserInfo(
-            val sub: String,
-            val name: String,
-            val family_name: String,
-            val given_name: String,
-            val picture: String,
-            val email: String
+        val sub: String,
+        val name: String,
+        val family_name: String,
+        val given_name: String,
+        val picture: String,
+        val email: String
     )
 
     data class User(
-            @JsonProperty("@odata.context") var context: String,
-            var onPremisesSamAccountName: String,
-            var memberOf: List<Group>
+        @JsonProperty("@odata.context") var context: String,
+        var onPremisesSamAccountName: String,
+        var memberOf: List<Group>
     )
 
     data class Group(var displayName: String)

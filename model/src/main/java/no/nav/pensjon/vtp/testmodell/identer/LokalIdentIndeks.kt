@@ -9,8 +9,8 @@ class LokalIdentIndeks(private val unikScenarioId: String, private val identGene
 
     fun getVoksenIdentForLokalIdent(lokalIdent: String, kjønn: Kjønn): String {
         return if (lokalIdent.matches("^\\d+$".toRegex())) {
-            identer.computeIfAbsent(key(lokalIdent)) { i: String? -> lokalIdent }
-        } else identer.computeIfAbsent(key(lokalIdent)) { i: String? ->
+            identer.computeIfAbsent(key(lokalIdent)) { lokalIdent }
+        } else identer.computeIfAbsent(key(lokalIdent)) {
             if (kjønn == Kjønn.M) identGenerator.tilfeldigMannFnr(
                 null
             ) else identGenerator.tilfeldigKvinneFnr(null)
@@ -19,8 +19,8 @@ class LokalIdentIndeks(private val unikScenarioId: String, private val identGene
 
     fun getVoksenIdentForLokalIdent(lokalIdent: String, kjønn: Kjønn, foedselsdato: String?): String {
         return if (lokalIdent.matches("^\\d+$".toRegex())) {
-            identer.computeIfAbsent(key(lokalIdent)) { i: String? -> lokalIdent }
-        } else identer.computeIfAbsent(key(lokalIdent)) { i: String? ->
+            identer.computeIfAbsent(key(lokalIdent)) { lokalIdent }
+        } else identer.computeIfAbsent(key(lokalIdent)) {
             if (kjønn == Kjønn.M) identGenerator.tilfeldigMannFnr(
                 foedselsdato
             ) else identGenerator.tilfeldigKvinneFnr(foedselsdato)
