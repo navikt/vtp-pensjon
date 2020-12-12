@@ -40,7 +40,7 @@
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin.format.skip>false</kotlin.format.skip>
 
-        <sonar.projectKey>navikt_vtp-pensjon</sonar.projectKey>
+        <sonar.projectKey>navikt_vtp-pensjon:${project.artifactId}</sonar.projectKey>
         <sonar.organization>navit</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
