@@ -5,6 +5,7 @@ import FormattedDate from "./FormattedDate";
 
 interface RequestResponseListProps {
   requests: RequestResponse[];
+  selectedRequest: RequestResponse | null;
   setSelectedRequest: (request: RequestResponse) => any;
 }
 export default function RequestResponseList(props: RequestResponseListProps) {
@@ -21,7 +22,9 @@ export default function RequestResponseList(props: RequestResponseListProps) {
       <tbody>
         {props.requests.map((request, i) => {
           let rowClass = "";
-          if (request.status >= 400 && request.status <= 499) {
+          if (request === props.selectedRequest) {
+            rowClass = "table-primary";
+          } else if (request.status >= 400 && request.status <= 499) {
             rowClass = "table-warning";
           } else if (request.status == 500) {
             rowClass = "table-danger";

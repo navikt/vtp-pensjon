@@ -27,6 +27,7 @@ export default () => {
         <Col className="w-50" style={scrollable}>
           <RequestResponseList
             requests={requests}
+            selectedRequest={requestToShow}
             setSelectedRequest={setSelectedRequest}
           />
         </Col>
