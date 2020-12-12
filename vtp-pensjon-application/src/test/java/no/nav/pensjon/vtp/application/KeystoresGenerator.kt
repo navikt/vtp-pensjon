@@ -28,7 +28,7 @@ import java.util.*
  * 6. Kopier og erstatt vtp truststore og keystore i keystore.jks og truststore med nye genererte
  * 7. Lag Pull-Request til vtp-master med oppdaterte truststore/keystore
  */
-fun main(args: Array<String>) {
+fun main() {
     val keystoreFile = File(System.getProperty("user.home", ".") + "/.modig/keystore.jks")
     val keystorePassword = "devillokeystore1234"
     val truststoreFile = File(System.getProperty("user.home", ".") + "/.modig/truststore.jks")
