@@ -11,13 +11,6 @@ object FiktivtNavn {
     private val fornavnKvinner = loadNames("/basedata/fornavn-kvinner.txt")
     private val fornavnMenn = loadNames("/basedata/fornavn-menn.txt")
 
-    fun getRandomFornavnMann(): String =
-        getRandom(fornavnMenn)
-    fun getRandomFornavnKvinne(): String =
-        getRandom(fornavnKvinner)
-    fun getRandomEtternavn(): String =
-        getRandom(etternavn)
-
     private fun getRandom(liste: List<String>): String {
         return liste[Random().nextInt(liste.size)]
     }
@@ -30,13 +23,13 @@ object FiktivtNavn {
 
     fun getRandomName(kjønn: Kjønn): PersonNavn {
         return if (kjønn == Kjønn.K) {
-            getRandomFemaleName(getRandomEtternavn())
+            getRandomFemaleName(getRandom(etternavn))
         } else {
-            getRandomMaleName(getRandomEtternavn())
+            getRandomMaleName(getRandom(etternavn))
         }
     }
 
-    fun getRandomName(kjønn: Kjønn, etternavn: String?): PersonNavn {
+    fun getRandomName(kjønn: Kjønn, etternavn: String): PersonNavn {
         return if (kjønn == Kjønn.K) {
             getRandomFemaleName(etternavn)
         } else {
@@ -56,11 +49,11 @@ object FiktivtNavn {
         }
     }
 
-    fun getRandomFemaleName(lastName: String?): PersonNavn {
-        return PersonNavn(getRandomFornavnKvinne(), lastName, Kjønn.K)
+    fun getRandomFemaleName(lastName: String): PersonNavn {
+        return PersonNavn(getRandom(fornavnKvinner), lastName, Kjønn.K)
     }
 
-    fun getRandomMaleName(lastName: String?): PersonNavn {
-        return PersonNavn(getRandomFornavnMann(), lastName, Kjønn.M)
+    fun getRandomMaleName(lastName: String): PersonNavn {
+        return PersonNavn(getRandom(fornavnMenn), lastName, Kjønn.M)
     }
 }

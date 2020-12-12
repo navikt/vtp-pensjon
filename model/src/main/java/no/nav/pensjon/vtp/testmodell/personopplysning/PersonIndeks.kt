@@ -1,9 +1,6 @@
 package no.nav.pensjon.vtp.testmodell.personopplysning
 
 import org.springframework.stereotype.Component
-import java.util.*
-import java.util.Optional.empty
-import java.util.Optional.ofNullable
 
 @Component
 class PersonIndeks(private val personIdentFooRepository: PersonIdentFooRepository) {
@@ -13,10 +10,8 @@ class PersonIndeks(private val personIdentFooRepository: PersonIdentFooRepositor
         pers.annenPart?.ident?.let { personIdentFooRepository.save(PersonIdentFoo(it, pers)) }
     }
 
-    fun findById(id: String): Optional<Personopplysninger> {
+    fun findById(id: String): Personopplysninger? {
         return personIdentFooRepository.findById(id)
             ?.personopplysninger
-            ?.let { ofNullable(it) }
-            ?: empty()
     }
 }

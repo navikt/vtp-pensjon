@@ -138,7 +138,7 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
                         addParameter("client_id", clientId)
                         addParameter("iss", getIssuer(tenant))
                         addParameter("redirect_uri", redirectUri)
-                        addParameter("code", "${user.cn};${nonce ?: ""}")
+                        addParameter("code", "${user.cn};$nonce")
                     }.toString()
                     UserEntry(username = user.cn, displayName = user.displayName, redirect = redirect)
                 }

@@ -15,28 +15,30 @@ import javax.xml.ws.soap.Addressing
 @Addressing
 @WebService(targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", name = "PSAKPerson")
 @HandlerChain(file = "/Handler-chain.xml")
-class PsakPersonServiceMockImpl(private val personModellRepository: PersonModellRepository, private val psakpselvPersonAdapter: PsakpselvPersonAdapter) : PSAKPerson {
+class PsakPersonServiceMockImpl(
+    private val personModellRepository: PersonModellRepository,
+    private val psakpselvPersonAdapter: PsakpselvPersonAdapter
+) : PSAKPerson {
     @WebMethod
-    @RequestWrapper(localName = "finnPerson", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.FinnPerson")
-    @ResponseWrapper(localName = "finnPersonResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.FinnPersonResponse")
+    @RequestWrapper(
+        localName = "finnPerson",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.FinnPerson"
+    )
+    @ResponseWrapper(
+        localName = "finnPersonResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.FinnPersonResponse"
+    )
     @WebResult(name = "finnPersonResponse")
     override fun finnPerson(
         @WebParam(name = "finnPersonRequest") finnPersonRequest: ASBOPenFinnPersonRequest
-    ): ASBOPenFinnPersonResponse {
-        val asboPenFinnPersonResponse = ASBOPenFinnPersonResponse()
-        val liste = ASBOPenPersonListe()
-
-        liste.setPersoner(
-            personModellRepository.findAll()
-                .map(PersonModell::ident)
-                .map { ident -> psakpselvPersonAdapter.getASBOPenPerson(ident) }
-                .filter { i -> i.isPresent }
-                .map { o -> o.get() }
+    ) = ASBOPenFinnPersonResponse().apply {
+        personer = ASBOPenPersonListe().apply {
+            personer = personModellRepository.findAll()
+                .map(PersonModell::ident).mapNotNull(psakpselvPersonAdapter::getASBOPenPerson)
                 .toTypedArray()
-        )
-
-        asboPenFinnPersonResponse.personer = liste
-        return asboPenFinnPersonResponse
+        }
     }
 
     override fun lagreSprak(lagreSprakRequest: ASBOPenPerson): ASBOPenTomRespons {
@@ -48,23 +50,42 @@ class PsakPersonServiceMockImpl(private val personModellRepository: PersonModell
     }
 
     @WebMethod
-    @RequestWrapper(localName = "hentBrukerprofil", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentBrukerprofil")
-    @ResponseWrapper(localName = "hentBrukerprofilResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentBrukerprofilResponse")
+    @RequestWrapper(
+        localName = "hentBrukerprofil",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentBrukerprofil"
+    )
+    @ResponseWrapper(
+        localName = "hentBrukerprofilResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentBrukerprofilResponse"
+    )
     @WebResult(name = "hentBrukerprofilResponse")
     @Throws(HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg::class)
     override fun hentBrukerprofil(
         @WebParam(name = "hentBrukerprofilRequest") hentBrukerprofilRequest: ASBOPenPerson
-    ): ASBOPenPerson {
-        return psakpselvPersonAdapter.getASBOPenPerson(hentBrukerprofilRequest.fodselsnummer).orElseThrow({ HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg() })
-    }
+    ) = psakpselvPersonAdapter.getASBOPenPerson(hentBrukerprofilRequest.fodselsnummer)
+        ?: throw HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg()
 
     @WebMethod
-    @RequestWrapper(localName = "hentEnhetId", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentEnhetId")
-    @ResponseWrapper(localName = "hentEnhetIdResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentEnhetIdResponse")
+    @RequestWrapper(
+        localName = "hentEnhetId",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentEnhetId"
+    )
+    @ResponseWrapper(
+        localName = "hentEnhetIdResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentEnhetIdResponse"
+    )
     @WebResult(name = "hentEnhetIdResponse", targetNamespace = "")
-    override fun hentEnhetId(@WebParam(name = "hentEnhetIdRequest", targetNamespace = "") hentEnhetIdRequest: ASBOPenPerson): ASBOPenPerson {
-        return psakpselvPersonAdapter.getASBOPenPerson(hentEnhetIdRequest.fodselsnummer).orElseThrow({ HentEnhetIdFaultPenPersonIkkeFunnetMsg() })
-    }
+    override fun hentEnhetId(
+        @WebParam(
+            name = "hentEnhetIdRequest",
+            targetNamespace = ""
+        ) hentEnhetIdRequest: ASBOPenPerson
+    ) = psakpselvPersonAdapter.getASBOPenPerson(hentEnhetIdRequest.fodselsnummer)
+        ?: throw HentEnhetIdFaultPenPersonIkkeFunnetMsg()
 
     override fun slettAdresse(slettAdresseRequest: ASBOPenSlettAdresseRequest): String {
         throw UnsupportedOperationException("Ikke implementert")
@@ -75,26 +96,40 @@ class PsakPersonServiceMockImpl(private val personModellRepository: PersonModell
     }
 
     @WebMethod
-    @RequestWrapper(localName = "hentFamilierelasjoner", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentFamilierelasjoner")
-    @ResponseWrapper(localName = "hentFamilierelasjonerResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentFamilierelasjonerResponse")
+    @RequestWrapper(
+        localName = "hentFamilierelasjoner",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentFamilierelasjoner"
+    )
+    @ResponseWrapper(
+        localName = "hentFamilierelasjonerResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentFamilierelasjonerResponse"
+    )
     @WebResult(name = "hentFamilierelasjonerResponse")
     @Throws(HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg::class)
     override fun hentFamilierelasjoner(
         @WebParam(name = "hentFamilierelasjonerRequest") hentFamilierelasjonerRequest: ASBOPenHentFamilierelasjonerRequest
-    ): ASBOPenPerson {
-        return psakpselvPersonAdapter.getASBOPenPerson(hentFamilierelasjonerRequest.fodselsnummer).orElseThrow({ HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg() })
-    }
+    ) = psakpselvPersonAdapter.getASBOPenPerson(hentFamilierelasjonerRequest.fodselsnummer)
+        ?: throw HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg()
 
     @WebMethod
-    @RequestWrapper(localName = "hentSamboerforhold", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentSamboerforhold")
-    @ResponseWrapper(localName = "hentSamboerforholdResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentSamboerforholdResponse")
+    @RequestWrapper(
+        localName = "hentSamboerforhold",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentSamboerforhold"
+    )
+    @ResponseWrapper(
+        localName = "hentSamboerforholdResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentSamboerforholdResponse"
+    )
     @WebResult(name = "hentSamboerforholdResponse")
     @Throws(HentSamboerforholdFaultPenGeneriskMsg::class)
     override fun hentSamboerforhold(
         @WebParam(name = "hentSamboerforholdRequest") hentSamboerforholdRequest: ASBOPenHentSamboerforholdRequest
-    ): ASBOPenPerson {
-        return psakpselvPersonAdapter.getASBOPenPerson(hentSamboerforholdRequest.fodselsnummer).orElseThrow({ HentSamboerforholdFaultPenGeneriskMsg() })
-    }
+    ) = psakpselvPersonAdapter.getASBOPenPerson(hentSamboerforholdRequest.fodselsnummer)
+        ?: throw HentSamboerforholdFaultPenGeneriskMsg()
 
     override fun lagreDodsdato(lagreDodsdatoRequest: ASBOPenPerson): String {
         throw UnsupportedOperationException("Ikke implementert")
@@ -137,21 +172,44 @@ class PsakPersonServiceMockImpl(private val personModellRepository: PersonModell
     }
 
     @WebMethod
-    @RequestWrapper(localName = "erEgenansatt", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.ErEgenansatt")
-    @ResponseWrapper(localName = "erEgenansattResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.ErEgenansattResponse")
+    @RequestWrapper(
+        localName = "erEgenansatt",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.ErEgenansatt"
+    )
+    @ResponseWrapper(
+        localName = "erEgenansattResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.ErEgenansattResponse"
+    )
     @WebResult(name = "erEgenansattResponse", targetNamespace = "")
-    override fun erEgenansatt(@WebParam(name = "erEgenansattRequest", targetNamespace = "") erEgenansattRequest: ASBOPenPerson): Boolean {
-        return erEgenansattRequest.erEgenansatt
-    }
+    override fun erEgenansatt(
+        @WebParam(
+            name = "erEgenansattRequest",
+            targetNamespace = ""
+        ) erEgenansattRequest: ASBOPenPerson
+    ) = erEgenansattRequest.erEgenansatt
 
     @WebMethod
-    @RequestWrapper(localName = "hentPersonUtland", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentPersonUtland")
-    @ResponseWrapper(localName = "hentPersonUtlandResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentPersonUtlandResponse")
+    @RequestWrapper(
+        localName = "hentPersonUtland",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentPersonUtland"
+    )
+    @ResponseWrapper(
+        localName = "hentPersonUtlandResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentPersonUtlandResponse"
+    )
     @WebResult(name = "hentPersonUtlandResponse", targetNamespace = "")
     @Throws(HentPersonUtlandFaultPenPersonIkkeFunnetMsg::class)
-    override fun hentPersonUtland(@WebParam(name = "hentPersonUtlandRequest", targetNamespace = "") hentPersonUtlandRequest: ASBOPenPerson): ASBOPenPerson {
-        return psakpselvPersonAdapter.getASBOPenPerson(hentPersonUtlandRequest.fodselsnummer).orElseThrow({ HentPersonUtlandFaultPenPersonIkkeFunnetMsg() })
-    }
+    override fun hentPersonUtland(
+        @WebParam(
+            name = "hentPersonUtlandRequest",
+            targetNamespace = ""
+        ) hentPersonUtlandRequest: ASBOPenPerson
+    ) = psakpselvPersonAdapter.getASBOPenPerson(hentPersonUtlandRequest.fodselsnummer)
+        ?: throw HentPersonUtlandFaultPenPersonIkkeFunnetMsg()
 
     override fun lagreBrukerprofil(lagreBrukerprofilRequest: ASBOPenPerson): ASBOPenTomRespons {
         throw UnsupportedOperationException("Ikke implementert")
@@ -162,35 +220,61 @@ class PsakPersonServiceMockImpl(private val personModellRepository: PersonModell
     }
 
     @WebMethod
-    @RequestWrapper(localName = "hentHistorikk", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentHistorikk")
-    @ResponseWrapper(localName = "hentHistorikkResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentHistorikkResponse")
+    @RequestWrapper(
+        localName = "hentHistorikk",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentHistorikk"
+    )
+    @ResponseWrapper(
+        localName = "hentHistorikkResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentHistorikkResponse"
+    )
     @WebResult(name = "hentHistorikkResponse", targetNamespace = "")
     @Throws(HentHistorikkFaultPenPersonIkkeFunnetMsg::class)
-    override fun hentHistorikk(@WebParam(name = "hentHistorikkRequest", targetNamespace = "") hentHistorikkRequest: ASBOPenHentHistorikkRequest): ASBOPenPerson {
-        return psakpselvPersonAdapter.getASBOPenPerson(hentHistorikkRequest.fodselsnummer).orElseThrow({ HentHistorikkFaultPenPersonIkkeFunnetMsg() })
-    }
+    override fun hentHistorikk(
+        @WebParam(
+            name = "hentHistorikkRequest",
+            targetNamespace = ""
+        ) hentHistorikkRequest: ASBOPenHentHistorikkRequest
+    ) = psakpselvPersonAdapter.getASBOPenPerson(hentHistorikkRequest.fodselsnummer)
+        ?: throw HentHistorikkFaultPenPersonIkkeFunnetMsg()
 
     @WebMethod
-    @RequestWrapper(localName = "hentKontoinformasjon", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentKontoinformasjon")
-    @ResponseWrapper(localName = "hentKontoinformasjonResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentKontoinformasjonResponse")
+    @RequestWrapper(
+        localName = "hentKontoinformasjon",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentKontoinformasjon"
+    )
+    @ResponseWrapper(
+        localName = "hentKontoinformasjonResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentKontoinformasjonResponse"
+    )
     @WebResult(name = "hentKontoinformasjonsResponse")
     @Throws(HentKontoinformasjonFaultPenPersonIkkeFunnetMsg::class)
     override fun hentKontoinformasjon(
         @WebParam(name = "hentKontoinformasjonRequest") hentKontoinformasjonRequest: ASBOPenPerson
-    ): ASBOPenPerson {
-        return psakpselvPersonAdapter.getASBOPenPerson(hentKontoinformasjonRequest.fodselsnummer).orElseThrow({ HentKontoinformasjonFaultPenPersonIkkeFunnetMsg() })
-    }
+    ) = psakpselvPersonAdapter.getASBOPenPerson(hentKontoinformasjonRequest.fodselsnummer)
+        ?: throw HentKontoinformasjonFaultPenPersonIkkeFunnetMsg()
 
     @WebMethod
-    @RequestWrapper(localName = "hentPerson", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentPerson")
-    @ResponseWrapper(localName = "hentPersonResponse", targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf", className = "no.nav.inf.psak.person.HentPersonResponse")
+    @RequestWrapper(
+        localName = "hentPerson",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentPerson"
+    )
+    @ResponseWrapper(
+        localName = "hentPersonResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.HentPersonResponse"
+    )
     @WebResult(name = "hentPersonResponse")
     @Throws(HentPersonFaultPenPersonIkkeFunnetMsg::class)
     override fun hentPerson(
         @WebParam(name = "hentPersonRequest") hentPersonRequest: ASBOPenHentPersonRequest
-    ): ASBOPenPerson {
-        return psakpselvPersonAdapter.getASBOPenPerson(hentPersonRequest.person.fodselsnummer).orElseThrow({ HentPersonFaultPenPersonIkkeFunnetMsg() })
-    }
+    ) = psakpselvPersonAdapter.getASBOPenPerson(hentPersonRequest.person.fodselsnummer)
+        ?: throw HentPersonFaultPenPersonIkkeFunnetMsg()
 
     override fun lagreSamboerforhold(lagreSamboerforholdRequest: ASBOPenPerson): ASBOPenTomRespons {
         throw UnsupportedOperationException("Ikke implementert")

@@ -2,12 +2,12 @@ package no.nav.pensjon.vtp.core.util
 
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.LocalDateTime.ofInstant
+import java.time.ZoneId.systemDefault
 import java.util.*
+import java.util.GregorianCalendar.from
 import javax.xml.datatype.DatatypeConfigurationException
 import javax.xml.datatype.DatatypeFactory
-import javax.xml.datatype.XMLGregorianCalendar
 
 class DateUtils
 
@@ -24,8 +24,8 @@ internal fun datetypeFactoryFun(): DatatypeFactory {
 
 private val datatypeFactory = datetypeFactoryFun()
 
-fun LocalDate.asXMLGregorianCalendar(): XMLGregorianCalendar = datatypeFactory.newXMLGregorianCalendar(GregorianCalendar.from(atStartOfDay(ZoneId.systemDefault())))
+fun LocalDate.asGregorianCalendar() = from(atStartOfDay(systemDefault()))
 
-fun Calendar.toLocalDate(): LocalDate? {
-    return LocalDateTime.ofInstant(this.toInstant(), this.timeZone.toZoneId()).toLocalDate()
-}
+fun LocalDate.asXMLGregorianCalendar() = datatypeFactory.newXMLGregorianCalendar(asGregorianCalendar())
+
+fun Calendar.toLocalDate() = ofInstant(toInstant(), timeZone.toZoneId()).toLocalDate()
