@@ -1,16 +1,16 @@
 package no.nav.pensjon.vtp.mocks.psak
 
 import no.nav.inf.pselv.person.*
-import no.nav.pensjon.vtp.core.annotations.SoapService
-import javax.jws.WebService
-import javax.jws.HandlerChain
 import no.nav.lib.pen.psakpselv.asbo.ASBOPenTomRespons
 import no.nav.lib.pen.psakpselv.asbo.person.*
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory
-import javax.jws.WebMethod
-import javax.jws.WebResult
-import javax.jws.WebParam
+import no.nav.pensjon.vtp.core.annotations.SoapService
 import java.lang.UnsupportedOperationException
+import javax.jws.HandlerChain
+import javax.jws.WebMethod
+import javax.jws.WebParam
+import javax.jws.WebResult
+import javax.jws.WebService
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper
 import javax.xml.ws.ResponseWrapper

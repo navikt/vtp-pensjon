@@ -2,12 +2,6 @@ package no.nav.pensjon.vtp.mocks.psak
 
 import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson
 import no.nav.pensjon.vtp.core.annotations.SoapService
-import javax.jws.WebService
-import javax.jws.HandlerChain
-import javax.jws.WebMethod
-import javax.jws.WebParam
-import java.lang.UnsupportedOperationException
-import javax.jws.WebResult
 import no.nav.virksomhet.part.person.v2.Diskresjonskode
 import no.nav.virksomhet.part.person.v2.Navn
 import no.nav.virksomhet.part.person.v2.PersonIdent
@@ -16,6 +10,12 @@ import no.nav.virksomhet.tjenester.person.meldinger.v2.*
 import no.nav.virksomhet.tjenester.person.v2.HentPersonPersonIkkeFunnet
 import no.nav.virksomhet.tjenester.person.v2.ObjectFactory
 import no.nav.virksomhet.tjenester.person.v2.Person
+import java.lang.UnsupportedOperationException
+import javax.jws.HandlerChain
+import javax.jws.WebMethod
+import javax.jws.WebParam
+import javax.jws.WebResult
+import javax.jws.WebService
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper
 import javax.xml.ws.ResponseWrapper
