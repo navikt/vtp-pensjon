@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: Set version
         id: version
         shell: bash
@@ -37,7 +39,14 @@ jobs:
           export VERSION="$TIME-$COMMIT$BRANCH_SUFFIX"
           echo "Building version $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-      - uses: actions/cache@v2
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v2
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -49,13 +58,13 @@ jobs:
       - name: Set build version
         run: |
           echo "BUILD_VERSION=$(date +%Y.%m.%d.%H%M%S)-$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
-
-      - name: Build artifacts
+      - name: Build and analyze
         shell: bash
         run: |
-          mvn clean install --settings maven-settings.xml -Dfile.encoding=UTF-8 -Dkotlin.format.skip=true
+          mvn clean install --settings maven-settings.xml -Dfile.encoding=UTF-8 -Dkotlin.format.skip=true -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Build and push Docker image
         run: |

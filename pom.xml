@@ -40,6 +40,10 @@
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin.format.skip>false</kotlin.format.skip>
 
+        <sonar.projectKey>navikt_vtp-pensjon</sonar.projectKey>
+        <sonar.organization>navit</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
         <kafka.version>2.6.0</kafka.version>
         <cxf.version>3.4.1</cxf.version>
         <tjenestespesifikasjoner.version>1.2020.07.17-17.06-31e5aa824db7</tjenestespesifikasjoner.version>
