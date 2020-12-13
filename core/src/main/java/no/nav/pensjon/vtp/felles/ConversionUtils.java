@@ -3,56 +3,48 @@ package no.nav.pensjon.vtp.felles;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static java.util.Date.from;
+import static java.util.GregorianCalendar.from;
+import static javax.xml.datatype.DatatypeFactory.newInstance;
 
-public class ConversionUtils {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ConversionUtils.class);
-
-    public static XMLGregorianCalendar convertToXMLGregorianCalendar(LocalDateTime localDateTime) {
-        if(localDateTime==null) {
+public interface ConversionUtils {
+    static XMLGregorianCalendar convertToXMLGregorianCalendar(LocalDateTime localDateTime) {
+        if (localDateTime == null) {
             return null;
         }
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-        gregorianCalendar.setTime(Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()));
-        XMLGregorianCalendar xmlGregorianCalendar = null;
+
         try {
-            xmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+            final GregorianCalendar gregorianCalendar = new GregorianCalendar();
+            gregorianCalendar.setTime(from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()));
+
+            return newInstance().newXMLGregorianCalendar(gregorianCalendar);
         } catch (DatatypeConfigurationException e) {
-            LOG.error("", e);
+            throw new RuntimeException(e);
         }
-        return xmlGregorianCalendar;
     }
 
-    public static XMLGregorianCalendar convertToXMLGregorianCalendar(LocalDate localDate) {
-
+    static XMLGregorianCalendar convertToXMLGregorianCalendar(LocalDate localDate) {
         if (localDate == null) {
             return null;
-        } else {
-            XMLGregorianCalendar xmlGregorianCalendar = null;
-            GregorianCalendar gregorianCalendar = GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-            try {
-                xmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
-            }
-            catch (DatatypeConfigurationException e) {
-                LOG.error("", e);
-            }
-            return xmlGregorianCalendar;
+        }
+
+        try {
+            return newInstance().newXMLGregorianCalendar(from(localDate.atStartOfDay(ZoneId.systemDefault())));
+        } catch (DatatypeConfigurationException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public static LocalDate convertToLocalDate(XMLGregorianCalendar xmlGregorianCalendar) {
+    static LocalDate convertToLocalDate(XMLGregorianCalendar xmlGregorianCalendar) {
         if (xmlGregorianCalendar == null) {
             return null;
         }
+
         return xmlGregorianCalendar.toGregorianCalendar().toZonedDateTime().toLocalDate();
     }
 }
