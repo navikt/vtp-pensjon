@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.Resource
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Files.createTempFile
 import java.security.KeyStore
 import java.security.KeyStore.PasswordProtection
 import java.util.*
@@ -20,10 +22,14 @@ import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.SSLContext
 
 private fun copyToTempFile(resource: Resource, prefix: String): File {
-    val tempFile = createTempFile(prefix, ".jks")
-    resource.inputStream
-        .use { i -> tempFile.outputStream().use { o -> i.copyTo(o) } }
-    return tempFile
+    val tempFolder = Files.createTempDirectory("")
+    val tempFile = createTempFile(tempFolder, prefix, ".jks")
+    tempFolder.toFile().deleteOnExit()
+
+    return tempFile.toFile().apply {
+        deleteOnExit()
+        resource.inputStream.use { i -> outputStream().use { o -> i.copyTo(o) } }
+    }
 }
 
 @Configuration
