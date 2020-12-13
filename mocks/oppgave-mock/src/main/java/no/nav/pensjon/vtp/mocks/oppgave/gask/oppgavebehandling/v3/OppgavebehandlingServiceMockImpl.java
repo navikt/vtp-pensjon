@@ -79,8 +79,7 @@ public class OppgavebehandlingServiceMockImpl implements OppgavebehandlingV3 {
     @RequestWrapper(localName = "ferdigstillOppgaveBolk", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgavebehandling/v3", className = "no.nav.tjeneste.virksomhet.oppgavebehandling.v3.FerdigstillOppgaveBolk")
     @ResponseWrapper(localName = "ferdigstillOppgaveBolkResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgavebehandling/v3", className = "no.nav.tjeneste.virksomhet.oppgavebehandling.v3.FerdigstillOppgaveBolkResponse")
     public FerdigstillOppgaveBolkResponse ferdigstillOppgaveBolk(@WebParam(name = "request") FerdigstillOppgaveBolkRequest ferdigstillOppgaveBolkRequest) {
-// throw new NotImplementedException();
-        LOG.info("Oppgavebehandling_ferdigstillOppgaveBolk. oppgaveIdListe: {}", ferdigstillOppgaveBolkRequest.getOppgaveIdListe().stream().collect(Collectors.joining(",")));
+        LOG.info("Oppgavebehandling_ferdigstillOppgaveBolk. oppgaveIdListe: {}", String.join(",", ferdigstillOppgaveBolkRequest.getOppgaveIdListe()));
         FerdigstillOppgaveBolkResponse response = new FerdigstillOppgaveBolkResponse();
         response.setTransaksjonOk(true);
         return response;
@@ -101,17 +100,14 @@ public class OppgavebehandlingServiceMockImpl implements OppgavebehandlingV3 {
     @ResponseWrapper(localName = "lagreMappeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgavebehandling/v3", className = "no.nav.tjeneste.virksomhet.oppgavebehandling.v3.LagreMappeResponse")
     public void lagreMappe(@WebParam(name = "request") LagreMappeRequest lagreMappeRequest) {
         throw new NotImplementedException();
-
     }
 
     @Override
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/oppgavebehandling/v3/Oppgavebehandling_v3/slettMappeRequest")
     @RequestWrapper(localName = "slettMappe", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgavebehandling/v3", className = "no.nav.tjeneste.virksomhet.oppgavebehandling.v3.SlettMappe")
     @ResponseWrapper(localName = "slettMappeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/oppgavebehandling/v3", className = "no.nav.tjeneste.virksomhet.oppgavebehandling.v3.SlettMappeResponse")
-    public void slettMappe(@WebParam(name = "request") SlettMappeRequest slettMappeRequest)
-            throws SlettMappeMappeIkkeTom {
+    public void slettMappe(@WebParam(name = "request") SlettMappeRequest slettMappeRequest) {
         throw new NotImplementedException();
-
     }
 
     @Override
