@@ -6,6 +6,7 @@ import javax.jws.HandlerChain;
 import javax.jws.WebService;
 import javax.xml.ws.soap.Addressing;
 
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +69,7 @@ public class DokumentproduksjonV2MockImpl implements DokumentproduksjonV2 {
 
     @Override
     public void avbrytVedlegg(AvbrytVedleggRequest avbrytVedleggRequest) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @Override
@@ -95,17 +96,17 @@ public class DokumentproduksjonV2MockImpl implements DokumentproduksjonV2 {
 
     @Override
     public void knyttVedleggTilForsendelse(KnyttVedleggTilForsendelseRequest knyttVedleggTilForsendelseRequest) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @Override
     public ProduserRedigerbartDokumentResponse produserRedigerbartDokument(ProduserRedigerbartDokumentRequest produserRedigerbartDokumentRequest) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @Override
     public void avbrytForsendelse(AvbrytForsendelseRequest avbrytForsendelseRequest) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @Override
@@ -115,16 +116,16 @@ public class DokumentproduksjonV2MockImpl implements DokumentproduksjonV2 {
 
     @Override
     public RedigerDokumentResponse redigerDokument(RedigerDokumentRequest redigerDokumentRequest) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @Override
     public ProduserIkkeredigerbartVedleggResponse produserIkkeredigerbartVedlegg(ProduserIkkeredigerbartVedleggRequest produserIkkeredigerbartVedleggRequest) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @Override
     public void endreDokumentTilRedigerbart(EndreDokumentTilRedigerbartRequest endreDokumentTilRedigerbartRequest) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 }

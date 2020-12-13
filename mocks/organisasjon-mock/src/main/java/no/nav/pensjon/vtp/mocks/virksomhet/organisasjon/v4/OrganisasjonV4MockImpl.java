@@ -1,44 +1,23 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.organisasjon.v4;
 
-import java.util.Optional;
-
-import javax.jws.HandlerChain;
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
-import javax.jws.WebService;
-import javax.xml.ws.RequestWrapper;
-import javax.xml.ws.ResponseWrapper;
-import javax.xml.ws.soap.Addressing;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException;
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell;
+import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.binding.HentNoekkelinfoOrganisasjonUgyldigInput;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.binding.HentOrganisasjonUgyldigInput;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.binding.OrganisasjonV4;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.feil.UgyldigInput;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.informasjon.Organisasjon;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.FinnOrganisasjonRequest;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.FinnOrganisasjonResponse;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.FinnOrganisasjonsendringerListeRequest;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.FinnOrganisasjonsendringerListeResponse;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.HentNoekkelinfoOrganisasjonRequest;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.HentNoekkelinfoOrganisasjonResponse;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.HentOrganisasjonRequest;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.HentOrganisasjonResponse;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.HentOrganisasjonsnavnBolkRequest;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.HentOrganisasjonsnavnBolkResponse;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.HentVirksomhetsOrgnrForJuridiskOrgnrBolkRequest;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.HentVirksomhetsOrgnrForJuridiskOrgnrBolkResponse;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.ValiderOrganisasjonRequest;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.ValiderOrganisasjonResponse;
+import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-// import javax.persistence.EntityManager;
-// import javax.persistence.Persistence;
+import javax.jws.*;
+import javax.xml.ws.RequestWrapper;
+import javax.xml.ws.ResponseWrapper;
+import javax.xml.ws.soap.Addressing;
+import java.util.Optional;
 
 @SoapService(path = "/ereg/ws/OrganisasjonService/v4")
 @Addressing
@@ -62,7 +41,7 @@ public class OrganisasjonV4MockImpl implements OrganisasjonV4 {
     @ResponseWrapper(localName = "finnOrganisasjonResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjon/v4",
             className = "no.nav.tjeneste.virksomhet.organisasjon.v4.FinnOrganisasjonResponse")
     public FinnOrganisasjonResponse finnOrganisasjon(@WebParam(name = "request") FinnOrganisasjonRequest finnOrganisasjonRequest) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @Override
@@ -81,7 +60,7 @@ public class OrganisasjonV4MockImpl implements OrganisasjonV4 {
     @ResponseWrapper(localName = "hentOrganisasjonsnavnBolkResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjon/v4",
             className = "no.nav.tjeneste.virksomhet.organisasjon.v4.HentOrganisasjonsnavnBolkResponse")
     public HentOrganisasjonsnavnBolkResponse hentOrganisasjonsnavnBolk(@WebParam(name = "request") HentOrganisasjonsnavnBolkRequest hentOrganisasjonsnavnBolkRequest) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @Override
@@ -143,7 +122,7 @@ public class OrganisasjonV4MockImpl implements OrganisasjonV4 {
     @ResponseWrapper(localName = "validerOrganisasjonResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjon/v4",
             className = "no.nav.tjeneste.virksomhet.organisasjon.v4.ValiderOrganisasjonResponse")
     public ValiderOrganisasjonResponse validerOrganisasjon(@WebParam(name = "request") ValiderOrganisasjonRequest request) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @Override
@@ -154,7 +133,7 @@ public class OrganisasjonV4MockImpl implements OrganisasjonV4 {
     @ResponseWrapper(localName = "hentVirksomhetsOrgnrForJuridiskOrgnrBolkResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjon/v4",
             className = "no.nav.tjeneste.virksomhet.organisasjon.v4.HentVirksomhetsOrgnrForJuridiskOrgnrBolkResponse")
     public HentVirksomhetsOrgnrForJuridiskOrgnrBolkResponse hentVirksomhetsOrgnrForJuridiskOrgnrBolk(@WebParam(name = "request") HentVirksomhetsOrgnrForJuridiskOrgnrBolkRequest hentVirksomhetsOrgnrForJuridiskOrgnrBolkRequest)  {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @Override
@@ -165,6 +144,6 @@ public class OrganisasjonV4MockImpl implements OrganisasjonV4 {
     @ResponseWrapper(localName = "finnOrganisasjonsendringerListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjon/v4",
             className = "no.nav.tjeneste.virksomhet.organisasjon.v4.FinnOrganisasjonsendringerListeResponse")
     public FinnOrganisasjonsendringerListeResponse finnOrganisasjonsendringerListe(@WebParam(name = "request") FinnOrganisasjonsendringerListeRequest finnOrganisasjonsendringerListeRequest) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 }

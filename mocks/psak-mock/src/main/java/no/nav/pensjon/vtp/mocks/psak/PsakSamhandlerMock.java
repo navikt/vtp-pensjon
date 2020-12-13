@@ -1,9 +1,9 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
-import no.nav.inf.psak.samhandler.*;
+import no.nav.inf.psak.samhandler.PSAKSamhandler;
 import no.nav.lib.pen.psakpselv.asbo.samhandler.*;
 import no.nav.pensjon.vtp.core.annotations.SoapService;
-
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,11 +35,10 @@ public class PsakSamhandlerMock implements PSAKSamhandler {
             className = "no.nav.inf.psak.samhandler.LagreSamhandlerResponse"
     )
     @WebResult(
-            name = "lagreSamhandlerResponse",
-            targetNamespace = ""
+            name = "lagreSamhandlerResponse"
     )
-    public ASBOPenSamhandler lagreSamhandler(@WebParam(name = "lagreSamhandlerRequest", targetNamespace = "") ASBOPenSamhandler asboPenSamhandler) throws LagreSamhandlerFaultPenGeneriskMsg, LagreSamhandlerFaultPenSamhandlerIkkeFunnetMsg {
-        throw new UnsupportedOperationException("Ikke implementert");
+    public ASBOPenSamhandler lagreSamhandler(@WebParam(name = "lagreSamhandlerRequest") ASBOPenSamhandler asboPenSamhandler) {
+        throw new NotImplementedException();
     }
 
     @Override
@@ -55,10 +54,9 @@ public class PsakSamhandlerMock implements PSAKSamhandler {
             className = "no.nav.inf.psak.samhandler.FinnSamhandlerResponse"
     )
     @WebResult(
-            name = "finnSamhandlerResponse",
-            targetNamespace = ""
+            name = "finnSamhandlerResponse"
     )
-    public ASBOPenSamhandlerListe finnSamhandler(@WebParam(name = "finnSamhandlerRequest", targetNamespace = "") ASBOPenFinnSamhandlerRequest asboPenFinnSamhandlerRequest) throws FinnSamhandlerFaultPenGeneriskMsg {
+    public ASBOPenSamhandlerListe finnSamhandler(@WebParam(name = "finnSamhandlerRequest") ASBOPenFinnSamhandlerRequest asboPenFinnSamhandlerRequest) {
         LOG.info("Kall mot PsakSamhandlerMock.finnSamhandler");
 
         ASBOPenSamhandlerListe liste = new ASBOPenSamhandlerListe();
@@ -81,11 +79,10 @@ public class PsakSamhandlerMock implements PSAKSamhandler {
             className = "no.nav.inf.psak.samhandler.OpprettSamhandlerResponse"
     )
     @WebResult(
-            name = "opprettSamhandlerResponse",
-            targetNamespace = ""
+            name = "opprettSamhandlerResponse"
     )
-    public ASBOPenSamhandler opprettSamhandler(@WebParam(name = "opprettSamhandlerRequest", targetNamespace = "") ASBOPenSamhandler asboPenSamhandler) throws OpprettSamhandlerFaultPenGeneriskMsg, OpprettSamhandlerFaultPenOffentligIdIkkeFunnetMsg {
-        throw new UnsupportedOperationException("Ikke implementert");
+    public ASBOPenSamhandler opprettSamhandler(@WebParam(name = "opprettSamhandlerRequest") ASBOPenSamhandler asboPenSamhandler) {
+        throw new NotImplementedException();
     }
 
     @Override
@@ -101,10 +98,9 @@ public class PsakSamhandlerMock implements PSAKSamhandler {
             className = "no.nav.inf.psak.samhandler.HentSamhandlerResponse"
     )
     @WebResult(
-            name = "hentSamhandlerResponse",
-            targetNamespace = ""
+            name = "hentSamhandlerResponse"
     )
-    public ASBOPenSamhandler hentSamhandler(@WebParam(name = "hentSamhandlerRequest", targetNamespace = "") ASBOPenHentSamhandlerRequest asboPenHentSamhandlerRequest) throws HentSamhandlerFaultPenGeneriskMsg, HentSamhandlerFaultPenSamhandlerIkkeFunnetMsg {
+    public ASBOPenSamhandler hentSamhandler(@WebParam(name = "hentSamhandlerRequest") ASBOPenHentSamhandlerRequest asboPenHentSamhandlerRequest) {
         LOG.info("Kall mot PsakSamhandlerMock.hentSamhandler");
         return createDummySamhandler();
     }

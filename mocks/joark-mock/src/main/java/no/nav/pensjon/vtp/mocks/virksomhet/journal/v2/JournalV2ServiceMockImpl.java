@@ -1,36 +1,26 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.journal.v2;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.jws.HandlerChain;
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
-import javax.jws.WebService;
-import javax.xml.ws.RequestWrapper;
-import javax.xml.ws.ResponseWrapper;
-import javax.xml.ws.soap.Addressing;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.mocks.virksomhet.journal.modell.JournalpostV2Builder;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentModell;
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell;
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException;
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository;
 import no.nav.tjeneste.virksomhet.journal.v2.binding.HentDokumentDokumentIkkeFunnet;
 import no.nav.tjeneste.virksomhet.journal.v2.binding.JournalV2;
 import no.nav.tjeneste.virksomhet.journal.v2.feil.DokumentIkkeFunnet;
 import no.nav.tjeneste.virksomhet.journal.v2.informasjon.Sak;
-import no.nav.tjeneste.virksomhet.journal.v2.meldinger.HentDokumentRequest;
-import no.nav.tjeneste.virksomhet.journal.v2.meldinger.HentDokumentResponse;
-import no.nav.tjeneste.virksomhet.journal.v2.meldinger.HentDokumentURLRequest;
-import no.nav.tjeneste.virksomhet.journal.v2.meldinger.HentDokumentURLResponse;
-import no.nav.tjeneste.virksomhet.journal.v2.meldinger.HentJournalpostListeRequest;
-import no.nav.tjeneste.virksomhet.journal.v2.meldinger.HentJournalpostListeResponse;
+import no.nav.tjeneste.virksomhet.journal.v2.meldinger.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.jws.*;
+import javax.xml.ws.RequestWrapper;
+import javax.xml.ws.ResponseWrapper;
+import javax.xml.ws.soap.Addressing;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @SoapService(path = "/joark/Journal/v2")
 @Addressing
@@ -97,7 +87,7 @@ public class JournalV2ServiceMockImpl implements JournalV2 {
     @ResponseWrapper(localName = "hentDokumentURLResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/journal/v2", className = "no.nav.tjeneste.virksomhet.journal.v2.HentDokumentURLResponse")
     @Override
     public HentDokumentURLResponse hentDokumentURL(@WebParam(name = "Request") HentDokumentURLRequest request) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/journal/v2/Journal_v2/pingRequest")

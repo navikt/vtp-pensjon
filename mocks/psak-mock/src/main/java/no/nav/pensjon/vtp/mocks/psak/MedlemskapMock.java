@@ -1,10 +1,10 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException;
 import no.nav.virksomhet.tjenester.medlemskap.meldinger.v1.HentPeriodeListeResponse;
 import no.nav.virksomhet.tjenester.medlemskap.meldinger.v1.HentPeriodeRequest;
 import no.nav.virksomhet.tjenester.medlemskap.meldinger.v1.HentPeriodeResponse;
-import no.nav.virksomhet.tjenester.medlemskap.v1.HentPeriodeListePersonIkkeFunnet;
 import no.nav.virksomhet.tjenester.medlemskap.v1.Medlemskap;
 import no.nav.virksomhet.tjenester.medlemskap.v1.ObjectFactory;
 
@@ -20,28 +20,24 @@ import javax.xml.ws.ResponseWrapper;
 public class MedlemskapMock implements Medlemskap {
     /**
      * <p>Operasjonen skal tilby å hente en liste med medlemskapsperioder til en person.</p>
-     *
-     * @param request
      */
     @Override
     @WebMethod
     @RequestWrapper(localName = "hentPeriodeListe", targetNamespace = "http://nav.no/virksomhet/tjenester/medlemskap/v1", className = "no.nav.virksomhet.tjenester.medlemskap.v1.HentPeriodeListe")
     @ResponseWrapper(localName = "hentPeriodeListeResponse", targetNamespace = "http://nav.no/virksomhet/tjenester/medlemskap/v1", className = "no.nav.virksomhet.tjenester.medlemskap.v1.HentPeriodeListeResponse")
-    @WebResult(name = "response", targetNamespace = "")
+    @WebResult(name = "response")
     public no.nav.virksomhet.tjenester.medlemskap.meldinger.v1.HentPeriodeListeResponse hentPeriodeListe(
-            @WebParam(name = "request", targetNamespace = "")
+            @WebParam(name = "request")
                     no.nav.virksomhet.tjenester.medlemskap.meldinger.v1.HentPeriodeListeRequest request
-    ) throws HentPeriodeListePersonIkkeFunnet {
+    ) {
         return new HentPeriodeListeResponse();
     }
 
     /**
      * <p>Operasjonen skal tilby å hente en medlemskapsperiode.</p>
-     *
-     * @param request
      */
     @Override
     public HentPeriodeResponse hentPeriode(HentPeriodeRequest request) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 }

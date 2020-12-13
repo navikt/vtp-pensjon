@@ -1,61 +1,28 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.person.v3;
 
-import static java.util.Optional.ofNullable;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import javax.jws.HandlerChain;
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
-import javax.jws.WebService;
-import javax.xml.ws.RequestWrapper;
-import javax.xml.ws.ResponseWrapper;
-import javax.xml.ws.soap.Addressing;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException;
 import no.nav.pensjon.vtp.testmodell.kodeverk.Rolle;
-import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
-import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIndeks;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
-import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger;
+import no.nav.pensjon.vtp.testmodell.personopplysning.*;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentGeografiskTilknytningPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonhistorikkPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 import no.nav.tjeneste.virksomhet.person.v3.feil.PersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.Aktoer;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.AktoerId;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.BostedsadressePeriode;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.Diskresjonskoder;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.Familierelasjon;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonIdent;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonstatusPeriode;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.StatsborgerskapPeriode;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentEkteskapshistorikkRequest;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentEkteskapshistorikkResponse;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentGeografiskTilknytningRequest;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentGeografiskTilknytningResponse;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonRequest;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonerMedSammeAdresseRequest;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonerMedSammeAdresseResponse;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonhistorikkRequest;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonhistorikkResponse;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonnavnBolkRequest;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonnavnBolkResponse;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentSikkerhetstiltakRequest;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentSikkerhetstiltakResponse;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentVergeRequest;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentVergeResponse;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.*;
+import no.nav.tjeneste.virksomhet.person.v3.meldinger.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.jws.*;
+import javax.xml.ws.RequestWrapper;
+import javax.xml.ws.ResponseWrapper;
+import javax.xml.ws.soap.Addressing;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 @SoapService(path = "/tpsws/ws/Person/v3")
 @Addressing
@@ -172,7 +139,7 @@ public class PersonServiceMockImpl implements PersonV3 {
     @ResponseWrapper(localName = "hentVergeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/person/v3", className = "no.nav.tjeneste.virksomhet.person.v3.HentVergeResponse")
     @Override
     public HentVergeResponse hentVerge(@WebParam(name = "request") HentVergeRequest var1) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @Override
@@ -181,7 +148,7 @@ public class PersonServiceMockImpl implements PersonV3 {
     @RequestWrapper(localName = "hentEkteskapshistorikk", targetNamespace = "http://nav.no/tjeneste/virksomhet/person/v3", className = "no.nav.tjeneste.virksomhet.person.v3.HentEkteskapshistorikk")
     @ResponseWrapper(localName = "hentEkteskapshistorikkResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/person/v3", className = "no.nav.tjeneste.virksomhet.person.v3.HentEkteskapshistorikkResponse")
     public HentEkteskapshistorikkResponse hentEkteskapshistorikk(@WebParam(name = "request") HentEkteskapshistorikkRequest hentEkteskapshistorikkRequest) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/person/v3/Person_v3/hentPersonerMedSammeAdresseRequest")
@@ -190,7 +157,7 @@ public class PersonServiceMockImpl implements PersonV3 {
     @ResponseWrapper(localName = "hentPersonerMedSammeAdresseResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/person/v3", className = "no.nav.tjeneste.virksomhet.person.v3.HentPersonerMedSammeAdresseResponse")
     @Override
     public HentPersonerMedSammeAdresseResponse hentPersonerMedSammeAdresse(@WebParam(name = "request") HentPersonerMedSammeAdresseRequest var1) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/person/v3/Person_v3/hentPersonhistorikkRequest")
@@ -247,7 +214,7 @@ public class PersonServiceMockImpl implements PersonV3 {
     @ResponseWrapper(localName = "hentPersonnavnBolkResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/person/v3", className = "no.nav.tjeneste.virksomhet.person.v3.HentPersonnavnBolkResponse")
     @Override
     public HentPersonnavnBolkResponse hentPersonnavnBolk(@WebParam(name = "request") HentPersonnavnBolkRequest var1) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/person/v3/Person_v3/hentSikkerhetstiltakRequest")
@@ -256,7 +223,7 @@ public class PersonServiceMockImpl implements PersonV3 {
     @ResponseWrapper(localName = "hentSikkerhetstiltakResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/person/v3", className = "no.nav.tjeneste.virksomhet.person.v3.HentSikkerhetstiltakResponse")
     @Override
     public HentSikkerhetstiltakResponse hentSikkerhetstiltak(@WebParam(name = "request") HentSikkerhetstiltakRequest var1) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 }
 

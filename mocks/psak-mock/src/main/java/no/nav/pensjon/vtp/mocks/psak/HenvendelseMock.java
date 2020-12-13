@@ -1,11 +1,13 @@
 package no.nav.pensjon.vtp.mocks.psak;
 
-import no.nav.inf.psak.henvendelse.*;
+import no.nav.inf.psak.henvendelse.ObjectFactory;
+import no.nav.inf.psak.henvendelse.PSAKHenvendelse;
 import no.nav.lib.pen.psakpselv.asbo.henvendelse.ASBOPenHentStatistikkRequest;
 import no.nav.lib.pen.psakpselv.asbo.henvendelse.ASBOPenHenvendelse;
 import no.nav.lib.pen.psakpselv.asbo.henvendelse.ASBOPenHenvendelseListe;
 import no.nav.lib.pen.psakpselv.asbo.henvendelse.ASBOPenStatistikk;
 import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException;
 
 import javax.jws.*;
 import javax.xml.bind.annotation.XmlSeeAlso;
@@ -18,54 +20,54 @@ import javax.xml.ws.ResponseWrapper;
 @HandlerChain(file = "/Handler-chain.xml")
 public class HenvendelseMock implements PSAKHenvendelse {
     @Override
-    public ASBOPenHenvendelse lagreHenvendelse(ASBOPenHenvendelse lagreHenvendelseRequest) throws LagreHenvendelseFaultPenGeneriskMsg, LagreHenvendelseFaultPenHenvendelseIkkeFunnetMsg {
-        throw new UnsupportedOperationException("Ikke implementert");
+    public ASBOPenHenvendelse lagreHenvendelse(ASBOPenHenvendelse lagreHenvendelseRequest) {
+        throw new NotImplementedException();
     }
 
     @Override
-    public ASBOPenStatistikk hentStatistikkAntall(ASBOPenHentStatistikkRequest hentStatstikkAntallRequest) throws HentStatistikkAntallFaultPenGeneriskMsg {
-        throw new UnsupportedOperationException("Ikke implementert");
+    public ASBOPenStatistikk hentStatistikkAntall(ASBOPenHentStatistikkRequest hentStatstikkAntallRequest) {
+        throw new NotImplementedException();
     }
 
     @Override
-    public ASBOPenStatistikk hentStatistikkHenvendelseGjelder(ASBOPenHentStatistikkRequest hentStatistikkHenvendelseGjelderRequest) throws HentStatistikkHenvendelseGjelderFaultPenGeneriskMsg {
-        throw new UnsupportedOperationException("Ikke implementert");
+    public ASBOPenStatistikk hentStatistikkHenvendelseGjelder(ASBOPenHentStatistikkRequest hentStatistikkHenvendelseGjelderRequest) {
+        throw new NotImplementedException();
     }
 
     @Override
-    public ASBOPenStatistikk hentStatistikkPrType(ASBOPenHentStatistikkRequest hentStatistikkPrTypeRequest) throws HentStatistikkPrTypeFaultPenGeneriskMsg {
-        throw new UnsupportedOperationException("Ikke implementert");
+    public ASBOPenStatistikk hentStatistikkPrType(ASBOPenHentStatistikkRequest hentStatistikkPrTypeRequest) {
+        throw new NotImplementedException();
     }
 
     @Override
-    public Boolean erTidsbrukAktivert(ASBOPenHenvendelse erTidsbrukAktivertRequest) throws ErTidsbrukAktivertFaultPenGeneriskMsg {
-        throw new UnsupportedOperationException("Ikke implementert");
+    public Boolean erTidsbrukAktivert(ASBOPenHenvendelse erTidsbrukAktivertRequest) {
+        throw new NotImplementedException();
     }
 
     @Override
-    public ASBOPenHenvendelse opprettHenvendelse(ASBOPenHenvendelse opprettHenvendelseRequest) throws OpprettHenvendelseFaultPenGeneriskMsg {
+    public ASBOPenHenvendelse opprettHenvendelse(ASBOPenHenvendelse opprettHenvendelseRequest) {
         return opprettHenvendelseRequest;
     }
 
     @Override
-    public ASBOPenStatistikk hentStatistikkPrKanal(ASBOPenHentStatistikkRequest hentStatistikkPrKanalRequest) throws HentStatistikkPrKanalFaultPenGeneriskMsg {
-        throw new UnsupportedOperationException("Ikke implementert");
+    public ASBOPenStatistikk hentStatistikkPrKanal(ASBOPenHentStatistikkRequest hentStatistikkPrKanalRequest) {
+        throw new NotImplementedException();
     }
 
     @Override
     @WebMethod
     @RequestWrapper(localName = "hentHenvendelseListe", targetNamespace = "http://nav-cons-pen-psak-henvendelse/no/nav/inf", className = "no.nav.inf.psak.henvendelse.HentHenvendelseListe")
     @ResponseWrapper(localName = "hentHenvendelseListeResponse", targetNamespace = "http://nav-cons-pen-psak-henvendelse/no/nav/inf", className = "no.nav.inf.psak.henvendelse.HentHenvendelseListeResponse")
-    @WebResult(name = "hentHenvendelseListeResponse", targetNamespace = "")
+    @WebResult(name = "hentHenvendelseListeResponse")
     public no.nav.lib.pen.psakpselv.asbo.henvendelse.ASBOPenHenvendelseListe hentHenvendelseListe(
-            @WebParam(name = "hentHenvendelseListeRequest", targetNamespace = "")
+            @WebParam(name = "hentHenvendelseListeRequest")
                     no.nav.lib.pen.psakpselv.asbo.henvendelse.ASBOPenHenvendelse hentHenvendelseListeRequest
-    ) throws HentHenvendelseListeFaultPenGeneriskMsg {
+    ) {
         return new ASBOPenHenvendelseListe();
     }
 
     @Override
-    public ASBOPenHenvendelse hentHenvendelse(ASBOPenHenvendelse hentHenvendelseRequest) throws HentHenvendelseFaultPenGeneriskMsg, HentHenvendelseFaultPenHenvendelseIkkeFunnetMsg {
-        throw new UnsupportedOperationException("Ikke implementert");
+    public ASBOPenHenvendelse hentHenvendelse(ASBOPenHenvendelse hentHenvendelseRequest) {
+        throw new NotImplementedException();
     }
 }
