@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import no.nav.pensjon.vtp.felles.ConversionUtils;
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.FrilansArbeidsforholdsperiode;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektType;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell;
@@ -94,9 +95,9 @@ public class HentInntektlistBolkMapper {
                 Loennsinntekt inntekt = lagLoennsinntekt(modellPeriode, aktoer);
                 inntektListe.add(inntekt);
             } else if (modellPeriode.getType().equals(InntektType.NÆRINGSINNTEKT)) {
-                throw new UnsupportedOperationException("Ikke implementert ennå");
+                throw new NotImplementedException();
             } else if (modellPeriode.getType().equals(InntektType.PENSJON_ELLER_TRYGD)) {
-                throw new UnsupportedOperationException("Ikke implementert ennå");
+                throw new NotImplementedException();
             } else if (modellPeriode.getType().equals(InntektType.YTELSE_FRA_OFFENTLIGE)) {
                 YtelseFraOffentlige ytelseFraOffentlige = lagYtelseFraOffentlige(modellPeriode, aktoer);
                 inntektListe.add(ytelseFraOffentlige);

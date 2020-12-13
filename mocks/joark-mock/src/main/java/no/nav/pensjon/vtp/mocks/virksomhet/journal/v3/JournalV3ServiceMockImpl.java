@@ -13,6 +13,7 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.Addressing;
 
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +53,7 @@ public class JournalV3ServiceMockImpl implements JournalV3 {
 
     @Override
     public HentDokumentURLResponse hentDokumentURL(HentDokumentURLRequest hentDokumentURLRequest) {
-        throw new UnsupportedOperationException("Ikke implementert.");
+        throw new NotImplementedException();
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/journal/v3/Journal_v3/hentKjerneJournalpostListeRequest")

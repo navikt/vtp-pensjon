@@ -1,43 +1,28 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.aktoer.v2;
 
-import static java.util.Optional.ofNullable;
+import no.nav.pensjon.vtp.core.annotations.SoapService;
+import no.nav.pensjon.vtp.felles.ConversionUtils;
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
+import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
+import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
+import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIkkeFunnet;
+import no.nav.tjeneste.virksomhet.aktoer.v2.feil.PersonIkkeFunnet;
+import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.jws.*;
+import javax.xml.ws.RequestWrapper;
+import javax.xml.ws.ResponseWrapper;
+import javax.xml.ws.soap.Addressing;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.jws.HandlerChain;
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
-import javax.jws.WebService;
-import javax.xml.ws.RequestWrapper;
-import javax.xml.ws.ResponseWrapper;
-import javax.xml.ws.soap.Addressing;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import no.nav.pensjon.vtp.core.annotations.SoapService;
-import no.nav.pensjon.vtp.felles.ConversionUtils;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository;
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell;
-import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
-import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.aktoer.v2.feil.PersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.AktoerIder;
-import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.Feil;
-import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentListeRequest;
-import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentListeResponse;
-import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentRequest;
-import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentResponse;
-import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdListeRequest;
-import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdListeResponse;
-import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdRequest;
-import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdResponse;
-import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.IdentDetaljer;
+import static java.util.Optional.ofNullable;
 
 @SoapService(path="erregister/ws/Aktoer/v2")
 @Addressing
@@ -139,7 +124,7 @@ public class AktoerServiceMockImpl implements AktoerV2 {
     public HentIdentForAktoerIdListeResponse hentIdentForAktoerIdListe(
                                                                        @WebParam(name = "hentIdentForAktoerIdListeRequest") HentIdentForAktoerIdListeRequest hentIdentForAktoerIdListeRequest) {
 
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @Override

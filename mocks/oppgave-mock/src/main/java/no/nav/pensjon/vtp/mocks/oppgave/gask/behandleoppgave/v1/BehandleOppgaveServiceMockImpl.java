@@ -9,6 +9,7 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.Addressing;
 
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +58,7 @@ public class BehandleOppgaveServiceMockImpl implements BehandleOppgaveV1 {
     @ResponseWrapper(localName = "lagreOppgaveResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/behandleoppgave/v1", className = "no.nav.tjeneste.virksomhet.behandleoppgave.v1.LagreOppgaveResponse")
     public void lagreOppgave(
                              @WebParam(name = "request") no.nav.tjeneste.virksomhet.behandleoppgave.v1.meldinger.WSLagreOppgaveRequest request) {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
 
     }
 

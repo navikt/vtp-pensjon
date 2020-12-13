@@ -11,6 +11,7 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.Addressing;
 
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,6 +112,6 @@ public class InngaaendeJournalServiceMockImpl implements InngaaendeJournalV1 {
     )
     @Override
     public UtledJournalfoeringsbehovResponse utledJournalfoeringsbehov(@WebParam(name = "request") UtledJournalfoeringsbehovRequest request) {
-            throw new UnsupportedOperationException("Ikke implementert");
+            throw new NotImplementedException();
     }
 }

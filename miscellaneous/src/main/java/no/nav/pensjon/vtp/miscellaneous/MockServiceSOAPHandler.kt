@@ -17,5 +17,5 @@ class MockServiceSOAPHandler : SOAPHandler<SOAPMessageContext> {
 
     override fun handleFault(context: SOAPMessageContext) = true
 
-    override fun close(context: MessageContext) {}
+    override fun close(context: MessageContext) = Unit
 }

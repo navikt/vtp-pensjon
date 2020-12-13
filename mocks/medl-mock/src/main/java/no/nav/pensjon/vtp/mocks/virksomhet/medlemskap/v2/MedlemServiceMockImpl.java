@@ -11,6 +11,7 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.Addressing;
 
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +47,7 @@ public class MedlemServiceMockImpl implements MedlemskapV2 {
     })
     @Override
     public HentPeriodeResponse hentPeriode(@WebParam(name = "request",targetNamespace = "") HentPeriodeRequest request) throws Sikkerhetsbegrensning {
-        throw new UnsupportedOperationException("Ikke implementert");
+        throw new NotImplementedException();
     }
 
     @WebMethod
