@@ -13,12 +13,10 @@ import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioTemplateRepositoryImp
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.io.IOException
 
 @Configuration
 class RepositoryConfiguration {
     @Bean
-    @Throws(IOException::class)
     fun adresseIndeks(): AdresseIndeks {
         return BasisdataProviderFileImpl.loadAdresser()
     }
@@ -39,7 +37,6 @@ class RepositoryConfiguration {
     }
 
     @Bean
-    @Throws(IOException::class)
     fun enheterIndeks(): EnheterIndeks {
         return BasisdataProviderFileImpl.loadEnheter()
     }

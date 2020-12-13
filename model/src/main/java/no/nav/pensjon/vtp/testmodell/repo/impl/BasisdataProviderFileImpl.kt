@@ -22,9 +22,9 @@ object BasisdataProviderFileImpl {
     }
 
     fun loadEnheter(): EnheterIndeks {
-        val enheterIndeks = EnheterIndeks()
-        enheterIndeks.leggTil(mapper.readValue(javaClass.getResource("/basedata/enheter.json").openStream()))
-        return enheterIndeks
+        return EnheterIndeks().apply {
+            saveAll(mapper.readValue(javaClass.getResource("/basedata/enheter.json").openStream()))
+        }
     }
 
     fun loadAnsatte(): AnsatteIndeks {
