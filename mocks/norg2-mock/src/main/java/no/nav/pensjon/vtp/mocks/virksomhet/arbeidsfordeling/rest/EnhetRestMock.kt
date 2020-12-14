@@ -156,24 +156,24 @@ class EnhetRestMock(private val enheterIndeks: EnheterIndeks) {
         )
 
         return listOf(
-            Norg2RsOrganisering().apply {
-                organiserer = Norg2RsSimpleEnhet().apply {
-                    id = norg2RsEnhet.enhetId
-                    navn = norg2RsEnhet.navn
-                    nr = norg2RsEnhet.enhetNr
+            Norg2RsOrganisering(
+                organiserer = Norg2RsSimpleEnhet(
+                    id = norg2RsEnhet.enhetId,
+                    navn = norg2RsEnhet.navn,
+                    nr = norg2RsEnhet.enhetNr,
                     gyldigFra = validFrom
-                }
-                organisertUnder = Norg2RsSimpleEnhet().apply {
-                    id = 99768L
-                    navn = "Enhet over " + norg2RsEnhet.navn
-                    nr = "99768"
+                ),
+                organisertUnder = Norg2RsSimpleEnhet(
+                    id = 99768L,
+                    navn = "Enhet over " + norg2RsEnhet.navn,
+                    nr = "99768",
                     gyldigFra = validFrom
-                }
-                fra = validFrom
-                til = LocalDate.of(2036, 3, 18).format(DateTimeFormatter.ISO_LOCAL_DATE)
-                id = 123456123456L
+                ),
+                fra = validFrom,
+                til = LocalDate.of(2036, 3, 18).format(DateTimeFormatter.ISO_LOCAL_DATE),
+                id = 123456123456L,
                 orgType = "FORV"
-            }
+            )
         )
     }
 
@@ -183,23 +183,23 @@ class EnhetRestMock(private val enheterIndeks: EnheterIndeks) {
     }
 
     private fun convert(modell: Norg2Modell): Norg2RsEnhet {
-        return Norg2RsEnhet().apply {
-            enhetNr = modell.enhetId
-            enhetNr = modell.enhetId
-            navn = modell.navn
-            status = modell.status
-            type = modell.type
-            isOppgavebehandler = true
-        }
+        return Norg2RsEnhet(
+            enhetId = modell.enhetId,
+            enhetNr = modell.enhetId.toString(),
+            navn = modell.navn,
+            status = modell.status,
+            type = modell.type,
+            oppgavebehandler = true
+        )
     }
 
     private fun enEnhet(id: Long): Norg2RsEnhet {
-        return Norg2RsEnhet().apply {
-            enhetId = id
-            enhetNr = id.toString()
-            navn = "NAV Arbeid og ytelser Tønsberg"
-            isOppgavebehandler = true
-        }
+        return Norg2RsEnhet(
+            enhetId = id,
+            enhetNr = id.toString(),
+            navn = "NAV Arbeid og ytelser Tønsberg",
+            oppgavebehandler = true
+        )
     }
 
     private fun norg2RsArbeidsfordelinger(enheter: Collection<Norg2Modell>): List<Norg2RsArbeidsfordeling> {
@@ -208,11 +208,11 @@ class EnhetRestMock(private val enheterIndeks: EnheterIndeks) {
     }
 
     private fun convertToArbeidsfordeling(modell: Norg2Modell): Norg2RsArbeidsfordeling {
-        return Norg2RsArbeidsfordeling().apply {
-            enhetId = modell.enhetId.toLong()
-            enhetNr = modell.enhetId
-            enhetNavn = modell.navn
+        return Norg2RsArbeidsfordeling(
+            enhetId = modell.enhetId,
+            enhetNr = modell.enhetId.toString(),
+            enhetNavn = modell.navn,
             diskresjonskode = modell.diskresjonskode
-        }
+        )
     }
 }

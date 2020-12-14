@@ -21,7 +21,7 @@ class AnsatteIndeks {
         return ansatte.firstOrNull { sn.equals(it.sn, ignoreCase = true) }
     }
 
-    fun findByEnhetsId(enhetsId: String): List<NAVAnsatt> {
+    fun findByEnhetsId(enhetsId: Long): List<NAVAnsatt> {
         return ansatte.filter { it.enheter.contains(enhetsId) }
     }
 }

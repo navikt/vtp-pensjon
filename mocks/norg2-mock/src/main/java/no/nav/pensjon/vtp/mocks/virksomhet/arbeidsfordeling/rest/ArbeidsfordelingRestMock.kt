@@ -31,7 +31,7 @@ class ArbeidsfordelingRestMock(private val enheterIndeks: EnheterIndeks) {
             }
             .map {
                 ArbeidsfordelingResponse(
-                    enhetNr = it.enhetId,
+                    enhetNr = it.enhetId.toString(),
                     enhetNavn = it.navn,
                     enhetType = it.status,
                     status = it.type
@@ -57,7 +57,7 @@ class ArbeidsfordelingRestMock(private val enheterIndeks: EnheterIndeks) {
             ?.let {
                 arrayOf(
                     ArbeidsfordelingResponse(
-                        enhetNr = enhet.enhetId,
+                        enhetNr = enhet.enhetId.toString(),
                         enhetNavn = enhet.navn,
                         enhetType = enhet.status,
                         status = enhet.type

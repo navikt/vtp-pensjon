@@ -48,8 +48,9 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>io.swagger</groupId>
-				<artifactId>swagger-codegen-maven-plugin</artifactId>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>4.3.1</version>
 				<executions>
 					<execution>
 						<goals>
@@ -64,7 +65,7 @@
 							<generateModelTests>false</generateModelTests>
 							<generateSupportingFiles>false</generateSupportingFiles>
 
-							<language>jaxrs</language>
+							<generatorName>kotlin-spring</generatorName>
 							<output>${project.basedir}</output>
 
 							<modelNamePrefix>norg2</modelNamePrefix>

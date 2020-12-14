@@ -42,12 +42,12 @@ class PsakNavOrgEnhetMock(private val enheterIndeks: EnheterIndeks) : PSAKNAVOrg
     override fun hentNAVEnhet(
         @WebParam(name = "hentNAVEnhetRequest") hentNAVEnhetRequest: ASBOPenNAVEnhet
     ) = enheterIndeks.finnByEnhetId(
-        hentNAVEnhetRequest.enhetsId
+        hentNAVEnhetRequest.enhetsId?.toLong()
             ?: throw HentNAVEnhetFaultPenGeneriskMsg("EnhetsId was null")
     )
         ?.let {
             ASBOPenNAVEnhet().apply {
-                enhetsId = it.enhetId
+                enhetsId = it.enhetId.toString()
                 enhetsNavn = it.navn
             }
         }

@@ -101,7 +101,7 @@ class ArbeidsfordelingMockImpl(private val enheterIndeks: EnheterIndeks) : Arbei
     private fun lagEnhet(modell: Norg2Modell): Organisasjonsenhet {
         return Organisasjonsenhet()
             .apply {
-                enhetId = modell.enhetId
+                enhetId = modell.enhetId.toString()
                 enhetNavn = modell.navn
                 status = modell.status?.let { Enhetsstatus.fromValue(it) }
                 type = modell.type?.let {

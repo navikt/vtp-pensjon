@@ -68,7 +68,7 @@ class OppgaveBehandlingMock(
     @WebResult(name = "response")
     override fun opprettOppgave(@WebParam(name = "request") request: OpprettOppgaveRequest): OpprettOppgaveResponse {
         val sporing =
-            Sporing("saksbeh", getNorg2Modell(request.opprettetAvEnhetId)) // XXX: Get actual user from security context
+            Sporing("saksbeh", getNorg2Modell(request.opprettetAvEnhetId.toLong())) // XXX: Get actual user from security context
 
         return with(request.opprettOppgave) {
             wrap(
@@ -207,7 +207,7 @@ class OppgaveBehandlingMock(
                         version = versjon,
                         endretSporing = Sporing(
                             "saksbeh",
-                            getNorg2Modell(request.endretAvEnhetId)
+                            getNorg2Modell(request.endretAvEnhetId.toLong())
                         ), // XXX: Get actual user from security context
                         aktivFra = aktivFra?.toLocalDate(),
                         aktivTil = aktivTil?.toLocalDate(),
@@ -315,8 +315,8 @@ class OppgaveBehandlingMock(
         return ferdigstillOppgaveBolkResponse
     }
 
-    private fun getNorg2Modell(enhetId: Int) =
-        enheterIndeks.finnByEnhetId("" + enhetId)
+    private fun getNorg2Modell(enhetId: Long) =
+        enheterIndeks.finnByEnhetId(enhetId)
             ?: throw IllegalArgumentException("Unknown enhet $enhetId")
 
     private fun wrap(oppgaveId: String): OpprettOppgaveResponse {
