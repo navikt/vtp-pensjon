@@ -53,7 +53,7 @@ class JournalforingRestTjeneste(private val journalRepository: JournalRepository
                 lagJournalpostUstrukturertDokument(
                     fnr = fnr,
                     dokumenttypeId = dokumenttypeid,
-                    journalstatus = Journalstatus(journalstatus)
+                    journalstatus = Journalstatus.fromCode(journalstatus)
                 )
             } else {
                 lagJournalpostUstrukturertDokument(

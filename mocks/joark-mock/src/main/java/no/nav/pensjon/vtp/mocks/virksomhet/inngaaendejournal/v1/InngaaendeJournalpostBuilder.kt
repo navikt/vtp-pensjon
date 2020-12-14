@@ -19,7 +19,7 @@ fun buildFromV1(journalpostModell: JournalpostModell): InngaaendeJournalpost {
 
         tema = journalpostModell.arkivtema?.let {
             Tema().apply {
-                value = it.kode
+                value = it.name
             }
         }
 
@@ -58,7 +58,7 @@ fun buildFromV1(journalpostModell: JournalpostModell): InngaaendeJournalpost {
 private fun lagDokumentinformasjon(dokumentModell: DokumentModell) = Dokumentinformasjon().apply {
     dokumenttypeId = dokumentModell.dokumentType?.let {
         DokumenttypeIder().apply {
-            value = dokumentModell.dokumentType!!.kode
+            value = dokumentModell.dokumentType?.name
         }
     }
 
@@ -69,8 +69,8 @@ private fun lagDokumentinformasjon(dokumentModell: DokumentModell) = Dokumentinf
             .map {
                 Dokumentinnhold().apply {
 
-                    arkivfiltype = Arkivfiltyper().withValue(it.filType.kode)
-                    variantformat = Variantformater().withValue(it.variantFormat.kode)
+                    arkivfiltype = Arkivfiltyper().withValue(it.filType.name)
+                    variantformat = Variantformater().withValue(it.variantFormat.name)
                 }
             }
     )

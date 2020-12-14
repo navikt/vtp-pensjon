@@ -37,8 +37,7 @@ class DokumentproduksjonV2MockImpl(private val journalRepository: JournalReposit
 
             val journalpost = journalRepository.save(
                 lagJournalpostUstrukturertDokument(
-                    bruker.ident,
-                    DokumenttypeId(request.dokumentbestillingsinformasjon.dokumenttypeId)
+                    bruker.ident, DokumenttypeId.fromCode(request.dokumentbestillingsinformasjon.dokumenttypeId)
                 )
             )
 

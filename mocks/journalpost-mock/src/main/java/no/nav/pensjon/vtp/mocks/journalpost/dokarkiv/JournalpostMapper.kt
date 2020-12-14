@@ -10,6 +10,7 @@ import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentVariantInnhold
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostBruker
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.*
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Arkivfiltype
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.HOVEDDOKUMENT
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.VEDLEGG
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalposttyper.*
@@ -26,7 +27,7 @@ import java.time.LocalDateTime.now
 fun tilModell(journalpostRequest: OpprettJournalpostRequest) =
     JournalpostModell(
         journalposttype = mapJournalposttype(journalpostRequest.journalpostType),
-        arkivtema = Arkivtema(journalpostRequest.tema),
+        arkivtema = Arkivtema.valueOf(journalpostRequest.tema),
         bruker = mapAvsenderFraBruker(journalpostRequest.bruker),
         sakId = journalpostRequest.sak.arkivsaksnummer,
         mottattDato = journalpostRequest.datoMottatt?.toLocalDateTime() ?: now(),
@@ -61,7 +62,7 @@ fun mapAvsenderFraBruker(bruker: Bruker): JournalpostBruker {
 // dokument.dokumentvarianter
 private fun mapDokument(dokument: Dokument, dokumentTilknyttetJournalpost: DokumentTilknyttetJournalpost) =
     DokumentModell(
-        dokumentkategori = Dokumentkategori(dokument.dokumentKategori),
+        dokumentkategori = Dokumentkategori.fromCode(dokument.dokumentKategori),
         tittel = dokument.tittel,
         dokumentVariantInnholdListe = dokument.dokumentvarianter
             .map { mapDokumentVariant(it) },
@@ -69,8 +70,8 @@ private fun mapDokument(dokument: Dokument, dokumentTilknyttetJournalpost: Dokum
     )
 
 private fun mapDokumentVariant(dokumentVariant: DokumentVariant) = DokumentVariantInnhold(
-    filType = Arkivfiltype(dokumentVariant.filtype),
-    variantFormat = Variantformat(dokumentVariant.variantformat),
+    filType = Arkivfiltype.valueOf(dokumentVariant.filtype),
+    variantFormat = Variantformat.valueOf(dokumentVariant.variantformat),
     dokumentInnhold = dokumentVariant.fysiskDokument
 )
 
