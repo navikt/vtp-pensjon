@@ -9,7 +9,7 @@ fun buildFromV2(modell: JournalpostModell) = Journalpost().apply {
     journalpostId = modell.journalpostId
     journalstatus = modell.journalStatus?.let {
         Journalstatuser().apply {
-            value = it.kode
+            value = it.name
         }
     }
     // TODO: OL Fjern hardkoding om nødvendig og xmlGregorianConvert
@@ -25,24 +25,24 @@ fun buildFromV2(modell: JournalpostModell) = Journalpost().apply {
                     journalfoertDokument = JournalfoertDokumentInfo().apply {
                         dokumentType = it.dokumentType?.let {
                             Dokumenttyper().apply {
-                                value = it.kode
+                                value = it.name
                             }
                         }
                         beskriverInnholdListe.addAll(
                             it.dokumentVariantInnholdListe.map {
                                 DokumentInnhold().apply {
                                     filtype = Arkivfiltyper().apply {
-                                        value = it.filType.kode
+                                        value = it.filType.name
                                     }
                                     variantformat = Variantformater().apply {
-                                        value = it.variantFormat.kode
+                                        value = it.variantFormat.name
                                     }
                                 }
                             }
                         )
                     }
                     dokumentTilknyttetJournalpost = TilknyttetJournalpostSom().apply {
-                        value = it.dokumentTilknyttetJournalpost.kode
+                        value = it.dokumentTilknyttetJournalpost.name
                     }
                 }
             }

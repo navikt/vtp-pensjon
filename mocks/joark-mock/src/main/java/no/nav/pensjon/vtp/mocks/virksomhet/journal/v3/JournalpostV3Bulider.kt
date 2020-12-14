@@ -3,6 +3,8 @@ package no.nav.pensjon.vtp.mocks.virksomhet.journal.modell
 import no.nav.pensjon.vtp.core.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentModell
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.HOVEDDOKUMENT
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.VEDLEGG
 import no.nav.tjeneste.virksomhet.journal.v3.informasjon.*
 import no.nav.tjeneste.virksomhet.journal.v3.informasjon.Journaltilstand.fromValue
 import no.nav.tjeneste.virksomhet.journal.v3.informasjon.hentkjernejournalpostliste.ArkivSak
@@ -18,11 +20,11 @@ fun buildFromV3(modell: JournalpostModell) =
         }
         hoveddokument = lagDetaljertDokumentinformasjon(
             modell.dokumentModellList
-                .first { it.dokumentTilknyttetJournalpost.kode == "HOVEDDOKUMENT" }
+                .first { it.dokumentTilknyttetJournalpost == HOVEDDOKUMENT }
         )
         vedleggListe.addAll(
             modell.dokumentModellList
-                .filter { it.dokumentTilknyttetJournalpost.kode == "VEDLEGG" }
+                .filter { it.dokumentTilknyttetJournalpost == VEDLEGG }
                 .map { lagDetaljertDokumentinformasjon(it) }
         )
         journaltilstand = modell.journaltilstand?.let {
@@ -32,7 +34,7 @@ fun buildFromV3(modell: JournalpostModell) =
         forsendelseJournalfoert = modell.mottattDato?.asXMLGregorianCalendar()
         journalposttype = modell.journalposttype?.let {
             Journalposttyper().apply {
-                kodeverksRef = it.kode
+                kodeverksRef = it.name
             }
         }
     }
@@ -43,7 +45,7 @@ private fun lagDetaljertDokumentinformasjon(dokumentModell: DokumentModell) =
             dokumentId = dokumentModell.dokumentId
             dokumentkategori = dokumentModell.dokumentkategori?.let {
                 Dokumentkategorier().apply {
-                    kodeverksRef = it.kode
+                    kodeverksRef = it.name
                 }
             }
                 ?: Dokumentkategorier()
@@ -51,8 +53,8 @@ private fun lagDetaljertDokumentinformasjon(dokumentModell: DokumentModell) =
             dokumentTypeId = dokumentModell.dokumentType
                 ?.let {
                     DokumenttypeIder().apply {
-                        kodeverksRef = it.kode
-                        value = it.kode
+                        kodeverksRef = it.name
+                        value = it.name
                     }
                 }
                 ?: DokumenttypeIder()
@@ -62,12 +64,12 @@ private fun lagDetaljertDokumentinformasjon(dokumentModell: DokumentModell) =
                     .map { (filType, variantFormat) ->
                         DokumentInnhold().apply {
                             arkivfiltype = Arkivfiltyper().apply {
-                                kodeverksRef = filType.kode
-                                value = filType.kode
+                                kodeverksRef = filType.name
+                                value = filType.name
                             }
                             variantformat = Variantformater().apply {
-                                kodeverksRef = variantFormat.kode
-                                value = variantFormat.kode
+                                kodeverksRef = variantFormat.name
+                                value = variantFormat.name
                             }
                         }
                     }
