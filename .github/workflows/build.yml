@@ -40,13 +40,12 @@ jobs:
       - name: Build and analyze
         shell: bash
         run: |
-          mvn verify --settings maven-settings.xml -Dfile.encoding=UTF-8 -Dkotlin.format.skip=true -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          mvn -T1C verify --settings maven-settings.xml -Dfile.encoding=UTF-8 -Dkotlin.format.skip=true -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Build and push Docker image
-        if: github.ref == 'refs/heads/master'
+      - name: Build Docker image
         run: |
           TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
           COMMIT=$(git rev-parse --short=12 HEAD)
@@ -54,8 +53,14 @@ jobs:
           echo "Building version $VERSION"
 
           docker build --pull --tag ${IMAGE_BASE}:${VERSION} --tag ${IMAGE_BASE}:latest .
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Push Docker image
+        if: github.ref == 'refs/heads/master'
+        run: |
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker push ${IMAGE_BASE}:latest
           docker push ${IMAGE_BASE}:${VERSION}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ env.VERSION }}
