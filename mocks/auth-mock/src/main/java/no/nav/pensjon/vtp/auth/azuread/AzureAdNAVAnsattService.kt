@@ -110,7 +110,7 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
         @RequestParam(value = "scope", defaultValue = "openid") scope: String,
         @RequestParam("client_id") clientId: String,
         @RequestParam("state") state: String,
-        @RequestParam("nonce") nonce: String,
+        @RequestParam("nonce", defaultValue = "") nonce: String,
         @RequestParam("redirect_uri") redirectUri: String
     ): ResponseEntity<List<UserEntry>> {
         logger.info("kall mot AzureAD authorize med redirecturi $redirectUri")
