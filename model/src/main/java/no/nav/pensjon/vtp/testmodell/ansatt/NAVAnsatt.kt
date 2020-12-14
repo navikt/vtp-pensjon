@@ -7,5 +7,5 @@ data class NAVAnsatt(
     val displayName: String,
     val email: String,
     val groups: List<String>,
-    val enheter: List<String>
+    val enheter: List<Long>
 )

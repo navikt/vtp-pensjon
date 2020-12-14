@@ -40,11 +40,11 @@ class PenNavOrgEnhetMock(private val enheterIndeks: EnheterIndeks) : PENNAVOrgEn
     @WebResult(name = "hentNAVEnhetResponse")
     override fun hentNAVEnhet(@WebParam(name = "hentNAVEnhetRequest") asboPenNAVEnhet: ASBOPenNAVEnhet) =
         enheterIndeks.finnByEnhetId(
-            asboPenNAVEnhet.enhetsId
+            asboPenNAVEnhet.enhetsId?.toLong()
                 ?: throw HentNAVEnhetFaultPenGeneriskMsg("EnhetsId was null")
         )?.let {
             ASBOPenNAVEnhet().apply {
-                enhetsId = it.enhetId
+                enhetsId = it.enhetId.toString()
                 enhetsNavn = it.navn
             }
         }

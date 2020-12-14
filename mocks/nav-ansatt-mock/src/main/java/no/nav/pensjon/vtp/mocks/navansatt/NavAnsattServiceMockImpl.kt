@@ -47,7 +47,7 @@ class NavAnsattServiceMockImpl(private val ansatteIndeks: AnsatteIndeks, private
 
     private fun asAsboPenNAVEnhet(enhet: Norg2Modell): ASBOPenNAVEnhet {
         return ASBOPenNAVEnhet().apply {
-            enhetsId = enhet.enhetId
+            enhetsId = enhet.enhetId.toString()
             enhetsNavn = enhet.navn
             orgEnhetsId = "7000"
         }
@@ -91,7 +91,7 @@ class NavAnsattServiceMockImpl(private val ansatteIndeks: AnsatteIndeks, private
     @WebResult(name = "hentNAVAnsattListeResponse")
     override fun hentNAVAnsattListe(@WebParam(name = "hentNAVAnsattListeRequest") enhet: ASBOPenNAVEnhet) =
         ASBOPenNAVAnsattListe().apply {
-            navAnsatte = ansatteIndeks.findByEnhetsId(enhet.enhetsId)
+            navAnsatte = ansatteIndeks.findByEnhetsId(enhet.enhetsId.toLong())
                 .map {
                     ASBOPenNAVAnsatt().apply {
                         ansattId = it.cn
