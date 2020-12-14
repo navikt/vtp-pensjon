@@ -1,9 +1,5 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arena.meldekort;
 
-import static no.nav.pensjon.vtp.testmodell.FeilKodeKonstanter.PERSON_IKKE_FUNNET;
-import static no.nav.pensjon.vtp.testmodell.FeilKodeKonstanter.SIKKERHET_BEGRENSNING;
-import static no.nav.pensjon.vtp.testmodell.FeilKodeKonstanter.UGYLDIG_INPUT;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -17,13 +13,13 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.Addressing;
 
+import no.nav.pensjon.vtp.testmodell.FeilKode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import no.nav.pensjon.vtp.core.annotations.SoapService;
 import no.nav.pensjon.vtp.mocks.virksomhet.arena.meldekort.modell.ArenaMUMapper;
 import no.nav.pensjon.vtp.felles.ConversionUtils;
-import no.nav.pensjon.vtp.testmodell.Feilkode;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell;
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.ArenaModell;
@@ -40,6 +36,7 @@ import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.meldinger.Finn
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.meldinger.FinnMeldekortUtbetalingsgrunnlagListeResponse;
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.meldinger.ObjectFactory;
 
+@SuppressWarnings("ValidExternallyBoundObject")
 @SoapService(path = "/ail_ws/MeldekortUtbetalingsgrunnlag_v1")
 @Addressing
 @WebService(endpointInterface = "no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.binding.MeldekortUtbetalingsgrunnlagV1")
@@ -51,8 +48,8 @@ public class MeldekortUtbetalingsgrunnlagMockImpl implements MeldekortUtbetaling
     private static final String FAULTINFO_FEILAARSAK = "Feilaarsak";
     private static final String FAULTINFO_FEILKILDE = "Mock MeldekortUtbetalingsgrunnlag";
 
-    private static ObjectFactory of = new ObjectFactory();
-    private static ArenaMUMapper arenaMapper = new ArenaMUMapper();
+    private static final ObjectFactory objectFactory = new ObjectFactory();
+    private static final ArenaMUMapper arenaMapper = new ArenaMUMapper();
     private final InntektYtelseIndeks inntektYtelseIndeks;
 
     public MeldekortUtbetalingsgrunnlagMockImpl(InntektYtelseIndeks inntektYtelseIndeks) {
@@ -60,33 +57,33 @@ public class MeldekortUtbetalingsgrunnlagMockImpl implements MeldekortUtbetaling
     }
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/meldekortutbetalingsgrunnlag/v1/meldekortutbetalingsgrunnlag_v1/FinnMeldekortUtbetalingsgrunnlagListeRequest")
-    @WebResult(name = "response", targetNamespace = "")
+    @WebResult(name = "response")
     @RequestWrapper(localName = "finnMeldekortUtbetalingsgrunnlagListe", targetNamespace = "http://nav.no/tjeneste/virksomhet/meldekortutbetalingsgrunnlag/v1", className = "no.nav.tjeneste.virksomhet.arena.meldekort.finnMeldekortUtbetalingsgrunnlagListe")
     @ResponseWrapper(localName = "finnMeldekortUtbetalingsgrunnlagListeResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/ytelseskontrakt/v1", className = "no.nav.tjeneste.virksomhet.arena.meldekort.finnMeldekortUtbetalingsgrunnlagListeResponse")
     @Override
-    public FinnMeldekortUtbetalingsgrunnlagListeResponse finnMeldekortUtbetalingsgrunnlagListe(@WebParam(name = "request", targetNamespace = "") FinnMeldekortUtbetalingsgrunnlagListeRequest finnMeldekortUtbetalingsgrunnlagListeRequest)
+    public FinnMeldekortUtbetalingsgrunnlagListeResponse finnMeldekortUtbetalingsgrunnlagListe(@WebParam(name = "request") FinnMeldekortUtbetalingsgrunnlagListeRequest finnMeldekortUtbetalingsgrunnlagListeRequest)
             throws FinnMeldekortUtbetalingsgrunnlagListeAktoerIkkeFunnet, FinnMeldekortUtbetalingsgrunnlagListeSikkerhetsbegrensning,
             FinnMeldekortUtbetalingsgrunnlagListeUgyldigInput {
 
-        FinnMeldekortUtbetalingsgrunnlagListeResponse response = of.createFinnMeldekortUtbetalingsgrunnlagListeResponse();
+        FinnMeldekortUtbetalingsgrunnlagListeResponse response = objectFactory.createFinnMeldekortUtbetalingsgrunnlagListeResponse();
         AktoerId aktoerId = (AktoerId) finnMeldekortUtbetalingsgrunnlagListeRequest.getIdent();
         String aktørId = aktoerId.getAktoerId();
         LOG.info("finnMeldekortUtbetalingsgrunnlagListe. AktoerIdent: " + aktørId);
 
         if (aktørId == null) {
-            UgyldigInput faultInfo = lagUgyldigInput(aktørId);
+            UgyldigInput faultInfo = lagUgyldigInput(null);
             throw new FinnMeldekortUtbetalingsgrunnlagListeUgyldigInput(faultInfo.getFeilmelding(), faultInfo);
         }
         Optional<InntektYtelseModell> iyIndeksOpt = inntektYtelseIndeks.getInntektYtelseModellFraAktørId(aktørId);
-        if (!iyIndeksOpt.isPresent()) {
+        if (iyIndeksOpt.isEmpty()) {
             return response;
         }
         InntektYtelseModell inntektYtelseModell = iyIndeksOpt.get();
         ArenaModell arenaModell = inntektYtelseModell.getArenaModell();
-        Feilkode feilkode = arenaModell.getFeilkode();
+        FeilKode feilkode = arenaModell.getFeilkode();
         if (feilkode != null) {
             try {
-                haandterExceptions(feilkode.getKode(), aktørId);
+                haandterExceptions(feilkode, aktørId);
             } catch (Exception e) {
                 LOG.error("Error ", e);
                 throw e;
@@ -105,20 +102,20 @@ public class MeldekortUtbetalingsgrunnlagMockImpl implements MeldekortUtbetaling
         LOG.info("Ping mottatt og besvart");
     }
 
-    private void haandterExceptions(String kode, String ident)
+    private void haandterExceptions(FeilKode kode, String ident)
             throws FinnMeldekortUtbetalingsgrunnlagListeUgyldigInput, FinnMeldekortUtbetalingsgrunnlagListeAktoerIkkeFunnet,
             FinnMeldekortUtbetalingsgrunnlagListeSikkerhetsbegrensning {
 
         switch (kode) {
-            case UGYLDIG_INPUT: {
+            case UgyldigInput: {
                 UgyldigInput faultInfo = lagUgyldigInput(ident);
                 throw new FinnMeldekortUtbetalingsgrunnlagListeUgyldigInput(faultInfo.getFeilmelding(), faultInfo);
             }
-            case PERSON_IKKE_FUNNET: {
+            case PersonIkkeFunnet: {
                 AktoerIkkeFunnet faultInfo = lagAktoerIkkeFunnet();
                 throw new FinnMeldekortUtbetalingsgrunnlagListeAktoerIkkeFunnet(faultInfo.getFeilmelding(), faultInfo);
             }
-            case SIKKERHET_BEGRENSNING: {
+            case Sikkerhetsbegrensning: {
                 Sikkerhetsbegrensning faultInfo = lagSikkerhetsbegrensning(ident);
                 throw new FinnMeldekortUtbetalingsgrunnlagListeSikkerhetsbegrensning(faultInfo.getFeilmelding(), faultInfo);
             }

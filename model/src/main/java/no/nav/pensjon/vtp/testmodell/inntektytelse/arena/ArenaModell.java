@@ -8,22 +8,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.pensjon.vtp.testmodell.Feilkode;
+import no.nav.pensjon.vtp.testmodell.FeilKode;
 
 public class ArenaModell {
 
     @JsonProperty("feilkode")
-    private Feilkode feilkode;
+    private FeilKode feilkode;
 
     @JsonInclude(Include.NON_EMPTY)
     @JsonProperty("saker")
     private List<ArenaSak> saker = new ArrayList<>();
 
-    public Feilkode getFeilkode() {
+    public FeilKode getFeilkode() {
         return feilkode;
     }
 
-    public void setFeilkode(Feilkode feilkode) {
+    public void setFeilkode(FeilKode feilkode) {
         this.feilkode = feilkode;
     }
 
