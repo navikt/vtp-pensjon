@@ -8,6 +8,7 @@ import no.nav.lib.pen.psakpselv.fault.ObjectFactory
 import no.nav.pensjon.vtp.core.annotations.SoapService
 import no.nav.pensjon.vtp.mocks.psak.util.PenNAVEnhetUtil
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import javax.jws.*
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper
@@ -25,7 +26,7 @@ import javax.xml.ws.ResponseWrapper
 @HandlerChain(file = "/Handler-chain.xml")
 class PsakNavOrgEnhetMock(private val enheterIndeks: EnheterIndeks) : PSAKNAVOrgEnhet {
     override fun hentSpesialenhetTilPerson(hentSpesialenhetTilPersonRequest: ASBOPenHentSpesialEnhetTilPersonRequest) =
-        throw UnsupportedOperationException("Ikke implementert")
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -54,7 +55,7 @@ class PsakNavOrgEnhetMock(private val enheterIndeks: EnheterIndeks) : PSAKNAVOrg
         ?: throw HentNAVEnhetFaultPenNAVEnhetIkkeFunnetMsg("Enhet med id ${hentNAVEnhetRequest.enhetsId} ikke funnet")
 
     override fun hentNAVEnhetGruppeListe(hentNAVEnhetGruppeListeRequest: ASBOPenNAVEnhet) =
-        throw UnsupportedOperationException("Ikke implementert")
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -75,11 +76,11 @@ class PsakNavOrgEnhetMock(private val enheterIndeks: EnheterIndeks) : PSAKNAVOrg
     }
 
     override fun hentNAVEnhetListe(hentNAVEnhetListeRequest: ASBOPenHentNAVEnhetListeRequest) =
-        throw UnsupportedOperationException("Ikke implementert")
+        throw NotImplementedException()
 
     override fun hentForvaltningsenhetTilPersonListe(hentForvaltningsenhetTilPersonListeRequest: ASBOPenHentForvaltningsenhetTilPersonListeRequest) =
-        throw UnsupportedOperationException("Ikke implementert")
+        throw NotImplementedException()
 
     override fun finnArenaNAVEnhetListe(finnArenaNAVEnhetListeRequest: ASBOPenFinnArenaNAVEnhetListeRequest) =
-        throw UnsupportedOperationException("Ikke implementert")
+        throw NotImplementedException()
 }

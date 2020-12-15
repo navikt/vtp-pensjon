@@ -40,30 +40,4 @@ public class Arbeidsforhold {
     public Boolean getRefusjon() {
         return refusjon;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(orgnr, inntekt, inntektperiode, refusjon);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Arbeidsforhold)) {
-            return false;
-        }
-        if (this == obj) {
-            return true;
-        }
-        Arbeidsforhold that = (Arbeidsforhold) obj;
-        return Objects.equals(that.orgnr, this.orgnr) &&
-                Objects.equals(that.inntekt, this.inntekt) &&
-                Objects.equals(that.inntektperiode, this.inntektperiode) &&
-                Objects.equals(that.refusjon, this.refusjon);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[orgnr=" + orgnr + ", inntekt=" + inntekt + ", inntektperiode="
-                + inntektperiode + ", refusjon=" + refusjon + "]";
-    }
 }

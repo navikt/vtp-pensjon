@@ -10,6 +10,7 @@ import no.nav.lib.pen.psakpselv.asbo.navorgenhet.ASBOPenNAVEnhet
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory
 import no.nav.pensjon.vtp.core.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import javax.jws.*
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper
@@ -67,7 +68,7 @@ class PenNavOrgEnhetMock(private val enheterIndeks: EnheterIndeks) : PENNAVOrgEn
             name = "hentNAVEnhetListeRequest",
             targetNamespace = ""
         ) asboPenHentNAVEnhetListeRequest: ASBOPenHentNAVEnhetListeRequest
-    ) = throw UnsupportedOperationException("Ikke implementert")
+    ) = throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -86,7 +87,7 @@ class PenNavOrgEnhetMock(private val enheterIndeks: EnheterIndeks) : PENNAVOrgEn
             name = "hentForvaltningsenhetTilPersonListeRequest",
             targetNamespace = ""
         ) asboPenHentForvaltningsenhetTilPersonListeRequest: ASBOPenHentForvaltningsenhetTilPersonListeRequest
-    ) = throw UnsupportedOperationException("Ikke implementert")
+    ) = throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -105,5 +106,5 @@ class PenNavOrgEnhetMock(private val enheterIndeks: EnheterIndeks) : PENNAVOrgEn
             name = "hentSpesialenhetTilPersonRequest",
             targetNamespace = ""
         ) asboPenHentSpesialEnhetTilPersonRequest: ASBOPenHentSpesialEnhetTilPersonRequest
-    ) = throw UnsupportedOperationException("Ikke implementert")
+    ) = throw NotImplementedException()
 }

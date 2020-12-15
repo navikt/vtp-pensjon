@@ -4,12 +4,8 @@ import no.nav.inf.pen.person.*
 import no.nav.lib.pen.psakpselv.asbo.person.*
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory
 import no.nav.pensjon.vtp.core.annotations.SoapService
-import java.lang.UnsupportedOperationException
-import javax.jws.HandlerChain
-import javax.jws.WebMethod
-import javax.jws.WebParam
-import javax.jws.WebResult
-import javax.jws.WebService
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
+import javax.jws.*
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper
 import javax.xml.ws.ResponseWrapper
@@ -63,9 +59,8 @@ class PenPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPers
     ) = psakpselvPersonAdapter.getASBOPenPerson(hentFamilierelasjonsHistorikkRequest.fnr)
         ?: throw HentFamilierelasjonsHistorikkFaultPenPersonIkkeFunnetMsg()
 
-    override fun finnAdresseListe(finnAdresseListeRequest: ASBOPenFinnAdresseListeRequest): ASBOPenFinnAdresseListeResponse {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun finnAdresseListe(finnAdresseListeRequest: ASBOPenFinnAdresseListeRequest) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(

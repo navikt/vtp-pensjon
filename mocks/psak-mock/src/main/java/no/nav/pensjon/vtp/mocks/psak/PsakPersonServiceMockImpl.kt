@@ -1,9 +1,9 @@
 package no.nav.pensjon.vtp.mocks.psak
 
 import no.nav.inf.psak.person.*
-import no.nav.lib.pen.psakpselv.asbo.ASBOPenTomRespons
 import no.nav.lib.pen.psakpselv.asbo.person.*
 import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import javax.jws.*
@@ -41,13 +41,10 @@ class PsakPersonServiceMockImpl(
         }
     }
 
-    override fun lagreSprak(lagreSprakRequest: ASBOPenPerson): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreSprak(lagreSprakRequest: ASBOPenPerson) = throw NotImplementedException()
 
-    override fun opprettSamboerforhold(opprettSamboerforholdRequest: ASBOPenPerson): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun opprettSamboerforhold(opprettSamboerforholdRequest: ASBOPenPerson) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -61,7 +58,6 @@ class PsakPersonServiceMockImpl(
         className = "no.nav.inf.psak.person.HentBrukerprofilResponse"
     )
     @WebResult(name = "hentBrukerprofilResponse")
-    @Throws(HentBrukerprofilFaultPenBrukerprofilIkkeFunnetMsg::class)
     override fun hentBrukerprofil(
         @WebParam(name = "hentBrukerprofilRequest") hentBrukerprofilRequest: ASBOPenPerson
     ) = psakpselvPersonAdapter.getASBOPenPerson(hentBrukerprofilRequest.fodselsnummer)
@@ -87,13 +83,10 @@ class PsakPersonServiceMockImpl(
     ) = psakpselvPersonAdapter.getASBOPenPerson(hentEnhetIdRequest.fodselsnummer)
         ?: throw HentEnhetIdFaultPenPersonIkkeFunnetMsg()
 
-    override fun slettAdresse(slettAdresseRequest: ASBOPenSlettAdresseRequest): String {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun slettAdresse(slettAdresseRequest: ASBOPenSlettAdresseRequest) =
+        throw NotImplementedException()
 
-    override fun lagreEpost(lagreEpostRequest: ASBOPenPerson): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreEpost(lagreEpostRequest: ASBOPenPerson) = throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -107,7 +100,6 @@ class PsakPersonServiceMockImpl(
         className = "no.nav.inf.psak.person.HentFamilierelasjonerResponse"
     )
     @WebResult(name = "hentFamilierelasjonerResponse")
-    @Throws(HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg::class)
     override fun hentFamilierelasjoner(
         @WebParam(name = "hentFamilierelasjonerRequest") hentFamilierelasjonerRequest: ASBOPenHentFamilierelasjonerRequest
     ) = psakpselvPersonAdapter.getASBOPenPerson(hentFamilierelasjonerRequest.fodselsnummer)
@@ -125,51 +117,37 @@ class PsakPersonServiceMockImpl(
         className = "no.nav.inf.psak.person.HentSamboerforholdResponse"
     )
     @WebResult(name = "hentSamboerforholdResponse")
-    @Throws(HentSamboerforholdFaultPenGeneriskMsg::class)
     override fun hentSamboerforhold(
         @WebParam(name = "hentSamboerforholdRequest") hentSamboerforholdRequest: ASBOPenHentSamboerforholdRequest
     ) = psakpselvPersonAdapter.getASBOPenPerson(hentSamboerforholdRequest.fodselsnummer)
         ?: throw HentSamboerforholdFaultPenGeneriskMsg()
 
-    override fun lagreDodsdato(lagreDodsdatoRequest: ASBOPenPerson): String {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreDodsdato(lagreDodsdatoRequest: ASBOPenPerson) = throw NotImplementedException()
 
-    override fun lagreAdresse(lagreAdresseRequest: ASBOPenLagreAdresseRequest): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreAdresse(lagreAdresseRequest: ASBOPenLagreAdresseRequest) =
+        throw NotImplementedException()
 
-    override fun lagreStatsborgerskap(lagreStatsborgerskapRequest: ASBOPenPerson): String {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreStatsborgerskap(lagreStatsborgerskapRequest: ASBOPenPerson) =
+        throw NotImplementedException()
 
-    override fun lagreTelefonnumre(lagreTelefonnumreRequest: ASBOPenLagreTelefonnumreRequest): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreTelefonnumre(lagreTelefonnumreRequest: ASBOPenLagreTelefonnumreRequest) =
+        throw NotImplementedException()
 
-    override fun lagreFamilierelasjon(lagreFamilierelasjonRequest: ASBOPenPerson): String {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreFamilierelasjon(lagreFamilierelasjonRequest: ASBOPenPerson) =
+        throw NotImplementedException()
 
-    override fun opprettFamilierelasjon(opprettFamilierelasjonRequest: ASBOPenPerson): String {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun opprettFamilierelasjon(opprettFamilierelasjonRequest: ASBOPenPerson) =
+        throw NotImplementedException()
 
-    override fun lagreNavn(lagreNavnRequest: ASBOPenPerson): String {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreNavn(lagreNavnRequest: ASBOPenPerson) = throw NotImplementedException()
 
-    override fun lagreSivilstand(lagreSivilstandRequest: ASBOPenPerson): String {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreSivilstand(lagreSivilstandRequest: ASBOPenPerson) = throw NotImplementedException()
 
-    override fun lagreHistoriskSamboerforhold(lagreHistoriskSamboerforholdRequest: ASBOPenLagreHistoriskSamboerforholdRequest): String {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreHistoriskSamboerforhold(lagreHistoriskSamboerforholdRequest: ASBOPenLagreHistoriskSamboerforholdRequest) =
+        throw NotImplementedException()
 
-    override fun hentPersonUtlandHistorikkListe(hentPersonUtlandHistorikkListeRequest: ASBOPenHentPersonUtlandsHistorikkListeRequest): ASBOPenUtlandHistorikk {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun hentPersonUtlandHistorikkListe(hentPersonUtlandHistorikkListeRequest: ASBOPenHentPersonUtlandsHistorikkListeRequest) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -202,7 +180,6 @@ class PsakPersonServiceMockImpl(
         className = "no.nav.inf.psak.person.HentPersonUtlandResponse"
     )
     @WebResult(name = "hentPersonUtlandResponse", targetNamespace = "")
-    @Throws(HentPersonUtlandFaultPenPersonIkkeFunnetMsg::class)
     override fun hentPersonUtland(
         @WebParam(
             name = "hentPersonUtlandRequest",
@@ -211,13 +188,11 @@ class PsakPersonServiceMockImpl(
     ) = psakpselvPersonAdapter.getASBOPenPerson(hentPersonUtlandRequest.fodselsnummer)
         ?: throw HentPersonUtlandFaultPenPersonIkkeFunnetMsg()
 
-    override fun lagreBrukerprofil(lagreBrukerprofilRequest: ASBOPenPerson): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreBrukerprofil(lagreBrukerprofilRequest: ASBOPenPerson) =
+        throw NotImplementedException()
 
-    override fun lagreKontoinformasjon(lagreKontoinformasjonRequest: ASBOPenPerson): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreKontoinformasjon(lagreKontoinformasjonRequest: ASBOPenPerson) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -231,7 +206,6 @@ class PsakPersonServiceMockImpl(
         className = "no.nav.inf.psak.person.HentHistorikkResponse"
     )
     @WebResult(name = "hentHistorikkResponse", targetNamespace = "")
-    @Throws(HentHistorikkFaultPenPersonIkkeFunnetMsg::class)
     override fun hentHistorikk(
         @WebParam(
             name = "hentHistorikkRequest",
@@ -252,7 +226,6 @@ class PsakPersonServiceMockImpl(
         className = "no.nav.inf.psak.person.HentKontoinformasjonResponse"
     )
     @WebResult(name = "hentKontoinformasjonsResponse")
-    @Throws(HentKontoinformasjonFaultPenPersonIkkeFunnetMsg::class)
     override fun hentKontoinformasjon(
         @WebParam(name = "hentKontoinformasjonRequest") hentKontoinformasjonRequest: ASBOPenPerson
     ) = psakpselvPersonAdapter.getASBOPenPerson(hentKontoinformasjonRequest.fodselsnummer)
@@ -270,17 +243,14 @@ class PsakPersonServiceMockImpl(
         className = "no.nav.inf.psak.person.HentPersonResponse"
     )
     @WebResult(name = "hentPersonResponse")
-    @Throws(HentPersonFaultPenPersonIkkeFunnetMsg::class)
     override fun hentPerson(
         @WebParam(name = "hentPersonRequest") hentPersonRequest: ASBOPenHentPersonRequest
     ) = psakpselvPersonAdapter.getASBOPenPerson(hentPersonRequest.person.fodselsnummer)
         ?: throw HentPersonFaultPenPersonIkkeFunnetMsg()
 
-    override fun lagreSamboerforhold(lagreSamboerforholdRequest: ASBOPenPerson): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreSamboerforhold(lagreSamboerforholdRequest: ASBOPenPerson) =
+        throw NotImplementedException()
 
-    override fun slettSamboerforhold(slettSamboerforholdRequest: ASBOPenPerson): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun slettSamboerforhold(slettSamboerforholdRequest: ASBOPenPerson) =
+        throw NotImplementedException()
 }

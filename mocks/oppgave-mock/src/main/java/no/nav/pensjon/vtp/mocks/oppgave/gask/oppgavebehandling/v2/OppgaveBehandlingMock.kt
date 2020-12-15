@@ -6,6 +6,7 @@ import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFoo
 import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFooRepository
 import no.nav.pensjon.vtp.mocks.oppgave.repository.Sporing
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.virksomhet.tjenester.oppgavebehandling.feil.v2.ObjectFactory
 import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.*
 import no.nav.virksomhet.tjenester.oppgavebehandling.v2.LagreOppgaveOppgaveIkkeFunnet
@@ -47,8 +48,8 @@ class OppgaveBehandlingMock(
         className = "no.nav.virksomhet.tjenester.oppgavebehandling.v2.LagreOppgaveBolkResponse"
     )
     @WebResult(name = "response", targetNamespace = "")
-    override fun lagreOppgaveBolk(request: LagreOppgaveBolkRequest): LagreOppgaveBolkResponse =
-        throw UnsupportedOperationException("Ikke implementert")
+    override fun lagreOppgaveBolk(request: LagreOppgaveBolkRequest) =
+        throw NotImplementedException()
 
     /**
      *
@@ -121,7 +122,7 @@ class OppgaveBehandlingMock(
         className = "no.nav.virksomhet.tjenester.oppgavebehandling.v2.FeilregistrerOppgaveResponse"
     )
     override fun feilregistrerOppgave(request: FeilregistrerOppgaveRequest): Unit =
-        throw UnsupportedOperationException("Ikke implementert")
+        throw NotImplementedException()
 
     /**
      *
@@ -138,7 +139,7 @@ class OppgaveBehandlingMock(
         targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2",
         className = "no.nav.virksomhet.tjenester.oppgavebehandling.v2.LagreMappeResponse"
     )
-    override fun lagreMappe(request: LagreMappeRequest): Unit = throw UnsupportedOperationException("Ikke implementert")
+    override fun lagreMappe(request: LagreMappeRequest): Unit = throw NotImplementedException()
 
     /**
      *
@@ -155,7 +156,7 @@ class OppgaveBehandlingMock(
         targetNamespace = "http://nav.no/virksomhet/tjenester/oppgavebehandling/v2",
         className = "no.nav.virksomhet.tjenester.oppgavebehandling.v2.SlettMappeResponse"
     )
-    override fun slettMappe(request: SlettMappeRequest): Unit = throw UnsupportedOperationException("Ikke implementert")
+    override fun slettMappe(request: SlettMappeRequest): Unit = throw NotImplementedException()
 
     /**
      *
@@ -179,8 +180,8 @@ class OppgaveBehandlingMock(
         className = "no.nav.virksomhet.tjenester.oppgavebehandling.v2.BestillOppgaveResponse"
     )
     @WebResult(name = "response", targetNamespace = "")
-    override fun bestillOppgave(request: BestillOppgaveRequest): BestillOppgaveResponse =
-        throw UnsupportedOperationException("Ikke implementert")
+    override fun bestillOppgave(request: BestillOppgaveRequest) =
+        throw NotImplementedException()
 
     /**
      * Operasjon som tilbyr endring av en oppgave.
@@ -257,9 +258,7 @@ class OppgaveBehandlingMock(
         className = "no.nav.virksomhet.tjenester.oppgavebehandling.v2.OpprettMappeResponse"
     )
     @WebResult(name = "response", targetNamespace = "")
-    override fun opprettMappe(request: OpprettMappeRequest): OpprettMappeResponse {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun opprettMappe(request: OpprettMappeRequest) = throw NotImplementedException()
 
     /**
      *
@@ -283,9 +282,8 @@ class OppgaveBehandlingMock(
         className = "no.nav.virksomhet.tjenester.oppgavebehandling.v2.OpprettOppgaveBolkResponse"
     )
     @WebResult(name = "response", targetNamespace = "")
-    override fun opprettOppgaveBolk(request: OpprettOppgaveBolkRequest): OpprettOppgaveBolkResponse {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun opprettOppgaveBolk(request: OpprettOppgaveBolkRequest) =
+        throw NotImplementedException()
 
     /**
      *
