@@ -9,6 +9,7 @@ import java.util.*
 import java.util.GregorianCalendar.from
 import javax.xml.datatype.DatatypeConfigurationException
 import javax.xml.datatype.DatatypeFactory
+import javax.xml.datatype.XMLGregorianCalendar
 
 class DateUtils
 
@@ -37,3 +38,5 @@ fun LocalDateTime.asXMLGregorianCalendar() =
     )
 
 fun Calendar.toLocalDate() = ofInstant(toInstant(), timeZone.toZoneId()).toLocalDate()
+
+fun XMLGregorianCalendar.asLocalDate() = toGregorianCalendar().toZonedDateTime().toLocalDate()

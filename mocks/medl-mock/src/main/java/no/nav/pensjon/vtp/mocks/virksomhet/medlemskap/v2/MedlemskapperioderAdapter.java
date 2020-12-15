@@ -45,9 +45,9 @@ public class MedlemskapperioderAdapter {
 
             .withTrygdedekning(new TrygdedekningMedTerm().withValue(medlemsskapsperiode.getDekningType().getKode()))
             .withType(new PeriodetypeMedTerm().withValue("PMMEDSKP")) // medlemsskapsperiode.getType().getKode()
-            .withKilde(new KildeMedTerm().withValue(medlemsskapsperiode.getKilde().getKode()))
-            .withStatus(new StatuskodeMedTerm().withValue(medlemsskapsperiode.getStatus().getKode()))
-            .withLovvalg(new LovvalgMedTerm().withValue(medlemsskapsperiode.getLovvalgType().getKode()))
+            .withKilde(new KildeMedTerm().withValue(medlemsskapsperiode.getKilde().name()))
+            .withStatus(new StatuskodeMedTerm().withValue(medlemsskapsperiode.getStatus().name()))
+            .withLovvalg(new LovvalgMedTerm().withValue(medlemsskapsperiode.getLovvalgType().name()))
         ;
     }
 }

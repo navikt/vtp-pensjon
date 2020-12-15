@@ -1,16 +1,11 @@
 package no.nav.pensjon.vtp.mocks.psak
 
 import no.nav.inf.pselv.person.*
-import no.nav.lib.pen.psakpselv.asbo.ASBOPenTomRespons
 import no.nav.lib.pen.psakpselv.asbo.person.*
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory
 import no.nav.pensjon.vtp.core.annotations.SoapService
-import java.lang.UnsupportedOperationException
-import javax.jws.HandlerChain
-import javax.jws.WebMethod
-import javax.jws.WebParam
-import javax.jws.WebResult
-import javax.jws.WebService
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
+import javax.jws.*
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper
 import javax.xml.ws.ResponseWrapper
@@ -40,9 +35,8 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.HentEnhetIdResponse"
     )
     @WebResult(name = "hentEnhetIdResponse")
-    override fun hentEnhetId(@WebParam(name = "hentEnhetIdRequest") var1: ASBOPenPerson): ASBOPenPerson {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun hentEnhetId(@WebParam(name = "hentEnhetIdRequest") var1: ASBOPenPerson) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -56,9 +50,8 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.SlettAdresseResponse"
     )
     @WebResult(name = "slettAdresseResponse")
-    override fun slettAdresse(@WebParam(name = "slettAdresseRequest") var1: ASBOPenSlettAdresseRequest): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun slettAdresse(@WebParam(name = "slettAdresseRequest") var1: ASBOPenSlettAdresseRequest) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -72,9 +65,8 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.LagreTelefonnumreResponse"
     )
     @WebResult(name = "lagreTelefonnumreResponse")
-    override fun lagreTelefonnumre(@WebParam(name = "lagreTelefonnumreRequest") var1: ASBOPenLagreTelefonnumreRequest): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreTelefonnumre(@WebParam(name = "lagreTelefonnumreRequest") var1: ASBOPenLagreTelefonnumreRequest) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -88,9 +80,8 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.LagreSprakResponse"
     )
     @WebResult(name = "lagreSprakResponse")
-    override fun lagreSprak(@WebParam(name = "lagreSprakRequest") var1: ASBOPenPerson): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreSprak(@WebParam(name = "lagreSprakRequest") var1: ASBOPenPerson) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -104,9 +95,8 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.OpprettSamboerforholdResponse"
     )
     @WebResult(name = "opprettSamboerforholdResponse")
-    override fun opprettSamboerforhold(@WebParam(name = "opprettSamboerforholdRequest") var1: ASBOPenPerson): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun opprettSamboerforhold(@WebParam(name = "opprettSamboerforholdRequest") var1: ASBOPenPerson) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -196,9 +186,8 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.LagreAdresseResponse"
     )
     @WebResult(name = "lagreAdresseResponse")
-    override fun lagreAdresse(@WebParam(name = "lagreAdresseRequest") var1: ASBOPenLagreAdresseRequest): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreAdresse(@WebParam(name = "lagreAdresseRequest") var1: ASBOPenLagreAdresseRequest) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -212,9 +201,8 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.SlettSamboerforholdResponse"
     )
     @WebResult(name = "slettSamboerResponse")
-    override fun slettSamboerforhold(@WebParam(name = "slettSamboerRequest") var1: ASBOPenPerson): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun slettSamboerforhold(@WebParam(name = "slettSamboerRequest") var1: ASBOPenPerson) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -228,9 +216,8 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.LagreEpostResponse"
     )
     @WebResult(name = "lagreEpostResponse")
-    override fun lagreEpost(@WebParam(name = "lagreEpostRequest") var1: ASBOPenPerson): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreEpost(@WebParam(name = "lagreEpostRequest") var1: ASBOPenPerson) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -244,9 +231,8 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.ErEgenansattResponse"
     )
     @WebResult(name = "erEgenansattResponse")
-    override fun erEgenansatt(@WebParam(name = "erEgenansattRequest") var1: ASBOPenPerson): Boolean {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun erEgenansatt(@WebParam(name = "erEgenansattRequest") var1: ASBOPenPerson) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -260,9 +246,8 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.HentFamilierelasjonsHistorikkResponse"
     )
     @WebResult(name = "hentFamilierelasjonsHistorikkResponse")
-    override fun hentFamilierelasjonsHistorikk(@WebParam(name = "hentFamilierelasjonsHistorikkRequest") var1: ASBOPenHentFamilierelasjonsHistorikkRequest): ASBOPenPerson {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun hentFamilierelasjonsHistorikk(@WebParam(name = "hentFamilierelasjonsHistorikkRequest") var1: ASBOPenHentFamilierelasjonsHistorikkRequest) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -295,9 +280,8 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.LagreKontoinformasjonResponse"
     )
     @WebResult(name = "lagreKontoinformasjonResponse")
-    override fun lagreKontoinformasjon(@WebParam(name = "lagreKontoinformasjonRequest") var1: ASBOPenPerson): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreKontoinformasjon(@WebParam(name = "lagreKontoinformasjonRequest") var1: ASBOPenPerson) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -311,9 +295,8 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.LagreBrukerprofilResponse"
     )
     @WebResult(name = "lagreBrukerprofilResponse")
-    override fun lagreBrukerprofil(@WebParam(name = "lagreBrukerprofilRequest") var1: ASBOPenPerson): ASBOPenTomRespons {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun lagreBrukerprofil(@WebParam(name = "lagreBrukerprofilRequest") var1: ASBOPenPerson) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -327,7 +310,6 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.HentPersonListeResponse"
     )
     @WebResult(name = "hentPersonListeResponse")
-    override fun hentPersonListe(@WebParam(name = "hentPersonListeRequest") var1: ASBOPenHentPersonListeRequest): ASBOPenPersonListe {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun hentPersonListe(@WebParam(name = "hentPersonListeRequest") var1: ASBOPenHentPersonListeRequest) =
+        throw NotImplementedException()
 }

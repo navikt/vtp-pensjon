@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.mocks.organisasjonenhet.v2
 
 import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.ObjectFactory
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.OrganisasjonEnhetV2
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.informasjon.WSOrganisasjonsenhet
@@ -57,7 +58,7 @@ class OrganisasjonEnhetMock : OrganisasjonEnhetV2 {
     )
     override fun hentEnhetBolk(
         @WebParam(name = "request") request: WSHentEnhetBolkRequest
-    ) = throw UnsupportedOperationException("Ikke implementert")
+    ) = throw NotImplementedException()
 
     @WebMethod(action = "http://nav.no/tjeneste/virksomhet/organisasjonEnhet/v2/OrganisasjonEnhet_v2/hentFullstendigEnhetListeRequest")
     @WebResult(name = "response")
@@ -73,7 +74,7 @@ class OrganisasjonEnhetMock : OrganisasjonEnhetV2 {
     )
     override fun hentFullstendigEnhetListe(
         @WebParam(name = "request") request: WSHentFullstendigEnhetListeRequest
-    ) = throw UnsupportedOperationException("Ikke implementert")
+    ) = throw NotImplementedException()
 
     override fun ping() = Unit
 
@@ -91,5 +92,5 @@ class OrganisasjonEnhetMock : OrganisasjonEnhetV2 {
     )
     override fun hentOverordnetEnhetListe(
         @WebParam(name = "request") request: WSHentOverordnetEnhetListeRequest
-    ) = throw UnsupportedOperationException("Ikke implementert")
+    ) = throw NotImplementedException()
 }

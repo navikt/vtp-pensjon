@@ -31,7 +31,7 @@ class TestscenarioRestTjeneste(private val templateRepository: TestscenarioTempl
     fun hentScenario(@PathVariable("id") id: String) =
         testscenarioService.getTestscenario(id)
             ?.let { ok(konverterTilTestscenarioDto(it)) }
-            ?: notFound().build<TestscenarioDto>()
+            ?: notFound().build()
 
     @PostMapping(value = ["/{key}"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "", notes = "Initialiserer et test scenario basert på angitt template key i VTPs eksempel templates", response = TestscenarioDto::class)
@@ -43,7 +43,7 @@ class TestscenarioRestTjeneste(private val templateRepository: TestscenarioTempl
                 status(CREATED)
                     .body(konverterTilTestscenarioDto(testscenario))
             }
-            ?: notFound().build<TestscenarioDto>()
+            ?: notFound().build()
 
     @PostMapping(produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "", notes = "Initialiserer et testscenario basert på angitt json streng og returnerer det initialiserte objektet", response = TestscenarioDto::class)

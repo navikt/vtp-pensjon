@@ -2,20 +2,19 @@ package no.nav.pensjon.vtp.mocks.psak
 
 import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson
 import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.virksomhet.part.person.v2.Diskresjonskode
 import no.nav.virksomhet.part.person.v2.Navn
 import no.nav.virksomhet.part.person.v2.PersonIdent
 import no.nav.virksomhet.part.person.v2.Personstatus
-import no.nav.virksomhet.tjenester.person.meldinger.v2.*
+import no.nav.virksomhet.tjenester.person.meldinger.v2.HentPersonRequest
+import no.nav.virksomhet.tjenester.person.meldinger.v2.HentPersonResponse
+import no.nav.virksomhet.tjenester.person.meldinger.v2.HentUtenlandskIdentitetListeRequest
+import no.nav.virksomhet.tjenester.person.meldinger.v2.RegistrereAdresseForDodsboRequest
 import no.nav.virksomhet.tjenester.person.v2.HentPersonPersonIkkeFunnet
 import no.nav.virksomhet.tjenester.person.v2.ObjectFactory
 import no.nav.virksomhet.tjenester.person.v2.Person
-import java.lang.UnsupportedOperationException
-import javax.jws.HandlerChain
-import javax.jws.WebMethod
-import javax.jws.WebParam
-import javax.jws.WebResult
-import javax.jws.WebService
+import javax.jws.*
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper
 import javax.xml.ws.ResponseWrapper
@@ -41,9 +40,8 @@ class PersonV2ServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPerso
         targetNamespace = "http://nav.no/virksomhet/tjenester/person/v2",
         className = "no.nav.virksomhet.tjenester.person.v2.RegistrereAdresseForDodsboResponse"
     )
-    override fun registrereAdresseForDodsbo(@WebParam(name = "request") registrereAdresseForDodsboRequest: RegistrereAdresseForDodsboRequest) {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun registrereAdresseForDodsbo(@WebParam(name = "request") registrereAdresseForDodsboRequest: RegistrereAdresseForDodsboRequest) =
+        throw NotImplementedException()
 
     @WebMethod
     @RequestWrapper(
@@ -79,9 +77,8 @@ class PersonV2ServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPerso
         className = "no.nav.virksomhet.tjenester.person.v2.HentUtenlandskIdentitetListeResponse"
     )
     @WebResult(name = "response")
-    override fun hentUtenlandskIdentitetListe(@WebParam(name = "request") hentUtenlandskIdentitetListeRequest: HentUtenlandskIdentitetListeRequest): HentUtenlandskIdentitetListeResponse {
-        throw UnsupportedOperationException("Ikke implementert")
-    }
+    override fun hentUtenlandskIdentitetListe(@WebParam(name = "request") hentUtenlandskIdentitetListeRequest: HentUtenlandskIdentitetListeRequest) =
+        throw NotImplementedException()
 
     private fun ASBOPenPerson.asPersonV2(): no.nav.virksomhet.part.person.v2.Person {
         val asboPenPerson = this
