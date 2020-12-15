@@ -36,7 +36,7 @@ class TestscenarioTemplateLoader {
         resource.inputStream.use {
             return VariabelContainer(
                 jsonMapper.lagObjectMapper()
-                    .readValue<HashMap<String, String>>(it, object : TypeReference<HashMap<String, String>>() {})
+                    .readValue(it, object : TypeReference<HashMap<String, String>>() {})
             )
         }
     }
