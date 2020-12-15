@@ -31,7 +31,7 @@ class ArenaMUMapper {
                     objectFactory.createSak().apply {
                         fagsystemSakId = arenaSak.saksnummer
                         tema = objectFactory.createTema().apply {
-                            value = arenaSak.tema.kode
+                            value = arenaSak.tema.name
                         }
                         saksstatus = mapSakStatus(arenaSak.status)
                         vedtakListe.addAll(
@@ -57,7 +57,7 @@ class ArenaMUMapper {
     }
 
     private fun filtrerVekkSak(arenaSak: ArenaSak, temaer: List<String>): Boolean {
-        return temaer.isNotEmpty() && !temaer.contains(arenaSak.tema.kode)
+        return temaer.isNotEmpty() && !temaer.contains(arenaSak.tema.name)
     }
 
     private fun mapSakStatus(status: SakStatus) = objectFactory.createSaksstatuser().apply {

@@ -4,7 +4,6 @@ import no.nav.pensjon.vtp.testmodell.enums.IdentType
 import no.nav.pensjon.vtp.testmodell.enums.Kjonn
 import no.nav.pensjon.vtp.testmodell.enums.Kjonn.KVINNE
 import no.nav.pensjon.vtp.testmodell.enums.Kjonn.MANN
-import no.nav.pensjon.vtp.testmodell.util.TestdataUtil.generateRandomPlausibleBirtdayParent
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -82,30 +81,5 @@ class FoedselsnummerGenerator(
 
     private fun betweenExclusive(x: Int, min: Int, max: Int): Boolean {
         return x > min && x < max
-    }
-}
-
-class FodselsnummerGeneratorBuilder {
-    var kjonn: Kjonn = Kjonn.randomKjonn()
-    var identType: IdentType = IdentType.FNR
-    var fodselsdato: LocalDate = generateRandomPlausibleBirtdayParent()
-
-    fun kjonn(k: Kjonn): FodselsnummerGeneratorBuilder {
-        kjonn = k
-        return this
-    }
-
-    fun identType(i: IdentType): FodselsnummerGeneratorBuilder {
-        identType = i
-        return this
-    }
-
-    fun fodselsdato(lt: LocalDate?): FodselsnummerGeneratorBuilder {
-        lt?.let { fodselsdato = it }
-        return this
-    }
-
-    fun buildAndGenerate(): String {
-        return FoedselsnummerGenerator(kjonn, identType, fodselsdato).generate()
     }
 }

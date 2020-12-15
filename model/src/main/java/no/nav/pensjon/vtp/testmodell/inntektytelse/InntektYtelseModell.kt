@@ -18,7 +18,7 @@ data class InntektYtelseModell(
     val tRexModell: TRexModell? = null,
 
     @JsonProperty("inntektskomponent")
-    val inntektskomponentModell: InntektskomponentModell? = null,
+    val inntektskomponentModell: InntektskomponentModell,
 
     @JsonProperty("aareg")
     val arbeidsforholdModell: ArbeidsforholdModell? = null,

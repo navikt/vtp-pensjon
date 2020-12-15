@@ -6,7 +6,7 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
-@Document
+@Document("testscenarioV2")
 data class Testscenario(
     @Id
     val id: String,
