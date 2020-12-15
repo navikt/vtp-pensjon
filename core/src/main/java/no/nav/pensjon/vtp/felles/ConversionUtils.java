@@ -20,12 +20,4 @@ public interface ConversionUtils {
             throw new RuntimeException(e);
         }
     }
-
-    static LocalDate convertToLocalDate(XMLGregorianCalendar xmlGregorianCalendar) {
-        if (xmlGregorianCalendar == null) {
-            return null;
-        }
-
-        return xmlGregorianCalendar.toGregorianCalendar().toZonedDateTime().toLocalDate();
-    }
 }
