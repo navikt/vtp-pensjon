@@ -30,7 +30,7 @@ data class MedlemskapperiodeModell(
     val dekningType: DekningType? = DekningType.IHT_AVTALE, // setter til en uavklart kode default.
 
     @JsonProperty("kilde")
-    val kilde: MedlemskapKildeType? = MedlemskapKildeType.TPS,
+    val kilde: MedlemskapKildeType = MedlemskapKildeType.TPS,
 
     @JsonProperty("lovvalgType")
     val lovvalgType: LovvalgType? = LovvalgType.ENDL,
