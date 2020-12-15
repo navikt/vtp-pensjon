@@ -25,6 +25,9 @@ export default (props: Props) => (
           <Link className="nav-link" to="/snitch">
             Snitch
           </Link>
+          <Link className="nav-link" to="/tokenGenerator">
+            Generer token
+          </Link>
           <a className="nav-link" href="http://localhost:8060/swagger-ui/">
             Swagger
           </a>
