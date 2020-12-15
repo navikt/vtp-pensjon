@@ -9,6 +9,7 @@ import Snitch from "./components/Snitch/Snitch";
 import Testscenario from "./components/Testscenario/Testscenario";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { AzureADLogin, OpenAMLogin } from "./components/AzureADLogin";
+import TokenGenerator from "./components/TokenGenerator/TokenGenerator";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               component={AzureADLogin}
             />
             <Route path="/openam/authorize" component={OpenAMLogin} />
+            <Route path="/tokenGenerator" component={TokenGenerator} />
             <Route exact path="/">
               <Testscenario />
             </Route>
