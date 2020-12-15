@@ -70,11 +70,11 @@ class TestscenarioRestTjeneste(private val templateRepository: TestscenarioTempl
             testscenarioId = testscenario.id,
             variabler = testscenario.vars,
             personopplysninger = TestscenarioPersonopplysningDto(
-                testscenario.personopplysninger.søker.ident,
-                testscenario.personopplysninger.annenPart?.ident,
-                testscenario.personopplysninger.søker.aktørIdent,
-                testscenario.personopplysninger.annenPart?.aktørIdent,
-                testscenario.personopplysninger.søker.fødselsdato
+                søkerIdent = testscenario.personopplysninger.søker.ident,
+                annenpartIdent = testscenario.personopplysninger.annenPart?.ident,
+                søkerAktørIdent = testscenario.personopplysninger.søker.aktørIdent,
+                annenPartAktørIdent = testscenario.personopplysninger.annenPart?.aktørIdent,
+                fødselsdato = testscenario.personopplysninger.søker.fødselsdato
             ),
             scenariodataDto = TestscenariodataDto(
                 testscenario.søkerInntektYtelse?.inntektskomponentModell,
