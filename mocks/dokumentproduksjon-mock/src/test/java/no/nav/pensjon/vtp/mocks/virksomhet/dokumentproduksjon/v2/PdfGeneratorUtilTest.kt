@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2
 
-import no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2.PdfGenerering.PdfGeneratorUtil
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
@@ -11,7 +10,8 @@ private const val INPUT_TEXT: String = "paragraph.txt"
 private const val OUTPUT_PDF: String = "statiskBrev.pdf"
 
 class PdfGeneratorUtilTest {
-    private val renderer: PdfGeneratorUtil = PdfGeneratorUtil()
+    private val renderer: PdfGeneratorUtil =
+        PdfGeneratorUtil()
 
     @Test
     fun PdfGeneratorXmlTest() {

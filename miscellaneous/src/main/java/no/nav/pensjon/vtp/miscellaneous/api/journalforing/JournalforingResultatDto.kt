@@ -1,5 +1,5 @@
 package no.nav.pensjon.vtp.miscellaneous.api.journalforing
 
 class JournalforingResultatDto(
-    val journalpostId: String
+    @Suppress("unused") val journalpostId: String
 )

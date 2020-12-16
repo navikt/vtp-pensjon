@@ -26,17 +26,17 @@ internal fun datetypeFactoryFun(): DatatypeFactory {
 
 private val datatypeFactory = datetypeFactoryFun()
 
-fun LocalDate.asGregorianCalendar() = from(atStartOfDay(systemDefault()))
+fun LocalDate.asGregorianCalendar(): GregorianCalendar = from(atStartOfDay(systemDefault()))
 
-fun LocalDate.asXMLGregorianCalendar() = datatypeFactory.newXMLGregorianCalendar(asGregorianCalendar())
+fun LocalDate.asXMLGregorianCalendar(): XMLGregorianCalendar = datatypeFactory.newXMLGregorianCalendar(asGregorianCalendar())
 
-fun LocalDateTime.asXMLGregorianCalendar() =
+fun LocalDateTime.asXMLGregorianCalendar(): XMLGregorianCalendar =
     datatypeFactory.newXMLGregorianCalendar(
         GregorianCalendar().apply {
             time = Date.from(atZone(systemDefault()).toInstant())
         }
     )
 
-fun Calendar.toLocalDate() = ofInstant(toInstant(), timeZone.toZoneId()).toLocalDate()
+fun Calendar.toLocalDate(): LocalDate = ofInstant(toInstant(), timeZone.toZoneId()).toLocalDate()
 
-fun XMLGregorianCalendar.asLocalDate() = toGregorianCalendar().toZonedDateTime().toLocalDate()
+fun XMLGregorianCalendar.asLocalDate(): LocalDate = toGregorianCalendar().toZonedDateTime().toLocalDate()

@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2.PdfGenerering;
+package no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2;
 
 import java.awt.*;
 import java.io.File;
@@ -18,7 +18,6 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 public class PdfGeneratorUtil {
-    private final ClassLoader classLoader = PdfGeneratorUtil.class.getClassLoader();
     private static final String FONT_FILE = "fonts/OpenSans-Regular.ttf";
     private static final String OUTPUT_PDF = "statiskBrev.pdf";
     private static final int FONT_SIZE = 8;
@@ -26,6 +25,7 @@ public class PdfGeneratorUtil {
     private PDFont font;
     private PDDocument doc = null;
     private PDPageContentStream content = null;
+
     private int textRenderingLineStartY;
     private int textRenderingLineStartX;
     private int textRenderingLineEndX;
@@ -34,16 +34,21 @@ public class PdfGeneratorUtil {
     private int fontHeight;
 
     public PdfGeneratorUtil() {
-        loadAndSetFont();
+        ClassLoader classLoader = PdfGeneratorUtil.class.getClassLoader();
+        try (InputStream fontInputStream = classLoader.getResourceAsStream(FONT_FILE)) {
+            this.doc = new PDDocument();
+            this.font = PDType0Font.load(doc, fontInputStream);
+            double tempFontHeightDouble = font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * FONT_SIZE;
+            this.fontHeight = (int) Math.round(tempFontHeightDouble);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
     public byte[] genererPdfByteArrayFraString(String brev) {
         try {
-            if (doc == null) {
-                loadAndSetFont();
-            }
-            String[] pdfcontent = brev.replaceAll("\t", "  ").split(System.getProperty("line.separator"));
+            String[] pdfcontent = brev.replace("\t", "  ").split(System.getProperty("line.separator"));
             renderText(pdfcontent);
             saveAndClosePdf();
             Path pdfPath = Paths.get(OUTPUT_PDF);
@@ -138,18 +143,6 @@ public class PdfGeneratorUtil {
         textRenderingLineStartX = (int) (mediabox.getLowerLeftX()) + 2 * margin;
         textRenderingLineEndX = (int) (mediabox.getWidth()) - textRenderingLineStartX - 2 * margin;
         textRenderingLineCurrentY = textRenderingLineStartY;
-    }
-
-
-    private void loadAndSetFont() {
-        try (InputStream fontInputStream = classLoader.getResourceAsStream(FONT_FILE)) {
-            this.doc = new PDDocument();
-            this.font = PDType0Font.load(doc, fontInputStream);
-            double tempFontHeightDouble = font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * FONT_SIZE;
-            this.fontHeight = (int) Math.round(tempFontHeightDouble);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
