@@ -17,7 +17,6 @@
         <module>journalpost-mock</module>
         <module>dialog-mock</module>
         <module>dokumentproduksjon-mock</module>
-        <module>dokdist-mock</module>
         <module>enonic-mock</module>
         <module>egenansatt-mock</module>
         <module>inntekt-mock</module>

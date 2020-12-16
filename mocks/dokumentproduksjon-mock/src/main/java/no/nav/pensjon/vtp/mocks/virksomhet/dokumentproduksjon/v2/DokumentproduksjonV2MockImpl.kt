@@ -1,7 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2
 
 import no.nav.pensjon.vtp.core.annotations.SoapService
-import no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2.PdfGenerering.PdfGeneratorUtil
 import no.nav.pensjon.vtp.testmodell.dokument.JournalpostModellGenerator.lagJournalpostUstrukturertDokument
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
@@ -18,12 +17,12 @@ import javax.xml.ws.soap.Addressing
 @WebService(endpointInterface = "no.nav.tjeneste.virksomhet.dokumentproduksjon.v2.binding.DokumentproduksjonV2")
 @HandlerChain(file = "/Handler-chain.xml")
 class DokumentproduksjonV2MockImpl(private val journalRepository: JournalRepository) : DokumentproduksjonV2 {
-    override fun ping() {
-    }
+    override fun ping() = Unit
 
     override fun produserDokumentutkast(request: ProduserDokumentutkastRequest): ProduserDokumentutkastResponse {
         return ProduserDokumentutkastResponse().apply {
-            dokumentutkast = PdfGeneratorUtil().genererPdfByteArrayFraString(request.any.toString())
+            dokumentutkast = PdfGeneratorUtil()
+                .genererPdfByteArrayFraString(request.any.toString())
         }
     }
 
