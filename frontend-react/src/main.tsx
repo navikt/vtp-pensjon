@@ -10,6 +10,7 @@ import Testscenario from "./components/Testscenario/Testscenario";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { AzureADLogin, OpenAMLogin } from "./components/AzureADLogin";
 import TokenGenerator from "./components/TokenGenerator/TokenGenerator";
+import Loginservice from "./components/Loginservice/Loginservice";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               path="/azuread/:tenant/v2.0/authorize"
               component={AzureADLogin}
             />
+            <Route path="/loginservice/login" component={Loginservice} />
             <Route path="/openam/authorize" component={OpenAMLogin} />
             <Route path="/tokenGenerator" component={TokenGenerator} />
             <Route exact path="/">
