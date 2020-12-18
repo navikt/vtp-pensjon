@@ -34,11 +34,11 @@ class LoginService(
         val redirect: String
     )
     @GetMapping(value = ["/users"])
-    fun getUsers(@RequestParam("redirect") redirect: String?): List<UserSummary> =
+    fun getUsers(@RequestParam("redirect", required = true) redirect: String): List<UserSummary> =
         personModellRepository.findAll().map {
             val redirectUrl = URIBuilder("/rest/loginservice/login-redirect-with-cookie").apply {
                 addParameter("fnr", it.ident)
-                redirect?.let {  addParameter("redirect", it) }
+                addParameter("redirect", redirect)
             }.toString()
             UserSummary(
                 ident = it.ident,
@@ -50,7 +50,7 @@ class LoginService(
 
     // Deprecated: Use the /#/loginservice/login endpoint instead. Leave this legacy endpoint just for a little while, while consumers update.
     @GetMapping(value = ["/login"])
-    fun login(@RequestParam("redirect") redirect: String?): ResponseEntity<String> {
+    fun login(@RequestParam("redirect", required = true) redirect: String): ResponseEntity<String> {
         val rows = personModellRepository.findAll().stream()
             .map { (fnr, _, fornavn, etternavn) ->
                 val navn = "$fornavn $etternavn"
@@ -80,7 +80,7 @@ class LoginService(
 
     @GetMapping(value = ["/login-redirect-with-cookie"])
     @Throws(URISyntaxException::class, JoseException::class)
-    fun doLogin(@RequestParam("redirect") redirect: String?, @RequestParam("fnr") fnr: String?): ResponseEntity<*> {
+    fun doLogin(@RequestParam("redirect", required = true) redirect: String, @RequestParam("fnr") fnr: String?): ResponseEntity<*> {
         val now = NumericDate.now()
         val claims = JwtClaims()
         claims.subject = fnr
