@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
-class HentOppgaverResponse {
+public class HentOppgaverResponse {
     private final int antallTreffTotalt;
     private final List<ObjectNode> oppgaver;
 
