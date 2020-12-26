@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2
 
+import no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2.PdfGeneratorUtil.genererPdfByteArrayFraString
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
@@ -7,18 +8,16 @@ import java.io.*
 
 private const val INPUT_XML: String = "brevxml.txt"
 private const val INPUT_TEXT: String = "paragraph.txt"
-private const val OUTPUT_PDF: String = "statiskBrev.pdf"
 
 class PdfGeneratorUtilTest {
-    private val renderer: PdfGeneratorUtil =
-        PdfGeneratorUtil()
-
     @Test
     fun PdfGeneratorXmlTest() {
         getResourceAsStream(INPUT_XML).use { inputStream ->
             val inputString = hentStringFraInputStream(inputStream)
-            renderer.genererPdfByteArrayFraString(inputString)
-            PDDocument.load(FileInputStream(OUTPUT_PDF)).use { doc ->
+
+            val pdfDocument = genererPdfByteArrayFraString(inputString)
+
+            PDDocument.load(ByteArrayInputStream(pdfDocument)).use { doc ->
                 val numberOfPages = doc.numberOfPages
                 Assertions.assertThat(numberOfPages).isEqualTo(2)
             }
@@ -35,8 +34,8 @@ class PdfGeneratorUtilTest {
     fun PdfGeneratorLongParagraphTest() {
         getResourceAsStream(INPUT_TEXT).use { inputStream ->
             val inputString = hentStringFraInputStream(inputStream)
-            renderer.genererPdfByteArrayFraString(inputString)
-            PDDocument.load(FileInputStream(OUTPUT_PDF)).use { doc ->
+            val pdfDocument = genererPdfByteArrayFraString(inputString)
+            PDDocument.load(ByteArrayInputStream(pdfDocument)).use { doc ->
                 val numberOfPages = doc.numberOfPages
                 Assertions.assertThat(numberOfPages).isGreaterThan(1)
             }

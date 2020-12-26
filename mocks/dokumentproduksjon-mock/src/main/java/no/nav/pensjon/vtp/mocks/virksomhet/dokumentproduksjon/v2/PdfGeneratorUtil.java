@@ -1,15 +1,5 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -17,9 +7,15 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 public class PdfGeneratorUtil {
     private static final String FONT_FILE = "fonts/OpenSans-Regular.ttf";
-    private static final String OUTPUT_PDF = "statiskBrev.pdf";
     private static final int FONT_SIZE = 8;
 
     private PDFont font;
@@ -33,7 +29,7 @@ public class PdfGeneratorUtil {
     private int textRenderingLineCurrentY;
     private int fontHeight;
 
-    public PdfGeneratorUtil() {
+    private PdfGeneratorUtil() {
         ClassLoader classLoader = PdfGeneratorUtil.class.getClassLoader();
         try (InputStream fontInputStream = classLoader.getResourceAsStream(FONT_FILE)) {
             this.doc = new PDDocument();
@@ -46,13 +42,15 @@ public class PdfGeneratorUtil {
     }
 
 
-    public byte[] genererPdfByteArrayFraString(String brev) {
+    public static byte[] genererPdfByteArrayFraString(String brev) {
+        return new PdfGeneratorUtil().doGenererPdfByteArrayFraString(brev);
+    }
+
+    public byte[] doGenererPdfByteArrayFraString(String brev) {
         try {
             String[] pdfcontent = brev.replace("\t", "  ").split(System.getProperty("line.separator"));
             renderText(pdfcontent);
-            saveAndClosePdf();
-            Path pdfPath = Paths.get(OUTPUT_PDF);
-            return Files.readAllBytes(pdfPath);
+            return saveAndClosePdf();
         } catch (IOException e) {
             throw new IllegalStateException("Kunne ikke generere PDF", e);
         }
@@ -146,12 +144,14 @@ public class PdfGeneratorUtil {
     }
 
 
-    private void saveAndClosePdf() throws IOException {
+    private byte[] saveAndClosePdf() throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         if (doc != null) {
-            doc.save(new File(OUTPUT_PDF));
+            doc.save(byteArrayOutputStream);
             doc.close();
             doc = null;
         }
+        return byteArrayOutputStream.toByteArray();
     }
 
 

@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2
 
 import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2.PdfGeneratorUtil.genererPdfByteArrayFraString
 import no.nav.pensjon.vtp.testmodell.dokument.JournalpostModellGenerator.lagJournalpostUstrukturertDokument
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
@@ -21,8 +22,7 @@ class DokumentproduksjonV2MockImpl(private val journalRepository: JournalReposit
 
     override fun produserDokumentutkast(request: ProduserDokumentutkastRequest): ProduserDokumentutkastResponse {
         return ProduserDokumentutkastResponse().apply {
-            dokumentutkast = PdfGeneratorUtil()
-                .genererPdfByteArrayFraString(request.any.toString())
+            dokumentutkast = genererPdfByteArrayFraString(request.any.toString())
         }
     }
 
