@@ -4,6 +4,7 @@ import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentModell
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.HOVEDDOKUMENT
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId.ADOPSJONSSOKNAD_ENGANGSSTONAD
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalstatus.MOTTATT
 import no.nav.pensjon.vtp.testmodell.repo.impl.JournalRepositoryImpl
 import org.assertj.core.api.Assertions
 import org.junit.Assert
@@ -29,6 +30,7 @@ class JournalRepoTest {
             sakId = sakId,
             kommunikasjonsretning = "INN",
             fagsystemId = "FS32",
+            journalStatus = MOTTATT,
         )
 
         journalRepository.save(journalpostModell)
@@ -46,19 +48,22 @@ class JournalRepoTest {
 
         journalRepository.save(
             JournalpostModell(
-                avsenderFnr = avsenderFnrSøker
+                avsenderFnr = avsenderFnrSøker,
+                journalStatus = MOTTATT,
             )
         )
 
         journalRepository.save(
             JournalpostModell(
-                avsenderFnr = avsenderFnrSøker
+                avsenderFnr = avsenderFnrSøker,
+                journalStatus = MOTTATT,
             )
         )
 
         journalRepository.save(
             JournalpostModell(
-                avsenderFnr = avsenderFnrIkkeSøker
+                avsenderFnr = avsenderFnrIkkeSøker,
+                journalStatus = MOTTATT,
             )
         )
 
@@ -73,7 +78,8 @@ class JournalRepoTest {
         val resultatModell = journalRepository.save(
             JournalpostModell(
                 kommunikasjonsretning = "Inn",
-                avsenderFnr = "00115522447"
+                avsenderFnr = "00115522447",
+                journalStatus = MOTTATT,
             )
         )
         Assert.assertNotNull(resultatModell.journalpostId)

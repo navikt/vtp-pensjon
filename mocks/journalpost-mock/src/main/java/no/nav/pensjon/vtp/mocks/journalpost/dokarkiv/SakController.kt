@@ -89,9 +89,9 @@ class SakController {
             required = false
         ) xCorrelationID: String?,
         @ApiParam(value = "id", required = true) @PathVariable("id") id: Long
-    ) = Sak().apply {
-        fagsakId = id.toString()
-        arkivsaksnummer = id.toString()
-        arkivsaksystem = Sak.ArkivsaksystemEnum.PSAK
-    }
+    ) = Sak(
+        fagsakId = id.toString(),
+        arkivsaksnummer = id.toString(),
+        arkivsaksystem = Sak.Arkivsaksystem.pSAK,
+    )
 }

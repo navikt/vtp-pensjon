@@ -29,3 +29,4 @@ resources/ssl-terminator/localhost.*
 yarn.lock
 mocks/dokumentproduksjon-mock/statiskBrev.pdf
 .DS_Store
+mocks/journalpost-mock/.openapi-generator/dokarkiv-api.json.sha256

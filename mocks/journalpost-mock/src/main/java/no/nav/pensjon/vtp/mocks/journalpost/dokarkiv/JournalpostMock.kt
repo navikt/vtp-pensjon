@@ -16,17 +16,19 @@ class JournalpostMock(private val journalRepository: JournalRepository) {
         @RequestBody opprettJournalpostRequest: OpprettJournalpostRequest,
         @RequestParam("forsoekFerdigstill") forsoekFerdigstill: Boolean
     ) = accepted().body(
-        OpprettJournalpostResponse().apply {
-            val journalpostModell = journalRepository.save(tilModell(opprettJournalpostRequest))
-
-            dokumenter = journalpostModell.dokumentModellList
-                .map {
-                    DokumentInfo().apply {
-                        dokumentInfoId = it.dokumentId
-                    }
-                }
-            journalpostId = journalpostModell.journalpostId
-            isJournalpostferdigstilt = true
+        journalRepository.save(tilModell(opprettJournalpostRequest)).let { journalpostModell ->
+            OpprettJournalpostResponse(
+                dokumenter = journalpostModell.dokumentModellList
+                    .map {
+                        DokumentInfo(
+                            dokumentInfoId = it.dokumentId ?: throw IllegalStateException("Stored dokument without id")
+                        )
+                    },
+                journalpostId = journalpostModell.journalpostId
+                    ?: throw IllegalStateException("Stored journalpost without id"),
+                journalpostferdigstilt = true,
+                journalstatus = journalpostModell.journalStatus.name
+            )
         }
     )
 
@@ -39,16 +41,14 @@ class JournalpostMock(private val journalRepository: JournalRepository) {
         ?.let {
             journalRepository.save(
                 it.copy(
-                    sakId = oppdaterJournalpostRequest.sak.fagsakId,
-                    bruker = mapAvsenderFraBruker(oppdaterJournalpostRequest.bruker)
+                    sakId = oppdaterJournalpostRequest.sak?.fagsakId,
+                    bruker = oppdaterJournalpostRequest.bruker?.let { bruker -> mapAvsenderFraBruker(bruker) }
                 )
             )
             notFound().build()
         }
         ?: accepted().body(
-            OppdaterJournalpostResponse().apply {
-                this.journalpostId = journalpostId
-            }
+            OppdaterJournalpostResponse(journalpostId = journalpostId)
         )
 
     @PatchMapping("/journalpost/{journalpostid}/ferdigstill")

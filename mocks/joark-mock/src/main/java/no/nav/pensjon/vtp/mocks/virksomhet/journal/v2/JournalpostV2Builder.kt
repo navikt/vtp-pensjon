@@ -7,7 +7,7 @@ import java.time.LocalDate.now
 
 fun buildFromV2(modell: JournalpostModell) = Journalpost().apply {
     journalpostId = modell.journalpostId
-    journalstatus = modell.journalStatus?.let {
+    journalstatus = modell.journalStatus.let {
         Journalstatuser().apply {
             value = it.name
         }
@@ -28,8 +28,8 @@ fun buildFromV2(modell: JournalpostModell) = Journalpost().apply {
                                 value = it.name
                             }
                         }
-                        beskriverInnholdListe.addAll(
-                            it.dokumentVariantInnholdListe.map {
+                        beskriverInnholdListe += it.dokumentVariantInnholdListe
+                            ?.map {
                                 DokumentInnhold().apply {
                                     filtype = Arkivfiltyper().apply {
                                         value = it.filType.name
@@ -39,7 +39,7 @@ fun buildFromV2(modell: JournalpostModell) = Journalpost().apply {
                                     }
                                 }
                             }
-                        )
+                            ?: emptyList()
                     }
                     dokumentTilknyttetJournalpost = TilknyttetJournalpostSom().apply {
                         value = it.dokumentTilknyttetJournalpost.name

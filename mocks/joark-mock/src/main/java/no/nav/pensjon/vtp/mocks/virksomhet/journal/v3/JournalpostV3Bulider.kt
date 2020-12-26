@@ -59,19 +59,18 @@ private fun lagDetaljertDokumentinformasjon(dokumentModell: DokumentModell) =
                 }
                 ?: DokumenttypeIder()
 
-            dokumentInnholdListe.addAll(
-                dokumentModell.dokumentVariantInnholdListe
-                    .map { (filType, variantFormat) ->
-                        DokumentInnhold().apply {
-                            arkivfiltype = Arkivfiltyper().apply {
-                                kodeverksRef = filType.name
-                                value = filType.name
-                            }
-                            variantformat = Variantformater().apply {
-                                kodeverksRef = variantFormat.name
-                                value = variantFormat.name
-                            }
+            dokumentInnholdListe += dokumentModell.dokumentVariantInnholdListe
+                ?.map { (filType, variantFormat) ->
+                    DokumentInnhold().apply {
+                        arkivfiltype = Arkivfiltyper().apply {
+                            kodeverksRef = filType.name
+                            value = filType.name
+                        }
+                        variantformat = Variantformater().apply {
+                            kodeverksRef = variantFormat.name
+                            value = variantFormat.name
                         }
                     }
-            )
+                }
+                ?: emptyList()
         }

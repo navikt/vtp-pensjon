@@ -4,7 +4,7 @@ import no.nav.dokarkiv.generated.model.Bruker
 import no.nav.dokarkiv.generated.model.Dokument
 import no.nav.dokarkiv.generated.model.DokumentVariant
 import no.nav.dokarkiv.generated.model.OpprettJournalpostRequest
-import no.nav.dokarkiv.generated.model.OpprettJournalpostRequest.JournalpostTypeEnum
+import no.nav.dokarkiv.generated.model.OpprettJournalpostRequest.JournalpostType
 import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentModell
 import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentVariantInnhold
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostBruker
@@ -27,9 +27,9 @@ import java.time.LocalDateTime.now
 fun tilModell(journalpostRequest: OpprettJournalpostRequest) =
     JournalpostModell(
         journalposttype = mapJournalposttype(journalpostRequest.journalpostType),
-        arkivtema = Arkivtema.valueOf(journalpostRequest.tema),
-        bruker = mapAvsenderFraBruker(journalpostRequest.bruker),
-        sakId = journalpostRequest.sak.arkivsaksnummer,
+        arkivtema = journalpostRequest.tema?.let { Arkivtema.valueOf(it) },
+        bruker = journalpostRequest.bruker?.let { mapAvsenderFraBruker(it) },
+        sakId = journalpostRequest.sak?.arkivsaksnummer,
         mottattDato = journalpostRequest.datoMottatt?.toLocalDateTime() ?: now(),
         dokumentModellList = journalpostRequest.dokumenter
             .mapIndexed { index, dokument ->
@@ -41,17 +41,15 @@ fun tilModell(journalpostRequest: OpprettJournalpostRequest) =
                 } else {
                     mapDokument(dokument, VEDLEGG)
                 }
-            }
+            },
+        journalStatus = Journalstatus.MOTTATT
     )
 
 fun mapAvsenderFraBruker(bruker: Bruker): JournalpostBruker {
     return when (bruker.idType) {
-        Bruker.IdTypeEnum.FNR -> JournalpostBruker(ident = bruker.id, brukerType = BrukerType.FNR)
-        Bruker.IdTypeEnum.AKTOERID -> JournalpostBruker(ident = bruker.id, brukerType = BrukerType.AKTOERID)
-        Bruker.IdTypeEnum.ORGNR -> JournalpostBruker(ident = bruker.id, brukerType = BrukerType.ORGNR)
-        else -> {
-            throw UnsupportedOperationException("Kan ikke opprette journalpost for brukertype")
-        }
+        Bruker.IdType.fNR -> JournalpostBruker(ident = bruker.id, brukerType = BrukerType.FNR)
+        Bruker.IdType.aKTOERID -> JournalpostBruker(ident = bruker.id, brukerType = BrukerType.AKTOERID)
+        Bruker.IdType.oRGNR -> JournalpostBruker(ident = bruker.id, brukerType = BrukerType.ORGNR)
     }
 }
 
@@ -62,10 +60,10 @@ fun mapAvsenderFraBruker(bruker: Bruker): JournalpostBruker {
 // dokument.dokumentvarianter
 private fun mapDokument(dokument: Dokument, dokumentTilknyttetJournalpost: DokumentTilknyttetJournalpost) =
     DokumentModell(
-        dokumentkategori = Dokumentkategori.fromCode(dokument.dokumentKategori),
+        dokumentkategori = dokument.dokumentKategori?.let { Dokumentkategori.fromCode(it) },
         tittel = dokument.tittel,
         dokumentVariantInnholdListe = dokument.dokumentvarianter
-            .map { mapDokumentVariant(it) },
+            ?.map { mapDokumentVariant(it) },
         dokumentTilknyttetJournalpost = dokumentTilknyttetJournalpost
     )
 
@@ -75,7 +73,7 @@ private fun mapDokumentVariant(dokumentVariant: DokumentVariant) = DokumentVaria
     dokumentInnhold = dokumentVariant.fysiskDokument
 )
 
-private fun mapJournalposttype(type: JournalpostTypeEnum): Journalposttyper {
+private fun mapJournalposttype(type: JournalpostType): Journalposttyper {
     return when {
         type.toString().equals("INNGAAENDE", ignoreCase = true) -> {
             INNGAAENDE_DOKUMENT

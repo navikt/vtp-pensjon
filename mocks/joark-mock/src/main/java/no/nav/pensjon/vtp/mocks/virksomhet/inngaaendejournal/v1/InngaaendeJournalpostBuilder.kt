@@ -64,16 +64,14 @@ private fun lagDokumentinformasjon(dokumentModell: DokumentModell) = Dokumentinf
 
     dokumentId = dokumentModell.dokumentId
 
-    dokumentInnholdListe.addAll(
-        dokumentModell.dokumentVariantInnholdListe
-            .map {
-                Dokumentinnhold().apply {
-
-                    arkivfiltype = Arkivfiltyper().withValue(it.filType.name)
-                    variantformat = Variantformater().withValue(it.variantFormat.name)
-                }
+    dokumentInnholdListe += dokumentModell.dokumentVariantInnholdListe
+        ?.map {
+            Dokumentinnhold().apply {
+                arkivfiltype = Arkivfiltyper().withValue(it.filType.name)
+                variantformat = Variantformater().withValue(it.variantFormat.name)
             }
-    )
+        }
+        ?: emptyList()
 }
 
 private fun lagArkivSak(journalpostmodell: JournalpostModell): ArkivSak? =

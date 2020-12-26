@@ -12,7 +12,7 @@ data class JournalpostModell(
     val avsenderFnr: String? = null,
     val sakId: String? = null,
     val fagsystemId: String? = null,
-    val journalStatus: Journalstatus? = null,
+    val journalStatus: Journalstatus,
     val kommunikasjonsretning: String? = null,
     val mottattDato: LocalDateTime? = null,
     val mottakskanal: String? = null,

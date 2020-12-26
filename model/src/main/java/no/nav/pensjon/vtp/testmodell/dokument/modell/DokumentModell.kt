@@ -3,7 +3,6 @@ package no.nav.pensjon.vtp.testmodell.dokument.modell
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Dokumentkategori
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId
-import java.util.*
 
 data class DokumentModell(
     var dokumentId: String? = null,
@@ -12,6 +11,6 @@ data class DokumentModell(
     val tittel: String? = null,
     val innhold: String? = null,
     val dokumentTilknyttetJournalpost: DokumentTilknyttetJournalpost,
-    val dokumentVariantInnholdListe: List<DokumentVariantInnhold> = ArrayList(),
+    val dokumentVariantInnholdListe: List<DokumentVariantInnhold>? = null,
     val dokumentkategori: Dokumentkategori? = null,
 )
