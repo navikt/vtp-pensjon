@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory
 import java.util.*
 import java.util.stream.Collectors
 
+@Suppress("unused")
 class LocalKafkaServer(
     val zookeperPort: Int,
     val kafkaBrokerPort: Int,
@@ -110,8 +111,8 @@ class LocalKafkaServer(
         val bootstrapServers = String.format("%s:%s", "localhost", kafkaBrokerPort)
         val kafkaProperties = setupKafkaProperties(zookeperPort)
         val zkProperties = setupZookeperProperties(zookeperPort)
-        val url = Optional.ofNullable(javaClass.getResource("/kafkasecurity.conf"))
-            .orElseThrow { RuntimeException("Unable to locate kafkasecurity.conf") }
+        val url = javaClass.getResource("/kafkasecurity.conf")
+            ?: throw RuntimeException("Unable to locate kafkasecurity.conf")
         System.setProperty(JaasUtils.JAVA_LOGIN_CONFIG_PARAM, url.toString())
         log.info("Kafka startes med Jaas login config param: " + System.getProperty(JaasUtils.JAVA_LOGIN_CONFIG_PARAM))
         try {

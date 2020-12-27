@@ -13,8 +13,8 @@ import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.time.LocalDate.of
+import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
 import java.util.*
 import java.util.stream.Collectors
 
@@ -149,11 +149,8 @@ class EnhetRestMock(private val enheterIndeks: EnheterIndeks) {
     fun getOrganiseringListeForEnhet(@PathVariable("enhetsnummer") enhetsnummer: String): List<Norg2RsOrganisering> {
         val norg2RsEnhet = getEnhetUsingGET(enhetsnummer)
 
-        val validFrom = Optional.ofNullable(norg2RsEnhet.aktiveringsdato).orElse(
-            LocalDate.of(1950, 1, 1).format(
-                DateTimeFormatter.ISO_LOCAL_DATE
-            )
-        )
+        val validFrom = norg2RsEnhet.aktiveringsdato
+            ?: of(1950, 1, 1).format(ISO_LOCAL_DATE)
 
         return listOf(
             Norg2RsOrganisering(
@@ -170,7 +167,7 @@ class EnhetRestMock(private val enheterIndeks: EnheterIndeks) {
                     gyldigFra = validFrom
                 ),
                 fra = validFrom,
-                til = LocalDate.of(2036, 3, 18).format(DateTimeFormatter.ISO_LOCAL_DATE),
+                til = of(2036, 3, 18).format(ISO_LOCAL_DATE),
                 id = 123456123456L,
                 orgType = "FORV"
             )
