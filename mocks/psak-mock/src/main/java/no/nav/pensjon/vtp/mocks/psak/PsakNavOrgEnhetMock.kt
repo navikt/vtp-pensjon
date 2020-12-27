@@ -6,7 +6,7 @@ import no.nav.inf.psak.navorgenhet.PSAKNAVOrgEnhet
 import no.nav.lib.pen.psakpselv.asbo.navorgenhet.*
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory
 import no.nav.pensjon.vtp.core.annotations.SoapService
-import no.nav.pensjon.vtp.mocks.psak.util.PenNAVEnhetUtil
+import no.nav.pensjon.vtp.mocks.psak.util.asboPenNAVEnhet
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import javax.jws.*
@@ -72,7 +72,7 @@ class PsakNavOrgEnhetMock(private val enheterIndeks: EnheterIndeks) : PSAKNAVOrg
     override fun finnNAVEnhet(
         @WebParam(name = "finnNAVEnhetRequest", targetNamespace = "") finnNAVEnhetRequest: ASBOPenFinnNAVEnhetRequest
     ) = ASBOPenNAVEnhetListe().apply {
-        navEnheter = arrayOf(PenNAVEnhetUtil.getAsboPenNAVEnhet())
+        navEnheter = arrayOf(asboPenNAVEnhet())
     }
 
     override fun hentNAVEnhetListe(hentNAVEnhetListeRequest: ASBOPenHentNAVEnhetListeRequest) =
