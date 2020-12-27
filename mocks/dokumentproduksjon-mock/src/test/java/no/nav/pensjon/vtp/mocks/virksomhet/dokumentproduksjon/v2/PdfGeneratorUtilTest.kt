@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.*
 
-private const val INPUT_XML: String = "brevxml.txt"
+private const val INPUT_XML: String = "brev.xml"
 private const val INPUT_TEXT: String = "paragraph.txt"
 
 class PdfGeneratorUtilTest {
