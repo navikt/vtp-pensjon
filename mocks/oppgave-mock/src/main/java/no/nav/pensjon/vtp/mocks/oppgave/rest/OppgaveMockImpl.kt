@@ -18,10 +18,10 @@ import javax.validation.Valid
     consumes = [MediaType.APPLICATION_JSON_VALUE]
 )
 class OppgaveMockImpl {
-    private val oppgaver: MutableMap<Long, ObjectNode?> = ConcurrentHashMap()
+    private val oppgaver: MutableMap<Long, ObjectNode> = ConcurrentHashMap()
 
     @PostMapping
-    @ApiOperation(value = "Opprett oppgave", response = OppgaveJson::class)
+    @ApiOperation(value = "Opprett oppgave")
     @ApiImplicitParams(
         ApiImplicitParam(
             name = "X-Correlation-ID",
@@ -32,11 +32,11 @@ class OppgaveMockImpl {
         ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
     )
     fun opprettOppgave(
-        @ApiParam(value = "Oppgaven som opprettes", required = true) oppgave: @Valid ObjectNode?,
+        @ApiParam(value = "Oppgaven som opprettes", required = true) oppgave: @Valid ObjectNode,
         @RequestHeader httpHeaders: HttpHeaders?
     ): ResponseEntity<*> {
         val id = (oppgaver.size + 1).toLong()
-        oppgave!!.put("id", id)
+        oppgave.put("id", id)
         oppgaver[id] = oppgave
         return ResponseEntity.status(HttpStatus.CREATED).body(oppgave)
     }
@@ -57,5 +57,5 @@ class OppgaveMockImpl {
         ApiImplicitParam(name = "aktoerId", dataType = "string", paramType = "query")
     )
     fun hentOppgaver(httpHeaders: HttpHeaders?) =
-        HentOppgaverResponse(oppgaver.values.toList())
+        HentOppgaverResponse(antallTreffTotalt = oppgaver.values.size, oppgaver = oppgaver.values.toList())
 }
