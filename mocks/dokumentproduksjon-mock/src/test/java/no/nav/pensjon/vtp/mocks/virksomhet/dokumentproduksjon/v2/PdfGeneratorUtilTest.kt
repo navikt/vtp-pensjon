@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2
 
-import no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2.PdfGeneratorUtil.genererPdfByteArrayFraString
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test

@@ -1,7 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2
 
 import no.nav.pensjon.vtp.core.annotations.SoapService
-import no.nav.pensjon.vtp.mocks.virksomhet.dokumentproduksjon.v2.PdfGeneratorUtil.genererPdfByteArrayFraString
 import no.nav.pensjon.vtp.testmodell.dokument.JournalpostModellGenerator.lagJournalpostUstrukturertDokument
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
