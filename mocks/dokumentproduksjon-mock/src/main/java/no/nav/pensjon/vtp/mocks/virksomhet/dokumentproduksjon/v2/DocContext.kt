@@ -6,7 +6,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDFont
 import java.awt.Color
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -22,7 +21,6 @@ private fun fontHeight(font: PDFont, fontSize: Int): Int {
     val tempFontHeightDouble = (font.fontDescriptor.fontBoundingBox.height / 1000 * fontSize).toDouble()
     return tempFontHeightDouble.roundToInt()
 }
-
 
 internal class DocContext(private val doc: PDDocument, private val font: PDFont, private val fontSize: Int) {
     private val fontHeight: Int = fontHeight(font, fontSize)
