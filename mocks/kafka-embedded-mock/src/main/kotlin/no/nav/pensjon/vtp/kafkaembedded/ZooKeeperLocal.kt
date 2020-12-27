@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 
 internal class ZooKeeperLocal(zkProperties: Properties?) {
     private val t: Thread
-    private val LOG = LoggerFactory.getLogger(ZooKeeperLocal::class.java)
+    private val logger = LoggerFactory.getLogger(ZooKeeperLocal::class.java)
     private val zooKeeperServer: ZooKeeperServerMain
     fun stop() {
         t.interrupt()
@@ -34,9 +34,9 @@ internal class ZooKeeperLocal(zkProperties: Properties?) {
                 started.countDown() // here we go
                 zooKeeperServer.runFromConfig(configuration)
             } catch (e: IOException) {
-                LOG.error("Zookeeper failed: {}", e.message)
+                logger.error("Zookeeper failed: {}", e.message)
             } catch (e: AdminServerException) {
-                LOG.error("Zookeeper failed: {}", e.message)
+                logger.error("Zookeeper failed: {}", e.message)
                 e.printStackTrace()
             }
         }

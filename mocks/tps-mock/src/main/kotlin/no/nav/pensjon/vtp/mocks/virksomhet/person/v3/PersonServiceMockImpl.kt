@@ -196,7 +196,7 @@ class PersonServiceMockImpl(
         targetNamespace = "http://nav.no/tjeneste/virksomhet/person/v3",
         className = "no.nav.tjeneste.virksomhet.person.v3.HentPersonhistorikkResponse"
     )
-    override fun hentPersonhistorikk(@WebParam(name = "request") hentPersonhistorikkRequest: HentPersonhistorikkRequest) =
+    override fun hentPersonhistorikk(@WebParam(name = "request") hentPersonhistorikkRequest: HentPersonhistorikkRequest): HentPersonhistorikkResponse =
         try {
             val bruker: PersonModell = finnPerson(hentPersonhistorikkRequest.aktoer)
 

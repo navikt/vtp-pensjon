@@ -1,7 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.journal.v3
 
 import no.nav.pensjon.vtp.core.annotations.SoapService
-import no.nav.pensjon.vtp.mocks.virksomhet.journal.modell.buildFromV3
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository
 import no.nav.tjeneste.virksomhet.journal.v3.HentDokumentDokumentIkkeFunnet

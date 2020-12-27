@@ -9,8 +9,6 @@ import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.binding.FinnMe
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.binding.FinnMeldekortUtbetalingsgrunnlagListeSikkerhetsbegrensning
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.binding.FinnMeldekortUtbetalingsgrunnlagListeUgyldigInput
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.binding.MeldekortUtbetalingsgrunnlagV1
-import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.feil.Sikkerhetsbegrensning
-import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.feil.UgyldigInput
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.informasjon.AktoerId
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.meldinger.FinnMeldekortUtbetalingsgrunnlagListeRequest
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.meldinger.FinnMeldekortUtbetalingsgrunnlagListeResponse
@@ -98,8 +96,7 @@ class MeldekortUtbetalingsgrunnlagMockImpl(private val inntektYtelseIndeks: Innt
             val faultInfo = lagSikkerhetsbegrensning(ident)
             throw FinnMeldekortUtbetalingsgrunnlagListeSikkerhetsbegrensning(faultInfo.feilmelding, faultInfo)
         }
-        else -> {
-        }
+        else -> null
     }
 
     private fun lagUgyldigInput(ident: String?) = feilObjectFactory.createUgyldigInput().apply {

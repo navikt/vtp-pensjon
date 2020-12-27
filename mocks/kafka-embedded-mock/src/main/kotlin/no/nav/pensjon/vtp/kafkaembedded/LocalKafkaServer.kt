@@ -52,7 +52,7 @@ class LocalKafkaServer(
 
     private fun setupZookeperProperties(zookeeperPort: Int): Properties {
         val zkProperties = Properties()
-        zkProperties["dataDir"] = "target/zookeeper/" + zookeeperAndKafkaTempInstanceDataDir
+        zkProperties["dataDir"] = "target/zookeeper/$zookeeperAndKafkaTempInstanceDataDir"
         zkProperties["clientPort"] = "" + zookeeperPort
         zkProperties["admin.enableServer"] = "false"
         zkProperties["jaasLoginRenew"] = "3600000"
@@ -83,7 +83,7 @@ class LocalKafkaServer(
             "INTERNAL:SASL_SSL,EXTERNAL:SASL_SSL" // TODO: Fjern når POC fungerer
         kafkaProperties["zookeeper.connect"] = "localhost:$zookeeperPort"
         kafkaProperties["offsets.topic.replication.factor"] = "1"
-        kafkaProperties["log.dirs"] = "target/kafka-logs/" + zookeeperAndKafkaTempInstanceDataDir
+        kafkaProperties["log.dirs"] = "target/kafka-logs/$zookeeperAndKafkaTempInstanceDataDir"
         kafkaProperties["auto.create.topics.enable"] = "true"
         kafkaProperties["listeners"] = "INTERNAL://:9092,EXTERNAL://:9093"
         kafkaProperties["advertised.listeners"] = "INTERNAL://localhost:9092,EXTERNAL://vtp:9093"

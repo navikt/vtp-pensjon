@@ -57,14 +57,13 @@ class LoginService(
 
         val usersText = if (persons.isNotEmpty()) {
             persons
-                .map { (fnr, _, fornavn, etternavn) ->
+                .joinToString("\n") { (fnr, _, fornavn, etternavn) ->
                     val navn = "$fornavn $etternavn"
                     "<a href=\"login-redirect-with-cookie?fnr=$fnr&redirect=" + URLEncoder.encode(
                         redirect,
                         StandardCharsets.UTF_8
                     ) + "\">" + navn + "</a> (" + fnr + ")<br>"
                 }
-                .joinToString("\n")
         } else {
             "Det finnes ingen personer i VTP akkurat nå. Prøv å <a href=\"/#/\">laste inn et scenario</a>!"
         }

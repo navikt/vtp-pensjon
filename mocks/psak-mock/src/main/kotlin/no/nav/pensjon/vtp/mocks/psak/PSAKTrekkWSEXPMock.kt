@@ -15,35 +15,65 @@ import javax.xml.ws.ResponseWrapper
 @HandlerChain(file = "/Handler-chain.xml")
 class PSAKTrekkWSEXPMock : PSAKTrekk {
     @WebMethod
-    @RequestWrapper(localName = "hentSkattOgTrekk", targetNamespace = "http://nav-cons-pen-psak-trekk/no/nav/inf", className = "no.nav.inf.psak.trekk.HentSkattOgTrekk")
-    @ResponseWrapper(localName = "hentSkattOgTrekkResponse", targetNamespace = "http://nav-cons-pen-psak-trekk/no/nav/inf", className = "no.nav.inf.psak.trekk.HentSkattOgTrekkResponse")
+    @RequestWrapper(
+        localName = "hentSkattOgTrekk",
+        targetNamespace = "http://nav-cons-pen-psak-trekk/no/nav/inf",
+        className = "no.nav.inf.psak.trekk.HentSkattOgTrekk"
+    )
+    @ResponseWrapper(
+        localName = "hentSkattOgTrekkResponse",
+        targetNamespace = "http://nav-cons-pen-psak-trekk/no/nav/inf",
+        className = "no.nav.inf.psak.trekk.HentSkattOgTrekkResponse"
+    )
     @WebResult(name = "hentSkattOgTrekkResponse", targetNamespace = "")
-    @Throws(HentSkattOgTrekkFaultPenGeneriskMsg::class, HentSkattOgTrekkFaultPenIngenVedtaksopplysningerFunnetMsg::class)
-    override fun hentSkattOgTrekk(@WebParam(name = "hentSkattOgTrekkRequest", targetNamespace = "") asboPenHentSkattOgTrekkRequest: ASBOPenHentSkattOgTrekkRequest): ASBOPenSkattOgTrekk {
-        val trekk = ASBOPenSkattOgTrekk()
-        trekk.skattetrekk = ASBOPenSkattetrekk()
-        return trekk
+    override fun hentSkattOgTrekk(
+        @WebParam(
+            name = "hentSkattOgTrekkRequest",
+            targetNamespace = ""
+        ) asboPenHentSkattOgTrekkRequest: ASBOPenHentSkattOgTrekkRequest
+    ) = ASBOPenSkattOgTrekk().apply {
+        skattetrekk = ASBOPenSkattetrekk()
     }
 
     @WebMethod
-    @RequestWrapper(localName = "hentTrekkListe", targetNamespace = "http://nav-cons-pen-psak-trekk/no/nav/inf", className = "no.nav.inf.psak.trekk.HentTrekkListe")
-    @ResponseWrapper(localName = "hentTrekkListeResponse", targetNamespace = "http://nav-cons-pen-psak-trekk/no/nav/inf", className = "no.nav.inf.psak.trekk.HentTrekkListeResponse")
+    @RequestWrapper(
+        localName = "hentTrekkListe",
+        targetNamespace = "http://nav-cons-pen-psak-trekk/no/nav/inf",
+        className = "no.nav.inf.psak.trekk.HentTrekkListe"
+    )
+    @ResponseWrapper(
+        localName = "hentTrekkListeResponse",
+        targetNamespace = "http://nav-cons-pen-psak-trekk/no/nav/inf",
+        className = "no.nav.inf.psak.trekk.HentTrekkListeResponse"
+    )
     @WebResult(name = "hentTrekkListeResponse", targetNamespace = "")
-    @Throws(HentTrekkListeFaultPenGeneriskMsg::class, HentTrekkListeFaultPenKreditorAvdMaaOppgisMsg::class, HentTrekkListeFaultPenIngenTrekkFunnetMsg::class, HentTrekkListeFaultPenKreditorIkkeRegMsg::class)
-    override fun hentTrekkListe(@WebParam(name = "hentTrekkListeRequest", targetNamespace = "") asboPenHentTrekkListeRequest: ASBOPenHentTrekkListeRequest): ASBOPenAndreTrekkListe {
-        val liste = ASBOPenAndreTrekkListe()
-        liste.setTrekkListe(emptyArray())
-        return liste
+    override fun hentTrekkListe(
+        @WebParam(
+            name = "hentTrekkListeRequest",
+            targetNamespace = ""
+        ) asboPenHentTrekkListeRequest: ASBOPenHentTrekkListeRequest
+    ) = ASBOPenAndreTrekkListe().apply {
+        trekkListe = emptyArray()
     }
 
     @WebMethod
-    @RequestWrapper(localName = "hentTrekktransaksjonListe", targetNamespace = "http://nav-cons-pen-psak-trekk/no/nav/inf", className = "no.nav.inf.psak.trekk.HentTrekktransaksjonListe")
-    @ResponseWrapper(localName = "hentTrekktransaksjonListeResponse", targetNamespace = "http://nav-cons-pen-psak-trekk/no/nav/inf", className = "no.nav.inf.psak.trekk.HentTrekktransaksjonListeResponse")
+    @RequestWrapper(
+        localName = "hentTrekktransaksjonListe",
+        targetNamespace = "http://nav-cons-pen-psak-trekk/no/nav/inf",
+        className = "no.nav.inf.psak.trekk.HentTrekktransaksjonListe"
+    )
+    @ResponseWrapper(
+        localName = "hentTrekktransaksjonListeResponse",
+        targetNamespace = "http://nav-cons-pen-psak-trekk/no/nav/inf",
+        className = "no.nav.inf.psak.trekk.HentTrekktransaksjonListeResponse"
+    )
     @WebResult(name = "hentTrekktransaksjonListeResponse", targetNamespace = "")
-    @Throws(HentTrekktransaksjonListeFaultPenGeneriskMsg::class, HentTrekktransaksjonListeFaultPenIngenTransaksjonerFunnetMsg::class, HentTrekktransaksjonListeFaultPenTrekkvedtakIkkeFunnetMsg::class)
-    override fun hentTrekktransaksjonListe(@WebParam(name = "hentTrekktransaksjonListeRequest", targetNamespace = "") asboPenHentTrekktransaksjonListeRequest: ASBOPenHentTrekktransaksjonListeRequest): ASBOPenTrekktransaksjonListe {
-        val liste = ASBOPenTrekktransaksjonListe()
-        liste.trekktransaksjonListe = emptyArray()
-        return liste
+    override fun hentTrekktransaksjonListe(
+        @WebParam(
+            name = "hentTrekktransaksjonListeRequest",
+            targetNamespace = ""
+        ) asboPenHentTrekktransaksjonListeRequest: ASBOPenHentTrekktransaksjonListeRequest
+    ) = ASBOPenTrekktransaksjonListe().apply {
+        trekktransaksjonListe = emptyArray()
     }
 }

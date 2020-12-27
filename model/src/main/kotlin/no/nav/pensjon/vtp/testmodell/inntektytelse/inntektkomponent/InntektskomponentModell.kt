@@ -17,13 +17,13 @@ class InntektskomponentModell {
 
     val frilansarbeidsforholdperioderSplittMånedlig: List<FrilansArbeidsforholdsperiode>
         get() = frilansarbeidsforholdperioder
-            .flatMap { splittFrilansArbeidsforholdTilMånedligeIntervall(it) }
+            .flatMap { splittFrilansArbeidsforholdTilMaanedligeIntervall(it) }
 
     @JsonIgnore
     fun inntektsperioderSplittMånedlig(): List<Inntektsperiode> = inntektsperioder
-        .flatMap { splittInntektsperioderTilMånedligeIntervall(it) }
+        .flatMap { splittInntektsperioderTilMaanedligeIntervall(it) }
 
-    private fun splittFrilansArbeidsforholdTilMånedligeIntervall(fap: FrilansArbeidsforholdsperiode): List<FrilansArbeidsforholdsperiode> {
+    private fun splittFrilansArbeidsforholdTilMaanedligeIntervall(fap: FrilansArbeidsforholdsperiode): List<FrilansArbeidsforholdsperiode> {
         val frilansArbeidsforholdsperioderPerMåned: MutableList<FrilansArbeidsforholdsperiode> = ArrayList()
 
         val tomDato = fap.frilansTom ?: LocalDate.now()
@@ -45,9 +45,9 @@ class InntektskomponentModell {
         return frilansArbeidsforholdsperioderPerMåned
     }
 
-    private fun splittInntektsperioderTilMånedligeIntervall(ip: Inntektsperiode): List<Inntektsperiode> {
+    private fun splittInntektsperioderTilMaanedligeIntervall(ip: Inntektsperiode): List<Inntektsperiode> {
         val inntektsperioderPaaMaaned: MutableList<Inntektsperiode> = ArrayList()
-        val tomDato = if (ip.tom != null) ip.tom else LocalDate.now()
+        val tomDato = ip.tom ?: LocalDate.now()
         var dateCounter = ip.fom.withDayOfMonth(1)
 
         while (!dateCounter.isEqual(tomDato.withDayOfMonth(1))) {

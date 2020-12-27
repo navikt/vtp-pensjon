@@ -1,7 +1,5 @@
 package no.nav.pensjon.vtp.testmodell.dokument.modell.koder
 
-import java.util.*
-
 /*
     Hentet fra: https://modapp.adeo.no/kodeverksklient/viskodeverk/Journalposttyper/1?5
 */

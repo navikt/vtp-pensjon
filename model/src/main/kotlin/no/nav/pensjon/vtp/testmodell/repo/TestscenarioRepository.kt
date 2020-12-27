@@ -1,7 +1,6 @@
 package no.nav.pensjon.vtp.testmodell.repo
 
 import org.springframework.data.repository.Repository
-import java.util.*
 
 interface TestscenarioRepository : Repository<Testscenario, String> {
     fun findAll(): List<Testscenario>

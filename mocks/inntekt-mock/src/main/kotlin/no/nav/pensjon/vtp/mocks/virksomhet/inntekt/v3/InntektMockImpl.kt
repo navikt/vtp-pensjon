@@ -41,7 +41,7 @@ class InntektMockImpl(private val inntektYtelseIndeks: InntektYtelseIndeks) : In
             throw HentInntektListeBolkUgyldigInput("Formål eller A-inntektsfilter mangler", UgyldigInput())
         }
         val response = HentInntektListeBolkResponse()
-        if (request.identListe != null && !request.identListe.isEmpty() &&
+        if (request.identListe != null && request.identListe.isNotEmpty() &&
             request.uttrekksperiode != null
         ) {
             val fom = request.uttrekksperiode.maanedFom?.asLocalDate()

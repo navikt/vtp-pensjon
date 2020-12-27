@@ -19,12 +19,12 @@ object HentInntektlistBolkMapper {
 
         val inntektsliste = mapInntektFraModell(modell.inntektsperioderSplittMånedlig(), aktoer)
 
-        val inntektsMåneder: MutableMap<String, MutableList<Inntekt>> = HashMap()
+        val inntektsMaaneder: MutableMap<String, MutableList<Inntekt>> = HashMap()
         for (inntekt in inntektsliste) {
             val localDate = inntekt.opptjeningsperiode.startDato.asLocalDate()
             val key = "${localDate.year}-${localDate.month}"
 
-            inntektsMåneder.computeIfAbsent(key) { ArrayList() }.add(inntekt)
+            inntektsMaaneder.computeIfAbsent(key) { ArrayList() }.add(inntekt)
         }
 
         for (monthYearDate in getMonthYearsWithData(modell)) {
@@ -34,7 +34,7 @@ object HentInntektlistBolkMapper {
             }
 
             val key = "${monthYearDate.year}-${monthYearDate.month}"
-            inntektsMåneder[key]
+            inntektsMaaneder[key]
                 ?.let {
                     arbeidsInntektMaaned.arbeidsInntektInformasjon.inntektListe.addAll(it)
                     arbeidsInntektIdent.arbeidsInntektMaaned.add(arbeidsInntektMaaned)

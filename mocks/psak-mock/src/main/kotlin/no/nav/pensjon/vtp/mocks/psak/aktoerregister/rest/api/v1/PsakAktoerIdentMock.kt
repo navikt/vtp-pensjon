@@ -23,7 +23,7 @@ private const val GJELDENDE = "gjeldende"
 class PsakAktoerIdentMock {
     // TODO (TEAM FAMILIE) Lag mock-responser fra scenario NOSONAR
     private val personIdentMock = "12345678910"
-    private val aktørIdMock = "1234567891011"
+    private val aktoerIdMock = "1234567891011"
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getIdenter(
         @RequestHeader(NAV_IDENTER_HEADER_KEY) requestIdenter: Set<String>,
@@ -40,7 +40,7 @@ class PsakAktoerIdentMock {
             )
         } else {
             Identinfo(
-                ident = aktørIdMock,
+                ident = aktoerIdMock,
                 identgruppe = AKTOERID_IDENTGRUPPE,
                 gjeldende = true
             )

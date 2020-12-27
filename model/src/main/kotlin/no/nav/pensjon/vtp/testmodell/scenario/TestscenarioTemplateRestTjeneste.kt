@@ -47,5 +47,5 @@ class TestscenarioTemplateRestTjeneste(private val templateRepository: Testscena
                 it.getExpectedVars().forEach(Consumer { v: TemplateVariable -> map.putIfAbsent(v.name, null) })
                 ok(TemplateDto(key, it.templateName, map))
             }
-            ?: notFound().build<TemplateDto>()
+            ?: notFound().build()
 }

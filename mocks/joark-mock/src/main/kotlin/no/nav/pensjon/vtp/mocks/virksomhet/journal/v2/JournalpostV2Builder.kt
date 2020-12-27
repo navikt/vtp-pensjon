@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.mocks.virksomhet.journal.modell
+package no.nav.pensjon.vtp.mocks.virksomhet.journal.v2
 
 import no.nav.pensjon.vtp.core.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell

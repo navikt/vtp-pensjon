@@ -18,7 +18,7 @@ private const val GJELDENDE = "gjeldende"
 class AktoerIdentMock {
     // TODO (TEAM FAMILIE) Lag mock-responser fra scenario NOSONAR
     private val personIdentMock = "12345678910"
-    private val aktørIdMock = "1234567891011"
+    private val aktoerIdMock = "1234567891011"
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun alleIdenterForIdenter(
@@ -31,7 +31,7 @@ class AktoerIdentMock {
     ): Map<String, IdentinfoForAktoer> {
         response.setHeader("Cache-Control", "no-cache")
 
-        require(!requestIdenter.isEmpty()) { "Ville kastet \"MissingIdenterException\"" }
+        require(requestIdenter.isNotEmpty()) { "Ville kastet \"MissingIdenterException\"" }
         require(requestIdenter.size <= NAV_IDENTER_MAX_SIZE) { "Ville kastet \"RequestIdenterMaxSizeException\"" }
 
         return mapOf(
@@ -45,7 +45,7 @@ class AktoerIdentMock {
                         )
                     } else {
                         Identinfo(
-                            aktørIdMock,
+                            aktoerIdMock,
                             AKTOERID_IDENTGRUPPE,
                             true
                         )

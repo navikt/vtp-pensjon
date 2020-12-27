@@ -11,7 +11,7 @@ import java.time.LocalDate.of
 
 const val ENDRET_AV = "vtp"
 
-fun Endringstype.asEndringstyper() = Endringstyper.fromValue(name)
+fun Endringstype.asEndringstyper(): Endringstyper = Endringstyper.fromValue(name)
 fun Endringstype?.asEndringstyperOrNy() = this?.asEndringstyper() ?: Endringstyper.NY
 
 fun statsborgerskap(allePersonstatus: List<PersonstatusModell>) = allePersonstatus

@@ -166,7 +166,7 @@ class PsakPersonServiceMockImpl(
             name = "erEgenansattRequest",
             targetNamespace = ""
         ) erEgenansattRequest: ASBOPenPerson
-    ) = erEgenansattRequest.erEgenansatt
+    ): Boolean = erEgenansattRequest.erEgenansatt
 
     @WebMethod
     @RequestWrapper(

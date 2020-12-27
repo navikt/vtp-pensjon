@@ -28,7 +28,7 @@ class TestscenarioFraTemplateMapper {
 
     private fun hentObjecetNodeForTestscenario(testscenarioJson: String): ObjectNode {
         return try {
-            ObjectMapper().readValue<ObjectNode>(testscenarioJson, ObjectNode::class.java)
+            ObjectMapper().readValue(testscenarioJson, ObjectNode::class.java)
         } catch (e: IOException) {
             throw IllegalArgumentException("Kunne ikke converte JSON streng til ObjectNode", e)
         }
@@ -49,7 +49,7 @@ class TestscenarioFraTemplateMapper {
         if (node.has("vars")) {
             val vars = node["vars"]
             val defaultVars: Map<String, String> =
-                ObjectMapper().convertValue<Map<String, String>>(vars, object : TypeReference<Map<String, String>>() {})
+                ObjectMapper().convertValue(vars, object : TypeReference<Map<String, String>>() {})
             jsonMapper.addVars(defaultVars)
         }
         jsonMapper.addVars(overrideVars)
@@ -60,7 +60,7 @@ class TestscenarioFraTemplateMapper {
         } else {
             emptyList()
         }
-        val søkerInntektYtelse = if (node.has("inntektytelse-søker")) {
+        val soekerInntektYtelse = if (node.has("inntektytelse-søker")) {
             objectMapper.convertValue(node["inntektytelse-søker"], InntektYtelseModell::class.java)
         } else {
             null
@@ -82,7 +82,7 @@ class TestscenarioFraTemplateMapper {
         return TestscenarioLoad(
             hentTemplateNavnFraJsonString(node),
             personopplysninger,
-            søkerInntektYtelse,
+            soekerInntektYtelse,
             annenPartInntektYtelse,
             organisasjonModeller,
             variabelContainer
@@ -98,7 +98,7 @@ class TestscenarioFraTemplateMapper {
         }.lagObjectMapper()
 
         val personopplysninger = loadPersonopplysninger(template, objectMapper)
-        val søkerInntektYtelse = loadInntektopplysning("søker", template, objectMapper)
+        val soekerInntektYtelse = loadInntektopplysning("søker", template, objectMapper)
 
         val annenPartInntektYtelse: InntektYtelseModell? = if (personopplysninger.annenPart != null) {
             loadInntektopplysning("annenpart", template, objectMapper)
@@ -109,7 +109,7 @@ class TestscenarioFraTemplateMapper {
         return TestscenarioLoad(
             template.templateName,
             personopplysninger,
-            søkerInntektYtelse,
+            soekerInntektYtelse,
             annenPartInntektYtelse,
             organisasjonModeller,
             variabelContainer

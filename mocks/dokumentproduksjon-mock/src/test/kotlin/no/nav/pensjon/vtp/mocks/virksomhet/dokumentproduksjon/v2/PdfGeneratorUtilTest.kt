@@ -10,7 +10,7 @@ private const val INPUT_TEXT: String = "paragraph.txt"
 
 class PdfGeneratorUtilTest {
     @Test
-    fun PdfGeneratorXmlTest() {
+    fun pdfGeneratorXmlTest() {
         getResourceAsStream(INPUT_XML).use { inputStream ->
             val inputString = hentStringFraInputStream(inputStream)
 
@@ -30,7 +30,7 @@ class PdfGeneratorUtilTest {
     }
 
     @Test
-    fun PdfGeneratorLongParagraphTest() {
+    fun pdfGeneratorLongParagraphTest() {
         getResourceAsStream(INPUT_TEXT).use { inputStream ->
             val inputString = hentStringFraInputStream(inputStream)
             val pdfDocument = genererPdfByteArrayFraString(inputString)
