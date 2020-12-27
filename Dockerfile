@@ -1,4 +1,4 @@
-FROM navikt/java:11
+FROM navikt/java:15
 
 # Curl brukes av healthcheck i docker-compose.
 RUN apt-get -qq update && apt-get -qq -y install curl
