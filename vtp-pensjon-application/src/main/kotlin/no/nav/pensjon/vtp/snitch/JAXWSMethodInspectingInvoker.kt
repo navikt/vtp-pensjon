@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.snitch
 
-import no.nav.pensjon.vtp.utilities.addVtpHandlerMetaData
 import org.apache.cxf.jaxws.JAXWSMethodInvoker
 import org.apache.cxf.message.Exchange
 import org.apache.cxf.service.invoker.Factory
