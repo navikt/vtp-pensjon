@@ -115,5 +115,4 @@ class SnitchFilter(
             content = responseWrapper.contentAsByteArray
         )
     )
-
 }

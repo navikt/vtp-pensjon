@@ -11,7 +11,6 @@ private const val X_VTP_HANDLER = "x-vtp-handler"
 private const val X_VTP_CLASS = "x-vtp-class"
 private const val X_VTP_METHOD = "x-vtp-method"
 
-
 /**
  * Creates a string representation of the method call that the
  * IntelliJ console identifies and creates into a link.
