@@ -18,7 +18,7 @@ class GsakRepo {
     private val sakIder: AtomicInteger
     private val oppgaveIder: AtomicInteger
 
-    fun hentSak(sakId: String) = bySakId.get(sakId)
+    fun hentSak(sakId: String) = bySakId[sakId]
         ?: throw HentSakSakIkkeFunnet("Finner ikke sak $sakId", SakIkkeFunnet())
 
     val alleSaker: Collection<Sak>
