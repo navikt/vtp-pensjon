@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
 import java.util.ArrayList
-import java.util.stream.Collectors
 
 class InntektskomponentModell {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -17,9 +16,8 @@ class InntektskomponentModell {
     var frilansarbeidsforholdperioder: MutableList<FrilansArbeidsforholdsperiode> = ArrayList()
 
     val frilansarbeidsforholdperioderSplittMånedlig: List<FrilansArbeidsforholdsperiode>
-        get() = frilansarbeidsforholdperioder.stream()
-            .flatMap { ip: FrilansArbeidsforholdsperiode -> splittFrilansArbeidsforholdTilMånedligeIntervall(ip).stream() }
-            .collect(Collectors.toList())
+        get() = frilansarbeidsforholdperioder
+            .flatMap { splittFrilansArbeidsforholdTilMånedligeIntervall(it) }
 
     @JsonIgnore
     fun inntektsperioderSplittMånedlig(): List<Inntektsperiode> = inntektsperioder

@@ -39,7 +39,7 @@ class FindTemplateVariables {
     internal class FindTemplateVariableModule : SimpleModule() {
         private val vars: MutableSet<TemplateVariable> = HashSet()
         fun getVars(): Set<TemplateVariable> {
-            return Collections.unmodifiableSet(vars)
+            return vars
         }
 
         init {
@@ -87,7 +87,7 @@ class FindTemplateVariables {
                 return delegate.deserialize(p, ctxt)
             }
             val text = p.text
-            val matcher = TEMPLATE_VARIABLE_PATTERN.matcher(text)
+            val matcher = templateVariablePattern.matcher(text)
             if (matcher.find()) {
                 // antar p.t. kun en variabel per node
                 val varName = matcher.group(1)
@@ -102,7 +102,7 @@ class FindTemplateVariables {
     }
 
     companion object {
-        val TEMPLATE_VARIABLE_PATTERN = Pattern.compile("\\$\\{(.+)\\}")
+        val templateVariablePattern: Pattern = Pattern.compile("\\$\\{(.+)}")
         fun getPath(streamContext: JsonStreamContext?): String {
             var pc = streamContext
             val sb = StringBuilder(pc!!.currentName)

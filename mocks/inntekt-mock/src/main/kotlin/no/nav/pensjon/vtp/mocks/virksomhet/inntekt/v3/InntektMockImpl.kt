@@ -17,7 +17,6 @@ import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
-import java.util.stream.Collectors
 import javax.jws.*
 import javax.xml.ws.RequestWrapper
 import javax.xml.ws.ResponseWrapper
@@ -35,7 +34,8 @@ class InntektMockImpl(private val inntektYtelseIndeks: InntektYtelseIndeks) : In
     @RequestWrapper(localName = "hentInntektListeBolk", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3", className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentInntektListeBolk")
     @ResponseWrapper(localName = "hentInntektListeBolkResponse", targetNamespace = "http://nav.no/tjeneste/virksomhet/inntekt/v3", className = "no.nav.tjeneste.virksomhet.inntekt.v3.HentInntektListeBolkResponse")
     override fun hentInntektListeBolk(@WebParam(name = "request") request: HentInntektListeBolkRequest): HentInntektListeBolkResponse {
-        logger.info("hentInntektListeBolk. AktoerIdentListe: {}", request.identListe.stream().map { aktoer: Aktoer -> getIdentFromAktoer(aktoer) }.collect(Collectors.joining(",")))
+        logger.info("hentInntektListeBolk. AktoerIdentListe: {}", request.identListe.joinToString(separator = ",") { getIdentFromAktoer(it) })
+
         if (request.formaal == null || request.ainntektsfilter == null) {
             logger.warn("Request ugyldig. Mangler Formål eller A-inntektsfilter. ")
             throw HentInntektListeBolkUgyldigInput("Formål eller A-inntektsfilter mangler", UgyldigInput())

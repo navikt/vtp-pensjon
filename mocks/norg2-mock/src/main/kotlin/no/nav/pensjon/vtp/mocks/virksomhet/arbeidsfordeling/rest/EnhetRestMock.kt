@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*
 import java.time.LocalDate.of
 import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
 import java.util.*
-import java.util.stream.Collectors
 
 @RestController
 @Api(tags = ["Norg2 enheter"])
@@ -86,10 +85,9 @@ class EnhetRestMock(private val enheterIndeks: EnheterIndeks) {
             defaultValue = ""
         ) oppgavebehandlerFilter: String?
     ): ResponseEntity<*> {
-        val norg2RsEnheter = norg2RsEnheter(enheterIndeks.alleEnheter).stream()
+        val norg2RsEnheter = norg2RsEnheter(enheterIndeks.alleEnheter)
             .filter { e: Norg2RsEnhet -> enhetsnummerListe.isEmpty() || enhetsnummerListe.contains(e.enhetNr) }
             .filter { e: Norg2RsEnhet -> enhetStatusListe.isEmpty() || enhetStatusListe.contains(e.status) }
-            .collect(Collectors.toList())
         return ResponseEntity.ok(norg2RsEnheter)
     }
 

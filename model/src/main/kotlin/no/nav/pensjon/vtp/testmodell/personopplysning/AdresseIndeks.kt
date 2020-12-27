@@ -12,12 +12,12 @@ class AdresseIndeks {
 
     @Synchronized
     fun finn(adresseType: AdresseType, landkode: Landkode): AdresseModell {
-        return adresser.stream()
+        return adresser
             .filter { a: AdresseModell -> a.adresseType == adresseType }
             .filter { a: AdresseModell -> landkode == a.land }
             .filter { a: AdresseModell -> AdresseRefModell::class.java != a.javaClass }
-            .findFirst()
-            .orElseThrow { IllegalArgumentException("Fant ingen adresser i indeks for type=$adresseType, landkode=$landkode") }
+            .firstOrNull()
+            ?: throw IllegalArgumentException("Fant ingen adresser i indeks for type=$adresseType, landkode=$landkode")
     }
 
     /** bytt ut en generisk referansemal med en adressse fra katalogen.  */

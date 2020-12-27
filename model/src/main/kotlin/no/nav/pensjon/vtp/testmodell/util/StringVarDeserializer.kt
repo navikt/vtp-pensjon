@@ -26,7 +26,7 @@ class StringVarDeserializer(private val delegate: JsonDeserializer<*>, private v
 
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): String {
         val text = p.text
-        val matcher = FindTemplateVariables.TEMPLATE_VARIABLE_PATTERN.matcher(text)
+        val matcher = FindTemplateVariables.templateVariablePattern.matcher(text)
         if (!matcher.matches()) {
             return text
         }

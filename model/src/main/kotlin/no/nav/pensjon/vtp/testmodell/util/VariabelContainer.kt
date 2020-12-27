@@ -20,7 +20,7 @@ class VariabelContainer {
     }
 
     fun getVars(): Map<String, String?> {
-        return Collections.unmodifiableMap(vars)
+        return vars
     }
 
     fun putAll(vars2: VariabelContainer) {
@@ -46,7 +46,7 @@ class VariabelContainer {
             if (dirtyKey == null) {
                 return null
             }
-            val matcher = FindTemplateVariables.TEMPLATE_VARIABLE_PATTERN.matcher(dirtyKey)
+            val matcher = FindTemplateVariables.templateVariablePattern.matcher(dirtyKey)
             return if (matcher.find()) matcher.group(1) else dirtyKey
         }
     }

@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.mocks.oppgave.rest.infrastruktur.validering
 
-import java.util.*
 import javax.validation.ConstraintValidator
 import javax.validation.ConstraintValidatorContext
 
@@ -14,7 +13,7 @@ class OneOfValidator : ConstraintValidator<OneOf, String> {
     override fun isValid(oneOf: String, constraintValidatorContext: ConstraintValidatorContext): Boolean {
         return if (isBlank(oneOf)) {
             true
-        } else Arrays.stream(legalValues).anyMatch { legalEntry: String -> legalEntry == oneOf }
+        } else legalValues.any { legalEntry: String -> legalEntry == oneOf }
     }
 
     companion object {

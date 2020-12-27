@@ -11,7 +11,6 @@ import org.apache.kafka.common.serialization.StringSerializer
 import org.apache.kafka.streams.StreamsConfig
 import org.slf4j.LoggerFactory
 import java.util.*
-import java.util.stream.Collectors
 
 @Suppress("unused")
 class LocalKafkaServer(
@@ -122,8 +121,7 @@ class LocalKafkaServer(
         }
         kafkaAdminClient = AdminClient.create(createAdminClientProps(bootstrapServers)).apply {
             createTopics(
-                bootstrapTopics.stream().map { name: String? -> NewTopic(name, 1, 1.toShort()) }
-                    .collect(Collectors.toList())
+                bootstrapTopics.map { NewTopic(it, 1, 1.toShort()) }
             )
         }
         localConsumer = LocalKafkaConsumerStream(bootstrapServers, bootstrapTopics, cryptoConfigurationParameters)

@@ -14,7 +14,6 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
 import java.util.*
-import java.util.stream.Collectors
 
 @Component
 class HentInntektlisteBolkMapperRest(private val personModellRepository: PersonModellRepository) {
@@ -32,7 +31,7 @@ class HentInntektlisteBolkMapperRest(private val personModellRepository: PersonM
         while (runningMonth.isBefore(tom)) {
             arbeidsInntektIdent.arbeidsInntektMaaned.add(
                 ArbeidsInntektMaaned().apply {
-                    arbeidsInntektInformasjon = makeArbeidsInntektInformasjonForMåned(modell, runningMonth)
+                    arbeidsInntektInformasjon = makeArbeidsInntektInformasjonForMaaned(modell, runningMonth)
                     aarMaaned = runningMonth
                 }
             )
@@ -41,13 +40,13 @@ class HentInntektlisteBolkMapperRest(private val personModellRepository: PersonM
         return arbeidsInntektIdent
     }
 
-    private fun makeArbeidsInntektInformasjonForMåned(
+    private fun makeArbeidsInntektInformasjonForMaaned(
         modell: InntektskomponentModell,
         måned: YearMonth
     ): ArbeidsInntektInformasjon {
         return ArbeidsInntektInformasjon().apply {
             arbeidsforholdListe =
-                arbeidsforholdFrilanserListeFraModellListeForMåned(
+                arbeidsforholdFrilanserListeFraModellListeForMaaned(
                     modell.frilansarbeidsforholdperioderSplittMånedlig,
                     måned
                 )
@@ -55,7 +54,7 @@ class HentInntektlisteBolkMapperRest(private val personModellRepository: PersonM
         }
     }
 
-    private fun arbeidsforholdFrilanserListeFraModellListeForMåned(
+    private fun arbeidsforholdFrilanserListeFraModellListeForMaaned(
         modellPeriode: List<FrilansArbeidsforholdsperiode>,
         måned: YearMonth
     ): List<ArbeidsforholdFrilanser> {
@@ -80,13 +79,8 @@ class HentInntektlisteBolkMapperRest(private val personModellRepository: PersonM
     }
 
     private fun inntektListeFraModell(modellPeriode: List<Inntektsperiode>, måned: YearMonth): List<Inntekt> {
-        val inntektsperiodeList = modellPeriode.stream().filter { (_, tom) ->
-            localDateTimeInYearMonth(
-                tom, måned
-            )
-        }
-            .collect(Collectors.toList())
-        return inntektsperiodeList
+        return modellPeriode
+            .filter { localDateTimeInYearMonth(ldt = it.tom, yearMonth = måned) }
             .map {
                 Inntekt().apply {
                     inntektType = fraModellInntektstype(it.type)
