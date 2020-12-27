@@ -12,7 +12,7 @@ fun azureOidcToken(
     subject: String,
     nonce: String?,
     aud: List<String> = ArrayList(),
-    groups: MutableList<String> = ArrayList(),
+    groups: List<String> = ArrayList(),
     expiration: NumericDate = NumericDate.fromSeconds(NumericDate.now().value + 3600 * 6),
     issuer: String? = null,
     issuedAt: NumericDate = NumericDate.now(),

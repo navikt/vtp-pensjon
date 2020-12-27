@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity.badRequest
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.*
 import java.util.*
-import java.util.stream.Collectors
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -87,7 +86,7 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
             subject = codeData[0],
             nonce = if (codeData.size > 1) codeData[1] else null,
             issuer = getIssuer(tenant),
-            groups = user.groups.stream().map { ldapGroupName: String? -> AzureADGroupMapping.toAzureGroupId(ldapGroupName) }.collect(Collectors.toList()),
+            groups = user.groups.map { ldapGroupName: String -> toAzureGroupId(ldapGroupName) },
             aud = listOf(clientId),
             additionalClaims = mapOf(
                 "tid" to tenant,
