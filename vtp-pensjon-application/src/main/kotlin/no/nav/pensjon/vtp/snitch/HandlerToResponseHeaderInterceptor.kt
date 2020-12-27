@@ -1,23 +1,23 @@
-package no.nav.pensjon.vtp.utilities
+package no.nav.pensjon.vtp.snitch
 
+import no.nav.pensjon.vtp.utilities.addVtpHandlerMetaData
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 /**
- * Adds the handler toString of the MVC Handler to the HTTP Response Header
- * so that it can be added to the access log. This is to make it easier to
- * figure out which controller method that was called. For example for
- * use in the access log.
+ * Adds the VTP Handler Meta Data to the HTTP Response Header for calls
+ * processed by Spring MVC.
+ *
+ * This is later used by the access log and the Snitch.
  */
 class HandlerToResponseHeaderInterceptor : HandlerInterceptor {
-
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         if (handler is HandlerMethod) {
-            response.addHeader("x-vtp-handler", description(handler.method))
+            addVtpHandlerMetaData(response, handler.method)
         } else {
-            response.addHeader("x-vtp-handler", handler.toString())
+            addVtpHandlerMetaData(response, handler.toString())
         }
 
         return true

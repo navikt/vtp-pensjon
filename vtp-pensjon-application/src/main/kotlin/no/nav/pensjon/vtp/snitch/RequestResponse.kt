@@ -42,6 +42,8 @@ data class RequestResponse(
     val url: String,
     val status: Int,
     val handler: String?,
+    val handlerClass: String?,
+    val handlerMethod: String?,
     val exception: String?,
     val stackTrace: String?,
 

@@ -1,5 +1,8 @@
 package no.nav.pensjon.vtp.snitch
 
+import no.nav.pensjon.vtp.utilities.findClass
+import no.nav.pensjon.vtp.utilities.findHandler
+import no.nav.pensjon.vtp.utilities.findMethod
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
 import org.springframework.core.annotation.Order
 import org.springframework.messaging.simp.SimpMessagingTemplate
@@ -90,6 +93,8 @@ class SnitchFilter(
         method = requestWrapper.method,
         status = responseWrapper.status,
         handler = findHandler(responseWrapper),
+        handlerClass = findClass(responseWrapper),
+        handlerMethod = findMethod(responseWrapper),
         exception = null,
         stackTrace = null,
 
@@ -114,12 +119,4 @@ class SnitchFilter(
         )
     )
 
-    private fun findHandler(responseWrapper: ContentCachingResponseWrapper): String? {
-        val headers = responseWrapper.getHeaders("x-vtp-handler")
-        return if (headers.isNotEmpty()) {
-            headers.iterator().next()
-        } else {
-            null
-        }
-    }
 }

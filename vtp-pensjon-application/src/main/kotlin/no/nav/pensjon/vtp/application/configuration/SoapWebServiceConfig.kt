@@ -1,22 +1,14 @@
 package no.nav.pensjon.vtp.application.configuration
 
 import no.nav.pensjon.vtp.core.annotations.SoapService
-import no.nav.pensjon.vtp.utilities.description
+import no.nav.pensjon.vtp.snitch.JAXWSMethodInspectingInvoker
 import org.apache.cxf.Bus
 import org.apache.cxf.jaxws.EndpointImpl
-import org.apache.cxf.jaxws.JAXWSMethodInvoker
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean
-import org.apache.cxf.message.Exchange
-import org.apache.cxf.service.invoker.Factory
 import org.apache.cxf.service.invoker.Invoker
 import org.apache.cxf.service.invoker.SingletonFactory
-import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.context.request.RequestContextHolder
-import org.springframework.web.context.request.ServletRequestAttributes
-import java.lang.Exception
-import java.lang.reflect.Method
 import javax.annotation.PostConstruct
 
 @Configuration
@@ -44,28 +36,5 @@ class JaxWsMethodInspectingInvokerServerFactoryBean : JaxWsServerFactoryBean() {
         return if (serviceBean == null) {
             JAXWSMethodInspectingInvoker(SingletonFactory(serviceClass))
         } else JAXWSMethodInspectingInvoker(SingletonFactory(serviceBean))
-    }
-}
-
-/**
- * Adds the x-vtp-handler to make it easy to figure which java method
- * that was invoked. Logs any exception that occurs during invocation
- * for easier development and debugging.
- */
-class JAXWSMethodInspectingInvoker(factory: Factory) : JAXWSMethodInvoker(factory) {
-    private val logger = LoggerFactory.getLogger(javaClass)
-
-    override fun invoke(exchange: Exchange, serviceObject: Any, method: Method, params: List<Any>): Any {
-        val requestAttributes = RequestContextHolder.getRequestAttributes()
-        if (requestAttributes is ServletRequestAttributes) {
-            requestAttributes.response?.addHeader("x-vtp-handler", description(method))
-        }
-
-        return try {
-            super.invoke(exchange, serviceObject, method, params)
-        } catch (e: Exception) {
-            logger.error("Error invoking soap web service", e)
-            throw e
-        }
     }
 }

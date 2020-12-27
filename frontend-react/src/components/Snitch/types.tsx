@@ -11,6 +11,8 @@ export interface RequestResponse {
   path: string;
   url: string;
   method: string;
+  handlerClass: string;
+  handlerMethod: string;
   status: number;
   handler: string | null;
   exception: string | null;

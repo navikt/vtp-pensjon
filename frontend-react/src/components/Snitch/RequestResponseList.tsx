@@ -17,6 +17,8 @@ export default function RequestResponseList(props: RequestResponseListProps) {
           <th>Method</th>
           <th>Path</th>
           <th>Status</th>
+          <th>HandlerClass</th>
+          <th>HandlerMethod</th>
         </tr>
       </thead>
       <tbody>
@@ -43,6 +45,8 @@ export default function RequestResponseList(props: RequestResponseListProps) {
               <td>{request.method}</td>
               <td>{request.path}</td>
               <td>{request.status}</td>
+              <td>{request.handlerClass}</td>
+              <td>{request.handlerMethod}</td>
             </tr>
           );
         })}
