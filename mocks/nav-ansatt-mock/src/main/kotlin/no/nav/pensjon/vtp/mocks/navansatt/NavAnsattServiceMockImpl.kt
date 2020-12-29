@@ -69,10 +69,22 @@ class NavAnsattServiceMockImpl(private val ansatteIndeks: AnsatteIndeks, private
         ASBOPenFagomradeListe().apply {
             fagomrader = arrayOf(
                 ASBOPenFagomrade().apply {
-                    fagomradeBeskrivelse = "Spesialkompetanse for pepperkakebaking"
-                    fagomradeKode = "424242"
-                    gyldig = true
-                    trekkgruppeKode = "567890"
+                    fagomradeBeskrivelse = null
+                    fagomradeKode = "PEPPERKAKE" // Spesialkompetanse for pepperkakebaking
+                    gyldig = null
+                    trekkgruppeKode = null
+                },
+                ASBOPenFagomrade().apply {
+                    fagomradeBeskrivelse = null
+                    fagomradeKode = "PEN" // Pensjon
+                    gyldig = null
+                    trekkgruppeKode = null
+                },
+                ASBOPenFagomrade().apply {
+                    fagomradeBeskrivelse = null
+                    fagomradeKode = "UFO" // Uføretrygd
+                    gyldig = null
+                    trekkgruppeKode = null
                 }
             )
         }
