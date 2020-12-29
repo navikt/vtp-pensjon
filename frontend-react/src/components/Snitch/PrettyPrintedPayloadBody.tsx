@@ -14,16 +14,35 @@ function decodeBody(value: string): string {
 }
 
 function asJson(content: string): string {
-  return JSON.stringify(JSON.parse(decodeBody(content)), null, "  ");
+  return JSON.stringify(JSON.parse(content), null, "  ");
 }
 
 function asXml(content: string): string {
-  return xmlFormatter(decodeBody(content));
+  return xmlFormatter(content);
 }
 
 interface BodyProps {
   contentType: string;
   content: string;
+}
+
+function asWwwFormUrlencoded(content: string): JSX.Element {
+  return (
+    <div>
+      <dl className="row">
+        {content
+          .split("&")
+          .map((s) => s.split("="))
+          .map((s) => [s[0], decodeURIComponent(s[1])])
+          .map(([key, value]) => (
+            <React.Fragment key={key}>
+              <dt className="col-sm-3 col-md-2">{key}</dt>
+              <dd className="col-sm-9 col-md-10">{value}</dd>
+            </React.Fragment>
+          ))}
+      </dl>
+    </div>
+  );
 }
 
 export default function PrettyPrintedPayloadBody(
@@ -34,16 +53,19 @@ export default function PrettyPrintedPayloadBody(
     const contentType = parseContentType(props.contentType).type;
     switch (contentType) {
       case "application/json":
-        return <pre>{asJson(content)}</pre>;
+        return <pre>{asJson(decodeBody(content))}</pre>;
 
       case "application/xml":
-        return <pre>{asXml(content)}</pre>;
+        return <pre>{asXml(decodeBody(content))}</pre>;
 
       case "text/xml":
-        return <pre>{asXml(content)}</pre>;
+        return <pre>{asXml(decodeBody(content))}</pre>;
 
       case "text/html":
         return <pre>{decodeBody(content)}</pre>;
+
+      case "application/x-www-form-urlencoded":
+        return asWwwFormUrlencoded(decodeBody(content));
 
       default:
         return <pre>{content}</pre>;

@@ -17,6 +17,7 @@ function PayloadBody(props: PayloadBodyProps): JSX.Element | null {
   ) {
     return (
       <Card.Body className="pt-0">
+        <hr />
         <PrettyPrintedPayloadBody contentType={contentType} content={content} />
       </Card.Body>
     );
