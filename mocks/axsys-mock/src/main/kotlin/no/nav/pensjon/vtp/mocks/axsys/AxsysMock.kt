@@ -42,4 +42,22 @@ class AxsysMock(
             }
         )
     }
+
+    data class EnhetBruker(
+        val appIdent: String,
+        val historiskIdent: Int
+    )
+    @GetMapping(
+        value = ["/enhet/{id}/brukere"],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ApiOperation(value = "hentAlleBrukereForEnhet", notes = "Hent alle brukere for en NAV-enhet")
+    fun hentAlleBrukereForEnhet(@PathVariable("id") enhetsId: String): List<EnhetBruker> {
+        return ansatteIndeks.findByEnhetsId(enhetsId = enhetsId.toLong()).map {
+            EnhetBruker(
+                appIdent = it.cn,
+                historiskIdent = it.cn.toByteArray().sum() // arbitrary but deterministic id
+            )
+        }
+    }
 }
