@@ -1,20 +1,8 @@
 import React from "react";
 import { Badge, Card } from "react-bootstrap";
-import { Variant } from "react-bootstrap/types";
 import { RequestResponse } from "./types";
 import FormattedDate from "./FormattedDate";
-
-function badgeVariant(status: number): Variant {
-  if (status >= 200 && status <= 299) {
-    return "success";
-  } else if (status >= 400 && status <= 499) {
-    return "warning";
-  } else if (status >= 500 && status <= 599) {
-    return "danger";
-  } else {
-    return "primary";
-  }
-}
+import { badgeVariant } from "./Snitch";
 
 interface SummaryProps {
   request: RequestResponse;

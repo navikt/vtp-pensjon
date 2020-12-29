@@ -5,6 +5,19 @@ import RequestResponseList from "./RequestResponseList";
 import PayloadSummary from "./PayloadSummary";
 import RequestResponseSummary from "./RequestResponseSummary";
 import useSnitchDataStream from "./useSnitchDataStream";
+import { Variant } from "react-bootstrap/types";
+
+export function badgeVariant(status: number): Variant {
+  if (status >= 200 && status <= 299) {
+    return "success";
+  } else if (status >= 400 && status <= 499) {
+    return "warning";
+  } else if (status >= 500 && status <= 599) {
+    return "danger";
+  } else {
+    return "primary";
+  }
+}
 
 export default () => {
   const [

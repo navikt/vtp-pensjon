@@ -1,13 +1,15 @@
-import { Table } from "react-bootstrap";
+import { Badge, Table } from "react-bootstrap";
 import React from "react";
 import { RequestResponse } from "./types";
 import FormattedDate from "./FormattedDate";
+import { badgeVariant } from "./Snitch";
 
 interface RequestResponseListProps {
   requests: RequestResponse[];
   selectedRequest: RequestResponse | null;
   setSelectedRequest: (request: RequestResponse) => any;
 }
+
 export default function RequestResponseList(props: RequestResponseListProps) {
   return (
     <Table striped hover size="sm">
@@ -23,14 +25,8 @@ export default function RequestResponseList(props: RequestResponseListProps) {
       </thead>
       <tbody>
         {props.requests.map((request, i) => {
-          let rowClass = "";
-          if (request === props.selectedRequest) {
-            rowClass = "table-primary";
-          } else if (request.status >= 400 && request.status <= 499) {
-            rowClass = "table-warning";
-          } else if (request.status == 500) {
-            rowClass = "table-danger";
-          }
+          let rowClass =
+            request === props.selectedRequest ? "table-primary" : "";
 
           return (
             <tr
@@ -44,7 +40,11 @@ export default function RequestResponseList(props: RequestResponseListProps) {
               </td>
               <td>{request.method}</td>
               <td>{request.path}</td>
-              <td>{request.status}</td>
+              <td>
+                <Badge variant={badgeVariant(request.status)}>
+                  {request.status}
+                </Badge>
+              </td>
               <td>{request.handlerClass}</td>
               <td>{request.handlerMethod}</td>
             </tr>
