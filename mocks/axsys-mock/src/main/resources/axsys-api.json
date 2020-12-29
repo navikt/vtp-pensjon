@@ -1,0 +1,383 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "REST-grensesnittet som er tilgjengelig for konsumering av andre applikasjoner og komponenter, for å hente informasjon om tilganger på en ident. </br></br><a href=\"/sysdoc\">Lenke til system dokumentasjon</a>",
+    "title": "API versjon 1"
+  },
+  "host": "axsys.dev.adeo.no",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "enhet-controller",
+      "description": "Enhet Controller"
+    },
+    {
+      "name": "tilgang-controller",
+      "description": "Tilgang Controller"
+    }
+  ],
+  "paths": {
+    "/api/v1/enhet/{enhetId}/brukere": {
+      "get": {
+        "tags": [
+          "enhet-controller"
+        ],
+        "summary": "getAlleBrukereForEnhet",
+        "operationId": "getAlleBrukereForEnhetUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "enhetId",
+            "in": "path",
+            "description": "Enheten man gjør oppslag på",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fagomraade",
+            "in": "query",
+            "description": "Brukere knyttet til fagområder",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Nav-Call-Id",
+            "in": "header",
+            "description": "ID som identifiserer kallkjeden som dette kallet er en del av.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Nav-Consumer-Id",
+            "in": "header",
+            "description": "ID på systemet som gjør kallet, som regel brukeren til applikasjonen, for eksempel \"srvnorg\".",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BrukerDTO"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tilgang/{ident}": {
+      "get": {
+        "tags": [
+          "tilgang-controller"
+        ],
+        "summary": "Henter alle tilganger for en nav-ident.",
+        "operationId": "hentTilgangUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "ident",
+            "in": "path",
+            "description": "Nav-Ident",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "inkluderAlleEnheter",
+            "in": "query",
+            "description": "Inkluder tilganger for alle enheter uansett status. Dersom denne er false så inkluderes ikke nedlagte enheter",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "Nav-Call-Id",
+            "in": "header",
+            "description": "ID som identifiserer kallkjeden som dette kallet er en del av.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Nav-Consumer-Id",
+            "in": "header",
+            "description": "ID på systemet som gjør kallet, som regel brukeren til applikasjonen, for eksempel \"srvnorg\".",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "tilgang-controller"
+        ],
+        "summary": "Oppretter nye tilganger for en nav-ident.",
+        "operationId": "opprettTilgangerUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer + Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ident",
+            "in": "path",
+            "description": "Nav-Ident",
+            "required": true,
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 1
+          },
+          {
+            "name": "Nav-Call-Id",
+            "in": "header",
+            "description": "ID som identifiserer kallkjeden som dette kallet er en del av.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Nav-Consumer-Id",
+            "in": "header",
+            "description": "ID på systemet som gjør kallet, som regel brukeren til applikasjonen, for eksempel \"srvnorg\".",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "tilgang",
+            "description": "Tilgangsmodell",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TilgangDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "409": {
+            "description": "Konflikt, returnerer tilganger som allerede er tildelt"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "tilgang-controller"
+        ],
+        "summary": "Sletter alle tilganger for en nav-ident.",
+        "operationId": "slettTilgangerUsingDELETE",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer + Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ident",
+            "in": "path",
+            "description": "Nav-Ident",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Nav-Call-Id",
+            "in": "header",
+            "description": "ID som identifiserer kallkjeden som dette kallet er en del av.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Nav-Consumer-Id",
+            "in": "header",
+            "description": "ID på systemet som gjør kallet, som regel brukeren til applikasjonen, for eksempel \"srvnorg\".",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "tilgang-controller"
+        ],
+        "summary": "Oppdaterer angitte tilganger for en nav-ident.",
+        "operationId": "patchIdentUsingPATCH",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer + Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ident",
+            "in": "path",
+            "description": "Nav-Ident",
+            "required": true,
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 1
+          },
+          {
+            "name": "Nav-Call-Id",
+            "in": "header",
+            "description": "ID som identifiserer kallkjeden som dette kallet er en del av.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Nav-Consumer-Id",
+            "in": "header",
+            "description": "ID på systemet som gjør kallet, som regel brukeren til applikasjonen, for eksempel \"srvnorg\".",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "tilgang",
+            "description": "Tilgangsmodell",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TilgangDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "BrukerDTO": {
+      "type": "object",
+      "required": [
+        "appIdent",
+        "historiskIdent"
+      ],
+      "properties": {
+        "appIdent": {
+          "type": "string",
+          "example": "Z98765"
+        },
+        "historiskIdent": {
+          "type": "integer",
+          "format": "int64",
+          "example": 100001
+        }
+      },
+      "title": "BrukerDTO",
+      "description": "Bruker med historisk ident"
+    },
+    "EnhetDTO": {
+      "type": "object",
+      "required": [
+        "enhetId",
+        "fagomrader"
+      ],
+      "properties": {
+        "enhetId": {
+          "type": "string",
+          "example": "0200",
+          "description": "4 sifferet enhetsnummer"
+        },
+        "fagomrader": {
+          "type": "array",
+          "example": [
+            "UFO"
+          ],
+          "description": "Liste over fagområder",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "navn": {
+          "type": "string",
+          "example": "NAV Sagene",
+          "description": "Navn på enhet"
+        }
+      },
+      "title": "EnhetDTO",
+      "description": "NAV-enhet med fagområder"
+    },
+    "TilgangDTO": {
+      "type": "object",
+      "required": [
+        "enheter"
+      ],
+      "properties": {
+        "enheter": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/EnhetDTO"
+          }
+        }
+      },
+      "title": "TilgangDTO",
+      "description": "Tilganger en applikasjonsbruker har for NAV-enheter"
+    }
+  }
+}
