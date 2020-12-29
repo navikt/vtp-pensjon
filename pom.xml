@@ -47,7 +47,7 @@
         <maven.test.skip>false</maven.test.skip>
 
         <kafka.version>2.7.0</kafka.version>
-        <cxf.version>3.4.1</cxf.version>
+        <cxf.version>3.4.2</cxf.version>
         <tjenestespesifikasjoner.version>1.2020.07.17-17.06-31e5aa824db7</tjenestespesifikasjoner.version>
         <swagger.version>1.6.2</swagger.version>
         <springfox.version>3.0.0</springfox.version>
