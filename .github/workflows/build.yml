@@ -33,13 +33,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+#      - name: Cache Docker layers
+#        uses: actions/cache@v2
+#        with:
+#          path: /tmp/.buildx-cache
+#          key: ${{ runner.os }}-buildx-${{ github.sha }}
+#          restore-keys: |
+#            ${{ runner.os }}-buildx-
 
       - uses: actions/setup-java@v1
         with:
@@ -60,8 +60,8 @@ jobs:
           COMMIT=$(git rev-parse --short=12 HEAD)
           echo "::set-output name=tags::$IMAGE_BASE:$TIME-$COMMIT,$IMAGE_BASE:latest"
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v1
 
       - name: Login to GitHub Packages Docker Registry
         uses: docker/login-action@v1
@@ -76,5 +76,5 @@ jobs:
           context: .
           push: ${{ github.ref == 'refs/heads/master' }}
           tags: ${{ steps.docker_meta.outputs.tags }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+#          cache-from: type=local,src=/tmp/.buildx-cache
+#          cache-to: type=local,dest=/tmp/.buildx-cache
