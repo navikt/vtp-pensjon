@@ -30,16 +30,12 @@ function asWwwFormUrlencoded(content: string): JSX.Element {
   return (
     <div>
       <dl className="row">
-        {content
-          .split("&")
-          .map((s) => s.split("="))
-          .map((s) => [s[0], decodeURIComponent(s[1])])
-          .map(([key, value]) => (
-            <React.Fragment key={key}>
-              <dt className="col-sm-3 col-md-2">{key}</dt>
-              <dd className="col-sm-9 col-md-10">{value}</dd>
-            </React.Fragment>
-          ))}
+        {[...new URLSearchParams(content).entries()].map(([key, value]) => (
+          <React.Fragment key={key}>
+            <dt className="col-sm-3 col-md-2">{key}</dt>
+            <dd className="col-sm-9 col-md-10">{value}</dd>
+          </React.Fragment>
+        ))}
       </dl>
     </div>
   );
