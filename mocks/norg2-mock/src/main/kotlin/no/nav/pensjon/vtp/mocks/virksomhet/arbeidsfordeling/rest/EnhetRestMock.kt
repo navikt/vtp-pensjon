@@ -42,11 +42,7 @@ class EnhetRestMock(private val enheterIndeks: EnheterIndeks) {
         ]
     )
     fun getArbeidsFordelinger(
-        @RequestParam(
-            value = "fordelinger",
-            required = false,
-            defaultValue = ""
-        ) fordelinger: List<Fordeling?>?,
+        @RequestBody(required = false) fordelinger: List<Fordeling?>?,
         @RequestParam("skjermet") skjermet: Boolean
     ) = norg2RsArbeidsfordelinger(
         enheterIndeks.alleEnheter
