@@ -36,6 +36,7 @@
         <module>psak-mock</module>
         <module>digital-kontakt-informasjon-mock</module>
         <module>esb</module>
+        <module>pensjon-pdfmerger</module>
     </modules>
 
     <build>
