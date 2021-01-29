@@ -8,6 +8,5 @@ import java.lang.System.setProperty
 class VtpPensjonApplication
 
 fun main(args: Array<String>) {
-    setProperty("scenarios.dir", "./model/scenarios")
     runApplication<VtpPensjonApplication>(*args)
 }
