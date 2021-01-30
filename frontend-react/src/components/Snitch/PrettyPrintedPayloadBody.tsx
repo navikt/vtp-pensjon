@@ -63,6 +63,18 @@ export default function PrettyPrintedPayloadBody(
       case "application/x-www-form-urlencoded":
         return asWwwFormUrlencoded(decodeBody(content));
 
+      case "application/pdf":
+        return (
+          <div className="embed-responsive embed-responsive-1by1">
+            <iframe
+              className="embed-responsive-item"
+              src={`data:application/pdf;base64,${content}`}
+              frameBorder="0"
+              allowFullScreen
+            />
+          </div>
+        );
+
       default:
         return <pre>{content}</pre>;
     }
