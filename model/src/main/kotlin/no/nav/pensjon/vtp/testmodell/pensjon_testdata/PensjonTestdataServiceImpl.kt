@@ -6,6 +6,8 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.client.postForEntity
+import org.springframework.web.client.postForObject
 import java.lang.RuntimeException
 
 class PensjonTestdataServiceImpl(private val baseUrl: String) : PensjonTestdataService {
@@ -36,8 +38,7 @@ class PensjonTestdataServiceImpl(private val baseUrl: String) : PensjonTestdataS
         return hentScenarios()
             .filter { i -> i.id.equals(caseId) }
             .map { i -> opprettRequestMedhandlebars(i, dto) }
-            .map { i -> client.postForEntity("$baseUrl/api/testdata", i, ResponseEntity::class.java) }
-            .map{ i -> i.body.toString()}
+            .map { i -> client.postForObject<String>("$baseUrl/api/testdata", i) }
             .firstOrNull()
     }
 

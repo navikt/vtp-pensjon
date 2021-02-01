@@ -12,6 +12,7 @@ import no.nav.pensjon.vtp.testmodell.scenario.dto.TestscenarioDto
 import no.nav.pensjon.vtp.testmodell.scenario.dto.TestscenarioPersonopplysningDto
 import no.nav.pensjon.vtp.testmodell.scenario.dto.TestscenariodataDto
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.ResponseEntity
@@ -87,14 +88,18 @@ class TestscenarioRestTjeneste(
 
     @PostMapping(value = ["/cases"])
     @ApiOperation(value = "", notes = "Oppretter valgt scenario i pensjon-testdata for initialisert testscenario id")
-    fun opprettPensjonTestdataTestScenario(@RequestBody dt: OpprettSakDto): ResponseEntity<*> {
-        testscenarioService.getTestscenario(dt.testScenarioId)
-            ?.let {
-                pensjonTestdataService.opprettData(it)
-                val opprettTestdataScenario = pensjonTestdataService.opprettTestdataScenario(it, dt.caseId)
-                status(CREATED).body(opprettTestdataScenario)
-            }
-        return unprocessableEntity().build<Any>()
+    fun opprettPensjonTestdataTestScenario(@RequestBody dt: OpprettSakDto): ResponseEntity<String>? {
+        try{
+            return testscenarioService.getTestscenario(dt.testScenarioId)
+                ?.let {
+                    pensjonTestdataService.opprettData(it)
+                    val opprettTestdataScenario = pensjonTestdataService.opprettTestdataScenario(it, dt.caseId)
+                    status(CREATED).body(opprettTestdataScenario)
+                }
+        }
+        catch(e: HttpClientErrorException){
+            return status(BAD_REQUEST).body(e.message)
+        }
     }
 
     private fun konverterTilTestscenarioDto(testscenario: Testscenario): TestscenarioDto {
