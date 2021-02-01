@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.auth
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.nimbusds.jwt.JWTParser
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -27,7 +28,8 @@ class OldFashionedMock(
     private val logger = getLogger(OldFashionedMock::class.java)
 
     data class OldFashionedTokenResponse(
-        val access_token: String
+        @JsonProperty("access_token")
+        val accessToken: String
     )
     @PostMapping(value = ["/token"], consumes = [APPLICATION_FORM_URLENCODED_VALUE], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "/token", notes = "Veksle inn Azure AD-token til OpenAM-token")
@@ -45,6 +47,6 @@ class OldFashionedMock(
             nonce = null,
             issuer = issuer
         ).create()
-        return ok(OldFashionedTokenResponse(access_token = token))
+        return ok(OldFashionedTokenResponse(accessToken = token))
     }
 }
