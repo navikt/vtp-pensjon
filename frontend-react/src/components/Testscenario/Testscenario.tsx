@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import { Container } from "react-bootstrap";
 import {
+  CaseScenario,
   initialState,
   reducer,
   TestScenario,
@@ -17,6 +18,12 @@ async function fetchTemplates(): Promise<TestScenarioTemplate[]> {
 async function fetchScenarios(): Promise<TestScenario[]> {
   const response = await fetch("/api/testscenarios");
   return response.json();
+}
+
+async function fetchCases(): Promise<CaseScenario[]> {
+  const response = await fetch("/api/testscenarios/cases");
+  if (response.ok) return response.json();
+  return [] as CaseScenario[];
 }
 
 async function createScenario(templateId: string): Promise<void> {
@@ -53,6 +60,7 @@ export default () => {
     fetchScenarios().then((scenarios) =>
       dispatch({ type: "SCENARIOS_LOADED", scenarios })
     );
+    fetchCases().then((cases) => dispatch({ type: "CASES_LOADED", cases }));
     return () => {};
   }, []);
 
@@ -66,6 +74,7 @@ export default () => {
         <ActiveScenarios
           key={scenario.id}
           scenario={scenario}
+          cases={state.cases}
           onDelete={() => handleDelete(scenario.id)}
         />
       ))}

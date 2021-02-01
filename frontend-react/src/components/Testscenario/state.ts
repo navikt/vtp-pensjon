@@ -16,6 +16,15 @@ export interface TestScenarioState {
   templates: TestScenarioTemplate[];
   scenariosLoading: boolean;
   scenarios: TestScenario[];
+  casesLoading: false;
+  cases: CaseScenario[];
+}
+
+export interface CaseScenario {
+  id: string;
+  navn: string;
+  saksType: string;
+  maaVaereFoedtIAarMaaned?: any;
 }
 
 export type TestscenarioAction =
@@ -25,6 +34,10 @@ export type TestscenarioAction =
   | {
       type: "TEMPLATES_LOADED";
       templates: TestScenarioTemplate[];
+    }
+  | {
+      type: "CASES_LOADED";
+      cases: CaseScenario[];
     }
   | {
       type: "SCENARIOS_LOADING";
@@ -39,6 +52,8 @@ export const initialState: TestScenarioState = {
   templates: [],
   scenariosLoading: false,
   scenarios: [],
+  casesLoading: false,
+  cases: [],
 };
 
 export function reducer(
@@ -67,6 +82,12 @@ export function reducer(
         ...state,
         scenariosLoading: false,
         scenarios: action.scenarios,
+      };
+    case "CASES_LOADED":
+      return {
+        ...state,
+        casesLoading: false,
+        cases: action.cases,
       };
     default:
       return state;

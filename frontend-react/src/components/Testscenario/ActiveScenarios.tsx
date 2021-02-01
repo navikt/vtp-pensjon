@@ -1,14 +1,17 @@
-import { TestScenario } from "./state";
-import { Button, Card } from "react-bootstrap";
+import { CaseScenario, TestScenario } from "./state";
+import { Button, Card, Container } from "react-bootstrap";
 import React from "react";
+import ScenarioChooser from "./ScenarioChooser";
+import CaseChooser from "./CaseChooser";
 
 interface ActiveScenarioProps {
   scenario: TestScenario;
+  cases: CaseScenario[];
   onDelete: () => any;
 }
 
 export default function ActiveScenarios(props: ActiveScenarioProps) {
-  const { scenario, onDelete } = props;
+  const { scenario, cases, onDelete } = props;
   return (
     <Card>
       <Card.Header>
@@ -36,6 +39,19 @@ export default function ActiveScenarios(props: ActiveScenarioProps) {
             </a>
           </li>
         </ul>
+        {cases === undefined || cases.length == 0 ? (
+          ""
+        ) : (
+          <ul>
+            <li>
+              <CaseChooser
+                key={scenario.id}
+                cases={cases}
+                scenario={scenario}
+              />
+            </li>
+          </ul>
+        )}
       </Card.Body>
       <Card.Body>
         <Card.Title>Body</Card.Title>
