@@ -4,7 +4,6 @@ import no.nav.pensjon.vtp.testmodell.repo.Testscenario
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
 import org.springframework.web.client.postForObject
@@ -43,9 +42,9 @@ class PensjonTestdataServiceImpl(private val baseUrl: String) : PensjonTestdataS
     }
 
     private fun opprettRequestMedhandlebars(testdataScenario: PensjonTestdataScenario, dto: Testscenario): OpprettPensjonTestdata {
-        val handlebars: MutableMap<String, String>  = HashMap()
+        val handlebars: MutableMap<String, String> = HashMap()
         handlebars.put(testdataScenario.handlebars?.get(0)?.handlebar.orEmpty(), dto.personopplysninger.søker.ident)
-        if (testdataScenario.handlebars?.size == 2 && dto.personopplysninger.annenPart != null){
+        if (testdataScenario.handlebars?.size == 2 && dto.personopplysninger.annenPart != null) {
             handlebars.put(testdataScenario.handlebars.get(1).handlebar.orEmpty(), dto.personopplysninger.annenPart.ident)
         }
         return OpprettPensjonTestdata(testdataScenario.id, handlebars)

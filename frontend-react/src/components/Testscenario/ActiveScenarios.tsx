@@ -39,13 +39,19 @@ export default function ActiveScenarios(props: ActiveScenarioProps) {
             </a>
           </li>
         </ul>
-          {cases === undefined || cases.length == 0 ? '' :
-             <ul>
-             <li>
-                <CaseChooser key={scenario.id} cases={cases} scenario={scenario} />
-             </li>
-             </ul>
-          }
+        {cases === undefined || cases.length == 0 ? (
+          ""
+        ) : (
+          <ul>
+            <li>
+              <CaseChooser
+                key={scenario.id}
+                cases={cases}
+                scenario={scenario}
+              />
+            </li>
+          </ul>
+        )}
       </Card.Body>
       <Card.Body>
         <Card.Title>Body</Card.Title>

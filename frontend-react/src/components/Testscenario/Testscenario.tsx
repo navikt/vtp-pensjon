@@ -22,8 +22,7 @@ async function fetchScenarios(): Promise<TestScenario[]> {
 
 async function fetchCases(): Promise<CaseScenario[]> {
   const response = await fetch("/api/testscenarios/cases");
-  if (response.ok)
-    return response.json()
+  if (response.ok) return response.json();
   return [] as CaseScenario[];
 }
 

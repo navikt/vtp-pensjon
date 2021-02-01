@@ -89,15 +89,14 @@ class TestscenarioRestTjeneste(
     @PostMapping(value = ["/cases"])
     @ApiOperation(value = "", notes = "Oppretter valgt scenario i pensjon-testdata for initialisert testscenario id")
     fun opprettPensjonTestdataTestScenario(@RequestBody dt: OpprettSakDto): ResponseEntity<String>? {
-        try{
+        try {
             return testscenarioService.getTestscenario(dt.testScenarioId)
                 ?.let {
                     pensjonTestdataService.opprettData(it)
                     val opprettTestdataScenario = pensjonTestdataService.opprettTestdataScenario(it, dt.caseId)
                     status(CREATED).body(opprettTestdataScenario)
                 }
-        }
-        catch(e: HttpClientErrorException){
+        } catch (e: HttpClientErrorException) {
             return status(BAD_REQUEST).body(e.message)
         }
     }
