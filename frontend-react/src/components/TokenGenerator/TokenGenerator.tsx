@@ -26,16 +26,13 @@ type State =
       message: string;
     };
 
-export default () => {
+function TokenPanel(props: { generateToken: () => Promise<string> }) {
   const [state, setState] = useState<State>({ type: "NOT_LOADED" });
 
-  async function generateToken() {
+  async function generate() {
     try {
       setState({ type: "LOADING" });
-      const response = await fetch(
-        "/rest/v1/sts/token?grant_type=dfg&scope=fghfgh"
-      );
-      const token = (await response.json()).access_token;
+      const token = await props.generateToken();
       setState({ type: "LOADED", token });
     } catch (err) {
       console.error("Could not generate token", err);
@@ -44,16 +41,11 @@ export default () => {
     }
   }
 
-  useEffect(() => {
-    return () => {};
-  }, []);
-
   const isLoading = state.type === "LOADING";
 
   return (
-    <Container fluid>
-      <h1>Token Generator</h1>
-      <Button onClick={generateToken} disabled={isLoading}>
+    <div>
+      <Button onClick={generate} disabled={isLoading}>
         Generate a token{isLoading ? "..." : ""}
       </Button>
       {state.type === "ERROR" && <div>Error: {state.message}</div>}
@@ -90,6 +82,56 @@ export default () => {
           </Card.Body>
         </Card>
       )}
+    </div>
+  );
+}
+
+async function generateOpenAMToken() {
+  try {
+    const response = await fetch(
+      "/rest/v1/sts/token?grant_type=dfg&scope=fghfgh"
+    );
+    return (await response.json()).access_token;
+  } catch (err) {
+    console.error("Could not generate token", err);
+    throw err;
+  }
+}
+
+async function generateAzureADToken() {
+  try {
+    const response = await fetch("/rest/AzureAd/123456/mock-token", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: "client_id=whatever",
+    });
+    return await response.text();
+  } catch (err) {
+    console.error("Could not generate token", err);
+    throw err;
+  }
+}
+
+export default () => {
+  return (
+    <Container fluid>
+      <h1>Token Generator</h1>
+      <Row>
+        <Col>
+          <h2>STS token</h2>
+          <TokenPanel generateToken={generateOpenAMToken} />
+        </Col>
+        <Col>
+          <h2>OpenAM token</h2>
+          <TokenPanel generateToken={generateOpenAMToken} />
+        </Col>
+        <Col>
+          <h2>Azure AD token</h2>
+          <TokenPanel generateToken={generateAzureADToken} />
+        </Col>
+      </Row>
     </Container>
   );
 };

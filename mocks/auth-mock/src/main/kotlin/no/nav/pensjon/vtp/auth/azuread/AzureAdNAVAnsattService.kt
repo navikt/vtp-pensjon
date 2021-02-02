@@ -41,6 +41,15 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
     @ApiOperation(value = "azureAd/discovery/keys", notes = "Mock impl av Azure AD jwk_uri")
     fun authorize() = jsonWebKeySupport.jwks()
 
+    @PostMapping(value = ["/{tenant}/mock-token"], produces = [APPLICATION_JSON_VALUE])
+    @ApiOperation(value = "azureAd/mock-token", notes = "Generer Azure AD-token for testing")
+    fun mockToken(
+        @PathVariable("tenant") tenant: String,
+        @RequestParam("client_id") clientId: String,
+    ): ResponseEntity<*> {
+        return ok(createIdToken("lukesky;foobar", tenant, clientId))
+    }
+
     @PostMapping(value = ["/{tenant}/oauth2/v2.0/token"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "azureAd/access_token", notes = "Mock impl av Azure AD access_token")
     fun accessToken(
@@ -83,7 +92,7 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
 
         return azureOidcToken(
             jsonWebKeySupport = jsonWebKeySupport,
-            subject = codeData[0],
+            email = user.email,
             nonce = if (codeData.size > 1) codeData[1] else null,
             issuer = getIssuer(tenant),
             groups = user.groups.map { ldapGroupName: String -> toAzureGroupId(ldapGroupName) },

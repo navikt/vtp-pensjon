@@ -17,6 +17,10 @@ class AnsatteIndeks {
         return ansatte.firstOrNull { it.cn == ident }
     }
 
+    fun findByEmail(email: String): NAVAnsatt? {
+        return ansatte.firstOrNull { it.email == email }
+    }
+
     fun findBySnIgnoreCase(sn: String): NAVAnsatt? {
         return ansatte.firstOrNull { sn.equals(it.sn, ignoreCase = true) }
     }
