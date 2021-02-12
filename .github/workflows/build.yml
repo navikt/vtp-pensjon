@@ -9,6 +9,7 @@ on:
 
 env:
   IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/vtp-pensjon
+  IMAGE_BASE_GHCR: ghcr.io/${{ github.repository }}/vtp-pensjon
 
 jobs:
   build:
@@ -60,7 +61,12 @@ jobs:
           export VERSION="$TIME-$COMMIT"
           echo "Building version $VERSION"
 
-          docker build --pull --tag ${IMAGE_BASE}:${VERSION} --tag ${IMAGE_BASE}:latest .
+          docker build --pull \
+            --tag ${IMAGE_BASE}:${VERSION} \
+            --tag ${IMAGE_BASE}:latest \
+            --tag ${IMAGE_BASE_GHCR}:${VERSION} \
+            --tag ${IMAGE_BASE_GHCR}:latest \
+            .
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Push Docker image
@@ -69,6 +75,11 @@ jobs:
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker push ${IMAGE_BASE}:latest
           docker push ${IMAGE_BASE}:${VERSION}
+          docker login ghcr.io -u ${GHCR_PUSH_USERNAME} -p ${GHCR_PUSH_TOKEN}
+          docker push ${IMAGE_BASE_GHCR}:latest
+          docker push ${IMAGE_BASE_GHCR}:${VERSION}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_PUSH_USERNAME: ${{ secrets.GHCR_PUSH_USERNAME }}
+          GHCR_PUSH_TOKEN: ${{ secrets.GHCR_PUSH_TOKEN }}
           VERSION: ${{ env.VERSION }}
