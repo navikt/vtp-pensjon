@@ -90,7 +90,8 @@ class NavAnsattRestMock(
 
     data class NAVEnhetResult(
         val id: String,
-        val navn: String
+        val navn: String,
+        val nivaa: String
     )
 
     @GetMapping(
@@ -106,7 +107,8 @@ class NavAnsattRestMock(
             enheterIndeks.findByEnhetIdIn(ansatt.enheter).map {
                 NAVEnhetResult(
                     id = it.enhetId.toString(),
-                    navn = it.navn
+                    navn = it.navn,
+                    nivaa = "MOCKNIVAA"
                 )
             }
         )
