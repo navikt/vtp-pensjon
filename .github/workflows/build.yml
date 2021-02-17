@@ -20,14 +20,14 @@ jobs:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Cache SonarCloud packages
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
       - name: Cache Maven packages
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -35,7 +35,7 @@ jobs:
             ${{ runner.os }}-maven-
 
 #      - name: Cache Docker layers
-#        uses: actions/cache@v2
+#        uses: actions/cache@v2.1.4
 #        with:
 #          path: /tmp/.buildx-cache
 #          key: ${{ runner.os }}-buildx-${{ github.sha }}
