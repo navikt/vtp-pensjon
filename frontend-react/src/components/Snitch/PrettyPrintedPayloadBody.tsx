@@ -1,6 +1,8 @@
 import { parse as parseContentType } from "content-type";
 import React from "react";
 import xmlFormatter from "xml-formatter";
+import ReactJson from "react-json-view";
+import CSS from "csstype";
 
 function decodeBody(value: string): string {
   return decodeURIComponent(
@@ -13,8 +15,22 @@ function decodeBody(value: string): string {
   );
 }
 
-function asJson(content: string): string {
-  return JSON.stringify(JSON.parse(content), null, "  ");
+function asJson(content: string): JSX.Element {
+  const style: CSS.Properties = {
+    fontSize: "1rem",
+  };
+
+  return (
+    <ReactJson
+      src={JSON.parse(content)}
+      enableClipboard={false}
+      displayDataTypes={false}
+      displayObjectSize={false}
+      iconStyle={"triangle"}
+      style={style}
+      theme={"isotope"}
+    />
+  );
 }
 
 function asXml(content: string): string {
