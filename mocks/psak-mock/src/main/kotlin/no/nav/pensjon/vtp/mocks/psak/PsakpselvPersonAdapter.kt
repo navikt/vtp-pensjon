@@ -129,7 +129,9 @@ fun AdresseModell.asASBOPenBostedsAdresseOrNull(): ASBOPenBostedsAdresse? {
             adresseType = BOSTEDSADRESSE.name
             bolignr = husnummer.toString()
             boadresse1 = "$gatenavn $husnummer"
-            postnummer = this.postnummer
+            postnummer = this@asASBOPenBostedsAdresseOrNull.postnummer
+            boadresse2 = this@asASBOPenBostedsAdresseOrNull.tilleggsadresse
+            kommunenr = kommunenummer
         }
     } else {
         null
