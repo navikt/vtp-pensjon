@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@Api(tags = ["ArbeidsfordelingMock"])
+@Api(tags = ["Norg2 enheter"])
 @RequestMapping("/rest/norg2/api/v1/arbeidsfordeling")
 class ArbeidsfordelingRestMock(private val enheterIndeks: EnheterIndeks) {
     @PostMapping(
@@ -34,7 +34,8 @@ class ArbeidsfordelingRestMock(private val enheterIndeks: EnheterIndeks) {
                     enhetNr = it.enhetId.toString(),
                     enhetNavn = it.navn,
                     enhetType = it.status,
-                    status = it.type
+                    status = it.type,
+                    oppgavebehandler = true
                 )
             }
             .toTypedArray()
@@ -50,7 +51,7 @@ class ArbeidsfordelingRestMock(private val enheterIndeks: EnheterIndeks) {
             if (request.diskresjonskode != null && listOf("UFB", "SPSF", "SPFO").contains(request.diskresjonskode)) {
                 enheterIndeks.finnByDiskresjonskode(request.diskresjonskode)
             } else {
-                enheterIndeks.finnByDiskresjonskode("NORMAL-" + request.tema)
+                enheterIndeks.finnByDiskresjonskode(request.tema!!)
             }
 
         return enhet
@@ -60,7 +61,8 @@ class ArbeidsfordelingRestMock(private val enheterIndeks: EnheterIndeks) {
                         enhetNr = enhet.enhetId.toString(),
                         enhetNavn = enhet.navn,
                         enhetType = enhet.status,
-                        status = enhet.type
+                        status = enhet.type,
+                        oppgavebehandler = true
                     )
                 )
             }

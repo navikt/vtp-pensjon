@@ -10,5 +10,7 @@ data class ArbeidsfordelingResponse(
     @JsonProperty("status")
     val enhetType: String?,
     @JsonProperty("type")
-    val status: String?
+    val status: String?,
+    @JsonProperty("oppgavebehandler")
+    val oppgavebehandler: Boolean
 )
