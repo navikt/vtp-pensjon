@@ -42,7 +42,9 @@
                 <pattern>
                     <pattern>
                         {
-                        "message": "%r %s %b"
+                        "message": "%requestURL %statusCode %bytesSent",
+                        "transaction": "%header{nav-call-id}",
+                        "correlation-id": "%header{nav-call-id}"
                         }
                     </pattern>
                 </pattern>
