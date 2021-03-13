@@ -1,9 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ **** WARNING ****
+
+ This configuration file will output sensitive data if used in a proper environment. This is only suitable
+ when using VTP-Pensjon in a local environment where synthetic test data and mock access tokens are used.
+
+ **** WARNING ****
+-->
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <property name="APPENDER" value="CONSOLE_${LOG_OUTPUT:-PLAIN}"/>
+
+    <appender name="CONSOLE_PLAIN" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%fullRequest%n%n%fullResponse</pattern>
+            <pattern>%n-----------------START ACCESS LOG MESSAGE-----------------%n%h %l %u %user %date "%r" %s %b %responseHeader{x-vtp-handler}%n%n%fullRequest%n%n%fullResponse%n------------------END ACCESS LOG MESSAGE------------------%n%n</pattern>
         </encoder>
     </appender>
 
-    <appender-ref ref="STDOUT" />
+    <appender name="CONSOLE_JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.AccessEventCompositeJsonEncoder">
+            <providers>
+                <timestamp/>
+                <version/>
+                <message/>
+                <method/>
+                <protocol/>
+                <statusCode/>
+                <requestedUrl/>
+                <requestedUri/>
+                <remoteHost/>
+                <remoteUser/>
+                <contentLength/>
+                <elapsedTime/>
+                <requestHeaders>
+                    <fieldName>request_header</fieldName>
+                </requestHeaders>
+                <responseHeaders>
+                    <fieldName>response_header</fieldName>
+                </responseHeaders>
+                <nestedField/>
+                <pattern>
+                    <pattern>
+                        {
+                        "full_request": "%fullRequest",
+                        "full_response": "%fullResponse",
+                        "message": "%r %s %b"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <appender-ref ref="${APPENDER}"/>
 </configuration>

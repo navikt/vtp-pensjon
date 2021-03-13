@@ -15,14 +15,17 @@ class TomcatAccessLogCustomizer : WebServerFactoryCustomizer<TomcatServletWebSer
     @Value("\${verbose}")
     var verbose = false
     override fun customize(factory: TomcatServletWebServerFactory) {
-        val logbackValve = LogbackValve()
-        logbackValve.name = "Logback Access"
-        if (verbose) {
-            logbackValve.filename = "logback-access-verbose.xml"
-        } else {
-            logbackValve.filename = "logback-access.xml"
-        }
-        factory.addEngineValves(logbackValve)
+        factory.addEngineValves(
+            LogbackValve().apply {
+                name = "Logback Access"
+                filename =
+                    if (verbose) {
+                        "logback-access-verbose.xml"
+                    } else {
+                        "logback-access.xml"
+                    }
+            }
+        )
     }
 
     @ConditionalOnProperty("verbose")

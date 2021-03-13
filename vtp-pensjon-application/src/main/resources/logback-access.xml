@@ -1,9 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <property name="APPENDER" value="CONSOLE_${LOG_OUTPUT:-PLAIN}"/>
+
+    <appender name="CONSOLE_PLAIN" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%h %l %u %user %date "%r" %s %b %responseHeader{x-vtp-handler}</pattern>
         </encoder>
     </appender>
 
-    <appender-ref ref="STDOUT" />
+    <appender name="CONSOLE_JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.AccessEventCompositeJsonEncoder">
+            <providers>
+                <timestamp/>
+                <version/>
+                <message/>
+                <method/>
+                <protocol/>
+                <statusCode/>
+                <requestedUrl/>
+                <requestedUri/>
+                <remoteHost/>
+                <remoteUser/>
+                <contentLength/>
+                <elapsedTime/>
+                <requestHeaders>
+                    <fieldName>request_header</fieldName>
+                    <filter>
+                        <!--
+                            Excluding the Authorization header since vtp-pensjon is
+                            used in some test environments where actual OpenAM and
+                            AzureAD tokens are used.
+                        -->
+                        <exclude>Authorization</exclude>
+                    </filter>
+                </requestHeaders>
+                <responseHeaders>
+                    <fieldName>response_header</fieldName>
+                </responseHeaders>
+                <nestedField/>
+                <pattern>
+                    <pattern>
+                        {
+                        "message": "%r %s %b"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <appender-ref ref="${APPENDER}"/>
 </configuration>
