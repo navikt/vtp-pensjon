@@ -43,8 +43,8 @@
                     <pattern>
                         {
                         "message": "%requestURL %statusCode %bytesSent",
-                        "transaction": "%header{nav-call-id}",
-                        "correlation-id": "%header{nav-call-id}"
+                        "transaction": "%responseHeader{x-vtp-correlation-id}",
+                        "correlation-id": "%responseHeader{x-vtp-correlation-id}"
                         }
                     </pattern>
                 </pattern>
