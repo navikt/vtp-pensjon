@@ -44,7 +44,9 @@
                         {
                         "full_request": "%fullRequest",
                         "full_response": "%fullResponse",
-                        "message": "%r %s %b"
+                        "message": "%requestURL %statusCode %bytesSent",
+                        "transaction": "%responseHeader{x-vtp-correlation-id}",
+                        "correlation-id": "%responseHeader{x-vtp-correlation-id}"
                         }
                     </pattern>
                 </pattern>

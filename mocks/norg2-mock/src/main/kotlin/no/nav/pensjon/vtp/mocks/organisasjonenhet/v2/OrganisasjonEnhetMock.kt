@@ -6,16 +6,14 @@ import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.ObjectFactory
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.OrganisasjonEnhetV2
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.informasjon.WSOrganisasjonsenhet
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.meldinger.*
-import javax.jws.WebMethod
-import javax.jws.WebParam
-import javax.jws.WebResult
-import javax.jws.WebService
+import javax.jws.*
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper
 import javax.xml.ws.ResponseWrapper
 
 @SoapService(path = ["/norg2/ws/OrganisasjonEnhet/v2"])
 @WebService(name = "OrganisasjonEnhet_v2", targetNamespace = "http://nav.no/tjeneste/virksomhet/organisasjonEnhet/v2/")
+@HandlerChain(file = "/Handler-chain.xml")
 @XmlSeeAlso(
     ObjectFactory::class,
     no.nav.tjeneste.virksomhet.organisasjonenhet.v2.feil.ObjectFactory::class,

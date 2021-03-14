@@ -45,7 +45,7 @@ fun asHeadersMap(
 }
 
 @Component
-@Order(HIGHEST_PRECEDENCE)
+@Order(HIGHEST_PRECEDENCE + 1)
 class SnitchFilter(
     private val requestResponseRepository: RequestResponseRepository,
     private val simpMessagingTemplate: SimpMessagingTemplate
