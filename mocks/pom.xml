@@ -22,7 +22,6 @@
         <module>egenansatt-mock</module>
         <module>inntekt-mock</module>
         <module>joark-mock</module>
-        <module>kafka-embedded-mock</module>
         <module>kodeverk-mock</module>
         <module>ldap-mock</module>
         <module>medl-mock</module>

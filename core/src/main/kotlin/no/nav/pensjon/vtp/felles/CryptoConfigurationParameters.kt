@@ -5,7 +5,4 @@ data class CryptoConfigurationParameters(
 
     val keystorePath: String,
     val keystorePassword: String,
-
-    val truststorePath: String,
-    val truststorePassword: String
 )
