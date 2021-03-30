@@ -36,12 +36,9 @@ private fun copyToTempFile(resource: Resource, prefix: String): File {
 class CryptoConfiguration(
     @Value("\${no.nav.modig.security.appkey}") val keyAndCertAlias: String,
     @Value("\${no.nav.modig.security.appcert.keystore}") val keystoreResource: Resource,
-    @Value("\${no.nav.modig.security.appcert.password}") val keystorePassword: String,
-    @Value("\${no.nav.modig.security.truststore.path}") val truststoreResource: Resource,
-    @Value("\${no.nav.modig.security.truststore.password}") val truststorePassword: String
+    @Value("\${no.nav.modig.security.appcert.password}") val keystorePassword: String
 ) {
     val keystorePath: String by lazy { copyToTempFile(keystoreResource, "keystore").absolutePath }
-    val truststorePath: String by lazy { copyToTempFile(truststoreResource, "truststore").absolutePath }
 
     @Throws(WSSecurityException::class)
     @Bean
@@ -60,9 +57,6 @@ class CryptoConfiguration(
 
         keystorePath = keystorePath,
         keystorePassword = keystorePassword,
-
-        truststorePath = truststorePath,
-        truststorePassword = truststorePassword
     )
 
     @Bean

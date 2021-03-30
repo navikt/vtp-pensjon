@@ -42,8 +42,6 @@ spec:
   vault:
     enabled: false
   env:
-    - name: VTP_KAFKA_DISABLE
-      value: "true"
     - name: VTP_LDAP_DISABLE
       value: "false"
 

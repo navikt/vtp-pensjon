@@ -7,7 +7,7 @@ Virtuell Tjeneste Plattform (VTP) for pensjonsområdet
 #### vtp-pensjon hjelper deg med å: 
 - virtualisere grensesnitt rundt applikasjonene brukt i pensjonsområdet. 
 - instansierer og holde testdata konsistente på tvers av grensesnittene
-- ha en plattform for å simulere grensesnitt over REST, SOAP, Kafka, LDAP.
+- ha en plattform for å simulere grensesnitt over REST, SOAP, LDAP.
 - sikkerhetshåndtering over OAuth2
 - REST-grensesnitt for å programatisk opprette testdata (for automatiske tester) 
 - GUI for å opprette testdata for mennesker.
@@ -49,20 +49,9 @@ I modulen frontend (/frontend)
 
 
 ## Sertifiakter for SSL/TLS
-For å få vtp-pensjon til å kjøre med SSL/TLS forbindelse over SOAP, REST og Kafka må keystore angitt i VTP være tilgjengelig i SUT (System under test) sin Truststore. 
-
 For lokal utvikling på Team Pensjon bruker vi key- og truststore som hentes ved oppstart fra prosjekt-mappen. 
 Kopien av vtp sin public-nøkkelen er importert inn i PEN og POPP sine lokale truststores.
 For å generere et nytt gyldig nøkkelpar og   se ytterligere instruksjoner, kjør `KeyStoreTool.main`.
-
-Følgende systemvariabler kan defineres for å overstyre defaults i vtp-pensjon: 
-
-```bash
-JAVAX_NET_SSL_TRUSTSTORE
-JAVAX_NET_SSL_TRUSTSTOREPASSWORD
-NO_NAV_MODIG_SECURITY_APPCERT_KEYSTORE
-NO_NAV_MODIG_SECURITY_APPCERT_PASSWORD
-```
 
 ## Konfigurere nye tjenester
 Se SoapWebServerConfig for liste over url til genererte wsdl'er. Nye webtjenester registreres her. 
