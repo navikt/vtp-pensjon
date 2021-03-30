@@ -44,7 +44,3 @@ spec:
   env:
     - name: VTP_LDAP_DISABLE
       value: "true"
-    - name: NO_NAV_MODIG_SECURITY_APPCERT_KEYSTORE
-      value: "/etc/ssl/certs/java/cacerts"
-    - name: NO_NAV_MODIG_SECURITY_APPCERT_PASSWORD
-      value: "changeme"

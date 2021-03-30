@@ -53,15 +53,6 @@ For lokal utvikling på Team Pensjon bruker vi key- og truststore som hentes ved
 Kopien av vtp sin public-nøkkelen er importert inn i PEN og POPP sine lokale truststores.
 For å generere et nytt gyldig nøkkelpar og   se ytterligere instruksjoner, kjør `KeyStoreTool.main`.
 
-Følgende systemvariabler kan defineres for å overstyre defaults i vtp-pensjon: 
-
-```bash
-JAVAX_NET_SSL_TRUSTSTORE
-JAVAX_NET_SSL_TRUSTSTOREPASSWORD
-NO_NAV_MODIG_SECURITY_APPCERT_KEYSTORE
-NO_NAV_MODIG_SECURITY_APPCERT_PASSWORD
-```
-
 ## Konfigurere nye tjenester
 Se SoapWebServerConfig for liste over url til genererte wsdl'er. Nye webtjenester registreres her. 
 Se ApplicationConfig for liste over registrerte REST-tjenester. Nye REST-tjenester registreres her.     
