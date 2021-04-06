@@ -192,13 +192,6 @@
                 <artifactId>server</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>egenansatt-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>psak-mock</artifactId>

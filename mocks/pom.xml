@@ -14,7 +14,6 @@
         <module>auth-mock</module>
         <module>journalpost-mock</module>
         <module>enonic-mock</module>
-        <module>egenansatt-mock</module>
         <module>inntekt-mock</module>
         <module>joark-mock</module>
         <module>kodeverk-mock</module>
