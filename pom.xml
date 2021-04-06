@@ -24,8 +24,6 @@
 
     <modules>
         <module>frontend-react</module>
-        <module>core</module>
-        <module>mocks</module>
         <module>vtp-pensjon-application</module>
     </modules>
 
@@ -76,11 +74,6 @@
                 <version>${ks-tjenestespesifikasjoner.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.tjenestespesifikasjoner</groupId>
-                <artifactId>getapplicationversion</artifactId>
-                <version>${tjenestespesifikasjoner.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>no.nav.pensjon</groupId>
                 <artifactId>psak-esb-wsclient-legacy</artifactId>
                 <version>0.1.6-10dd8386f529</version>
@@ -94,166 +87,6 @@
                 <groupId>no.nav.pensjon</groupId>
                 <artifactId>pselv-esb-wsclient-legacy</artifactId>
                 <version>0.1.6-10dd8386f529</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>tps-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>joark-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>journalpost-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>auth-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>arena-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>axsys-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>medl-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>inntekt-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>arbeidsforhold-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>organisasjon-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>digital-kontakt-informasjon-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>sigrun-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>norg2-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>kodeverk-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>dokumentproduksjon-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>nav-ansatt-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>oppdrag-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>oppgave-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>enonic-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>autotest</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>ldap-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>server</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>egenansatt-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>psak-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>dialog-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>pensjon-pdfmerger</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>getapplicationversion</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>miscellaneous</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
