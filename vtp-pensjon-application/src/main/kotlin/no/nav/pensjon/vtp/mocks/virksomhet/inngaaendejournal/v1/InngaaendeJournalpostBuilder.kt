@@ -1,9 +1,9 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.inngaaendejournal.v1
 
-import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentModell
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.*
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tjeneste.virksomhet.inngaaendejournal.v1.informasjon.*
 
 fun buildFromV1(journalpostModell: JournalpostModell): InngaaendeJournalpost {

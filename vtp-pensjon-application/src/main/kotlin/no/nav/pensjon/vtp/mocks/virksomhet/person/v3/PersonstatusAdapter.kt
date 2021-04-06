@@ -1,8 +1,8 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.person.v3
 
-import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.kodeverk.Endringstype
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonstatusModell
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonstatusPeriode
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Personstatuser
 import no.nav.tjeneste.virksomhet.person.v3.metadata.Endringstyper

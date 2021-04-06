@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.medlemskap.v2
 
-import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapperiodeModell
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.Medlemsperiode
 import no.nav.tjeneste.virksomhet.medlemskap.v2.informasjon.kodeverk.*
 

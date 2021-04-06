@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.person.v3
 
-import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.personopplysning.StatsborgerskapModell
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Periode
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Statsborgerskap
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.StatsborgerskapPeriode

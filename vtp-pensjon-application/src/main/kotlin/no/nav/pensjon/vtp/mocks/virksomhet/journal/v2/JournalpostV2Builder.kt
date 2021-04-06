@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.journal.v2
 
-import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tjeneste.virksomhet.journal.v2.informasjon.*
 import java.time.LocalDate.now
 

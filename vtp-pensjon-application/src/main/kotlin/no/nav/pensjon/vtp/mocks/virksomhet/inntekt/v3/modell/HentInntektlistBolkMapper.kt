@@ -1,11 +1,11 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3.modell
 
-import no.nav.pensjon.vtp.util.asLocalDate
-import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektType
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.Inntektsperiode
+import no.nav.pensjon.vtp.util.asLocalDate
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.*
 import java.math.BigDecimal
 import java.time.LocalDate

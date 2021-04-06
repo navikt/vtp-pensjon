@@ -1,8 +1,8 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arena.meldekort.modell
 
+import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.*
 import no.nav.pensjon.vtp.util.asLocalDate
 import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
-import no.nav.pensjon.vtp.testmodell.inntektytelse.arena.*
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.informasjon.ObjectFactory
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.informasjon.Vedtaksstatuser
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.meldinger.FinnMeldekortUtbetalingsgrunnlagListeRequest

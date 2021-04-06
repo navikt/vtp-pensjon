@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.oppgave.gask.oppgave.v3
 
-import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFoo
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tjeneste.virksomhet.oppgave.v3.informasjon.oppgave.*
 
 fun no.nav.pensjon.vtp.mocks.oppgave.repository.Sporing.asSporingsdetalj(): Sporingsdetalj {

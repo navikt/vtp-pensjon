@@ -1,12 +1,12 @@
 package no.nav.pensjon.vtp.mocks.oppgave.gask.oppgavebehandling.v2
 
 import no.nav.pensjon.vtp.annotations.SoapService
-import no.nav.pensjon.vtp.util.toLocalDate
 import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFoo
 import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFooRepository
 import no.nav.pensjon.vtp.mocks.oppgave.repository.Sporing
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
+import no.nav.pensjon.vtp.util.toLocalDate
 import no.nav.virksomhet.tjenester.oppgavebehandling.feil.v2.ObjectFactory
 import no.nav.virksomhet.tjenester.oppgavebehandling.meldinger.v2.*
 import no.nav.virksomhet.tjenester.oppgavebehandling.v2.LagreOppgaveOppgaveIkkeFunnet

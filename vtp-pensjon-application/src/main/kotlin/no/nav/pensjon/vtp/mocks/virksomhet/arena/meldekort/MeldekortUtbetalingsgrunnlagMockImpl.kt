@@ -1,10 +1,10 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arena.meldekort
 
 import no.nav.pensjon.vtp.annotations.SoapService
-import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.mocks.virksomhet.arena.meldekort.modell.ArenaMUMapper
 import no.nav.pensjon.vtp.testmodell.FeilKode
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.binding.FinnMeldekortUtbetalingsgrunnlagListeAktoerIkkeFunnet
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.binding.FinnMeldekortUtbetalingsgrunnlagListeSikkerhetsbegrensning
 import no.nav.tjeneste.virksomhet.meldekortutbetalingsgrunnlag.v1.binding.FinnMeldekortUtbetalingsgrunnlagListeUgyldigInput

@@ -1,9 +1,9 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.aktoer.v2
 
 import no.nav.pensjon.vtp.annotations.SoapService
-import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIkkeFunnet

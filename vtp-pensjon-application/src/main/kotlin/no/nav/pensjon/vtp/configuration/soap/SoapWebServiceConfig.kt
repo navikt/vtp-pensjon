@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.configuration.soap
 
-import no.nav.pensjon.vtp.snitch.JAXWSMethodInspectingInvoker
 import no.nav.pensjon.vtp.annotations.SoapService
+import no.nav.pensjon.vtp.snitch.JAXWSMethodInspectingInvoker
 import org.apache.cxf.Bus
 import org.apache.cxf.jaxws.EndpointImpl
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean

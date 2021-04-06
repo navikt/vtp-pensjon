@@ -1,10 +1,10 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.journal.v3
 
-import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentModell
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.HOVEDDOKUMENT
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.VEDLEGG
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tjeneste.virksomhet.journal.v3.informasjon.*
 import no.nav.tjeneste.virksomhet.journal.v3.informasjon.Journaltilstand.fromValue
 import no.nav.tjeneste.virksomhet.journal.v3.informasjon.hentkjernejournalpostliste.ArkivSak

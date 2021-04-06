@@ -1,11 +1,11 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3
 
 import no.nav.pensjon.vtp.annotations.SoapService
-import no.nav.pensjon.vtp.util.asLocalDate
 import no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3.modell.HentInntektlistBolkMapper
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell
+import no.nav.pensjon.vtp.util.asLocalDate
 import no.nav.tjeneste.virksomhet.inntekt.v3.binding.HentInntektListeBolkUgyldigInput
 import no.nav.tjeneste.virksomhet.inntekt.v3.binding.InntektV3
 import no.nav.tjeneste.virksomhet.inntekt.v3.feil.UgyldigInput

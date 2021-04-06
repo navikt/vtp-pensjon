@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.oppgave.gask.sak.v1
 
-import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tjeneste.virksomhet.sak.v1.binding.HentSakSakIkkeFunnet
 import no.nav.tjeneste.virksomhet.sak.v1.feil.SakIkkeFunnet
 import no.nav.tjeneste.virksomhet.sak.v1.informasjon.*
