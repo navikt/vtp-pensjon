@@ -58,7 +58,7 @@ fun buildFromV1(journalpostModell: JournalpostModell): InngaaendeJournalpost {
 private fun lagDokumentinformasjon(dokumentModell: DokumentModell) = Dokumentinformasjon().apply {
     dokumenttypeId = dokumentModell.dokumentType?.let {
         DokumenttypeIder().apply {
-            value = dokumentModell.dokumentType?.name
+            value = it.name
         }
     }
 

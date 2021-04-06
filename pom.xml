@@ -24,7 +24,6 @@
 
     <modules>
         <module>frontend-react</module>
-        <module>core</module>
         <module>vtp-pensjon-application</module>
     </modules>
 
@@ -88,21 +87,6 @@
                 <groupId>no.nav.pensjon</groupId>
                 <artifactId>pselv-esb-wsclient-legacy</artifactId>
                 <version>0.1.6-10dd8386f529</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>autotest</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>server</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>

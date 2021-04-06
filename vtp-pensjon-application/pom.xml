@@ -21,7 +21,23 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jdk8</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-parameter-names</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>oauth2-oidc-sdk</artifactId>
         </dependency>
         <dependency>
             <groupId>com.unboundid</groupId>
@@ -50,10 +66,6 @@
         <dependency>
             <groupId>no.nav.pensjon</groupId>
             <artifactId>pselv-esb-wsclient-legacy</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>core</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
@@ -182,6 +194,18 @@
             <artifactId>ytelseskontrakt-v3-tjenestespesifikasjon</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf.services.sts</groupId>
+            <artifactId>cxf-services-sts-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
@@ -194,12 +218,20 @@
             <artifactId>jose4j</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jvnet.jaxb2_commons</groupId>
             <artifactId>jaxb2-basics-runtime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -226,16 +258,8 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-ws-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf.services.sts</groupId>
-            <artifactId>cxf-services-sts-core</artifactId>
+            <groupId>org.threeten</groupId>
+            <artifactId>threeten-extra</artifactId>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>

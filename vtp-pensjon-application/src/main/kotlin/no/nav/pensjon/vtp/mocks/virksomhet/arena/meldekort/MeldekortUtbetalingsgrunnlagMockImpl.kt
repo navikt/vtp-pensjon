@@ -83,7 +83,7 @@ class MeldekortUtbetalingsgrunnlagMockImpl(private val inntektYtelseIndeks: Innt
     )
     override fun ping() = Unit
 
-    private fun haandterExceptions(kode: FeilKode, ident: String) = when (kode) {
+    private fun haandterExceptions(kode: FeilKode, ident: String): Nothing = when (kode) {
         FeilKode.UgyldigInput -> {
             val faultInfo = lagUgyldigInput(ident)
             throw FinnMeldekortUtbetalingsgrunnlagListeUgyldigInput(faultInfo.feilmelding, faultInfo)
@@ -96,7 +96,6 @@ class MeldekortUtbetalingsgrunnlagMockImpl(private val inntektYtelseIndeks: Innt
             val faultInfo = lagSikkerhetsbegrensning(ident)
             throw FinnMeldekortUtbetalingsgrunnlagListeSikkerhetsbegrensning(faultInfo.feilmelding, faultInfo)
         }
-        else -> null
     }
 
     private fun lagUgyldigInput(ident: String?) = feilObjectFactory.createUgyldigInput().apply {
