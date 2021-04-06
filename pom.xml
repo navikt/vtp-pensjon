@@ -123,11 +123,6 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>nav-ansatt-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>oppdrag-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
