@@ -12,7 +12,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>auth-mock</module>
-        <module>axsys-mock</module>
         <module>journalpost-mock</module>
         <module>dialog-mock</module>
         <module>dokumentproduksjon-mock</module>

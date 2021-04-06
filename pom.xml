@@ -122,11 +122,6 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>axsys-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>medl-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>

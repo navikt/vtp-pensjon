@@ -16,6 +16,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
+        <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>ldap-mock</artifactId>
         </dependency>
@@ -38,10 +42,6 @@
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>auth-mock</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>axsys-mock</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
@@ -150,6 +150,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
@@ -211,6 +215,37 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>5.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+
+                        <configuration>
+                            <inputSpec>${basedir}/src/main/resources/axsys-api.json</inputSpec>
+
+                            <generateApis>false</generateApis>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateModelTests>false</generateModelTests>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+
+                            <generatorName>kotlin-spring</generatorName>
+                            <output>${project.basedir}</output>
+
+                            <modelNamePrefix>axsys</modelNamePrefix>
+                            <modelPackage>no.nav.axsys.model</modelPackage>
+
+                            <configOptions>
+                                <sourceFolder>target/generated-sources/swagger</sourceFolder>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
