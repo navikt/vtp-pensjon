@@ -76,11 +76,6 @@
                 <version>${ks-tjenestespesifikasjoner.version}</version>
             </dependency>
             <dependency>
-                <groupId>no.nav.tjenestespesifikasjoner</groupId>
-                <artifactId>getapplicationversion</artifactId>
-                <version>${tjenestespesifikasjoner.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>no.nav.pensjon</groupId>
                 <artifactId>psak-esb-wsclient-legacy</artifactId>
                 <version>0.1.6-10dd8386f529</version>
@@ -195,13 +190,6 @@
                 <artifactId>pensjon-pdfmerger</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>getapplicationversion</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>miscellaneous</artifactId>

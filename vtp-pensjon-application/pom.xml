@@ -85,10 +85,6 @@
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>getapplicationversion</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>miscellaneous</artifactId>
         </dependency>
         <dependency>
