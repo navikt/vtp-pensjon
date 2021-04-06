@@ -12,7 +12,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>auth-mock</module>
-        <module>tps-mock</module>
         <module>miscellaneous</module>
     </modules>
 
