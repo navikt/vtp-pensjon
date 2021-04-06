@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.snitch
+package no.nav.pensjon.vtp.application.snitch
 
 import org.springframework.data.mongodb.core.CollectionOptions.empty
 import org.springframework.data.mongodb.core.MongoOperations

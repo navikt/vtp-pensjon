@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.miscellaneous
+package no.nav.pensjon.vtp.application.configuration.soap
 
 import no.nav.pensjon.vtp.core.util.CORRELATION_ID_HEADER_NAME
 import no.nav.pensjon.vtp.core.util.resetCorrelationId

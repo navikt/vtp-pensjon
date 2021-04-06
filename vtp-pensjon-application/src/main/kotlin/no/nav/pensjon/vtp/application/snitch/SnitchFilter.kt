@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.snitch
+package no.nav.pensjon.vtp.application.snitch
 
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
 import org.springframework.core.annotation.Order

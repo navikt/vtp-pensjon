@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.miscellaneous
+package no.nav.pensjon.vtp.application.configuration.soap
 
 import javax.xml.bind.annotation.XmlAccessType
 import javax.xml.bind.annotation.XmlAccessorType

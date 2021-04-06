@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.snitch
+package no.nav.pensjon.vtp.application.snitch
 
 import javassist.ClassPool
 import javassist.CtClass

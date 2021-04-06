@@ -36,6 +36,7 @@
         <module>digital-kontakt-informasjon-mock</module>
         <module>esb</module>
         <module>pensjon-pdfmerger</module>
+        <module>miscellaneous</module>
     </modules>
 
     <build>

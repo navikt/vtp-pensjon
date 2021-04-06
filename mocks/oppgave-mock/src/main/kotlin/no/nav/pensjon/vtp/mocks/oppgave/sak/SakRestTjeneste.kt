@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.miscellaneous.api.sak
+package no.nav.pensjon.vtp.mocks.oppgave.sak
 
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation

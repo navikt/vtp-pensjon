@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.miscellaneous.api.sak
+package no.nav.pensjon.vtp.mocks.oppgave.sak
 
 @Suppress("SpellCheckingInspection")
 data class OpprettSakRequestDTO(
