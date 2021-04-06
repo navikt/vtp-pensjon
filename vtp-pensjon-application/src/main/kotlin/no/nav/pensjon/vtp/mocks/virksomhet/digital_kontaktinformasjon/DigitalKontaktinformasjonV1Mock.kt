@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.mocks.tjenestespesifikasjoner
+package no.nav.pensjon.vtp.mocks.virksomhet.digital_kontaktinformasjon
 
 import no.nav.pensjon.vtp.core.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
