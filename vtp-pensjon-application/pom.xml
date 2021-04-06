@@ -53,10 +53,6 @@
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>pensjon-pdfmerger</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>miscellaneous</artifactId>
         </dependency>
         <dependency>

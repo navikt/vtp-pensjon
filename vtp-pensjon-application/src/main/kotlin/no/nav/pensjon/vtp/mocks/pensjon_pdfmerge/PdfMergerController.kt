@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.mocks
+package no.nav.pensjon.vtp.mocks.pensjon_pdfmerge
 
 import org.springframework.http.MediaType.APPLICATION_PDF_VALUE
 import org.springframework.web.bind.annotation.GetMapping

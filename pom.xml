@@ -127,11 +127,6 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>pensjon-pdfmerger</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>miscellaneous</artifactId>
                 <version>${project.version}</version>
             </dependency>

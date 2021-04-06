@@ -15,7 +15,6 @@
         <module>sigrun-mock</module>
         <module>tps-mock</module>
         <module>psak-mock</module>
-        <module>pensjon-pdfmerger</module>
         <module>miscellaneous</module>
     </modules>
 
