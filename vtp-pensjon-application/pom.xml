@@ -36,6 +36,14 @@
             <artifactId>pen-esb-wsclient-legacy</artifactId>
         </dependency>
         <dependency>
+            <groupId>no.nav.pensjon</groupId>
+            <artifactId>psak-esb-wsclient-legacy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon</groupId>
+            <artifactId>pselv-esb-wsclient-legacy</artifactId>
+        </dependency>
+        <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>tps-mock</artifactId>
         </dependency>
@@ -46,10 +54,6 @@
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>sigrun-mock</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>psak-mock</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>

@@ -14,7 +14,6 @@
         <module>auth-mock</module>
         <module>sigrun-mock</module>
         <module>tps-mock</module>
-        <module>psak-mock</module>
         <module>miscellaneous</module>
     </modules>
 
