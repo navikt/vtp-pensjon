@@ -122,11 +122,6 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>arena-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>axsys-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -138,11 +133,6 @@
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>inntekt-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>arbeidsforhold-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
