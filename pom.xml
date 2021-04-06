@@ -217,12 +217,6 @@
                 <artifactId>psak-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>dialog-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>pensjon-pdfmerger</artifactId>

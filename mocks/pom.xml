@@ -13,7 +13,6 @@
     <modules>
         <module>auth-mock</module>
         <module>journalpost-mock</module>
-        <module>dialog-mock</module>
         <module>dokumentproduksjon-mock</module>
         <module>enonic-mock</module>
         <module>egenansatt-mock</module>
