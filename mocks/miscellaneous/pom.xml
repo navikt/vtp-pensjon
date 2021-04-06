@@ -18,10 +18,6 @@
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>dokumentproduksjon-mock</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>oppgave-mock</artifactId>
         </dependency>
         <dependency>

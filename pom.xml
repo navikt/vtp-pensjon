@@ -152,13 +152,6 @@
                 <artifactId>kodeverk-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>dokumentproduksjon-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>nav-ansatt-mock</artifactId>
