@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.ldap
+package no.nav.pensjon.vtp.mocks.ldap
 
 import com.unboundid.ldap.listener.InMemoryDirectoryServer
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig
