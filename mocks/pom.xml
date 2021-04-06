@@ -12,7 +12,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>auth-mock</module>
-        <module>norg2-mock</module>
         <module>oppdrag-mock</module>
         <module>oppgave-mock</module>
         <module>organisasjon-mock</module>

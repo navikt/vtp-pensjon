@@ -41,10 +41,6 @@
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>norg2-mock</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>organisasjon-mock</artifactId>
         </dependency>
         <dependency>
@@ -79,6 +75,10 @@
         <dependency>
             <groupId>no.nav.tjenester</groupId>
             <artifactId>aordningen-inntektsinformasjon-v1</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.tjenestespesifikasjoner</groupId>
+            <artifactId>arbeidsfordeling-v1-tjenestespesifikasjon</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.tjenestespesifikasjoner</groupId>
@@ -144,6 +144,10 @@
         <dependency>
             <groupId>no.nav.tjenestespesifikasjoner</groupId>
             <artifactId>nav-meldekortUtbetalingsgrunnlag-v1-tjenestespesifikasjon</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.tjenestespesifikasjoner</groupId>
+            <artifactId>organisasjonEnhet-v2-tjenestespesifikasjon</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.tjenestespesifikasjoner</groupId>
@@ -296,6 +300,31 @@
                             <apiPackage>no.nav.dokarkiv.generated.api</apiPackage>
                             <modelPackage>no.nav.dokarkiv.generated.model</modelPackage>
                             <invokerPackage>no.nav.dokarkiv.generated</invokerPackage>
+
+                            <configOptions>
+                                <sourceFolder>target/generated-sources/swagger</sourceFolder>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-norg2-api-stubs</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+
+                        <configuration>
+                            <inputSpec>${basedir}/src/main/resources/norg2-api.json</inputSpec>
+
+                            <generateApis>false</generateApis>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateModelTests>false</generateModelTests>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+
+                            <generatorName>kotlin-spring</generatorName>
+                            <output>${project.basedir}</output>
+
+                            <modelNamePrefix>norg2</modelNamePrefix>
+                            <modelPackage>no.nav.norg2.model</modelPackage>
 
                             <configOptions>
                                 <sourceFolder>target/generated-sources/swagger</sourceFolder>

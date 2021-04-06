@@ -115,12 +115,6 @@
                 <artifactId>sigrun-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>norg2-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>oppdrag-mock</artifactId>
