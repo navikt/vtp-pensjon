@@ -13,7 +13,6 @@
     <modules>
         <module>auth-mock</module>
         <module>journalpost-mock</module>
-        <module>joark-mock</module>
         <module>kodeverk-mock</module>
         <module>ldap-mock</module>
         <module>medl-mock</module>
@@ -25,7 +24,6 @@
         <module>tps-mock</module>
         <module>nav-ansatt-mock</module>
         <module>psak-mock</module>
-        <module>esb</module>
         <module>pensjon-pdfmerger</module>
         <module>miscellaneous</module>
     </modules>
