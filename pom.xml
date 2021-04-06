@@ -112,11 +112,6 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>miscellaneous</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>frontend-react</artifactId>
                 <scope>provided</scope>
                 <version>${project.version}</version>

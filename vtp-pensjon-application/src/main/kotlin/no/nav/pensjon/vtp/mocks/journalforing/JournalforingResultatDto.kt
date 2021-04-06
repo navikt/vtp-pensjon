@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.miscellaneous.api.journalforing
+package no.nav.pensjon.vtp.mocks.journalforing
 
 class JournalforingResultatDto(
     @Suppress("unused") val journalpostId: String

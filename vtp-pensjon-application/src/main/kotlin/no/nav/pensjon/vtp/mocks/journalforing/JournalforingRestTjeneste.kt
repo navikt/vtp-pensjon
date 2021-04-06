@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.miscellaneous.api.journalforing
+package no.nav.pensjon.vtp.mocks.journalforing
 
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation

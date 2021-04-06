@@ -16,6 +16,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
@@ -50,10 +54,6 @@
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>auth-mock</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>miscellaneous</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>

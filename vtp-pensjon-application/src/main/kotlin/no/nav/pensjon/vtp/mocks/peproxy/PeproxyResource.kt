@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.miscellaneous.rest
+package no.nav.pensjon.vtp.mocks.peproxy
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
