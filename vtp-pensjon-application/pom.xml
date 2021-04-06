@@ -69,10 +69,6 @@
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>enonic-mock</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>oppgave-mock</artifactId>
         </dependency>
         <dependency>
