@@ -12,7 +12,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>auth-mock</module>
-        <module>journalpost-mock</module>
         <module>kodeverk-mock</module>
         <module>ldap-mock</module>
         <module>medl-mock</module>
