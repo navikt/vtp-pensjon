@@ -25,7 +25,6 @@
     <modules>
         <module>frontend-react</module>
         <module>core</module>
-        <module>model</module>
         <module>mocks</module>
         <module>vtp-pensjon-application</module>
     </modules>
@@ -101,12 +100,6 @@
                 <artifactId>core</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>testmodell</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>tps-mock</artifactId>

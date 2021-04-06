@@ -21,9 +21,5 @@
             <artifactId>swagger-annotations</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>testmodell</artifactId>
-        </dependency>
     </dependencies>
 </project>
