@@ -25,7 +25,6 @@
     <modules>
         <module>frontend-react</module>
         <module>core</module>
-        <module>mocks</module>
         <module>vtp-pensjon-application</module>
     </modules>
 
@@ -93,11 +92,6 @@
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>auth-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
