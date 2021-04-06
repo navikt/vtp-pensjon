@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.digital_kontaktinformasjon
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.DigitalKontaktinformasjonV1
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.ObjectFactory

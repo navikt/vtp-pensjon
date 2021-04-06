@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.oppgave.gask.oppgavebehandling.v2
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
-import no.nav.pensjon.vtp.core.util.toLocalDate
+import no.nav.pensjon.vtp.annotations.SoapService
+import no.nav.pensjon.vtp.util.toLocalDate
 import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFoo
 import no.nav.pensjon.vtp.mocks.oppgave.repository.OppgaveFooRepository
 import no.nav.pensjon.vtp.mocks.oppgave.repository.Sporing

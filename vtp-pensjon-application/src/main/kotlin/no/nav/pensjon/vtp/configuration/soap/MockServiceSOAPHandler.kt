@@ -1,8 +1,8 @@
-package no.nav.pensjon.vtp.application.configuration.soap
+package no.nav.pensjon.vtp.configuration.soap
 
-import no.nav.pensjon.vtp.core.util.CORRELATION_ID_HEADER_NAME
-import no.nav.pensjon.vtp.core.util.resetCorrelationId
-import no.nav.pensjon.vtp.core.util.setCorrelationId
+import no.nav.pensjon.vtp.util.CORRELATION_ID_HEADER_NAME
+import no.nav.pensjon.vtp.util.resetCorrelationId
+import no.nav.pensjon.vtp.util.setCorrelationId
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import javax.xml.bind.JAXBContext

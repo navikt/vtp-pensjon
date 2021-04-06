@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arena.meldekort
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
-import no.nav.pensjon.vtp.core.util.asXMLGregorianCalendar
+import no.nav.pensjon.vtp.annotations.SoapService
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.mocks.virksomhet.arena.meldekort.modell.ArenaMUMapper
 import no.nav.pensjon.vtp.testmodell.FeilKode
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks

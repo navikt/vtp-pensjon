@@ -1,6 +1,6 @@
-package no.nav.pensjon.vtp.application.configuration
+package no.nav.pensjon.vtp.configuration
 
-import no.nav.pensjon.vtp.felles.CryptoConfigurationParameters
+import no.nav.pensjon.vtp.auth.CryptoConfigurationParameters
 import org.apache.wss4j.common.crypto.Crypto
 import org.apache.wss4j.common.crypto.CryptoFactory
 import org.apache.wss4j.common.ext.WSSecurityException

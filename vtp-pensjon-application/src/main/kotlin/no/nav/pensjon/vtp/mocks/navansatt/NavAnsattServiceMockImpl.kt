@@ -9,7 +9,7 @@ import no.nav.lib.pen.psakpselv.asbo.navansatt.ASBOPenNAVAnsatt
 import no.nav.lib.pen.psakpselv.asbo.navansatt.ASBOPenNAVAnsattListe
 import no.nav.lib.pen.psakpselv.asbo.navorgenhet.ASBOPenNAVEnhet
 import no.nav.lib.pen.psakpselv.asbo.navorgenhet.ASBOPenNAVEnhetListe
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
 import no.nav.pensjon.vtp.testmodell.enheter.Norg2Modell

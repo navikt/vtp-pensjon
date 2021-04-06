@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.psak
 
 import no.nav.lib.pen.psakpselv.asbo.person.*
-import no.nav.pensjon.vtp.core.util.asGregorianCalendar
+import no.nav.pensjon.vtp.util.asGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.personopplysning.*
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType.BOSTEDSADRESSE
 import org.springframework.stereotype.Component

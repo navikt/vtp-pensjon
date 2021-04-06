@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.application.configuration
+package no.nav.pensjon.vtp.configuration
 
 import ch.qos.logback.access.servlet.TeeFilter
 import ch.qos.logback.access.tomcat.LogbackValve

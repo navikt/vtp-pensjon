@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.core.annotations
+package no.nav.pensjon.vtp.annotations
 
 import org.springframework.stereotype.Component
 import kotlin.annotation.AnnotationTarget.ANNOTATION_CLASS

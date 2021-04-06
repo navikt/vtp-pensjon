@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.application.configuration
+package no.nav.pensjon.vtp.configuration
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

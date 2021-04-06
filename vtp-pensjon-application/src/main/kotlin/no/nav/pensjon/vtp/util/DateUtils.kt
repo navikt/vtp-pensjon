@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.core.util
+package no.nav.pensjon.vtp.util
 
 import org.slf4j.LoggerFactory
 import java.time.LocalDate

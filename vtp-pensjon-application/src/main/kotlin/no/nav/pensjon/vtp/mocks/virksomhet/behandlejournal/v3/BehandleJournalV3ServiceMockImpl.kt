@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.behandlejournal.v3
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.tjeneste.virksomhet.behandlejournal.v3.binding.BehandleJournalV3
 import no.nav.tjeneste.virksomhet.behandlejournal.v3.meldinger.*

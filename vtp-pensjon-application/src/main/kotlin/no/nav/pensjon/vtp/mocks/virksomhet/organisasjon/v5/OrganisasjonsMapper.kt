@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.organisasjon.v5
 
-import no.nav.pensjon.vtp.core.util.asXMLGregorianCalendar
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell
 import no.nav.tjeneste.virksomhet.organisasjon.v5.informasjon.*
 

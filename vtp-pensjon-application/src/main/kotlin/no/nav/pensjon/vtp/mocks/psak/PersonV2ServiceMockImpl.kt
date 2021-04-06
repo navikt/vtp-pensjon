@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.psak
 
 import no.nav.lib.pen.psakpselv.asbo.person.ASBOPenPerson
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.virksomhet.part.person.v2.Diskresjonskode
 import no.nav.virksomhet.part.person.v2.Navn

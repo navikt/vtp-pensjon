@@ -4,7 +4,7 @@ import nav_lib_test.no.nav.inf.ObjectFactory
 import nav_lib_test.no.nav.inf.binding.TESTGetApplicationVersion
 import nav_lib_test.no.nav.test.asbo.ASBOTestGetApplicationVersionRequest
 import nav_lib_test.no.nav.test.asbo.ASBOTestGetApplicationVersionResponse
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import javax.jws.HandlerChain
 import javax.jws.WebMethod
 import javax.jws.WebParam

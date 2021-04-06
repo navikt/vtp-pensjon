@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3.modell
 
-import no.nav.pensjon.vtp.core.util.asLocalDate
-import no.nav.pensjon.vtp.core.util.asXMLGregorianCalendar
+import no.nav.pensjon.vtp.util.asLocalDate
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektType
 import no.nav.pensjon.vtp.testmodell.inntektytelse.inntektkomponent.InntektskomponentModell

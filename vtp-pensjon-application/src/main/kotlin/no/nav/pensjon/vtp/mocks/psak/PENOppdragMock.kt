@@ -5,7 +5,7 @@ import no.nav.inf.pen.oppdrag.PENOppdrag
 import no.nav.lib.pen.psakpselv.asbo.oppdrag.ASBOPenOppdragsmelding
 import no.nav.lib.pen.psakpselv.asbo.oppdrag.ASBOPenSendAsynkOppdragsavstemmingListeRequest
 import no.nav.lib.pen.psakpselv.asbo.oppdrag.ASBOPenSimuleringsresultatLinjeListe
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import javax.jws.HandlerChain
 import javax.jws.WebMethod

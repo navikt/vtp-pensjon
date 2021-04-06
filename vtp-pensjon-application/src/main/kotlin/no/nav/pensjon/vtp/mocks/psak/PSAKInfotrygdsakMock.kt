@@ -6,7 +6,7 @@ import no.nav.inf.psak.infotrygdsak.ObjectFactory
 import no.nav.inf.psak.infotrygdsak.PSAKInfotrygdsak
 import no.nav.lib.pen.psakpselv.asbo.ASBOPenSaksInfo
 import no.nav.lib.pen.psakpselv.asbo.ASBOPenSaksInfoListe
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import javax.jws.*
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper

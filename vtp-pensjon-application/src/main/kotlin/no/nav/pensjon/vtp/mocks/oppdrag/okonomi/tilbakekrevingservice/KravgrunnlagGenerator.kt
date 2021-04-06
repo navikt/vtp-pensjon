@@ -1,7 +1,7 @@
 
 package no.nav.pensjon.vtp.mocks.oppdrag.okonomi.tilbakekrevingservice
 
-import no.nav.pensjon.vtp.core.util.asXMLGregorianCalendar
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tilbakekreving.kravgrunnlag.detalj.v1.DetaljertKravgrunnlagBelopDto
 import no.nav.tilbakekreving.kravgrunnlag.detalj.v1.DetaljertKravgrunnlagDto
 import no.nav.tilbakekreving.kravgrunnlag.detalj.v1.DetaljertKravgrunnlagPeriodeDto

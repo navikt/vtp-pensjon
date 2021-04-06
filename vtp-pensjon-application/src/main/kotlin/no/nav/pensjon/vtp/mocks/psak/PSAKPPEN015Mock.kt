@@ -4,7 +4,7 @@ import no.nav.inf.psak.ppen015.ObjectFactory
 import no.nav.inf.psak.ppen015.PSAKPPEN015
 import no.nav.lib.pen.psakpselv.asbo.ppen015.ASBOPSAKPPEN015Request
 import no.nav.lib.pen.psakpselv.asbo.ppen015.ASBOPSAKPPEN015Response
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import javax.jws.HandlerChain
 import javax.jws.WebMethod
 import javax.jws.WebParam

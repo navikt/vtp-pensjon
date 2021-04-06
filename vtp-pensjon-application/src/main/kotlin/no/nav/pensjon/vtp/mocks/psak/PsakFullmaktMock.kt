@@ -4,7 +4,7 @@ import no.nav.inf.psak.fullmakt.*
 import no.nav.lib.pen.psakpselv.asbo.fullmakt.ASBOPenFullmakt
 import no.nav.lib.pen.psakpselv.asbo.fullmakt.ASBOPenFullmaktListe
 import no.nav.lib.pen.psakpselv.asbo.fullmakt.ASBOPenHentFullmaktListeRequest
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import javax.jws.HandlerChain
 import javax.jws.WebMethod
 import javax.jws.WebResult

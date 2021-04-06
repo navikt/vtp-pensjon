@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.psak
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.virksomhet.tjenester.medlemskap.meldinger.v1.HentPeriodeListeRequest
 import no.nav.virksomhet.tjenester.medlemskap.meldinger.v1.HentPeriodeListeResponse

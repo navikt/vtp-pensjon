@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.oppdrag.okonomi.tilbakekrevingservice
 
 import no.nav.okonomi.tilbakekrevingservice.*
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import javax.jws.HandlerChain
 import javax.jws.WebMethod
 import javax.jws.WebResult

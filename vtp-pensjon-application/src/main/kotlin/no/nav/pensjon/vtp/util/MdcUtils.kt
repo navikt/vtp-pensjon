@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.core.util
+package no.nav.pensjon.vtp.util
 
 import org.slf4j.MDC.put
 import org.slf4j.MDC.remove

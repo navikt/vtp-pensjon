@@ -1,7 +1,7 @@
-package no.nav.pensjon.vtp.application.configuration
+package no.nav.pensjon.vtp.configuration
 
-import no.nav.pensjon.vtp.core.util.CORRELATION_ID_HEADER_NAME
-import no.nav.pensjon.vtp.core.util.withCorrelationId
+import no.nav.pensjon.vtp.util.CORRELATION_ID_HEADER_NAME
+import no.nav.pensjon.vtp.util.withCorrelationId
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component

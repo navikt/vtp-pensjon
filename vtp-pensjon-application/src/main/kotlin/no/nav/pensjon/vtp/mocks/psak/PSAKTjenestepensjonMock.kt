@@ -2,7 +2,7 @@ package no.nav.pensjon.vtp.mocks.psak
 
 import no.nav.inf.psak.tjenestepensjon.*
 import no.nav.lib.pen.psakpselv.asbo.tjenestepensjon.ASBOPenTjenestepensjon
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import javax.jws.*
 import javax.xml.bind.annotation.XmlSeeAlso
 

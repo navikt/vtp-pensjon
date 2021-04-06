@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.dialog
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.tjeneste.virksomhet.dialog.v1.DialogV1
 import no.nav.tjeneste.virksomhet.dialog.v1.meldinger.ObjectFactory
 import no.nav.tjeneste.virksomhet.dialog.v1.meldinger.WSHentDialogerRequest

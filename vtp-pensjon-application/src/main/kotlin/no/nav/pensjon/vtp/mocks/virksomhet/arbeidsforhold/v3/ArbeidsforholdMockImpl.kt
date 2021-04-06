@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsforhold.v3
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3

@@ -5,7 +5,7 @@ import no.nav.inf.psak.bidragsak.PSAKBidragsak
 import no.nav.lib.pen.psakpselv.asbo.bidragsak.ASBOPenForskuddSak
 import no.nav.lib.pen.psakpselv.asbo.bidragsak.ASBOPenHentForskuddRequest
 import no.nav.lib.pen.psakpselv.asbo.bidragsak.ObjectFactory
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import javax.jws.*
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper

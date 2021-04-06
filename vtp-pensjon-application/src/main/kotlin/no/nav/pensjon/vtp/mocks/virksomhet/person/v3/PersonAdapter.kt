@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.person.v3
 
-import no.nav.pensjon.vtp.core.util.asXMLGregorianCalendar
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.kodeverk.Diskresjonskoder
 import no.nav.pensjon.vtp.testmodell.kodeverk.GeografiskTilknytningType
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell

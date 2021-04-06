@@ -5,7 +5,7 @@ import no.nav.inf.psak.navorgenhet.HentNAVEnhetFaultPenNAVEnhetIkkeFunnetMsg
 import no.nav.inf.psak.navorgenhet.PSAKNAVOrgEnhet
 import no.nav.lib.pen.psakpselv.asbo.navorgenhet.*
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.mocks.psak.util.asboPenNAVEnhet
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException

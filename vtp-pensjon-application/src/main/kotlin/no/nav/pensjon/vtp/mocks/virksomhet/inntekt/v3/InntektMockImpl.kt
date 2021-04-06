@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
-import no.nav.pensjon.vtp.core.util.asLocalDate
+import no.nav.pensjon.vtp.annotations.SoapService
+import no.nav.pensjon.vtp.util.asLocalDate
 import no.nav.pensjon.vtp.mocks.virksomhet.inntekt.v3.modell.HentInntektlistBolkMapper
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks

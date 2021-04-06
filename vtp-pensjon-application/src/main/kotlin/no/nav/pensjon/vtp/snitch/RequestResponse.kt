@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.application.snitch
+package no.nav.pensjon.vtp.snitch
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document

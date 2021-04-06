@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.application.configuration
+package no.nav.pensjon.vtp.configuration
 
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import no.nav.pensjon.vtp.testmodell.brev.BrevMetadataIndeks

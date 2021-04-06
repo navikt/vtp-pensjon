@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.psak
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.virksomhet.tjenester.trekk.feil.v1.ObjectFactory
 import no.nav.virksomhet.tjenester.trekk.meldinger.v1.*
 import no.nav.virksomhet.tjenester.trekk.v1.FinnTrekkListeKreditorFinnesIkke

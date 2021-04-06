@@ -6,7 +6,7 @@ import no.nav.lib.pen.psakpselv.asbo.henvendelse.ASBOPenHenvendelse
 import no.nav.lib.pen.psakpselv.asbo.henvendelse.ASBOPenHenvendelseListe
 import no.nav.lib.pen.psakpselv.asbo.henvendelse.ASBOPenStatistikk
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import javax.jws.HandlerChain
 import javax.jws.WebMethod

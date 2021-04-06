@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.psak
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.virksomhet.grunnlag.institusjonsopphold.v1.ObjectFactory
 import no.nav.virksomhet.tjenester.institusjonsopphold.meldinger.v1.HentInstitusjonsoppholdListeRequest
 import no.nav.virksomhet.tjenester.institusjonsopphold.meldinger.v1.HentInstitusjonsoppholdListeResponse

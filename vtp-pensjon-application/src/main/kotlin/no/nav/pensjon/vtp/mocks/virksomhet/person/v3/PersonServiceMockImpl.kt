@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.person.v3
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.pensjon.vtp.testmodell.kodeverk.Rolle
 import no.nav.pensjon.vtp.testmodell.personopplysning.*

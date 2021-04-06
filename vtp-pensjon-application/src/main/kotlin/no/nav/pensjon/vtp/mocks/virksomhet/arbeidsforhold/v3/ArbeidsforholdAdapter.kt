@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsforhold.v3
 
-import no.nav.pensjon.vtp.core.util.asXMLGregorianCalendar
+import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.Arbeidsavtale
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.Arbeidsforhold
 import no.nav.pensjon.vtp.testmodell.inntektytelse.arbeidsforhold.Permisjon

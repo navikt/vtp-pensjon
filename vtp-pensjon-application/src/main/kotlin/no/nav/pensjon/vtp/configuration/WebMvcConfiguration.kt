@@ -1,6 +1,6 @@
-package no.nav.pensjon.vtp.application.configuration
+package no.nav.pensjon.vtp.configuration
 
-import no.nav.pensjon.vtp.application.snitch.HandlerToResponseHeaderInterceptor
+import no.nav.pensjon.vtp.snitch.HandlerToResponseHeaderInterceptor
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer

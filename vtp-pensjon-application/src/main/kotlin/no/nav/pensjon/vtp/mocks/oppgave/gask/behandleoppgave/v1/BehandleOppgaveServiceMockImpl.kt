@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.oppgave.gask.behandleoppgave.v1
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.mocks.oppgave.gask.sak.v1.GsakRepo
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.tjeneste.virksomhet.behandleoppgave.v1.BehandleOppgaveV1

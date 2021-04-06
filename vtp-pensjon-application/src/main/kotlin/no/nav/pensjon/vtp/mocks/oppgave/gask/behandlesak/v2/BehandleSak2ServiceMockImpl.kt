@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.oppgave.gask.behandlesak.v2
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.mocks.oppgave.gask.sak.v1.GsakRepo
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import no.nav.tjeneste.virksomhet.behandlesak.v2.*

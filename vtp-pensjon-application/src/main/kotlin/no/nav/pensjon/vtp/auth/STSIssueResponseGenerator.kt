@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.auth
 
-import no.nav.pensjon.vtp.felles.CryptoConfigurationParameters
 import org.apache.cxf.security.SecurityContext
 import org.apache.cxf.sts.StaticSTSProperties
 import org.apache.cxf.sts.operation.TokenIssueOperation

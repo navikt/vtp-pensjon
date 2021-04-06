@@ -2,7 +2,7 @@ package no.nav.pensjon.vtp.mocks.psak
 
 import no.nav.inf.psak.person.*
 import no.nav.lib.pen.psakpselv.asbo.person.*
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository

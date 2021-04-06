@@ -4,7 +4,7 @@ import no.nav.inf.pen.fullmakt.PENFullmakt
 import no.nav.lib.pen.psakpselv.asbo.fullmakt.ASBOPenFinnFullmaktmottagereRequest
 import no.nav.lib.pen.psakpselv.asbo.fullmakt.ASBOPenFullmaktListe
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import javax.jws.HandlerChain
 import javax.jws.WebMethod
 import javax.jws.WebParam

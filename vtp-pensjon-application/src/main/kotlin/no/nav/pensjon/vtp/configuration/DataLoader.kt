@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.application.configuration
+package no.nav.pensjon.vtp.configuration
 
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl.loadOrganisasjoner

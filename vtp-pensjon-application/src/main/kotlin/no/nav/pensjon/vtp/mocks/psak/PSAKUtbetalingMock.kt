@@ -6,7 +6,7 @@ import no.nav.inf.psak.utbetaling.PSAKUtbetaling
 import no.nav.lib.pen.psakpselv.asbo.utbetaling.ASBOPenUtbetalingRequest
 import no.nav.lib.pen.psakpselv.asbo.utbetaling.ASBOPenUtbetalingResponse
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import javax.jws.*
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper

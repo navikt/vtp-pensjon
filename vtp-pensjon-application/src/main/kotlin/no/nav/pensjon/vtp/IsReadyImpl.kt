@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.application
+package no.nav.pensjon.vtp
 
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation

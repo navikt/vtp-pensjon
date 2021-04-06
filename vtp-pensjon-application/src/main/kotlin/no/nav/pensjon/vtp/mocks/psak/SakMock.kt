@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.psak
 
-import no.nav.pensjon.vtp.core.annotations.SoapService
+import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.virksomhet.tjenester.sak.meldinger.v1.FinnGenerellSakListeRequest
 import no.nav.virksomhet.tjenester.sak.meldinger.v1.FinnGenerellSakListeResponse
 import no.nav.virksomhet.tjenester.sak.v1.ObjectFactory
