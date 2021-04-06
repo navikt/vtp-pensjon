@@ -17,10 +17,6 @@
             <artifactId>jackson-annotations</artifactId>
         </dependency>
         <dependency>
-            <groupId>jakarta.ws.rs</groupId>
-            <artifactId>jakarta.ws.rs-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>dokumentproduksjon-mock</artifactId>
         </dependency>
