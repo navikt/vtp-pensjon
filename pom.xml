@@ -107,11 +107,6 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>sigrun-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>autotest</artifactId>
                 <version>${project.version}</version>
             </dependency>
