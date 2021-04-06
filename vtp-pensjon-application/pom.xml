@@ -49,10 +49,6 @@
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>oppdrag-mock</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
             <artifactId>oppgave-mock</artifactId>
         </dependency>
         <dependency>
@@ -151,6 +147,10 @@
         </dependency>
         <dependency>
             <groupId>no.nav.tjenestespesifikasjoner</groupId>
+            <artifactId>tilbakekreving-v1-tjenestespesifikasjon</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.tjenestespesifikasjoner</groupId>
             <artifactId>ytelseskontrakt-v3-tjenestespesifikasjon</artifactId>
         </dependency>
         <dependency>
@@ -188,6 +188,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
