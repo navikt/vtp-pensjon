@@ -122,11 +122,6 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>inntekt-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>organisasjon-mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
