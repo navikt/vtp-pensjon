@@ -44,6 +44,7 @@ jobs:
 
       - uses: actions/setup-java@v2
         with:
+          distribution: 'adopt'
           java-version: 1.11
 
       - name: Build and analyze
