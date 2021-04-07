@@ -78,6 +78,7 @@ jobs:
           docker push ${IMAGE_BASE}:${VERSION}
           docker login ghcr.io -u ${GHCR_PUSH_USERNAME} -p ${GHCR_PUSH_TOKEN}
           docker push ${IMAGE_BASE_GHCR}:latest
+          echo ${IMAGE_BASE_GHCR}:${VERSION}
           docker push ${IMAGE_BASE_GHCR}:${VERSION}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
