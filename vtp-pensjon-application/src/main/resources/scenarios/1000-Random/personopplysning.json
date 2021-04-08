@@ -36,6 +36,11 @@
 				"kode": "BOSA",
 				"fom": "now()-P50Y"
 			}
+		],
+		"sivilstand": [
+			{
+				"kode": "GIFT"
+			}
 		]
 	},
 	"familierelasjoner": [
