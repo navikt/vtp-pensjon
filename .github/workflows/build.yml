@@ -9,7 +9,7 @@ on:
 
 env:
   IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/vtp-pensjon
-  IMAGE_BASE_GHCR: ghcr.io/${{ github.repository }}
+  IMAGE_BASE_GHCR: ghcr.io/${{ github.repository }}/vtp-pensjon
 
 jobs:
   build:
