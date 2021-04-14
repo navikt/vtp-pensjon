@@ -1,0 +1,56 @@
+{
+	"søker": {
+		"ident": "${for1}",
+		"fødselsdato": "${for1_fødselsdato}",
+		"kjønn": "K",
+		"geografiskTilknytning": {
+			"type": "Land",
+			"kode": "NOR"
+		},
+		"adresser": [
+			{
+				"@type": "ref",
+				"fom": "now() - P1Y",
+				"adresseType": "BOSTEDSADRESSE",
+				"land": "NOR"
+			}
+		],
+		"personstatus": [
+			{
+				"kode": "BOSA",
+                "fom": "now()-P50Y"
+			}
+		],
+		"sivilstand": [
+			{
+				"kode": "UGIF"
+			}
+		]
+	},
+	"annenPart": {
+		"ident": "${for2}",
+		"fødselsdato": "${for2_fødselsdato}",
+		"kjønn": "K",
+		"personstatus": [
+			{
+				"kode": "BOSA",
+				"fom": "now()-1Y"
+			}
+		],
+		"sivilstand": [
+			{
+				"kode": "UGIF"
+			}
+		]
+	},
+	"familierelasjoner": [
+		{
+			"rolle": "MORA",
+			"til": "${for1}"
+		},
+		{
+			"rolle": "BARN",
+			"til": "${for2}"
+		}
+	]
+}
