@@ -1,0 +1,32 @@
+{
+	"søker": {
+		"ident": "${for1}",
+		"fødselsdato": "${for1_fødselsdato}",
+		"kjønn": "K",
+		"geografiskTilknytning": {
+			"type": "Land",
+			"kode": "NOR"
+		},
+		"adresser": [
+			{
+				"@type": "ref",
+				"fom": "now() - P1Y",
+				"adresseType": "BOSTEDSADRESSE",
+				"land": "NOR"
+			}
+		],
+		"personstatus": [
+			{
+				"kode": "BOSA",
+                "fom": "now()-P1Y"
+			}
+		],
+		"sivilstand": [
+			{
+				"kode": "UGIF"
+			}
+		]
+	},
+	"familierelasjoner": [
+	]
+}

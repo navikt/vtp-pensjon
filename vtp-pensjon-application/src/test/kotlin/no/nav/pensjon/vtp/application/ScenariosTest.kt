@@ -26,7 +26,7 @@ class ScenariosTest @Autowired constructor(
                 assertNotNull(personopplysninger?.søker?.geografiskTilknytning)
                 val actual = personopplysninger?.familierelasjoner?.isEmpty()
                 assertNotNull(actual)
-                assertFalse(actual)
+                assertTrue(personopplysninger.annenPart == null || !actual)
             }
     }
 
