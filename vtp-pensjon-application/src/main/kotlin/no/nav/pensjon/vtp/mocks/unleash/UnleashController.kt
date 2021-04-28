@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.lang.System.currentTimeMillis
 import java.time.LocalDate.now
 import java.util.*
 import javax.servlet.http.Cookie
@@ -15,23 +14,29 @@ import javax.servlet.http.HttpServletResponse
 class UnleashController {
     @GetMapping("/api/client/features")
     fun features() = FeatureResource(
-        features = listOf(Feature(
-            name = "pensjon.tp-ejb-adapter.tp-nais",
-            description = "Controls the use of tjenestepensjon on nais / was",
-            enabled = true
-        ))
+        features = listOf(
+            Feature(
+                name = "pensjon.tp-ejb-adapter.tp-nais",
+                description = "Controls the use of tjenestepensjon on nais / was",
+                enabled = true
+            )
+        )
     )
 
     @PostMapping("/api/client/metrics")
     fun metrics(response: HttpServletResponse) = with(response) {
-        addCookie(Cookie(
-            "unleash-session",
-            "eyJub3dJbkhvdXJzIjo0NDk4OTZ9"
-        ))
-        addCookie(Cookie(
-            "unleash-session.sig",
-            "GkWsWE-O5XwV5rW11CCodmpkn8"
-        ))
+        addCookie(
+            Cookie(
+                "unleash-session",
+                "eyJub3dJbkhvdXJzIjo0NDk4OTZ9"
+            )
+        )
+        addCookie(
+            Cookie(
+                "unleash-session.sig",
+                "GkWsWE-O5XwV5rW11CCodmpkn8"
+            )
+        )
         status = 202
     }
 
