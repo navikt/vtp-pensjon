@@ -13,7 +13,7 @@ import javax.validation.Valid
 @RestController
 @Api(tags = ["Oppgave Mock"])
 @RequestMapping(
-    value = ["oppgave/api/v1/oppgaver"],
+    value = ["/rest/oppgave/api/v1/oppgaver"],
     produces = [MediaType.APPLICATION_JSON_VALUE],
     consumes = [MediaType.APPLICATION_JSON_VALUE]
 )
@@ -51,11 +51,11 @@ class OppgaveMockImpl {
             paramType = "header"
         ),
         ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header"),
-        ApiImplicitParam(name = "tema", dataType = "string", paramType = "query"),
+        ApiImplicitParam(name = "tema", dataType = "string", paramType = "query", allowMultiple = true),
         ApiImplicitParam(name = "oppgavetype", dataType = "string", paramType = "query"),
         ApiImplicitParam(name = "journalpostId", dataType = "string", paramType = "query"),
         ApiImplicitParam(name = "aktoerId", dataType = "string", paramType = "query")
     )
-    fun hentOppgaver(httpHeaders: HttpHeaders?) =
+    fun hentOppgaver(@RequestHeader httpHeaders: HttpHeaders?) =
         HentOppgaverResponse(antallTreffTotalt = oppgaver.values.size, oppgaver = oppgaver.values.toList())
 }
