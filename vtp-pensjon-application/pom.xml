@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -9,8 +9,6 @@
         <version>2.4.5</version>
         <relativePath/>
     </parent>
-
-    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>vtp-pensjon-application</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -79,8 +77,8 @@
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>frontend-react</artifactId>
-                <scope>provided</scope>
                 <version>${project.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <dependency>
@@ -94,8 +92,8 @@
                 <groupId>no.nav.foreldrepenger.kontrakter</groupId>
                 <artifactId>foreldrepenger-kontrakter-root</artifactId>
                 <version>5.0_20191210082234_0bd32f2</version>
-                <scope>import</scope>
                 <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>no.nav.foreldrepenger.kontrakter.topics</groupId>
@@ -249,7 +247,6 @@
                 <artifactId>dialog-v1-tjenestespesifikasjon</artifactId>
                 <version>${tjenestespesifikasjoner.version}</version>
             </dependency>
-
 
             <!-- Eksterne bibliotek -->
             <dependency>
@@ -599,10 +596,25 @@
     </repositories>
 
     <build>
-        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
-        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 
         <plugins>
+            <plugin>
+                <groupId>com.github.ekryd.sortpom</groupId>
+                <artifactId>sortpom-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <expandEmptyElements>false</expandEmptyElements>
+                    <nrOfIndentSpace>4</nrOfIndentSpace>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>sort</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>com.github.gantsign.maven</groupId>
                 <artifactId>ktlint-maven-plugin</artifactId>
@@ -753,10 +765,10 @@
                 <executions>
                     <execution>
                         <id>unpack-frontend</id>
-                        <phase>process-resources</phase>
                         <goals>
                             <goal>unpack</goal>
                         </goals>
+                        <phase>process-resources</phase>
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
@@ -777,5 +789,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
     </build>
 </project>
