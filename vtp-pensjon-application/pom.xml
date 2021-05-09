@@ -309,6 +309,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-access</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
         </dependency>
@@ -319,6 +323,10 @@
         <dependency>
             <groupId>com.unboundid</groupId>
             <artifactId>unboundid-ldapsdk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>io.swagger</groupId>
@@ -333,6 +341,10 @@
             <artifactId>jaxb-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+        </dependency>
+        <dependency>
             <groupId>no.nav.pensjon</groupId>
             <artifactId>pen-esb-wsclient-legacy</artifactId>
         </dependency>
@@ -345,21 +357,16 @@
             <artifactId>pselv-esb-wsclient-legacy</artifactId>
         </dependency>
         <dependency>
-            <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>frontend-react</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>no.nav.tjenester</groupId>
             <artifactId>aordningen-inntektsinformasjon-v1</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.tjenestespesifikasjoner</groupId>
-            <artifactId>arbeidsfordeling-v1-tjenestespesifikasjon</artifactId>
+            <artifactId>arbeidsevnevurdering-v1-tjenestespesifikasjon</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.tjenestespesifikasjoner</groupId>
-            <artifactId>arbeidsevnevurdering-v1-tjenestespesifikasjon</artifactId>
+            <artifactId>arbeidsfordeling-v1-tjenestespesifikasjon</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.tjenestespesifikasjoner</groupId>
@@ -544,16 +551,9 @@
             <artifactId>threeten-extra</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-access</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>frontend-react</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
