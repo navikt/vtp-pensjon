@@ -1,12 +1,14 @@
-FROM navikt/java:11
+FROM adoptopenjdk:11-jre-hotspot as builder
+ARG JAR_FILE=vtp-pensjon-application/target/*.jar
+COPY ${JAR_FILE} application.jar
+RUN java -Djarmode=layertools -jar application.jar extract
 
-USER root
-
-# Curl brukes av healthcheck i docker-compose.
-RUN apt-get -qq update && apt-get -qq -y install curl
-
-USER apprunner
-
-COPY vtp-pensjon-application/target/vtp-pensjon-application-1.0-SNAPSHOT.jar app.jar
+FROM adoptopenjdk:11-jre-hotspot
+COPY --from=builder dependencies/ ./
+COPY --from=builder snapshot-dependencies/ ./
+COPY --from=builder spring-boot-loader/ ./
+COPY --from=builder application/ ./
 
 EXPOSE 8636 8063 8060 8389 9093
+
+ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
