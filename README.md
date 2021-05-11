@@ -48,7 +48,7 @@ I modulen frontend (/frontend)
 * REST API dokumentasjon ligger på [Swagger UI](http://localhost:8060/rest/swagger-ui/index.html)  (Bruk HTTP for kall)
 
 
-## Sertifiakter for SSL/TLS
+## Sertifikater for SSL/TLS
 For lokal utvikling på Team Pensjon bruker vi key- og truststore som hentes ved oppstart fra prosjekt-mappen. 
 Kopien av vtp sin public-nøkkelen er importert inn i PEN og POPP sine lokale truststores.
 For å generere et nytt gyldig nøkkelpar og   se ytterligere instruksjoner, kjør `KeyStoreTool.main`.
