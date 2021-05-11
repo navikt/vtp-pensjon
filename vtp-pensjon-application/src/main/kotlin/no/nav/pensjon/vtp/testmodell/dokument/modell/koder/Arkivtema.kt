@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.testmodell.dokument.modell.koder
 
 /*
-Hentet fra: https://modapp.adeo.no/kodeverksklient/viskodeverk/Arkivtemaer/7?6
+Hentet fra: https://kodeverk-web.nais.preprod.local/kodeverksoversikt/kodeverk/Arkivtemaer
  */
 @Suppress("unused")
 enum class Arkivtema {
@@ -9,5 +9,7 @@ enum class Arkivtema {
     SYM,
     SYK,
     ENF,
-    OMS
+    OMS,
+    PEN,
+    UFO
 }
