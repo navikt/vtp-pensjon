@@ -11,5 +11,5 @@ data class HentOppgaverResponse(
 
     @JsonProperty("oppgaver")
     @ApiModelProperty(value = "Liste over oppgaver")
-    val oppgaver: List<ObjectNode>
+    val oppgaver: List<Oppgave>
 )

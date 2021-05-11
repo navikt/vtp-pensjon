@@ -1,14 +1,14 @@
 package no.nav.pensjon.vtp.mocks.oppgave.rest
 
-import com.fasterxml.jackson.databind.node.ObjectNode
-import io.swagger.annotations.*
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiImplicitParam
+import io.swagger.annotations.ApiImplicitParams
+import io.swagger.annotations.ApiOperation
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.concurrent.ConcurrentHashMap
-import javax.validation.Valid
 
 @RestController
 @Api(tags = ["Oppgave Mock"])
@@ -18,9 +18,9 @@ import javax.validation.Valid
     consumes = [MediaType.APPLICATION_JSON_VALUE]
 )
 class OppgaveMockImpl {
-    private val oppgaver: MutableMap<Long, ObjectNode> = ConcurrentHashMap()
+    private val oppgaver = mutableListOf<Oppgave>()
 
-    @PostMapping
+    @PutMapping
     @ApiOperation(value = "Opprett oppgave")
     @ApiImplicitParams(
         ApiImplicitParam(
@@ -32,12 +32,10 @@ class OppgaveMockImpl {
         ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
     )
     fun opprettOppgave(
-        @ApiParam(value = "Oppgaven som opprettes", required = true) oppgave: @Valid ObjectNode,
+        @RequestBody oppgave: Oppgave,
         @RequestHeader httpHeaders: HttpHeaders?
     ): ResponseEntity<*> {
-        val id = (oppgaver.size + 1).toLong()
-        oppgave.put("id", id)
-        oppgaver[id] = oppgave
+        oppgaver.add(oppgave)
         return ResponseEntity.status(HttpStatus.CREATED).body(oppgave)
     }
 
@@ -57,5 +55,5 @@ class OppgaveMockImpl {
         ApiImplicitParam(name = "aktoerId", dataType = "string", paramType = "query")
     )
     fun hentOppgaver(@RequestHeader httpHeaders: HttpHeaders?) =
-        HentOppgaverResponse(antallTreffTotalt = oppgaver.values.size, oppgaver = oppgaver.values.toList())
+        HentOppgaverResponse(antallTreffTotalt = oppgaver.size, oppgaver = oppgaver)
 }
