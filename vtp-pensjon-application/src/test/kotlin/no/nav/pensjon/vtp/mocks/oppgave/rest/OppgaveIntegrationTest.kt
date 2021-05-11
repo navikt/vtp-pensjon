@@ -35,18 +35,18 @@ class OppgaveIntegrationTest @Autowired constructor() {
             }
         """
 
-        this.mockMvc!!.perform(MockMvcRequestBuilders.put("/rest/oppgave/api/v1/oppgaver")
-            .content(opprettOppgaveRequest)
-            .contentType(MediaType.APPLICATION_JSON))
+        this.mockMvc!!.perform(
+            MockMvcRequestBuilders.put("/rest/oppgave/api/v1/oppgaver")
+                .content(opprettOppgaveRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful)
 
-
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/rest/oppgave/api/v1/oppgaver")
-            .contentType(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.get("/rest/oppgave/api/v1/oppgaver")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful)
             .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("P9000")))
-
     }
-
-
 }
