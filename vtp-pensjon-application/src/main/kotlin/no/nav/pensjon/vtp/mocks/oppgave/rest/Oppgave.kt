@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.oppgave.rest
 
 class Oppgave(
-    val id: Long,
+    var id: Long? = null,
     val tildeltEnhetsnr: String? = null,
     val endretAvEnhetsnr: String? = null,
     val opprettetAvEnhetsnr: String? = null,

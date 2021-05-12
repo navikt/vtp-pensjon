@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*
 )
 class OppgaveMockImpl {
     private val oppgaver = mutableListOf<Oppgave>()
+    private var oppgaveId = 1L
 
     @PutMapping
     @ApiOperation(value = "Opprett oppgave")
@@ -35,6 +36,7 @@ class OppgaveMockImpl {
         @RequestBody oppgave: Oppgave,
         @RequestHeader httpHeaders: HttpHeaders?
     ): ResponseEntity<*> {
+        oppgave.id = oppgaveId++
         oppgaver.add(oppgave)
         return ResponseEntity.status(HttpStatus.CREATED).body(oppgave)
     }
@@ -56,4 +58,10 @@ class OppgaveMockImpl {
     )
     fun hentOppgaver(@RequestHeader httpHeaders: HttpHeaders?) =
         HentOppgaverResponse(antallTreffTotalt = oppgaver.size, oppgaver = oppgaver)
+
+    @GetMapping("/{oppgaveid}")
+    @ApiOperation(value = "Hent oppgave")
+    fun hentOppgave(
+        @PathVariable("oppgaveid") oppgaveId: Long
+    ) = oppgaver.first { oppgave -> oppgave.id == oppgaveId }
 }
