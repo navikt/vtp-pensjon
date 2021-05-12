@@ -62,5 +62,6 @@ class OppgaveMockImpl {
     @GetMapping("/{oppgaveid}")
     @ApiOperation(value = "Hent oppgave")
     fun hentOppgave(
-        @PathVariable("oppgaveid") oppgaveId: Long) = oppgaver.first { oppgave -> oppgave.id == oppgaveId }
+        @PathVariable("oppgaveid") oppgaveId: Long
+    ) = oppgaver.first { oppgave -> oppgave.id == oppgaveId }
 }
