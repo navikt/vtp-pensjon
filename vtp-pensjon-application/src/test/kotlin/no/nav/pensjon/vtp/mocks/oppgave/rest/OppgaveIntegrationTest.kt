@@ -43,7 +43,14 @@ class OppgaveIntegrationTest @Autowired constructor() {
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful)
 
         this.mockMvc.perform(
-            MockMvcRequestBuilders.get("/rest/oppgave/api/v1/oppgaver")
+            MockMvcRequestBuilders.put("/rest/oppgave/api/v1/oppgaver")
+                .content(opprettOppgaveRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful)
+
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.get("/rest/oppgave/api/v1/oppgaver/2")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful)
