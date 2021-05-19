@@ -22,7 +22,7 @@ function asJson(content: string): JSX.Element {
       displayDataTypes={false}
       displayObjectSize={false}
       iconStyle={"triangle"}
-      style={{fontSize: "1rem"}}
+      style={{ fontSize: "1rem" }}
       theme={"isotope"}
     />
   );
@@ -57,7 +57,7 @@ export default function PrettyPrintedPayloadBody(
 ): JSX.Element {
   const content = props.content;
   if (content === undefined || content === null || content.length === 0) {
-    return <i style={{color: "#FF0000"}}>No content</i>
+    return <i style={{ color: "#FF0000" }}>No content</i>;
   }
 
   try {
