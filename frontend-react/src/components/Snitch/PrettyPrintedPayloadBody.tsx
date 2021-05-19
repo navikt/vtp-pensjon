@@ -2,7 +2,6 @@ import { parse as parseContentType } from "content-type";
 import React from "react";
 import xmlFormatter from "xml-formatter";
 import ReactJson from "react-json-view";
-import CSS from "csstype";
 
 function decodeBody(value: string): string {
   return decodeURIComponent(
@@ -16,10 +15,6 @@ function decodeBody(value: string): string {
 }
 
 function asJson(content: string): JSX.Element {
-  const style: CSS.Properties = {
-    fontSize: "1rem",
-  };
-
   return (
     <ReactJson
       src={JSON.parse(content)}
@@ -27,7 +22,7 @@ function asJson(content: string): JSX.Element {
       displayDataTypes={false}
       displayObjectSize={false}
       iconStyle={"triangle"}
-      style={style}
+      style={{fontSize: "1rem"}}
       theme={"isotope"}
     />
   );
@@ -61,6 +56,10 @@ export default function PrettyPrintedPayloadBody(
   props: BodyProps
 ): JSX.Element {
   const content = props.content;
+  if (content === undefined || content === null || content.length === 0) {
+    return <i style={{color: "#FF0000"}}>No content</i>
+  }
+
   try {
     const contentType = parseContentType(props.contentType).type;
     switch (contentType) {
