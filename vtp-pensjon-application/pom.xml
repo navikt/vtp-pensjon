@@ -137,6 +137,11 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.tjenestespesifikasjoner</groupId>
+                <artifactId>behandleArbeidOgAktivitetOppgave-v1-tjenestespesifikasjon</artifactId>
+                <version>${tjenestespesifikasjoner.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.tjenestespesifikasjoner</groupId>
                 <artifactId>arbeidsevnevurdering-v1-tjenestespesifikasjon</artifactId>
                 <version>${tjenestespesifikasjoner.version}</version>
             </dependency>
@@ -476,6 +481,10 @@
         <dependency>
             <groupId>no.nav.tjenestespesifikasjoner</groupId>
             <artifactId>ytelseskontrakt-v3-tjenestespesifikasjon</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.tjenestespesifikasjoner</groupId>
+            <artifactId>behandleArbeidOgAktivitetOppgave-v1-tjenestespesifikasjon</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
