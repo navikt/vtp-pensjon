@@ -8,7 +8,6 @@ on:
     types: [opened, synchronize, reopened]
 
 env:
-  IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/vtp-pensjon
   IMAGE_BASE_GHCR: ghcr.io/${{ github.repository }}/vtp-pensjon
 
 jobs:
@@ -56,8 +55,6 @@ jobs:
           export DOCKER_BUILDKIT=1
 
           docker build --pull \
-            --tag ${IMAGE_BASE}:${VERSION} \
-            --tag ${IMAGE_BASE}:latest \
             --tag ${IMAGE_BASE_GHCR}:${VERSION} \
             --tag ${IMAGE_BASE_GHCR}:latest \
             .
@@ -66,9 +63,6 @@ jobs:
       - name: Push Docker image
         if: github.ref == 'refs/heads/main'
         run: |
-          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
-          docker push ${IMAGE_BASE}:latest
-          docker push ${IMAGE_BASE}:${VERSION}
           docker login ghcr.io -u ${GHCR_PUSH_USERNAME} -p ${GHCR_PUSH_TOKEN}
           docker push ${IMAGE_BASE_GHCR}:latest
           docker push ${IMAGE_BASE_GHCR}:${VERSION}
