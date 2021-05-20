@@ -32,10 +32,10 @@ export default function ActiveScenarios(props: ActiveScenarioProps) {
             <a
               href={
                 "http://localhost:9080/psak/brukeroversikt/fnr=" +
-                scenario.personopplysninger?.søkerIdent
+                scenario.personopplysninger?.soekerIdent
               }
             >
-              {scenario.personopplysninger?.søkerIdent}
+              {scenario.personopplysninger?.soekerIdent}
             </a>
           </li>
         </ul>

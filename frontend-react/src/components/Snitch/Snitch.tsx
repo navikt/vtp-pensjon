@@ -20,10 +20,8 @@ export function badgeVariant(status: number): Variant {
 }
 
 export default () => {
-  const [
-    selectedRequest,
-    setSelectedRequest,
-  ] = useState<RequestResponse | null>(null);
+  const [selectedRequest, setSelectedRequest] =
+    useState<RequestResponse | null>(null);
 
   const requests = useSnitchDataStream();
 

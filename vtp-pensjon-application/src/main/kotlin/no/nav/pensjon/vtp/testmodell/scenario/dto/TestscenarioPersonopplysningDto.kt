@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
 
 data class TestscenarioPersonopplysningDto(
-    @JsonProperty("søkerIdent")
-    val søkerIdent: String? = null,
+    @JsonProperty("soekerIdent")
+    val soekerIdent: String? = null,
 
     @JsonProperty("annenpartIdent")
     val annenpartIdent: String? = null,
 
-    @JsonProperty("søkerAktørIdent")
-    val søkerAktørIdent: String? = null,
+    @JsonProperty("soekerAktoerIdent")
+    val soekerAktoerIdent: String? = null,
 
-    @JsonProperty("annenpartAktørIdent")
-    val annenPartAktørIdent: String? = null,
+    @JsonProperty("annenPartAktoerIdent")
+    val annenPartAktoerIdent: String? = null,
 
     @JsonProperty("fødselsdato")
     val fødselsdato: LocalDate? = null

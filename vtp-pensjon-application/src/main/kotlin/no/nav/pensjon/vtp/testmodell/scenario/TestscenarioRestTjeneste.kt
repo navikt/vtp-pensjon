@@ -116,10 +116,10 @@ class TestscenarioRestTjeneste(
             testscenarioId = testscenario.id,
             variabler = testscenario.vars,
             personopplysninger = TestscenarioPersonopplysningDto(
-                søkerIdent = testscenario.personopplysninger.søker.ident,
+                soekerIdent = testscenario.personopplysninger.søker.ident,
                 annenpartIdent = testscenario.personopplysninger.annenPart?.ident,
-                søkerAktørIdent = testscenario.personopplysninger.søker.aktørIdent,
-                annenPartAktørIdent = testscenario.personopplysninger.annenPart?.aktørIdent,
+                soekerAktoerIdent = testscenario.personopplysninger.søker.aktørIdent,
+                annenPartAktoerIdent = testscenario.personopplysninger.annenPart?.aktørIdent,
                 fødselsdato = testscenario.personopplysninger.søker.fødselsdato
             ),
             scenariodataDto = TestscenariodataDto(
