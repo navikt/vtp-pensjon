@@ -21,9 +21,9 @@ private const val GJELDENDE = "gjeldende"
 @Api(tags = ["aktoerregister"])
 @RequestMapping("/rest/psak/aktoerregister/api/v1/identer")
 class PsakAktoerIdentMock {
-    // TODO (TEAM FAMILIE) Lag mock-responser fra scenario NOSONAR
-    private val personIdentMock = "12345678910"
+    private val personIdentMock = "01015746161"
     private val aktoerIdMock = "1234567891011"
+
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getIdenter(
         @RequestHeader(NAV_IDENTER_HEADER_KEY) requestIdenter: Set<String>,
@@ -34,14 +34,14 @@ class PsakAktoerIdentMock {
 
         val identinfo: Identinfo = if (AKTOERID_IDENTGRUPPE == identgruppe) {
             Identinfo(
-                ident = personIdentMock,
-                identgruppe = PERSONIDENT_IDENTGRUPPE,
+                ident = aktoerIdMock,
+                identgruppe = AKTOERID_IDENTGRUPPE,
                 gjeldende = true
             )
         } else {
             Identinfo(
-                ident = aktoerIdMock,
-                identgruppe = AKTOERID_IDENTGRUPPE,
+                ident = personIdentMock,
+                identgruppe = PERSONIDENT_IDENTGRUPPE,
                 gjeldende = true
             )
         }

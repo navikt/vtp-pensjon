@@ -36,14 +36,14 @@ class OppgaveIntegrationTest @Autowired constructor() {
         """
 
         this.mockMvc!!.perform(
-            MockMvcRequestBuilders.put("/rest/oppgave/api/v1/oppgaver")
+            MockMvcRequestBuilders.post("/rest/oppgave/api/v1/oppgaver")
                 .content(opprettOppgaveRequest)
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful)
 
         this.mockMvc.perform(
-            MockMvcRequestBuilders.put("/rest/oppgave/api/v1/oppgaver")
+            MockMvcRequestBuilders.post("/rest/oppgave/api/v1/oppgaver")
                 .content(opprettOppgaveRequest)
                 .contentType(MediaType.APPLICATION_JSON)
         )
