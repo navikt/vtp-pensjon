@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.mocks.psak
 
 import no.nav.inf.psak.person.*
+import no.nav.lib.pen.psakpselv.asbo.ASBOPenTomRespons
 import no.nav.lib.pen.psakpselv.asbo.person.*
 import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
@@ -41,10 +42,33 @@ class PsakPersonServiceMockImpl(
         }
     }
 
-    override fun lagreSprak(lagreSprakRequest: ASBOPenPerson) = throw NotImplementedException()
+    @WebMethod
+    @RequestWrapper(
+        localName = "lagreSprak",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreSprak"
+    )
+    @ResponseWrapper(
+        localName = "lagreSprakResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreSprakResponse"
+    )
+    @WebResult(name = "lagreSprakResponse", targetNamespace = "")
+    override fun lagreSprak(lagreSprakRequest: ASBOPenPerson) = ASBOPenTomRespons()
 
-    override fun opprettSamboerforhold(opprettSamboerforholdRequest: ASBOPenPerson) =
-        throw NotImplementedException()
+    @WebMethod
+    @RequestWrapper(
+        localName = "opprettSamboerforhold",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.OpprettSamboerforhold"
+    )
+    @ResponseWrapper(
+        localName = "opprettSamboerforholdResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.OpprettSamboerforholdResponse"
+    )
+    @WebResult(name = "opprettSamboerforholdResponse", targetNamespace = "")
+    override fun opprettSamboerforhold(opprettSamboerforholdRequest: ASBOPenPerson) = ASBOPenTomRespons()
 
     @WebMethod
     @RequestWrapper(
@@ -86,7 +110,19 @@ class PsakPersonServiceMockImpl(
     override fun slettAdresse(slettAdresseRequest: ASBOPenSlettAdresseRequest) =
         throw NotImplementedException()
 
-    override fun lagreEpost(lagreEpostRequest: ASBOPenPerson) = throw NotImplementedException()
+    @WebMethod
+    @RequestWrapper(
+        localName = "lagreEpost",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreEpost"
+    )
+    @ResponseWrapper(
+        localName = "lagreEpostResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreEpostResponse"
+    )
+    @WebResult(name = "lagreEpostResponse", targetNamespace = "")
+    override fun lagreEpost(lagreEpostRequest: ASBOPenPerson) = ASBOPenTomRespons()
 
     @WebMethod
     @RequestWrapper(
@@ -124,14 +160,36 @@ class PsakPersonServiceMockImpl(
 
     override fun lagreDodsdato(lagreDodsdatoRequest: ASBOPenPerson) = throw NotImplementedException()
 
-    override fun lagreAdresse(lagreAdresseRequest: ASBOPenLagreAdresseRequest) =
-        throw NotImplementedException()
+    @WebMethod
+    @RequestWrapper(
+        localName = "lagreAdresse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreAdresse"
+    )
+    @ResponseWrapper(
+        localName = "lagreAdresseResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreAdresseResponse"
+    )
+    @WebResult(name = "lagreAdresseResponse", targetNamespace = "")
+    override fun lagreAdresse(lagreAdresseRequest: ASBOPenLagreAdresseRequest) = ASBOPenTomRespons()
 
     override fun lagreStatsborgerskap(lagreStatsborgerskapRequest: ASBOPenPerson) =
         throw NotImplementedException()
 
-    override fun lagreTelefonnumre(lagreTelefonnumreRequest: ASBOPenLagreTelefonnumreRequest) =
-        throw NotImplementedException()
+    @WebMethod
+    @RequestWrapper(
+        localName = "lagreTelefonnumre",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreTelefonnumre"
+    )
+    @ResponseWrapper(
+        localName = "lagreTelefonnumreResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreTelefonnumreResponse"
+    )
+    @WebResult(name = "lagreTelefonnumreResponse", targetNamespace = "")
+    override fun lagreTelefonnumre(lagreTelefonnumreRequest: ASBOPenLagreTelefonnumreRequest) = ASBOPenTomRespons()
 
     override fun lagreFamilierelasjon(lagreFamilierelasjonRequest: ASBOPenPerson) =
         throw NotImplementedException()
@@ -188,11 +246,33 @@ class PsakPersonServiceMockImpl(
     ) = psakpselvPersonAdapter.getASBOPenPerson(hentPersonUtlandRequest.fodselsnummer)
         ?: throw HentPersonUtlandFaultPenPersonIkkeFunnetMsg()
 
-    override fun lagreBrukerprofil(lagreBrukerprofilRequest: ASBOPenPerson) =
-        throw NotImplementedException()
+    @WebMethod
+    @RequestWrapper(
+        localName = "lagreBrukerprofil",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreBrukerprofil"
+    )
+    @ResponseWrapper(
+        localName = "lagreBrukerprofilResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreBrukerprofilResponse"
+    )
+    @WebResult(name = "lagreBrukerprofilResponse", targetNamespace = "")
+    override fun lagreBrukerprofil(lagreBrukerprofilRequest: ASBOPenPerson) = ASBOPenTomRespons()
 
-    override fun lagreKontoinformasjon(lagreKontoinformasjonRequest: ASBOPenPerson) =
-        throw NotImplementedException()
+    @WebMethod
+    @RequestWrapper(
+        localName = "lagreKontoinformasjon",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreKontoinformasjon"
+    )
+    @ResponseWrapper(
+        localName = "lagreKontoinformasjonResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreKontoinformasjonResponse"
+    )
+    @WebResult(name = "lagrekontoinformasjonResponse", targetNamespace = "")
+    override fun lagreKontoinformasjon(lagreKontoinformasjonRequest: ASBOPenPerson) = ASBOPenTomRespons()
 
     @WebMethod
     @RequestWrapper(
@@ -248,9 +328,31 @@ class PsakPersonServiceMockImpl(
     ) = psakpselvPersonAdapter.getASBOPenPerson(hentPersonRequest.person.fodselsnummer)
         ?: throw HentPersonFaultPenPersonIkkeFunnetMsg()
 
-    override fun lagreSamboerforhold(lagreSamboerforholdRequest: ASBOPenPerson) =
-        throw NotImplementedException()
+    @WebMethod
+    @RequestWrapper(
+        localName = "lagreSamboerforhold",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreSamboerforhold"
+    )
+    @ResponseWrapper(
+        localName = "lagreSamboerforholdResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.LagreSamboerforholdResponse"
+    )
+    @WebResult(name = "lagreSamboerforholdResponse", targetNamespace = "")
+    override fun lagreSamboerforhold(lagreSamboerforholdRequest: ASBOPenPerson) = ASBOPenTomRespons()
 
-    override fun slettSamboerforhold(slettSamboerforholdRequest: ASBOPenPerson) =
-        throw NotImplementedException()
+    @WebMethod
+    @RequestWrapper(
+        localName = "slettSamboerforhold",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.SlettSamboerforhold"
+    )
+    @ResponseWrapper(
+        localName = "slettSamboerforholdResponse",
+        targetNamespace = "http://nav-cons-pen-psak-person/no/nav/inf",
+        className = "no.nav.inf.psak.person.SlettSamboerforholdResponse"
+    )
+    @WebResult(name = "slettSamboerforholdResponse", targetNamespace = "")
+    override fun slettSamboerforhold(slettSamboerforholdRequest: ASBOPenPerson) = ASBOPenTomRespons()
 }
