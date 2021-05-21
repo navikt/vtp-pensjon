@@ -5,6 +5,7 @@ import no.nav.pensjon.vtp.testmodell.kodeverk.Sivilstander
 import no.nav.pensjon.vtp.testmodell.load.PersonTemplate
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonNavn
 import java.util.*
+import java.util.Locale.getDefault
 
 object FiktivtNavn {
     private val etternavn = loadNames("/basedata/etternavn.txt")
@@ -19,7 +20,7 @@ object FiktivtNavn {
         FiktivtNavn::class.java.getResourceAsStream(resourceName)
             .bufferedReader()
             .readLines()
-            .map { it.capitalize() }
+            .map { navn -> navn.replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() } }
 
     fun getRandomName(kjønn: Kjønn): PersonNavn {
         return if (kjønn == Kjønn.K) {
