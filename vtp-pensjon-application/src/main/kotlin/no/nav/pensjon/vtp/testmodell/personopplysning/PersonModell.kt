@@ -70,6 +70,6 @@ data class PersonModell(
     }
 
     fun getSpråk2Bokstaver(): String {
-        return språk?.substring(0, 2)?.toUpperCase(getDefault()) ?: NB
+        return språk?.substring(0, 2)?.uppercase(getDefault()) ?: NB
     }
 }
