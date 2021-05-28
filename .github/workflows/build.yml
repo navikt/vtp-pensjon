@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Cache Maven packages
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v2.1.6
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -27,7 +27,7 @@ jobs:
             ${{ runner.os }}-maven-
 
 #      - name: Cache Docker layers
-#        uses: actions/cache@v2.1.5
+#        uses: actions/cache@v2.1.6
 #        with:
 #          path: /tmp/.buildx-cache
 #          key: ${{ runner.os }}-buildx-${{ github.sha }}
