@@ -3,6 +3,8 @@ package no.nav.pensjon.vtp.auth
 import io.swagger.annotations.Api
 import org.apache.commons.codec.binary.Base64.encodeBase64String
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType
+import org.jose4j.jwt.NumericDate.fromSeconds
+import org.jose4j.jwt.NumericDate.now
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus.OK
 import org.springframework.http.MediaType
@@ -42,14 +44,17 @@ class STSRestTjeneste(private val jsonWebKeySupport: JsonWebKeySupport, private 
         @RequestParam grant_type: String?,
         @RequestParam scope: String?
     ): UserTokenResponse {
+        val expiresIn = 3600L * 6L
+
         return UserTokenResponse(
             access_token = OidcTokenGenerator(
                 jsonWebKeySupport = jsonWebKeySupport,
                 subject = "dummyBruker",
                 nonce = "",
-                issuer = issuer
+                issuer = issuer,
+                expiration = fromSeconds(now().value + expiresIn)
             ).create(),
-            expires_in = 600000 * 1000L,
+            expires_in = expiresIn,
             token_type = "Bearer"
         )
     }
