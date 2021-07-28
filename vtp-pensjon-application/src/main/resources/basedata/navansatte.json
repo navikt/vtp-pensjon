@@ -1,5 +1,17 @@
 [
   {
+    "cn": "utenenhet",
+    "givenname": "UtenEnhet",
+    "sn": "Saksbehandler",
+    "displayName": "UtenEnhet Saksbehandler",
+    "email":"utenenhet.saksbehandler@example.com",
+    "enheter": [],
+    "groups": [
+      "0000-GA-fpsak-saksbehandler",
+      "0000-GA-PENSJON_SAKSBEHANDLER"
+    ]
+  },
+  {
     "cn": "saksbeh",
     "givenname": "Sara",
     "sn": "Saksbehandler",

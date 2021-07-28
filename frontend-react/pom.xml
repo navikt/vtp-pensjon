@@ -17,6 +17,7 @@
 
     <properties>
         <frontend.skip>false</frontend.skip>
+        <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
     </properties>
 
     <build>
@@ -80,6 +81,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>copy-frontend-resources</id>
