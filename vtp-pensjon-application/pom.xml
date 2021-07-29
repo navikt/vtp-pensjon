@@ -76,7 +76,7 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
-                <artifactId>frontend-react</artifactId>
+                <artifactId>vtp-pensjon-frontend</artifactId>
                 <version>${project.version}</version>
                 <scope>provided</scope>
             </dependency>
@@ -561,7 +561,7 @@
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon.vtp</groupId>
-            <artifactId>frontend-react</artifactId>
+            <artifactId>vtp-pensjon-frontend</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -782,7 +782,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>no.nav.pensjon.vtp</groupId>
-                                    <artifactId>frontend-react</artifactId>
+                                    <artifactId>vtp-pensjon-frontend</artifactId>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.outputDirectory}</outputDirectory>
