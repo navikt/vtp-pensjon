@@ -45,7 +45,7 @@ I modulen frontend (/frontend)
 
 ## Opprette testdata 
 * Opprett testdata ved å legge scenario i /model/scenarios. Innledende tall brukes som referanse for å få instansiert scenario.
-* REST API dokumentasjon ligger på [Swagger UI](http://localhost:8060/rest/swagger-ui/index.html)  (Bruk HTTP for kall)
+* REST API dokumentasjon ligger på [Swagger UI](http://localhost:8060/swagger-ui/)  (Bruk HTTP for kall)
 
 
 ## Sertifikater for SSL/TLS
