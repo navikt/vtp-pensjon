@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.auth
+package no.nav.pensjon.vtp.auth.sts
 
 import org.opensaml.security.x509.X509Credential
 import org.springframework.stereotype.Component
@@ -6,8 +6,6 @@ import org.w3c.dom.Element
 import org.xml.sax.InputSource
 import java.io.StringReader
 import java.io.StringWriter
-import java.lang.Exception
-import java.lang.IllegalArgumentException
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -20,7 +18,6 @@ import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
-import kotlin.Throws
 
 @Component
 class SamlTokenGenerator(private val x509Credential: X509Credential) {

@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-@Api(tags = ["AzureAd"])
 @RequestMapping("/rest/AzureAd")
 class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private val jsonWebKeySupport: JsonWebKeySupport) {
     @GetMapping(value = ["/isAlive"], produces = [TEXT_HTML_VALUE])
@@ -37,21 +36,10 @@ class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private 
             profile = profile
         )
 
-    @GetMapping(value = ["/{tenant}/discovery/v2.0/keys"], produces = [APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "azureAd/discovery/keys", notes = "Mock impl av Azure AD jwk_uri")
+    @GetMapping(value = ["/{tenant}/discovery/v2.0/keys"])
     fun authorize() = jsonWebKeySupport.jwks()
 
-    @PostMapping(value = ["/{tenant}/mock-token"], produces = [APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "azureAd/mock-token", notes = "Generer Azure AD-token for testing")
-    fun mockToken(
-        @PathVariable("tenant") tenant: String,
-        @RequestParam("client_id") clientId: String,
-    ): ResponseEntity<*> {
-        return ok(createIdToken("lukesky;foobar", tenant, clientId))
-    }
-
-    @PostMapping(value = ["/{tenant}/oauth2/v2.0/token"], produces = [APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "azureAd/access_token", notes = "Mock impl av Azure AD access_token")
+    @PostMapping(value = ["/{tenant}/oauth2/v2.0/token"])
     fun accessToken(
         req: HttpServletRequest,
         @PathVariable("tenant") tenant: String,

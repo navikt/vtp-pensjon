@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.auth
+package no.nav.pensjon.vtp.auth.abac
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.swagger.annotations.Api

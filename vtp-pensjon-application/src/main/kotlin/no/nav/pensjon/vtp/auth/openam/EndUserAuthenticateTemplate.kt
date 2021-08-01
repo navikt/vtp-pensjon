@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.auth
+package no.nav.pensjon.vtp.auth.openam
 
 data class Name(
     val name: String,

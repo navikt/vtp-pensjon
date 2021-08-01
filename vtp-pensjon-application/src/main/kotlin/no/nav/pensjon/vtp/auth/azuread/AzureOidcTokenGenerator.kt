@@ -5,8 +5,6 @@ import org.apache.commons.codec.digest.DigestUtils
 import org.jose4j.jwt.JwtClaims
 import org.jose4j.jwt.NumericDate
 import org.springframework.util.ObjectUtils
-import java.util.*
-import kotlin.collections.ArrayList
 
 fun azureOidcToken(
     jsonWebKeySupport: JsonWebKeySupport,
