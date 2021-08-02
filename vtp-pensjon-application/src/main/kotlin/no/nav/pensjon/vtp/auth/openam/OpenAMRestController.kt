@@ -88,21 +88,22 @@ class OpenAMRestController(
                         accessToken = "access:$code"
                     )
                 )
-                "refresh_token" -> refresh_token
-                    ?.let {
-                        if (!refresh_token.startsWith("refresh:")) {
-                            status(FORBIDDEN).body("Invalid refresh token $refresh_token")
-                        } else {
-                            ok(
-                                Oauth2AccessTokenResponse(
-                                    idToken = createIdToken(clientId, refresh_token.substring(8)),
-                                    refreshToken = "refresh:${refresh_token.substring(8)}",
-                                    accessToken = "access:${refresh_token.substring(8)}"
+                "refresh_token" ->
+                    refresh_token
+                        ?.let {
+                            if (!refresh_token.startsWith("refresh:")) {
+                                status(FORBIDDEN).body("Invalid refresh token $refresh_token")
+                            } else {
+                                ok(
+                                    Oauth2AccessTokenResponse(
+                                        idToken = createIdToken(clientId, refresh_token.substring(8)),
+                                        refreshToken = "refresh:${refresh_token.substring(8)}",
+                                        accessToken = "access:${refresh_token.substring(8)}"
+                                    )
                                 )
-                            )
+                            }
                         }
-                    }
-                    ?: badRequest().body("Missing required parameter 'request_token'")
+                        ?: badRequest().body("Missing required parameter 'request_token'")
                 else -> badRequest().body("Unknown grant_type $grant_type")
             }
         }

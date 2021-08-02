@@ -48,16 +48,7 @@ type State =
     };
 
 function imageUrl(user: string): string {
-  switch (user) {
-    case "darthvad":
-      return "/assets/darthvad.jpg";
-    case "prinleia":
-      return "/assets/prinleia.jpg";
-    case "lukesky":
-      return "/assets/lukesky.png";
-    default:
-      return "/assets/saksbehandler.svg";
-  }
+  return "/assets/saksbehandler.svg";
 }
 
 const Login: React.FC<{ usersUrl: string; queryParams: string }> = (props) => {
