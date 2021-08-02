@@ -117,7 +117,11 @@ class OpenAMRestController(
             nonce = if (codeData.size > 1) codeData[1] else null,
             issuer = issuer,
             aud = listOf(clientId),
-            expiration = now().apply { addSeconds(3600L * 6L) }
+            expiration = now().apply { addSeconds(3600L * 6L) },
+            additionalClaims = mapOf(
+                "azp" to "OIDC",
+                "acr" to "Level4"
+            ),
         )
     }
 
@@ -129,7 +133,7 @@ class OpenAMRestController(
 
     @GetMapping(value = ["/oauth2/connect/jwk_uri"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "oauth2/connect/jwk_uri", notes = "Mock impl av Oauth2 jwk_uri")
-    fun authorize(req: HttpServletRequest?) = oidcTokenGenerator.jwks()
+    fun authorize() = oidcTokenGenerator.jwks()
 
     /**
      * brukes til autentisere bruker slik at en slipper å autentisere senere. OpenAM mikk-makk .

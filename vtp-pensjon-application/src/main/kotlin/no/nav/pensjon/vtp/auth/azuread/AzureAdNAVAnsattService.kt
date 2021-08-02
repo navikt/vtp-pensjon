@@ -18,7 +18,10 @@ import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("/rest/AzureAd")
-class AzureAdNAVAnsattService(private val ansatteIndeks: AnsatteIndeks, private val jsonWebKeySupport: JsonWebKeySupport) {
+class AzureAdNAVAnsattService(
+    private val ansatteIndeks: AnsatteIndeks,
+    private val jsonWebKeySupport: JsonWebKeySupport
+) {
     @GetMapping(value = ["/isAlive"], produces = [TEXT_HTML_VALUE])
     fun isAliveMock() = ok("Azure AD is OK")
 

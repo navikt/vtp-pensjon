@@ -11,16 +11,13 @@ class OidcTokenGenerator(
     private val jsonWebKeySupport: JsonWebKeySupport
 ) {
     fun oidcToken(
-        subject: String,
+        subject: String?,
         nonce: String? = null,
         issuer: String,
         aud: List<String>,
         expiration: NumericDate,
         issuedAt: NumericDate = now(),
-        additionalClaims: Map<String, String> = mapOf(
-            "azp" to "OIDC",
-            "acr" to "Level4"
-        )
+        additionalClaims: Map<String, Any>
     ): String {
         return jsonWebKeySupport.createRS256Token(
             JwtClaims().apply {
@@ -28,7 +25,7 @@ class OidcTokenGenerator(
                 this.issuer = issuer
                 this.expirationTime = expiration
                 this.issuedAt = issuedAt
-                this.subject = subject
+                if (subject != null) this.subject = subject
 
                 setGeneratedJwtId()
 
@@ -37,7 +34,7 @@ class OidcTokenGenerator(
                 }
 
                 for ((key, value) in additionalClaims) {
-                    setStringClaim(key, value)
+                    setClaim(key, value)
                 }
             }.toJson()
         ).compactSerialization

@@ -52,7 +52,10 @@ class OldFashionedMock(
                         nonce = null,
                         issuer = issuer,
                         aud = listOf("OIDC"),
-                        expiration = now().apply { addSeconds(3600L * 6L) }
+                        expiration = now().apply { addSeconds(3600L * 6L) },
+                        additionalClaims = mapOf(
+                            "azp" to "OIDC"
+                        ),
                     )
                 )
             )

@@ -9,16 +9,21 @@ import {
 } from "react-bootstrap";
 import { TokenDisplay } from "./TokenDisplay";
 import { CommandDisplay } from "./CommandDisplay";
-import {
-  azureAdResponseMapper,
-  generateAzureADRequest,
-  generateOpenAMRequest,
-  generateStsRequest,
-  openAmResponseMapper,
-  RequestParameters,
-  stsResponeMapper,
-} from "./RequestSuppliers";
 import { generateCommand } from "./CommandLineGenerator";
+import {
+  maskinportenRequestSupplier,
+  maskinportenResponseMapper,
+} from "./support/MaskinportenSupport";
+import {
+  azureADRequestSupplier,
+  azureAdResponseMapper,
+} from "./support/AzureADSupport";
+import {
+  openAMRequestSupplier,
+  openAmResponseMapper,
+} from "./support/OpenAMSupport";
+import { stsRequestSupplier, stsResponseMapper } from "./support/StsSupport";
+import { RequestParameters } from "./RequestParameters";
 
 type State =
   | {
@@ -36,35 +41,44 @@ type State =
       message: string;
     };
 
+interface Foo {
+  default?: string;
+}
+
 function TokenPanel(props: {
-  useUsername: boolean;
-  useClientId: boolean;
-  useTenantId: boolean;
+  clientId?: Foo;
+  resource?: Foo;
+  scope?: Foo;
+  tenantId?: Foo;
+  username?: Foo;
   requestSupplier: (
     requestParameters: RequestParameters
   ) => Request | undefined;
   responseMapper: (response: Response) => Promise<string>;
-  defaultClientId: string | undefined;
-  defaultUsername: string | undefined;
-  defaultTenantId: string | undefined;
 }) {
   const [state, setState] = useState<State>({ type: "NOT_LOADED" });
   const [clientId, setClientId] = useState<string | undefined>(
-    props.defaultClientId
+    props.clientId?.default
   );
   const [username, setUsername] = useState<string | undefined>(
-    props.defaultUsername
+    props.username?.default
   );
+  const [resource, setResource] = useState<string | undefined>(
+    props.resource?.default
+  );
+  const [scope, setScope] = useState<string | undefined>(props.scope?.default);
   const [tenantId, setTenantId] = useState<string | undefined>(
-    props.defaultTenantId
+    props.tenantId?.default
   );
   const [command, setCommand] = useState<string | undefined>(undefined);
 
   function getRequest() {
     return props.requestSupplier({
-      username: username,
       clientId: clientId,
+      resource: resource,
+      scope: scope,
       tenantId: tenantId,
+      username: username,
     });
   }
 
@@ -116,7 +130,7 @@ function TokenPanel(props: {
   return (
     <>
       <Form onSubmit={handleSubmit} style={{ marginBottom: "12px" }}>
-        {props.useTenantId && (
+        {props.tenantId && (
           <Form.Group className="mb-3" controlId="tenantId">
             <Form.Label>TenantId</Form.Label>
             <FormControl
@@ -128,7 +142,7 @@ function TokenPanel(props: {
             />
           </Form.Group>
         )}
-        {props.useClientId && (
+        {props.clientId && (
           <Form.Group className="mb-3" controlId="clientId">
             <Form.Label>ClientId</Form.Label>
             <FormControl
@@ -140,7 +154,7 @@ function TokenPanel(props: {
             />
           </Form.Group>
         )}
-        {props.useUsername && (
+        {props.username && (
           <Form.Group className="mb-3" controlId="username">
             <Form.Label>Username</Form.Label>
             <FormControl
@@ -149,6 +163,30 @@ function TokenPanel(props: {
               aria-describedby="generate-button"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+            />
+          </Form.Group>
+        )}
+        {props.resource && (
+          <Form.Group className="mb-3" controlId="resource">
+            <Form.Label>Resource</Form.Label>
+            <FormControl
+              placeholder="Resource"
+              aria-label="Resource"
+              aria-describedby="generate-button"
+              value={resource}
+              onChange={(e) => setResource(e.target.value)}
+            />
+          </Form.Group>
+        )}
+        {props.scope && (
+          <Form.Group className="mb-3" controlId="scope">
+            <Form.Label>Scope</Form.Label>
+            <FormControl
+              placeholder="Scope"
+              aria-label="Scope"
+              aria-describedby="generate-button"
+              value={scope}
+              onChange={(e) => setScope(e.target.value)}
             />
           </Form.Group>
         )}
@@ -176,40 +214,39 @@ export default () => {
         <Col>
           <h2>STS token</h2>
           <TokenPanel
-            useUsername={true}
-            useClientId={false}
-            useTenantId={false}
-            defaultClientId={"psak"}
-            defaultUsername={"saksbeh"}
-            defaultTenantId={undefined}
-            requestSupplier={generateStsRequest}
-            responseMapper={stsResponeMapper}
+            username={{ default: "saksbeh" }}
+            clientId={{ default: "psak" }}
+            requestSupplier={stsRequestSupplier}
+            responseMapper={stsResponseMapper}
           />
         </Col>
         <Col>
           <h2>OpenAM token</h2>
           <TokenPanel
-            useClientId={true}
-            useUsername={true}
-            useTenantId={false}
-            defaultClientId={"psak"}
-            defaultUsername={"saksbeh"}
-            defaultTenantId={undefined}
-            requestSupplier={generateOpenAMRequest}
+            username={{ default: "saksbeh" }}
+            clientId={{ default: "psak" }}
+            requestSupplier={openAMRequestSupplier}
             responseMapper={openAmResponseMapper}
           />
         </Col>
         <Col>
           <h2>Azure AD token</h2>
           <TokenPanel
-            useClientId={true}
-            useUsername={true}
-            useTenantId={true}
-            defaultClientId={"psak"}
-            defaultUsername={"saksbeh"}
-            defaultTenantId={"966ac572-f5b7-4bbe-aa88-c76419c0f851"}
-            requestSupplier={generateAzureADRequest}
+            username={{ default: "saksbeh" }}
+            clientId={{ default: "psak" }}
+            tenantId={{ default: "966ac572-f5b7-4bbe-aa88-c76419c0f851" }}
+            requestSupplier={azureADRequestSupplier}
             responseMapper={azureAdResponseMapper}
+          />
+        </Col>
+        <Col>
+          <h2>Maskinporten token</h2>
+          <TokenPanel
+            clientId={{ default: "889640782" }}
+            resource={{}}
+            scope={{ default: "nav:pensjon/v1/tpregisteret" }}
+            requestSupplier={maskinportenRequestSupplier}
+            responseMapper={maskinportenResponseMapper}
           />
         </Col>
       </Row>
