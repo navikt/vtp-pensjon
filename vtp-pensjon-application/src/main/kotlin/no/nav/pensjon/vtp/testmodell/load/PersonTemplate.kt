@@ -15,6 +15,7 @@ data class PersonTemplate(
     val fødselsdato: LocalDate?,
     val dødsdato: LocalDate?,
     val diskresjonskode: Diskresjonskoder?,
+    val egenansatt: Boolean,
     val språk: String?,
     val kjønn: Kjønn,
     val gjeldendeAdresseType: AdresseType?,

@@ -53,6 +53,7 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
             fødselsdato = i.fødselsdato,
             dødsdato = i.dødsdato,
             diskresjonskode = i.diskresjonskode,
+            egenansatt = i.egenansatt,
             språk = i.språk,
             kjønn = i.kjønn,
             gjeldendeAdresseType = i.gjeldendeAdresseType,

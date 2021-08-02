@@ -24,11 +24,6 @@ class PDLMock {
         return java.util.Map.of("errors", listOf<Map<String, String?>>(errors))
     }
 
-    @GetMapping(path = ["/skjermet"])
-    fun skjermet(@RequestParam("ident") ident: String?): Boolean {
-        return false
-    }
-
     @GetMapping(path = ["/api/v1/personer/kontaktinformasjon"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getIdenter(@RequestHeader("Nav-Personidenter") requestIdenter: String?): DkifResponse {
         val kontakt = requestIdenter
