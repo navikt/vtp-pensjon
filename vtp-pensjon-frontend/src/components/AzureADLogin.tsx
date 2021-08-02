@@ -1,12 +1,23 @@
 import * as React from "react";
-import { RouteComponentProps } from "react-router";
 import { useEffect, useState } from "react";
-import { Card, Container } from "react-bootstrap";
+import { RouteComponentProps } from "react-router";
+import { Card, Col, Container } from "react-bootstrap";
+
+interface NAVAnsatt {
+  cn: string;
+  givenname: string;
+  sn: string;
+  displayName: string;
+  email: string;
+  groups: string[];
+  enheter: number[];
+}
 
 interface User {
   username: string;
   displayName: string;
   redirect: string;
+  details: NAVAnsatt;
 }
 
 async function fetchUsers(
@@ -16,7 +27,7 @@ async function fetchUsers(
   // /rest/AzureAd/sdfgsdfg/v2.0/users?client_id=sdfgsdfg&state=dfgh&nonce=asd&redirect_uri=sdfg
   const response = await fetch(`${usersUrl}${queryParams}`);
   if (response.status === 200) {
-    return await response.json();
+    return response.json();
   } else {
     const data = await response.json();
     throw new Error(`HTTP ${response.status} ${data.message || data.error}`);
@@ -37,16 +48,7 @@ type State =
     };
 
 function imageUrl(user: string): string {
-  switch (user) {
-    case "darthvad":
-      return "/assets/darthvad.jpg";
-    case "prinleia":
-      return "/assets/prinleia.jpg";
-    case "lukesky":
-      return "/assets/lukesky.png";
-    default:
-      return "/assets/saksbehandler.svg";
-  }
+  return "/assets/saksbehandler.svg";
 }
 
 const Login: React.FC<{ usersUrl: string; queryParams: string }> = (props) => {
@@ -75,32 +77,71 @@ const Login: React.FC<{ usersUrl: string; queryParams: string }> = (props) => {
     return <div>Error from VTP backend API: {state.error.message}</div>;
   } else {
     return (
-      <Container>
+      <Container fluid>
         <h1>Velg bruker</h1>
-        {state.users.map((user) => (
-          <a href={user.redirect} key={user.username}>
-            <Card
-              className={"mb-2"}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                padding: "2px",
-              }}
+        {state.users
+          .sort((a, b) => a.displayName.localeCompare(b.displayName))
+          .map((user) => (
+            <div
+              onClick={() => (window.location.href = user.redirect)}
+              key={user.username}
             >
-              <div style={{ width: "100px" }}>
-                <img
-                  className="img-fluid"
-                  src={imageUrl(user.username)}
-                  alt="Bruker"
-                  style={{ maxHeight: "80px", maxWidth: "100px" }}
-                />
-              </div>
-              <div>
-                <h3 style={{ marginLeft: "10px" }}>{user.displayName}</h3>
-              </div>
-            </Card>
-          </a>
-        ))}
+              <Card
+                style={{
+                  flexDirection: "row",
+                  padding: "12px",
+                  marginBottom: "12px",
+                }}
+              >
+                <Col sm={1}>
+                  <img
+                    className="img-fluid"
+                    src={imageUrl(user.username)}
+                    alt="Bruker"
+                    style={{
+                      maxHeight: "80px",
+                      maxWidth: "100px",
+                    }}
+                  />
+                </Col>
+                <Col sm={4}>
+                  <Card.Title>{user.displayName}</Card.Title>
+                  <Card.Body>
+                    <dl className="row">
+                      <dt className="col-sm-3">Brukernavn</dt>
+                      <dd className="col-sm-9">{user.details.cn}</dd>
+                      <dt className="col-sm-3">Fornavn</dt>
+                      <dd className="col-sm-9">{user.details.givenname}</dd>
+                      <dt className="col-sm-3">Etternavn</dt>
+                      <dd className="col-sm-9">{user.details.sn}</dd>
+                      <dt className="col-sm-3">E-post</dt>
+                      <dd className="col-sm-9">{user.details.email}</dd>
+                    </dl>
+                  </Card.Body>
+                </Col>
+                <Col sm={5}>
+                  <Card.Title>Tilgangsgrupper</Card.Title>
+                  <Card.Body>
+                    <ul className="list-unstyled">
+                      {user.details.groups.sort().map((group) => (
+                        <li key={user.username + group}>{group}</li>
+                      ))}
+                    </ul>
+                  </Card.Body>
+                </Col>
+                <Col sm={2}>
+                  <Card.Title>Enheter</Card.Title>
+                  <Card.Body>
+                    <ul className="list-unstyled">
+                      {user.details.enheter.sort().map((enhet) => (
+                        <li key={user.username + enhet}>{enhet}</li>
+                      ))}
+                    </ul>
+                  </Card.Body>
+                </Col>
+              </Card>
+            </div>
+          ))}
       </Container>
     );
   }

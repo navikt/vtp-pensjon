@@ -1,17 +1,20 @@
-package no.nav.pensjon.vtp.auth
+package no.nav.pensjon.vtp.auth.sts
 
 import io.swagger.annotations.Api
+import no.nav.pensjon.vtp.auth.OidcTokenGenerator
+import no.nav.pensjon.vtp.auth.getUser
 import org.apache.commons.codec.binary.Base64.encodeBase64String
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType
-import org.jose4j.jwt.NumericDate.fromSeconds
 import org.jose4j.jwt.NumericDate.now
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpStatus.OK
-import org.springframework.http.MediaType
+import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.http.ResponseEntity
+import org.springframework.http.ResponseEntity.ok
+import org.springframework.http.ResponseEntity.status
 import org.springframework.web.bind.annotation.*
 import java.io.StringWriter
-import java.time.LocalDateTime
 import java.time.LocalDateTime.MAX
 import java.time.ZoneId.systemDefault
 import java.time.ZonedDateTime
@@ -22,8 +25,13 @@ import javax.xml.bind.JAXB
 @RestController
 @Api(tags = ["Security Token Service"])
 @RequestMapping("/rest/v1/sts")
-class STSRestTjeneste(private val jsonWebKeySupport: JsonWebKeySupport, private val generator: STSIssueResponseGenerator, private val samlTokenGenerator: SamlTokenGenerator, @Value("\${ISSO_OAUTH2_ISSUER}") private val issuer: String) {
-    @PostMapping(value = ["/token/exchange"], produces = [MediaType.APPLICATION_JSON_VALUE])
+class STSRestTjeneste(
+    private val oidcTokenGenerator: OidcTokenGenerator,
+    private val generator: STSIssueResponseGenerator,
+    private val samlTokenGenerator: SamlTokenGenerator,
+    @Value("\${STS_OAUTH2_ISSUE}") private val issuer: String
+) {
+    @PostMapping(value = ["/token/exchange"])
     fun dummySaml(
         @RequestParam grant_type: String,
         @RequestParam subject_token_type: String,
@@ -39,33 +47,49 @@ class STSRestTjeneste(private val jsonWebKeySupport: JsonWebKeySupport, private 
             expires_in = of(MAX, systemDefault())
         )
     }
-    @GetMapping(value = ["/token"], produces = [MediaType.APPLICATION_JSON_VALUE])
+
+    @GetMapping(value = ["/token"])
     fun dummyToken(
+        @RequestHeader(AUTHORIZATION) authorization: String?,
         @RequestParam grant_type: String?,
         @RequestParam scope: String?
-    ): UserTokenResponse {
-        val expiresIn = 3600L * 6L
+    ) = getUser(authorization)
+        ?.let { user ->
+            val expiresInSeconds = 3600L * 6L
 
-        return UserTokenResponse(
-            access_token = OidcTokenGenerator(
-                jsonWebKeySupport = jsonWebKeySupport,
-                subject = "dummyBruker",
-                nonce = "",
-                issuer = issuer,
-                expiration = fromSeconds(now().value + expiresIn)
-            ).create(),
-            expires_in = expiresIn,
-            token_type = "Bearer"
-        )
-    }
+            ok(
+                UserTokenResponse(
+                    access_token = oidcTokenGenerator.oidcToken(
+                        subject = user,
+                        aud = listOf(
+                            user,
+                            "vtp-pensjon"
+                        ),
+                        issuer = issuer,
+                        expiration = now().apply { addSeconds(expiresInSeconds) },
+                        additionalClaims = mapOf(
+                            "azp" to user
+                        )
+                    ),
+                    expires_in = expiresInSeconds,
+                    token_type = "Bearer"
+                )
+            )
+        }
+        ?: status(UNAUTHORIZED)
+            .body(
+                ErrorResponse(
+                    error = "invalid_client",
+                    error_description = "Unauthorised: Full authentication is required to access this resource"
+                )
+            )
 
-    @GetMapping(value = ["/samltoken"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @Throws(Exception::class)
+    @GetMapping(value = ["/samltoken"])
     fun dummyToken(): ResponseEntity<SAMLResponse> {
-        val samlToken = samlTokenGenerator.issueToken("CN=InternBruker,OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local")
+        val samlToken =
+            samlTokenGenerator.issueToken("CN=InternBruker,OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local")
 
-        return ResponseEntity
-            .status(OK)
+        return status(OK)
             .header("Cache-Control", "no-store")
             .header("Pragma", "no-cache")
             .body(
@@ -94,18 +118,13 @@ class STSRestTjeneste(private val jsonWebKeySupport: JsonWebKeySupport, private 
     )
 
     data class UserTokenResponse(
-        val access_token: String? = null,
-        val expires_in: Long? = null,
-        val token_type: String? = null
-    ) {
-        /**
-         *
-         * @param expirationLeeway the amount of seconds to be subtracted from the expirationTime to avoid returning false positives
-         * @return `true` if "now" is after the expirationtime(minus leeway), else returns `false`
-         */
-        @Suppress("unused")
-        fun isExpired(expirationLeeway: Long): Boolean {
-            return LocalDateTime.now().isAfter(LocalDateTime.now().plusSeconds(expires_in!!).minusSeconds(expirationLeeway))
-        }
-    }
+        val access_token: String,
+        val expires_in: Long,
+        val token_type: String
+    )
+
+    data class ErrorResponse(
+        val error: String,
+        val error_description: String
+    )
 }

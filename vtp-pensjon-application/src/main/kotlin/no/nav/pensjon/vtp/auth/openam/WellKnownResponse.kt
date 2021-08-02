@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.auth
+package no.nav.pensjon.vtp.auth.openam
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

@@ -1,5 +1,6 @@
-package no.nav.pensjon.vtp.auth
+package no.nav.pensjon.vtp.auth.sts
 
+import no.nav.pensjon.vtp.auth.CryptoConfigurationParameters
 import org.apache.cxf.security.SecurityContext
 import org.apache.cxf.sts.StaticSTSProperties
 import org.apache.cxf.sts.operation.TokenIssueOperation
@@ -14,7 +15,6 @@ import org.apache.wss4j.common.ext.WSPasswordCallback
 import org.apache.wss4j.common.principal.CustomTokenPrincipal
 import org.springframework.stereotype.Component
 import java.security.Principal
-import java.util.*
 import javax.security.auth.callback.Callback
 import javax.security.auth.callback.CallbackHandler
 

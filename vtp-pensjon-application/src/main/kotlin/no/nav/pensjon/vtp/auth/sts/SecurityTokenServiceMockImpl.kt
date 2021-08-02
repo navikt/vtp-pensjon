@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.auth
+package no.nav.pensjon.vtp.auth.sts
 
 import org.apache.cxf.ws.security.sts.provider.SecurityTokenService
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenCollectionType
