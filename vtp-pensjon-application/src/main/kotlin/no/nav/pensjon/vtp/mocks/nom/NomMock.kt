@@ -14,5 +14,5 @@ class NomMock(private val personModellRepository: PersonModellRepository) {
 
     @GetMapping(path = ["/skjermet"])
     fun skjermet(@RequestParam("personident", required = true) personident: String) =
-            personModellRepository.findById(personident)?.egenansatt ?: false
+        personModellRepository.findById(personident)?.egenansatt ?: false
 }
