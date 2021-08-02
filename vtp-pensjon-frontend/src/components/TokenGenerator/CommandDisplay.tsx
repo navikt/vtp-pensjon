@@ -7,7 +7,7 @@ export function CommandDisplay(props: { command: string | undefined }) {
     <Card>
       <Card.Header>
         <div className="d-flex align-items-center">
-          <h3 className="mr-auto">Comand</h3>
+          <h3 className="mr-auto">Command</h3>
           <ButtonGroup>
             {props.command !== undefined ? (
               <CopyToClipboard options={{ debug: true }} text={props.command}>
