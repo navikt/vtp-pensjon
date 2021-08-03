@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse
 import no.nav.pensjon.vtp.auth.OidcTokenGenerator
+import no.nav.pensjon.vtp.auth.UserEntry
 import no.nav.pensjon.vtp.auth.getUser
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
@@ -29,13 +30,6 @@ class OpenAMRestController(
     private val oidcTokenGenerator: OidcTokenGenerator,
     @Value("\${ISSO_OAUTH2_ISSUER}") val issuer: String
 ) {
-    data class UserEntry(
-        val username: String,
-        val displayName: String,
-        val redirect: String,
-        val details: NAVAnsatt
-    )
-
     @GetMapping(value = ["/oauth2/users"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "oauth2/users", notes = "Liste over brukere til OpenAM-innlogging")
     fun users(

@@ -3,6 +3,7 @@ package no.nav.pensjon.vtp.auth.azuread
 import io.swagger.annotations.ApiOperation
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport
 import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse
+import no.nav.pensjon.vtp.auth.UserEntry
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.apache.http.client.utils.URIBuilder
@@ -90,7 +91,6 @@ class AzureAdNAVAnsattService(
         )
     }
 
-    data class UserEntry(val username: String, val displayName: String, val redirect: String)
     @GetMapping(value = ["/{tenant}/v2.0/users"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "/v2.0/users", notes = "Hent brukere/saksbehandlere man kan logge inn som")
     fun users(
@@ -129,7 +129,7 @@ class AzureAdNAVAnsattService(
                         addParameter("redirect_uri", redirectUri)
                         addParameter("code", "${user.cn};$nonce")
                     }.toString()
-                    UserEntry(username = user.cn, displayName = user.displayName, redirect = redirect)
+                    UserEntry(username = user.cn, displayName = user.displayName, redirect = redirect, details = user)
                 }
         )
     }
