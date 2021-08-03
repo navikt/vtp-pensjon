@@ -4,6 +4,7 @@ import com.nimbusds.jose.JOSEObject
 import com.nimbusds.jwt.JWTClaimsSet
 import no.nav.pensjon.vtp.auth.OidcTokenGenerator
 import org.jose4j.jwt.NumericDate
+import org.jose4j.jwt.NumericDate.now
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.hateoas.server.LinkBuilder
 import org.springframework.hateoas.server.mvc.linkTo
@@ -44,27 +45,14 @@ class MaskinportenMock(
     ) = when (grantType) {
         "urn:ietf:params:oauth:grant-type:jwt-bearer" -> {
             val claims = JWTClaimsSet.parse(JOSEObject.parse(assertion).payload.toJSONObject())
-            val now = NumericDate.now()
+            val now = now()
 
             ok(
                 AccessTokenResponse(
-                    access_token =
-                    oidcTokenGenerator.oidcToken(
-                        subject = "subject",
-                        issuer = issuer,
-                        aud = listOfNotNull(claims.getStringClaim("resource")),
-                        additionalClaims = mapOf(
-                            "client_id" to claims.issuer,
-                            "client_amr" to "virksomhetssertifikat",
-                            "consumer" to mapOf(
-                                "authority" to "iso6523-actorid-upis",
-                                "ID" to "0192:${claims.issuer}"
-                            ),
-                            "scope" to claims.getClaim("scope"),
-                            "token_type" to "Bearer",
-                            "jti" to UUID.randomUUID().toString()
-                            // TODO: supplier delegation_source
-                        ),
+                    access_token = generateAccessToken(
+                        resource = claims.getStringClaim("resource"),
+                        consumer = claims.issuer,
+                        scope = claims.getStringClaim("scope"),
                         issuedAt = now,
                         expiration = now.apply { addSeconds(3600L * 6L) }
                     ),
@@ -76,6 +64,38 @@ class MaskinportenMock(
         }
         else -> badRequest().body("Unsupported grant_type '$grantType'")
     }
+
+    @PostMapping("/mock_access_token")
+    fun generateAccessToken(
+        @RequestParam(required = false)
+        resource: String?,
+        @RequestParam
+        consumer: String,
+        @RequestParam
+        scope: String,
+        @RequestParam(required = false)
+        issuedAt: NumericDate?,
+        @RequestParam(required = false)
+        expiration: NumericDate?
+    ) = oidcTokenGenerator.oidcToken(
+        subject = "subject",
+        issuer = issuer,
+        aud = listOfNotNull(resource),
+        additionalClaims = mapOf(
+            "client_id" to consumer,
+            "client_amr" to "virksomhetssertifikat",
+            "consumer" to mapOf(
+                "authority" to "iso6523-actorid-upis",
+                "ID" to "0192:$consumer"
+            ),
+            "scope" to scope,
+            "token_type" to "Bearer",
+            "jti" to UUID.randomUUID().toString()
+            // TODO: supplier delegation_source
+        ),
+        issuedAt = issuedAt ?: now(),
+        expiration = expiration ?: now().apply { addSeconds(3600L * 6L) }
+    )
 
     @ExceptionHandler
     fun onParseException(exception: ParseException) = ResponseEntity(exception.message, BAD_REQUEST)
