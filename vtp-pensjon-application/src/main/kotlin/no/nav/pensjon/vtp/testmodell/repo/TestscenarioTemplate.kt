@@ -11,6 +11,8 @@ interface TestscenarioTemplate {
 
     fun organisasjonReader(): Reader?
 
+    fun digitalkontaktinfoReader(): Reader?
+
     val vars: VariabelContainer
     fun getExpectedVars(): Set<TemplateVariable>
     val templateName: String
