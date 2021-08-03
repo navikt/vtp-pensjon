@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router";
-import { Card, Col, Container } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
 
 interface NAVAnsatt {
   cn: string;
@@ -55,12 +55,19 @@ const Login: React.FC<{ usersUrl: string; queryParams: string }> = (props) => {
   const [state, setState] = useState<State>({ type: "LOADING" });
   useEffect(() => {
     fetchUsers(props.usersUrl, props.queryParams)
-      .then((users) =>
+      .then((users) => {
+        users.sort((a, b) => a.displayName.localeCompare(b.displayName));
+
+        users.forEach((user) => {
+          user.details.groups.sort();
+          user.details.enheter.sort();
+        });
+
         setState({
           type: "LOADED",
           users: users,
-        })
-      )
+        });
+      })
       .catch((error) =>
         setState({
           type: "ERROR",
@@ -79,20 +86,15 @@ const Login: React.FC<{ usersUrl: string; queryParams: string }> = (props) => {
     return (
       <Container fluid>
         <h1>Velg bruker</h1>
-        {state.users
-          .sort((a, b) => a.displayName.localeCompare(b.displayName))
-          .map((user) => (
-            <div
-              onClick={() => (window.location.href = user.redirect)}
-              key={user.username}
+        {state.users.map((user) => (
+          <div key={user.username}>
+            <Card
+              style={{
+                padding: "12px",
+                marginBottom: "12px",
+              }}
             >
-              <Card
-                style={{
-                  flexDirection: "row",
-                  padding: "12px",
-                  marginBottom: "12px",
-                }}
-              >
+              <Row>
                 <Col sm={1}>
                   <img
                     className="img-fluid"
@@ -123,7 +125,7 @@ const Login: React.FC<{ usersUrl: string; queryParams: string }> = (props) => {
                   <Card.Title>Tilgangsgrupper</Card.Title>
                   <Card.Body>
                     <ul className="list-unstyled">
-                      {user.details.groups.sort().map((group) => (
+                      {user.details.groups.map((group) => (
                         <li key={user.username + group}>{group}</li>
                       ))}
                     </ul>
@@ -133,15 +135,23 @@ const Login: React.FC<{ usersUrl: string; queryParams: string }> = (props) => {
                   <Card.Title>Enheter</Card.Title>
                   <Card.Body>
                     <ul className="list-unstyled">
-                      {user.details.enheter.sort().map((enhet) => (
+                      {user.details.enheter.map((enhet) => (
                         <li key={user.username + enhet}>{enhet}</li>
                       ))}
                     </ul>
                   </Card.Body>
                 </Col>
-              </Card>
-            </div>
-          ))}
+              </Row>
+              <Row>
+                <Col className="text-center">
+                  <Button href={user.redirect} variant={"primary"}>
+                    Logg inn som {user.displayName}
+                  </Button>
+                </Col>
+              </Row>
+            </Card>
+          </div>
+        ))}
       </Container>
     );
   }
