@@ -1,8 +1,7 @@
 package no.nav.pensjon.vtp.mocks.dkif
 
 import io.swagger.annotations.Api
-import no.nav.pensjon.vtp.testmodell.dkif.DkifResponse
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
+import no.nav.pensjon.vtp.testmodell.dkif.*
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,11 +12,26 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Api(tags = ["Digital kontaktinformasjon"])
 @RequestMapping("/rest/dkif")
-class DkifMock {
+class DkifMock(private val dkifRepository: DkifRepository) {
 
     @GetMapping(path = ["/v1/personer/kontaktinformasjon"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getIdenter(@RequestHeader("Nav-Personidenter") requestIdenter: List<String>): DkifResponse {
-        return DkifResponse(kontaktinfo = emptyMap(), feil = emptyMap())
+        val kontaktinfoMap = hashMapOf<String, Kontaktinfo>()
+        val feilMap = hashMapOf<String, Feil>()
+
+        requestIdenter.forEach {
+            val kontaktinfo = dkifRepository.findById(it)
+            if (kontaktinfo != null) {
+                kontaktinfoMap.put(it, kontaktinfo)
+            } else {
+                feilMap.put(it, Feil("Ingen kontaktinformasjon er registrert på personen"))
+            }
+        }
+
+        return DkifResponse(
+            if (kontaktinfoMap.isEmpty()) null else kontaktinfoMap,
+            if (feilMap.isEmpty()) null else feilMap
+        )
     }
 
     @GetMapping("/ping")
