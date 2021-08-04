@@ -28,8 +28,8 @@ class DkifMock(private val dkifRepository: DkifRepository) {
         }
 
         return DkifResponse(
-            if (kontaktinfoMap.isEmpty()) null else kontaktinfoMap,
-            if (feilMap.isEmpty()) null else feilMap
+            kontaktinfoMap.ifEmpty { null },
+            feilMap.ifEmpty { null }
         )
     }
 
