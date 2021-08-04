@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl
 
+import no.nav.pensjon.vtp.testmodell.dkif.DkifModell
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger
@@ -38,12 +39,15 @@ class FileTestscenarioTemplate(
                 inntektopplysningReader("søker").use { søkerInntektopplysningReader ->
                     inntektopplysningReader("annenpart").use { annenpartInntektopplysningReader ->
                         organisasjonReader().use { organisasjonsReader ->
-                            val finder = FindTemplateVariables()
-                            finder.scanForVariables(Personopplysninger::class.java, personopplysningReader)
-                            finder.scanForVariables(InntektYtelseModell::class.java, søkerInntektopplysningReader)
-                            finder.scanForVariables(InntektYtelseModell::class.java, annenpartInntektopplysningReader)
-                            finder.scanForVariables(OrganisasjonModell::class.java, organisasjonsReader)
-                            return finder.discoveredVariables
+                            digitalkontaktinfoReader().use { dkifReader ->
+                                val finder = FindTemplateVariables()
+                                finder.scanForVariables(Personopplysninger::class.java, personopplysningReader)
+                                finder.scanForVariables(InntektYtelseModell::class.java, søkerInntektopplysningReader)
+                                finder.scanForVariables(InntektYtelseModell::class.java, annenpartInntektopplysningReader)
+                                finder.scanForVariables(OrganisasjonModell::class.java, organisasjonsReader)
+                                finder.scanForVariables(DkifModell::class.java, dkifReader)
+                                return finder.discoveredVariables
+                            }
                         }
                     }
                 }
@@ -65,6 +69,10 @@ class FileTestscenarioTemplate(
         return asReader(templateDir + ORGANISASJON_JSON_FILE)
     }
 
+    override fun digitalkontaktinfoReader(): Reader? {
+        return asReader(templateDir + DKIF_JSON_FILE)
+    }
+
     private fun asReader(path: String): Reader? {
         val resource: Resource = UrlResource(path)
         return if (resource.exists()) InputStreamReader(resource.inputStream) else null
@@ -73,6 +81,7 @@ class FileTestscenarioTemplate(
     companion object {
         const val PERSONOPPLYSNING_JSON_FILE = "personopplysning.json"
         const val ORGANISASJON_JSON_FILE = "organisasjon.json"
+        const val DKIF_JSON_FILE = "digitalkontaktinfo.json"
     }
 
     init {

@@ -3,6 +3,8 @@ package no.nav.pensjon.vtp.testmodell.repo.impl
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
+import no.nav.pensjon.vtp.testmodell.dkif.DkifModell
+import no.nav.pensjon.vtp.testmodell.dkif.DkifModeller
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell
 import no.nav.pensjon.vtp.testmodell.load.PersonopplysningerTemplate
 import no.nav.pensjon.vtp.testmodell.load.TestscenarioLoad
@@ -79,12 +81,20 @@ class TestscenarioFraTemplateMapper {
             throw IllegalArgumentException("Must include personopplysninger")
         }
 
+        val digitalkontaktinfo = if (node.has("digitalkontaktinfo")) {
+            val digitalkontaktinfoResult = node["digitalkontaktinfo"]
+            objectMapper.convertValue(digitalkontaktinfoResult, DkifModeller::class.java).kontaktinfo
+        } else {
+            throw IllegalArgumentException("Must include digitalkontaktinfo")
+        }
+
         return TestscenarioLoad(
             hentTemplateNavnFraJsonString(node),
             personopplysninger,
             soekerInntektYtelse,
             annenPartInntektYtelse,
             organisasjonModeller,
+            digitalkontaktinfo,
             variabelContainer
         )
     }
@@ -106,12 +116,14 @@ class TestscenarioFraTemplateMapper {
             null
         }
         val organisasjonModeller = loadOrganisasjonModeller(template, objectMapper)
+        val dkifModeller = loadDigitalkontaktinfo(template, objectMapper)
         return TestscenarioLoad(
             template.templateName,
             personopplysninger,
             soekerInntektYtelse,
             annenPartInntektYtelse,
             organisasjonModeller,
+            dkifModeller,
             variabelContainer
         )
     }
@@ -167,6 +179,23 @@ class TestscenarioFraTemplateMapper {
             }
         } catch (e: IOException) {
             throw IllegalArgumentException("Kunne ikke lese personopplysning.json for scenario:$template", e)
+        }
+    }
+
+    private fun loadDigitalkontaktinfo(
+        template: TestscenarioTemplate,
+        objectMapper: ObjectMapper
+    ): List<DkifModell> {
+        try {
+            template.digitalkontaktinfoReader().use { reader ->
+                return if (reader != null) {
+                    objectMapper.readValue(reader, DkifModeller::class.java).kontaktinfo
+                } else {
+                    emptyList()
+                }
+            }
+        } catch (e: IOException) {
+            throw IllegalArgumentException("Kunne ikke lese digitalkontaktinfo.json for scenario:$template", e)
         }
     }
 }

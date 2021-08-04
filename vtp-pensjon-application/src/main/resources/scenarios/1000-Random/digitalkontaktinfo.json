@@ -1,0 +1,12 @@
+{
+  "kontaktinfo": [
+    {
+      "personident": "${for1}",
+      "kanVarsles": true,
+      "reservert": false,
+      "epostadresse": "foo@bar",
+      "mobiltelefonnummer": "12345678",
+      "spraak": "nb"
+    }
+  ]
+}
