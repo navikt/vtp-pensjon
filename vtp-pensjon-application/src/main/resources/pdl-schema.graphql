@@ -1,0 +1,24 @@
+schema {
+    query: Query
+}
+
+type Query {
+    hentPerson(ident: ID!): Person
+}
+
+type Person {
+	 navn: Navn
+}
+
+type Navn {
+    fornavn: String!
+    mellomnavn: String
+    etternavn: String!
+    forkortetNavn: String
+    metadata: Metadata!
+}
+
+type Metadata {
+    historisk: Boolean!
+    master: String!
+}
