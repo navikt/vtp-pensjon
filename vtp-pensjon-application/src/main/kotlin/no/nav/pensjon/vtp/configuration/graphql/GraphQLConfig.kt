@@ -9,19 +9,22 @@ import graphql.schema.idl.TypeRuntimeWiring
 import no.nav.pensjon.vtp.configuration.graphql.model.*
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import org.springframework.context.annotation.Bean
+import org.springframework.core.io.ResourceLoader
 import org.springframework.stereotype.Component
-import java.io.File
 import javax.annotation.PostConstruct
 
 @Component
-class GraphQLConfig(private val personModellRepository: PersonModellRepository) {
+class GraphQLConfig(
+    private val personModellRepository: PersonModellRepository,
+    private val resourceLoader: ResourceLoader
+) {
 
     @Bean
     @PostConstruct
     fun graphQL(): GraphQL = GraphQL.newGraphQL(buildSchema()).build()
 
     private fun buildSchema(): GraphQLSchema {
-        val sdl = File("src/main/resources/pdl-schema.graphql")
+        val sdl = resourceLoader.getResource("classpath:pdl-schema.graphql").file
         val typeRegistry = SchemaParser().parse(sdl)
         val runtimeWiring: RuntimeWiring = RuntimeWiring.newRuntimeWiring()
             .type(
