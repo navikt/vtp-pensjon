@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.mocks.psak
 
-import graphql.ExecutionResult
 import graphql.GraphQL
 import io.swagger.annotations.Api
 import org.springframework.web.bind.annotation.*
@@ -11,7 +10,5 @@ import org.springframework.web.bind.annotation.*
 class PdlMock(private val graphQL: GraphQL) {
 
     @PostMapping(path = ["/graphql"])
-    fun query(@RequestBody query: String): ExecutionResult {
-        return graphQL.execute(query)
-    }
+    fun query(@RequestBody query: String) = graphQL.execute(query).toSpecification()
 }
