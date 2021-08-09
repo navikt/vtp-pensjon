@@ -9,14 +9,12 @@ data class Person(
 )
 
 class PersonDataFetcher(val personModellRepository: PersonModellRepository) : DataFetcher<Person> {
-
-    override fun get(env: DataFetchingEnvironment): Person? {
-        val personModell = personModellRepository.findById(env.getArgument("ident")) ?: return null
-        return Person(
+    override fun get(env: DataFetchingEnvironment) = personModellRepository.findById(env.getArgument("ident"))?.let {
+        Person(
             Navn(
-                fornavn = personModell.fornavn,
+                fornavn = it.fornavn,
                 mellomnavn = null,
-                etternavn = personModell.etternavn,
+                etternavn = it.etternavn,
                 forkortetNavn = null,
                 metadata = Metadata(false, "FREG")
             )
