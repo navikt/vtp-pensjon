@@ -1,3 +1,5 @@
+scalar Date
+
 schema {
     query: Query
 }
@@ -15,6 +17,7 @@ type Navn {
     mellomnavn: String
     etternavn: String!
     forkortetNavn: String
+    gyldigFraOgMed: Date
     metadata: Metadata!
 }
 

@@ -16,6 +16,7 @@ class PersonDataFetcher(val personModellRepository: PersonModellRepository) : Da
                 mellomnavn = null,
                 etternavn = it.etternavn,
                 forkortetNavn = null,
+                gyldigFraOgMed = null,
                 metadata = Metadata(false, "FREG")
             )
         )

@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.configuration.graphql
 
 import graphql.GraphQL
+import graphql.scalars.datetime.DateScalar
 import graphql.schema.GraphQLSchema
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
@@ -27,6 +28,7 @@ class GraphQLConfig(
         val sdl = resourceLoader.getResource("classpath:pdl-schema.graphql").file
         val typeRegistry = SchemaParser().parse(sdl)
         val runtimeWiring: RuntimeWiring = RuntimeWiring.newRuntimeWiring()
+            .scalar(DateScalar.INSTANCE)
             .type(
                 TypeRuntimeWiring.newTypeWiring("Query")
                     .dataFetcher(
@@ -52,6 +54,9 @@ class GraphQLConfig(
                     )
                     .dataFetcher(
                         "forkortetNavn", ForkortetNavnDataFetcher()
+                    )
+                    .dataFetcher(
+                        "gyldigFraOgMed", GyldigFraOgMedNavnDataFetcher()
                     )
                     .dataFetcher(
                         "metaddata", NavnMetadataDataFetcher()
