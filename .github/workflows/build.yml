@@ -60,14 +60,18 @@ jobs:
             .
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+      - name: Log in to the Container registry
+        if: github.ref == 'refs/heads/main'
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Push Docker image
         if: github.ref == 'refs/heads/main'
         run: |
-          docker login ghcr.io -u ${GHCR_PUSH_USERNAME} -p ${GHCR_PUSH_TOKEN}
           docker push ${IMAGE_BASE_GHCR}:latest
           docker push ${IMAGE_BASE_GHCR}:${VERSION}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GHCR_PUSH_USERNAME: ${{ secrets.GHCR_PUSH_USERNAME }}
-          GHCR_PUSH_TOKEN: ${{ secrets.GHCR_PUSH_TOKEN }}
           VERSION: ${{ env.VERSION }}
