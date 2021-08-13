@@ -8,12 +8,9 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import no.nav.tjenester.aordningen.inntektsinformasjon.*
 import no.nav.tjenester.aordningen.inntektsinformasjon.inntekt.Inntekt
 import org.springframework.stereotype.Component
-import java.lang.IllegalStateException
-import java.lang.RuntimeException
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
-import java.util.*
 
 @Component
 class HentInntektlisteBolkMapperRest(private val personModellRepository: PersonModellRepository) {

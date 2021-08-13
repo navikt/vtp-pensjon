@@ -3,7 +3,6 @@ package no.nav.pensjon.vtp.testmodell.inntektytelse.arena
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import no.nav.pensjon.vtp.testmodell.inntektytelse.RelatertYtelseTema
-import java.util.*
 
 data class ArenaSak(
     @JsonProperty("saksnummer")

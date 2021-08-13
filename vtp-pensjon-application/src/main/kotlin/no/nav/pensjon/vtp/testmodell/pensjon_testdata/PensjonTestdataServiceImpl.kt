@@ -5,9 +5,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.client.postForEntity
 import org.springframework.web.client.postForObject
-import java.lang.RuntimeException
 
 class PensjonTestdataServiceImpl(private val baseUrl: String) : PensjonTestdataService {
     private val logger = LoggerFactory.getLogger(javaClass)

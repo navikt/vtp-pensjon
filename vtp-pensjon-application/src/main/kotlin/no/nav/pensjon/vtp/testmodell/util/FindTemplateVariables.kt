@@ -12,9 +12,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import no.nav.pensjon.vtp.testmodell.repo.TemplateVariable
 import java.io.IOException
 import java.io.Reader
-import java.lang.IllegalArgumentException
-import java.lang.StringBuilder
-import java.util.*
 import java.util.regex.Pattern
 
 /** Scanner input for template variable og finner type, path etc.  */

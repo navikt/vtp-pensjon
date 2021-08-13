@@ -1,13 +1,13 @@
 package no.nav.pensjon.vtp.testmodell.ansatt
 
-import java.util.*
-
 class AnsatteIndeks {
     private val ansatte: MutableList<NAVAnsatt> = ArrayList()
 
     fun findAll(): List<NAVAnsatt> {
         return ansatte
     }
+
+    fun save(ansatt: NAVAnsatt) = ansatt.also(ansatte::add)
 
     fun saveAll(ansatte: List<NAVAnsatt>) {
         this.ansatte.addAll(ansatte)
