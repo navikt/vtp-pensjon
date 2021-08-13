@@ -31,45 +31,35 @@ class GraphQLConfig(
             .scalar(DateScalar.INSTANCE)
             .type(
                 TypeRuntimeWiring.newTypeWiring("Query")
-                    .dataFetcher(
-                        "hentPerson", PersonDataFetcher(personModellRepository)
-                    )
+                    .dataFetcher("hentPerson", PersonDataFetcher(personModellRepository))
             )
             .type(
                 TypeRuntimeWiring.newTypeWiring("Person")
-                    .dataFetcher(
-                        "navn", NavnDataFetcher()
-                    )
-            )
-            .type(
-                TypeRuntimeWiring.newTypeWiring("Navn")
-                    .dataFetcher(
-                        "fornavn", FornavnDataFetcher()
-                    )
-                    .dataFetcher(
-                        "mellomnavn", MellomnavnDataFetcher()
-                    )
-                    .dataFetcher(
-                        "etternavn", EtternavnDataFetcher()
-                    )
-                    .dataFetcher(
-                        "forkortetNavn", ForkortetNavnDataFetcher()
-                    )
-                    .dataFetcher(
-                        "gyldigFraOgMed", GyldigFraOgMedNavnDataFetcher()
-                    )
-                    .dataFetcher(
-                        "metaddata", NavnMetadataDataFetcher()
-                    )
+                    .dataFetcher("navn", NavnDataFetcher())
+                    .dataFetcher("foedsel", FoedselDataFetcher())
             )
             .type(
                 TypeRuntimeWiring.newTypeWiring("Metadata")
-                    .dataFetcher(
-                        "historisk", HistoriskMetadataDataFetcher()
-                    )
-                    .dataFetcher(
-                        "master", MasterMetadataDataFetcher()
-                    )
+                    .dataFetcher("historisk", HistoriskMetadataDataFetcher())
+                    .dataFetcher("master", MasterMetadataDataFetcher())
+            )
+            .type(
+                TypeRuntimeWiring.newTypeWiring("Navn")
+                    .dataFetcher("fornavn", FornavnDataFetcher())
+                    .dataFetcher("mellomnavn", MellomnavnDataFetcher())
+                    .dataFetcher("etternavn", EtternavnDataFetcher())
+                    .dataFetcher("forkortetNavn", ForkortetNavnDataFetcher())
+                    .dataFetcher("gyldigFraOgMed", GyldigFraOgMedNavnDataFetcher())
+                    .dataFetcher("metaddata", NavnMetadataDataFetcher())
+            )
+            .type(
+                TypeRuntimeWiring.newTypeWiring("Foedsel")
+                    .dataFetcher("foedselsaar", FoedselsaarDataFetcher())
+                    .dataFetcher("foedselsdato", FoedselsdatoDataFetcher())
+                    .dataFetcher("foedeland", FoedelandDataFetcher())
+                    .dataFetcher("foedested", FoedestadDataFetcher())
+                    .dataFetcher("foedekommune", FoedekommuneDataFetcher())
+                    .dataFetcher("metadata", FoedselMetadataDataFetcher())
             )
             .build()
         val schemaGenerator = SchemaGenerator()

@@ -5,7 +5,8 @@ import graphql.schema.DataFetchingEnvironment
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 
 data class Person(
-    val navn: Navn
+    val navn: Navn,
+    val foedsel: Foedsel
 )
 
 class PersonDataFetcher(val personModellRepository: PersonModellRepository) : DataFetcher<Person> {
@@ -17,6 +18,14 @@ class PersonDataFetcher(val personModellRepository: PersonModellRepository) : Da
                 etternavn = it.etternavn,
                 forkortetNavn = null,
                 gyldigFraOgMed = null,
+                metadata = Metadata(false, "FREG")
+            ),
+            Foedsel(
+                foedselsaar = null,
+                foedselsdato = null,
+                foedeland = null,
+                foedested = null,
+                foedekommune = null,
                 metadata = Metadata(false, "FREG")
             )
         )
