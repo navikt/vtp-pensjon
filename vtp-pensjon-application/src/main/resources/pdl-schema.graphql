@@ -9,7 +9,8 @@ type Query {
 }
 
 type Person {
-	 navn: Navn
+    navn: Navn
+    foedsel: Foedsel
 }
 
 type Navn {
@@ -18,6 +19,15 @@ type Navn {
     etternavn: String!
     forkortetNavn: String
     gyldigFraOgMed: Date
+    metadata: Metadata!
+}
+
+type Foedsel {
+    foedselsaar: Int
+    foedselsdato: Date
+    foedeland: String
+    foedested: String
+    foedekommune: String
     metadata: Metadata!
 }
 
