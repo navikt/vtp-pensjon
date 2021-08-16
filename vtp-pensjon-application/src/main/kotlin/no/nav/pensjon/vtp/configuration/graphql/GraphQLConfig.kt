@@ -19,7 +19,6 @@ class GraphQLConfig(
     private val personModellRepository: PersonModellRepository,
     private val resourceLoader: ResourceLoader
 ) {
-
     @Bean
     @PostConstruct
     fun graphQL(): GraphQL = GraphQL.newGraphQL(buildSchema()).build()
@@ -35,31 +34,15 @@ class GraphQLConfig(
             )
             .type(
                 TypeRuntimeWiring.newTypeWiring("Person")
-                    .dataFetcher("navn", NavnDataFetcher())
-                    .dataFetcher("foedsel", FoedselDataFetcher())
             )
             .type(
                 TypeRuntimeWiring.newTypeWiring("Metadata")
-                    .dataFetcher("historisk", HistoriskMetadataDataFetcher())
-                    .dataFetcher("master", MasterMetadataDataFetcher())
             )
             .type(
                 TypeRuntimeWiring.newTypeWiring("Navn")
-                    .dataFetcher("fornavn", FornavnDataFetcher())
-                    .dataFetcher("mellomnavn", MellomnavnDataFetcher())
-                    .dataFetcher("etternavn", EtternavnDataFetcher())
-                    .dataFetcher("forkortetNavn", ForkortetNavnDataFetcher())
-                    .dataFetcher("gyldigFraOgMed", GyldigFraOgMedNavnDataFetcher())
-                    .dataFetcher("metaddata", NavnMetadataDataFetcher())
             )
             .type(
                 TypeRuntimeWiring.newTypeWiring("Foedsel")
-                    .dataFetcher("foedselsaar", FoedselsaarDataFetcher())
-                    .dataFetcher("foedselsdato", FoedselsdatoDataFetcher())
-                    .dataFetcher("foedeland", FoedelandDataFetcher())
-                    .dataFetcher("foedested", FoedestadDataFetcher())
-                    .dataFetcher("foedekommune", FoedekommuneDataFetcher())
-                    .dataFetcher("metadata", FoedselMetadataDataFetcher())
             )
             .build()
         val schemaGenerator = SchemaGenerator()
