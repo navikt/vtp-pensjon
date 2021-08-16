@@ -11,6 +11,8 @@ type Query {
 type Person {
     navn: Navn
     foedsel: Foedsel
+    statsborgerskap: Statsborgerskap
+    doedsfall : Doedsfall
 }
 
 type Navn {
@@ -28,6 +30,19 @@ type Foedsel {
     foedeland: String
     foedested: String
     foedekommune: String
+    metadata: Metadata!
+}
+
+type Statsborgerskap {
+    land: String!
+    bekreftelsesdato: Date
+    gyldigFraOgMed: Date
+    gyldigTilOgMed: Date
+    metadata: Metadata!
+}
+
+type Doedsfall {
+    doedsdato: Date
     metadata: Metadata!
 }
 

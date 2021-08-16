@@ -10,7 +10,6 @@ data class Person(
     val foedsel: Foedsel,
     val doedsfall: Doedsfall,
     val statsborgerskap: Statsborgerskap,
-
 )
 
 class PersonDataFetcher(val personModellRepository: PersonModellRepository) : DataFetcher<Person> {
@@ -37,7 +36,7 @@ class PersonDataFetcher(val personModellRepository: PersonModellRepository) : Da
                 metadata = Metadata(false, "FREG")
             ),
             Statsborgerskap(
-                land = it.statsborgerskap!!.first().land.toString(),
+                land = it.statsborgerskap!!.firstOrNull()?.land.toString(),
                 bekreftelsesdato = null,
                 gyldigFraOgMed = Date(it.statsborgerskap.first().fom!!.toEpochDay()),
                 gyldigTilOgMed = Date(it.statsborgerskap.first().tom!!.toEpochDay()),

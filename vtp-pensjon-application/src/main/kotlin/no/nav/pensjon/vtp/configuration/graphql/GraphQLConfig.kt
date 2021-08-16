@@ -44,6 +44,12 @@ class GraphQLConfig(
             .type(
                 TypeRuntimeWiring.newTypeWiring("Foedsel")
             )
+            .type(
+                TypeRuntimeWiring.newTypeWiring("Doedsfall")
+            )
+            .type(
+                TypeRuntimeWiring.newTypeWiring("Statsborgerskap")
+            )
             .build()
         val schemaGenerator = SchemaGenerator()
         return schemaGenerator.makeExecutableSchema(typeRegistry, runtimeWiring)
