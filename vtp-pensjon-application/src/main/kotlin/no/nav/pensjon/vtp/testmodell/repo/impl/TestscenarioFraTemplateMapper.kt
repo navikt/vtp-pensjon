@@ -15,8 +15,6 @@ import no.nav.pensjon.vtp.testmodell.util.JsonMapper
 import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
 import org.springframework.stereotype.Component
 import java.io.IOException
-import java.lang.IllegalArgumentException
-import java.lang.RuntimeException
 
 @Component
 class TestscenarioFraTemplateMapper {

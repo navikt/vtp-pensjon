@@ -4,7 +4,6 @@ import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Arkivtema
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalposttyper
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalstatus
 import java.time.LocalDateTime
-import java.util.*
 
 data class JournalpostModell(
     var journalpostId: String? = null,

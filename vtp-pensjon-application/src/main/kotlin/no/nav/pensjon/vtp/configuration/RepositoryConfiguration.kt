@@ -5,6 +5,7 @@ import no.nav.pensjon.vtp.testmodell.brev.BrevMetadataIndeks
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
 import no.nav.pensjon.vtp.testmodell.pensjon_testdata.PensjonTestdataService
 import no.nav.pensjon.vtp.testmodell.pensjon_testdata.PensjonTestdataServiceImpl
+import no.nav.pensjon.vtp.testmodell.pensjon_testdata.PensjonTestdataServiceNull
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseIndeks
 import no.nav.pensjon.vtp.testmodell.repo.TestscenarioTemplateRepository
 import no.nav.pensjon.vtp.testmodell.repo.impl.BasisdataProviderFileImpl
@@ -32,9 +33,11 @@ class RepositoryConfiguration {
     }
 
     @Bean
-    fun pensjonTestdataService(@Value("\${pensjon.testdata.url}") pensjonTestdataUrl: String): PensjonTestdataService {
-        return PensjonTestdataServiceImpl(pensjonTestdataUrl)
-    }
+    fun pensjonTestdataService(@Value("\${pensjon.testdata.url}") pensjonTestdataUrl: String?): PensjonTestdataService =
+        when {
+            pensjonTestdataUrl.isNullOrBlank() -> PensjonTestdataServiceNull()
+            else -> PensjonTestdataServiceImpl(pensjonTestdataUrl)
+        }
 
     @Bean
     fun enheterIndeks(): EnheterIndeks {

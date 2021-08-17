@@ -1,7 +1,5 @@
 package no.nav.pensjon.vtp.testmodell.personopplysning
 
-import java.util.*
-
 class AdresseIndeks {
     private val adresser: MutableList<AdresseModell> = ArrayList()
 

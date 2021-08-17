@@ -6,7 +6,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDFont
 import java.awt.Color
 import java.io.ByteArrayOutputStream
-import java.util.*
 import kotlin.math.roundToInt
 
 private fun newPage(doc: PDDocument, fontHeight: Int, fontSize: Int): PageContext {

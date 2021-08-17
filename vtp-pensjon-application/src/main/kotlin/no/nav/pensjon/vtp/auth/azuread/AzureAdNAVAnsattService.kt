@@ -1,10 +1,8 @@
 package no.nav.pensjon.vtp.auth.azuread
 
 import io.swagger.annotations.ApiOperation
-import no.nav.pensjon.vtp.auth.JsonWebKeySupport
-import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse
-import no.nav.pensjon.vtp.auth.UserEntry
-import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
+import no.nav.pensjon.vtp.auth.*
+import no.nav.pensjon.vtp.testmodell.ansatt.AnsattService
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.apache.http.client.utils.URIBuilder
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
@@ -20,7 +18,7 @@ import javax.servlet.http.HttpServletResponse
 @RestController
 @RequestMapping("/rest/AzureAd")
 class AzureAdNAVAnsattService(
-    private val ansatteIndeks: AnsatteIndeks,
+    private val ansattService: AnsattService,
     private val jsonWebKeySupport: JsonWebKeySupport
 ) {
     @GetMapping(value = ["/isAlive"], produces = [TEXT_HTML_VALUE])
@@ -53,16 +51,30 @@ class AzureAdNAVAnsattService(
     ): ResponseEntity<*> {
         return when (grantType) {
             "authorization_code" -> {
-                val token = createIdToken(code, tenant, clientId)
-                ok(Oauth2AccessTokenResponse(idToken = token, refreshToken = "refresh:$code", accessToken = "access:$code"))
+                ok(
+                    Oauth2AccessTokenResponse(
+                        idToken = createIdToken(code = code, tenant = tenant, clientId = clientId),
+                        refreshToken = "refresh:$code",
+                        accessToken = "access:$code"
+                    )
+                )
             }
             "refresh_token" -> {
                 if (refreshToken == null) {
                     badRequest().body("Missing required parameter 'request_token'")
                 } else {
                     val usernameWithNonce = refreshToken.substring(8)
-                    val token = createIdToken(usernameWithNonce /*+ ";"*/, tenant, clientId)
-                    ok(Oauth2AccessTokenResponse(idToken = token, refreshToken = "refresh:$usernameWithNonce", accessToken = "access:$usernameWithNonce"))
+                    ok(
+                        Oauth2AccessTokenResponse(
+                            idToken = createIdToken(
+                                code = usernameWithNonce,
+                                tenant = tenant,
+                                clientId = clientId
+                            ),
+                            refreshToken = "refresh:$usernameWithNonce",
+                            accessToken = "access:$usernameWithNonce"
+                        )
+                    )
                 }
             }
             else -> {
@@ -73,7 +85,7 @@ class AzureAdNAVAnsattService(
 
     private fun createIdToken(code: String, tenant: String, clientId: String): String {
         val codeData = code.split(";".toRegex()).toTypedArray()
-        val user = ansatteIndeks.findByCn(codeData[0]) ?: throw RuntimeException("Fant ikke NAV-ansatt med brukernavn ${codeData[0]}")
+        val user = ansattService.findByCn(codeData[0]) ?: throw RuntimeException("Fant ikke NAV-ansatt med brukernavn ${codeData[0]}")
 
         return azureOidcToken(
             jsonWebKeySupport = jsonWebKeySupport,
@@ -118,7 +130,7 @@ class AzureAdNAVAnsattService(
         Objects.requireNonNull(redirectUri, "Missing the ?redirect_uri=xxx query parameter")
 
         return ok(
-            ansatteIndeks.findAll()
+            ansattService.findAll(includeGenerated = false)
                 .sortedBy { it.displayName }
                 .map { user: NAVAnsatt ->
                     val redirect = URIBuilder(redirectUri).apply {
@@ -133,6 +145,29 @@ class AzureAdNAVAnsattService(
                 }
         )
     }
+
+    @PostMapping(value = ["/{tenant}/v2.0/users"])
+    @ApiOperation(
+        value = "/v2.0/users",
+        notes = "Creates a ansatt with the given attributes and issues a token for the ansatt"
+    )
+    fun newUser(
+        @PathVariable("tenant") tenant: String,
+        @RequestParam("client_id") clientId: String,
+        @RequestBody ansattRequest: AnsattRequest
+    ) = createUser(ansattRequest.groups).let { (cn) ->
+        Oauth2AccessTokenResponse(
+            idToken = createIdToken(
+                code = cn,
+                tenant = tenant,
+                clientId = clientId
+            ),
+            refreshToken = "refresh:$cn",
+            accessToken = "access:$cn"
+        )
+    }
+
+    fun createUser(groups: List<String>) = ansattService.addAnnsatt(groups = groups, enheter = emptyList(), generated = true)
 
     private fun getFrontendUrl(req: HttpServletRequest): String {
         return req.scheme + "://" + req.serverName + ":" + req.serverPort + "/#"

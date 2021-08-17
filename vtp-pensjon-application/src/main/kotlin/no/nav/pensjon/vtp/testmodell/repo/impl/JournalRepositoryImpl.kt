@@ -6,7 +6,6 @@ import no.nav.pensjon.vtp.testmodell.repo.JournalRepository
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime.now
 import java.time.format.DateTimeFormatter.ofPattern
-import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 @Repository

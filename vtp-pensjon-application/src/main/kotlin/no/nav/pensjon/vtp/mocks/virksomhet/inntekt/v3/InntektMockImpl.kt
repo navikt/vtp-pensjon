@@ -16,7 +16,6 @@ import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.PersonIdent
 import no.nav.tjeneste.virksomhet.inntekt.v3.meldinger.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
-import java.util.*
 import javax.jws.*
 import javax.xml.ws.RequestWrapper
 import javax.xml.ws.ResponseWrapper

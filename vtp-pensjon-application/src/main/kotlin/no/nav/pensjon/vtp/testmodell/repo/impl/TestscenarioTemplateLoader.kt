@@ -8,7 +8,6 @@ import org.springframework.core.io.Resource
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
-import java.util.*
 
 const val LOCATION_PATTERN = "classpath:/scenarios/**/vars.json"
 

@@ -2,7 +2,6 @@ package no.nav.pensjon.vtp.testmodell.scenario.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.util.*
 
 /** Beskriver en template,inklusiv liste av variable og deres verdier.  */
 data class TemplateDto(

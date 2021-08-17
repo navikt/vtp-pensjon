@@ -3,7 +3,6 @@ package no.nav.pensjon.vtp.mocks.virksomhet.person.v3
 import no.nav.pensjon.vtp.testmodell.personopplysning.*
 import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.*
-import java.lang.UnsupportedOperationException
 import java.time.LocalDate
 
 fun setAdresser(bruker: Bruker, person: PersonModell) {

@@ -2,7 +2,6 @@ package no.nav.pensjon.vtp.testmodell.inntektytelse.trex
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.util.ArrayList
 
 data class TRexModell(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

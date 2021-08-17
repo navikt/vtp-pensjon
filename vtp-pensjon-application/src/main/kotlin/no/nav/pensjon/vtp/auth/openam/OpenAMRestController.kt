@@ -3,11 +3,8 @@ package no.nav.pensjon.vtp.auth.openam
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
-import no.nav.pensjon.vtp.auth.Oauth2AccessTokenResponse
-import no.nav.pensjon.vtp.auth.OidcTokenGenerator
-import no.nav.pensjon.vtp.auth.UserEntry
-import no.nav.pensjon.vtp.auth.getUser
-import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
+import no.nav.pensjon.vtp.auth.*
+import no.nav.pensjon.vtp.testmodell.ansatt.AnsattService
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.apache.http.client.utils.URIBuilder
 import org.jose4j.jwt.NumericDate.now
@@ -26,9 +23,9 @@ import javax.servlet.http.HttpServletRequest
 @Api(tags = ["Openam"])
 @RequestMapping("/rest/isso")
 class OpenAMRestController(
-    private val ansatteIndeks: AnsatteIndeks,
+    private val ansattService: AnsattService,
     private val oidcTokenGenerator: OidcTokenGenerator,
-    @Value("\${ISSO_OAUTH2_ISSUER}") val issuer: String
+    @Value("\${ISSO_OAUTH2_ISSUER}") val issuer: String,
 ) {
     @GetMapping(value = ["/oauth2/users"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "oauth2/users", notes = "Liste over brukere til OpenAM-innlogging")
@@ -47,7 +44,7 @@ class OpenAMRestController(
         require(scope == "openid") { "Unsupported scope [$scope], should be 'openid'" }
         require(responseType == "code") { "Unsupported responseType [$responseType], should be 'code'" }
 
-        return ansatteIndeks.findAll()
+        return ansattService.findAll(includeGenerated = false)
             .sortedBy { it.displayName }
             .map { user: NAVAnsatt ->
                 val uriBuilder = URIBuilder(redirectUri)
@@ -65,7 +62,6 @@ class OpenAMRestController(
     @PostMapping(value = ["/oauth2/access_token"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "oauth2/access_token", notes = "Mock impl av Oauth2 access_token")
     fun accessToken(
-        req: HttpServletRequest,
         @RequestHeader(AUTHORIZATION) authorization: String?,
         @RequestParam grant_type: String,
         @RequestParam(required = false) realm: String?,
@@ -103,6 +99,31 @@ class OpenAMRestController(
         }
         ?: status(UNAUTHORIZED).body("Missing basic authorization header")
 
+    @PostMapping(value = ["/oauth2/ansatt"])
+    @ApiOperation(
+        value = "oauth2/mock_access_token",
+        notes = "Creates a ansatt with the given attributes and issues a token for the ansatt"
+    )
+    fun newAnsatt(
+        @RequestHeader(AUTHORIZATION) authorization: String?,
+        @RequestBody ansattRequest: AnsattRequest
+    ): ResponseEntity<*> = getUser(authorization)
+        ?.let { clientId ->
+            createUser(ansattRequest.groups).let { (cn) ->
+                ok(
+                    Oauth2AccessTokenResponse(
+                        idToken = createIdToken(clientId, cn),
+                        refreshToken = "refresh:$cn",
+                        accessToken = "access:$cn"
+                    )
+                )
+            }
+        }
+        ?: status(UNAUTHORIZED).body("Missing basic authorization header")
+
+    fun createUser(groups: List<String>) =
+        ansattService.addAnnsatt(groups = groups, enheter = emptyList(), generated = true)
+
     private fun createIdToken(clientId: String, code: String): String {
         val codeData = code.split(";".toRegex()).toTypedArray()
 
@@ -125,18 +146,14 @@ class OpenAMRestController(
     @GetMapping(value = ["/oauth2/../isAlive.jsp"], produces = [TEXT_HTML_VALUE])
     fun isAliveMockRassUrl() = "Server is ALIVE"
 
-    @GetMapping(value = ["/oauth2/connect/jwk_uri"], produces = [APPLICATION_JSON_VALUE])
+    @GetMapping(value = ["/oauth2/connect/jwk_uri"])
     @ApiOperation(value = "oauth2/connect/jwk_uri", notes = "Mock impl av Oauth2 jwk_uri")
     fun authorize() = oidcTokenGenerator.jwks()
 
     /**
      * brukes til autentisere bruker slik at en slipper å autentisere senere. OpenAM mikk-makk .
      */
-    @PostMapping(
-        value = ["/json/authenticate"],
-        produces = [APPLICATION_JSON_VALUE],
-        consumes = [APPLICATION_JSON_VALUE]
-    )
+    @PostMapping("/json/authenticate")
     @ApiOperation(value = "json/authenticate", notes = "Mock impl av OpenAM autenticate for service bruker innlogging")
     fun serviceBrukerAuthenticate(
         @ApiParam("Liste over aksjonspunkt som skal bekreftes, inklusiv data som trengs for å løse de.") enduserTemplate: EndUserAuthenticateTemplate?
@@ -170,7 +187,7 @@ class OpenAMRestController(
         return req.scheme + "://" + req.serverName + ":" + req.serverPort + "/#"
     }
 
-    @GetMapping(value = ["/oauth2/.well-known/openid-configuration"], produces = [APPLICATION_JSON_VALUE])
+    @GetMapping(value = ["/oauth2/.well-known/openid-configuration"])
     @ApiOperation(value = "Discovery url", notes = "Mock impl av discovery urlen. ")
     fun wellKnown(req: HttpServletRequest) =
         WellKnownResponse(

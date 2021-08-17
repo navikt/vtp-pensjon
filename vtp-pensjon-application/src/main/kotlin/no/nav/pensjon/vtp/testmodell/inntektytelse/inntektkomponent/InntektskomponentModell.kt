@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
-import java.util.ArrayList
 
 class InntektskomponentModell {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

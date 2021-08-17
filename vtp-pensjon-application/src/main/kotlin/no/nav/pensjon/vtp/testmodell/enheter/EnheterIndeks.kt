@@ -1,7 +1,5 @@
 package no.nav.pensjon.vtp.testmodell.enheter
 
-import java.util.*
-
 class EnheterIndeks(private val byDiskresjonskode: MutableMap<String, Norg2Modell> = HashMap()) {
     fun saveAll(enheter: Collection<Norg2Modell>) {
         enheter.forEach { m: Norg2Modell -> byDiskresjonskode.putIfAbsent(m.diskresjonskode, m) }

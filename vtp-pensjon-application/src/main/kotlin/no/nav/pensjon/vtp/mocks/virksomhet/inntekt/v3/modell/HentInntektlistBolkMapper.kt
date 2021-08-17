@@ -9,7 +9,6 @@ import no.nav.pensjon.vtp.util.asXMLGregorianCalendar
 import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.*
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.util.*
 
 object HentInntektlistBolkMapper {
     fun makeArbeidsInntektIdent(modell: InntektskomponentModell, aktoer: Aktoer): ArbeidsInntektIdent {

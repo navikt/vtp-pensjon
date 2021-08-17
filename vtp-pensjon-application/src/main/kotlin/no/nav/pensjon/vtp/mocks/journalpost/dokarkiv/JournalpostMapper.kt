@@ -10,7 +10,6 @@ import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentVariantInnhold
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostBruker
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.*
-import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Arkivfiltype
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.HOVEDDOKUMENT
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.VEDLEGG
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalposttyper.*
