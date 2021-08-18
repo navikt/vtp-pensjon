@@ -309,6 +309,11 @@
                 <artifactId>oauth2-oidc-sdk</artifactId>
                 <version>9.12</version>
             </dependency>
+            <dependency>
+                <groupId>org.jvnet.jaxb2_commons</groupId>
+                <artifactId>jaxb2-basics-runtime</artifactId>
+                <version>0.12.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -621,6 +626,74 @@
     <build>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-codegen-plugin</artifactId>
+                <version>3.4.3</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.cxf.xjcplugins</groupId>
+                        <artifactId>cxf-xjc-boolean</artifactId>
+                        <version>3.3.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-value-constructor</artifactId>
+                        <version>3.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-basics</artifactId>
+                        <version>0.12.0</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+
+                        <configuration>
+                            <defaultOptions>
+                                <bindingFiles>
+                                    <bindingFile>src/main/resources/wsdl/bindings.xjb</bindingFile>
+                                </bindingFiles>
+                                <extraargs>
+                                    <!-- Generate server stubs -->
+                                    <extraarg>-impl</extraarg>
+                                    <!--                                    <extraarg>-verbose</extraarg>-->
+                                    <!--change Boolean type getters to getXXX (to ensure status quo with starting point) -->
+                                    <extraarg>-xjc-Xbg</extraarg>
+                                    <!-- Add namespace on element, not on package level -->
+                                    <extraarg>-xjc-npa</extraarg>
+                                    <extraarg>-xjc-Xvalue-constructor</extraarg>
+                                    <extraarg>-xjc-XtoString</extraarg>
+                                </extraargs>
+                            </defaultOptions>
+                            <wsdlOptions>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/wsdl/samperson/SAMPersonWSEXP_SAMPersonHttp_Service.wsdl</wsdl>
+                                    <extraargs>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>http://nav-cons-sto-sam-person/no/nav/inf=no.nav.inf</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo=no.nav.lib.sto.sam.asbo</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person=no.nav.lib.sto.sam.asbo.person</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault=no.nav.lib.sto.sam.fault</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>http://nav-cons-sto-sam-person/no/nav/inf/Binding=no.nav.inf.binding</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+                            </wsdlOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>com.github.ekryd.sortpom</groupId>
                 <artifactId>sortpom-maven-plugin</artifactId>
