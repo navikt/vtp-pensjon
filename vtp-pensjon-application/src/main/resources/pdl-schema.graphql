@@ -1,0 +1,52 @@
+scalar Date
+
+schema {
+    query: Query
+}
+
+type Query {
+    hentPerson(ident: ID!): Person
+}
+
+type Person {
+    navn: Navn
+    foedsel: Foedsel
+    statsborgerskap: Statsborgerskap
+    doedsfall : Doedsfall
+}
+
+type Navn {
+    fornavn: String!
+    mellomnavn: String
+    etternavn: String!
+    forkortetNavn: String
+    gyldigFraOgMed: Date
+    metadata: Metadata!
+}
+
+type Foedsel {
+    foedselsaar: Int
+    foedselsdato: Date
+    foedeland: String
+    foedested: String
+    foedekommune: String
+    metadata: Metadata!
+}
+
+type Statsborgerskap {
+    land: String!
+    bekreftelsesdato: Date
+    gyldigFraOgMed: Date
+    gyldigTilOgMed: Date
+    metadata: Metadata!
+}
+
+type Doedsfall {
+    doedsdato: Date
+    metadata: Metadata!
+}
+
+type Metadata {
+    historisk: Boolean!
+    master: String!
+}
