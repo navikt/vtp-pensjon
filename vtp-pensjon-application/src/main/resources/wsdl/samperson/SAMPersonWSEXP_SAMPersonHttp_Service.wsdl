@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="SAMPersonWSEXP_SAMPersonHttp_Service" targetNamespace="http://nav-cons-sto-sam-person/no/nav/inf/Binding" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:Port_0="http://nav-cons-sto-sam-person/no/nav/inf" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:this="http://nav-cons-sto-sam-person/no/nav/inf/Binding" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="http://nav-cons-sto-sam-person/no/nav/inf" location="no/nav/inf/SAMPerson.wsdl"/>
+  <wsdl:binding name="SAMPersonWSEXP_SAMPersonHttpBinding" type="Port_0:SAMPerson">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="hentPerson">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="hentPersonRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="hentPersonResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoPersonIkkeFunnet">
+        <soap:fault name="faultStoPersonIkkeFunnet" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SAMPersonWSEXP_SAMPersonHttpService">
+    <wsdl:port name="SAMPersonWSEXP_SAMPersonHttpPort" binding="this:SAMPersonWSEXP_SAMPersonHttpBinding">
+      <soap:address location="http://localhost:9080/nav-cons-sto-sam-personWeb/sca/SAMPersonWSEXP"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

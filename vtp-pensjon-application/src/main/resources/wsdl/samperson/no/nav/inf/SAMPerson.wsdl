@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:bons2="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person" xmlns:bons3="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" xmlns:bons4="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" xmlns:bons5="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/person" xmlns:tns="http://nav-cons-sto-sam-person/no/nav/inf" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SAMPerson" targetNamespace="http://nav-cons-sto-sam-person/no/nav/inf">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://nav-cons-sto-sam-person/no/nav/inf" xmlns:bons2="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person" xmlns:bons3="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" xmlns:bons4="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" xmlns:tns="http://nav-cons-sto-sam-person/no/nav/inf" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" schemaLocation="../lib/sto/sam/fault/FaultStoPersonIkkeFunnet.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" schemaLocation="../lib/sto/sam/fault/FaultStoGenerisk.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" schemaLocation="../lib/sto/sam/asbo/ASBOStoPerson.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person" schemaLocation="../lib/sto/sam/asbo/person/ASBOStoHentPersonRequest.xsd"/>
+            <xsd:element name="hentPerson">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="hentPersonRequest" nillable="true" type="bons2:ASBOStoHentPersonRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+            <xsd:element name="hentPersonResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="hentPersonResponse" nillable="true" type="bons3:ASBOStoPerson"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+            <xsd:element name="hentPerson_faultStoGenerisk" type="bons4:FaultStoGenerisk"/>
+            <xsd:element name="hentPerson_faultStoPersonIkkeFunnet" type="bons4:FaultStoPersonIkkeFunnet"/>
+        </xsd:schema>
+  </wsdl:types>
+    <wsdl:message name="hentPersonRequestMsg">
+    <wsdl:part element="tns:hentPerson" name="hentPersonParameters"/>
+  </wsdl:message>
+    <wsdl:message name="hentPersonResponseMsg">
+    <wsdl:part element="tns:hentPersonResponse" name="hentPersonResult"/>
+  </wsdl:message>
+    <wsdl:message name="hentPerson_faultStoGeneriskMsg">
+    <wsdl:part element="tns:hentPerson_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="hentPerson_faultStoPersonIkkeFunnetMsg">
+    <wsdl:part element="tns:hentPerson_faultStoPersonIkkeFunnet" name="faultStoPersonIkkeFunnet"/>
+  </wsdl:message>
+    <wsdl:portType name="SAMPerson">
+        <wsdl:operation name="hentPerson">
+      <wsdl:input message="tns:hentPersonRequestMsg" name="hentPersonRequest"/>
+      <wsdl:output message="tns:hentPersonResponseMsg" name="hentPersonResponse"/>
+      <wsdl:fault message="tns:hentPerson_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+      <wsdl:fault message="tns:hentPerson_faultStoPersonIkkeFunnetMsg" name="faultStoPersonIkkeFunnet"/>
+    </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>
