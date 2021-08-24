@@ -1,11 +1,10 @@
-package no.nav.pensjon.vtp.auth.openam
+package no.nav.pensjon.vtp.auth.isso
 
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import no.nav.pensjon.vtp.auth.*
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsattService
-import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.apache.http.client.utils.URIBuilder
 import org.jose4j.jwt.NumericDate.now
 import org.springframework.beans.factory.annotation.Value
@@ -22,7 +21,7 @@ import javax.servlet.http.HttpServletRequest
 @RestController
 @Api(tags = ["Openam"])
 @RequestMapping("/rest/isso")
-class OpenAMRestController(
+class IssoMock(
     private val ansattService: AnsattService,
     private val oidcTokenGenerator: OidcTokenGenerator,
     @Value("\${ISSO_OAUTH2_ISSUER}") val issuer: String,
@@ -40,23 +39,28 @@ class OpenAMRestController(
         @RequestParam state: String,
         @RequestParam("redirect_uri") redirectUri: String,
         @RequestParam(required = false) nonce: String?
-    ): List<UserEntry> {
-        require(scope == "openid") { "Unsupported scope [$scope], should be 'openid'" }
-        require(responseType == "code") { "Unsupported responseType [$responseType], should be 'code'" }
-
-        return ansattService.findAll(includeGenerated = false)
-            .sortedBy { it.displayName }
-            .map { user: NAVAnsatt ->
-                val uriBuilder = URIBuilder(redirectUri)
-                uriBuilder.addParameter("scope", scope)
-                uriBuilder.addParameter("state", state)
-                uriBuilder.addParameter("client_id", clientId)
-                uriBuilder.addParameter("iss", issuer)
-                uriBuilder.addParameter("redirect_uri", redirectUri)
-                uriBuilder.addParameter("code", "${user.cn};${nonce ?: ""}")
-                val redirect = uriBuilder.toString()
-                UserEntry(username = user.cn, displayName = user.displayName, redirect = redirect, details = user)
+    ) = when {
+        scope != "openid" -> badRequest().body("Unsupported scope [$scope], should be 'openid'")
+        responseType != "code" -> badRequest().body("Unsupported responseType [$responseType], should be 'code'")
+        else -> ok(
+            ansattService.findAll(includeGenerated = false).map {
+                UserEntry(
+                    username = it.cn,
+                    displayName = it.displayName,
+                    redirect = uri(
+                        template = redirectUri,
+                        parameters = mapOf(
+                            "scope" to scope,
+                            "state" to state,
+                            "client_id" to clientId,
+                            "iss" to issuer,
+                            "code" to "${it.cn};${nonce ?: ""}"
+                        )
+                    ),
+                    details = it
+                )
             }
+        )
     }
 
     @PostMapping(value = ["/oauth2/access_token"], produces = [APPLICATION_JSON_VALUE])
@@ -67,8 +71,9 @@ class OpenAMRestController(
         @RequestParam(required = false) realm: String?,
         @RequestParam code: String,
         @RequestParam(required = false) refresh_token: String?,
-        @RequestParam(required = false) redirect_uri: String?
-    ): ResponseEntity<*> = getUser(authorization)
+        @RequestParam(required = false) redirect_uri: String?,
+        @RequestParam("client_id", required = false) client_id: String?,
+    ): ResponseEntity<*> = (client_id ?: getUser(authorization))
         ?.let { clientId ->
             when (grant_type) {
                 "authorization_code" -> ok(
@@ -134,7 +139,7 @@ class OpenAMRestController(
             aud = listOf(clientId),
             expiration = now().apply { addSeconds(3600L * 6L) },
             additionalClaims = mapOf(
-                "azp" to "OIDC",
+                "azp" to clientId,
                 "acr" to "Level4"
             ),
         )
@@ -178,8 +183,6 @@ class OpenAMRestController(
                 )
             )
         }
-        // TODO ingen validering av authId?
-        // TODO generer unik session token?
         // generer token som brukes til å bekrefte innlogging ovenfor openam
         ?: EndUserAuthenticateSuccess("i-am-just-a-dummy-session-token-workaround", "/isso/console")
 
@@ -201,5 +204,10 @@ class OpenAMRestController(
     @ExceptionHandler(value = [Exception::class])
     fun handleException(e: Exception): ResponseEntity<JsonResponse> {
         return ResponseEntity(JsonResponse(e.message ?: ""), INTERNAL_SERVER_ERROR)
+    }
+
+    companion object {
+        private fun uri(template: String, parameters: Map<String, String>) =
+            URIBuilder(template).apply { parameters.forEach { addParameter(it.key, it.value) } }.toString()
     }
 }

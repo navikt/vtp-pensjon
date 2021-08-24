@@ -25,6 +25,21 @@
     ]
   },
   {
+    "cn": "spesialsaksbeh",
+    "givenname": "Spesial",
+    "sn": "Saksbehandler",
+    "displayName": "Saksbehandler Spesial",
+    "email":"spesial.saksbehandler@example.com",
+    "enheter": [
+      "4407",
+      "4817"
+    ],
+    "groups": [
+      "0000-GA-PENSJON_SAKSBEHANDLER",
+      "0000-GA-PENSJON_SPESIAL"
+    ]
+  },
+  {
     "cn": "klageb",
     "givenname": "Enkel",
     "sn": "Klagebehandler",

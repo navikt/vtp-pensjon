@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.auth.openam
+package no.nav.pensjon.vtp.auth.isso
 
 data class Name(
     val name: String,
