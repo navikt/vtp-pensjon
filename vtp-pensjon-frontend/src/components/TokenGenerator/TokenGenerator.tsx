@@ -234,6 +234,7 @@ export default () => {
           <TokenPanel
             username={{ default: "saksbeh" }}
             clientId={{ default: "psak" }}
+            scope={{}}
             tenantId={{ default: "966ac572-f5b7-4bbe-aa88-c76419c0f851" }}
             requestSupplier={azureADRequestSupplier}
             responseMapper={azureAdResponseMapper}

@@ -1,4 +1,4 @@
-import { RequestParameters } from "../RequestParameters";
+import {RequestParameters} from "../RequestParameters";
 
 export function azureADRequestSupplier(requestParameters: RequestParameters) {
   if (requestParameters.clientId === undefined) {
@@ -29,6 +29,7 @@ export function azureADRequestSupplier(requestParameters: RequestParameters) {
           `client_id=${encodeURIComponent(requestParameters.clientId)}` +
           `&code=${encodeURIComponent(requestParameters.username)}` +
           `&redirect_uri=${encodeURIComponent("https://example.com")}` +
+          (requestParameters.scope && `&scope=${encodeURIComponent(requestParameters.scope)}` || "") +
           `&grant_type=authorization_code`,
       }
     );
