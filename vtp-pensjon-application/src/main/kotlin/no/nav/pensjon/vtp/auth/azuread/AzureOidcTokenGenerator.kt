@@ -15,8 +15,8 @@ fun azureOidcToken(
     expiration: NumericDate = NumericDate.fromSeconds(NumericDate.now().value + 3600 * 6),
     issuer: String? = null,
     issuedAt: NumericDate = NumericDate.now(),
-    additionalClaims: Map<String, String> = HashMap()
-
+    additionalClaims: Map<String, String> = HashMap(),
+    scope: String?,
 ): String {
     val claims = JwtClaims()
     claims.issuer = issuer
@@ -43,5 +43,6 @@ fun azureOidcToken(
         claims.setStringClaim(key, value)
     }
     claims.setClaim("groups", groups)
+    scope?.let { claims.setClaim("scp", scope) }
     return jsonWebKeySupport.createRS256Token(claims.toJson()).compactSerialization
 }

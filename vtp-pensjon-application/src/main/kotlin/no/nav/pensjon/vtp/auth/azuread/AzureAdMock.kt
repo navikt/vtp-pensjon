@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("/rest/AzureAd")
-class AzureAdNAVAnsattService(
+class AzureAdMock(
     private val ansattService: AnsattService,
     private val jsonWebKeySupport: JsonWebKeySupport
 ) {
@@ -47,13 +47,14 @@ class AzureAdNAVAnsattService(
         @RequestParam("realm") realm: String?,
         @RequestParam("code") code: String,
         @RequestParam("refresh_token", required = false) refreshToken: String?,
-        @RequestParam("redirect_uri") redirectUri: String
+        @RequestParam("redirect_uri") redirectUri: String,
+        @RequestParam("scope", required = false) scope: String?,
     ): ResponseEntity<*> {
         return when (grantType) {
             "authorization_code" -> {
                 ok(
                     Oauth2AccessTokenResponse(
-                        idToken = createIdToken(code = code, tenant = tenant, clientId = clientId),
+                        idToken = createIdToken(code = code, tenant = tenant, clientId = clientId, scope = scope),
                         refreshToken = "refresh:$code",
                         accessToken = "access:$code"
                     )
@@ -69,7 +70,8 @@ class AzureAdNAVAnsattService(
                             idToken = createIdToken(
                                 code = usernameWithNonce,
                                 tenant = tenant,
-                                clientId = clientId
+                                clientId = clientId,
+                                scope = scope,
                             ),
                             refreshToken = "refresh:$usernameWithNonce",
                             accessToken = "access:$usernameWithNonce"
@@ -83,7 +85,7 @@ class AzureAdNAVAnsattService(
         }
     }
 
-    private fun createIdToken(code: String, tenant: String, clientId: String): String {
+    private fun createIdToken(code: String, tenant: String, clientId: String, scope: String? = null): String {
         val codeData = code.split(";".toRegex()).toTypedArray()
         val user = ansattService.findByCn(codeData[0]) ?: throw RuntimeException("Fant ikke NAV-ansatt med brukernavn ${codeData[0]}")
 
@@ -99,7 +101,8 @@ class AzureAdNAVAnsattService(
                 "oid" to UUID.nameUUIDFromBytes(user.cn.toByteArray()).toString(), // user id - which is normally a UUID in Azure AD
                 "name" to user.displayName,
                 "preferred_username" to user.email
-            )
+            ),
+            scope = scope,
         )
     }
 
