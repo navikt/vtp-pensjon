@@ -52,8 +52,8 @@ class PersonServiceMockImpl(
             .any { familierelasjon: FamilierelasjonModell ->
                 familierelasjon.rolle == Rolle.BARN &&
                     personModellRepository.findById(familierelasjon.til)
-                    ?.let { it.aktørIdent == bruker.aktørIdent }
-                    ?: throw RuntimeException("Unable to locate child with ident $familierelasjon.til")
+                        ?.let { it.aktørIdent == bruker.aktørIdent }
+                        ?: throw RuntimeException("Unable to locate child with ident $familierelasjon.til")
             }
 
         val person = fra(bruker)
