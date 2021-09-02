@@ -70,5 +70,4 @@ class UnleashController(
     )
 
     data class FeatureResource(val version: Int = 1, val features: List<Feature>)
-
 }
