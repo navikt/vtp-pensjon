@@ -159,7 +159,7 @@ export function Unleash() {
 
     function deleteFeature(feature: Feature) {
         fetch(
-            "/rest/unleash/api/client/features/" + feature.name,
+            "/rest/unleash/api/client/features/" + encodeURI(feature.name),
             {
                 method: "delete"
             }
