@@ -114,7 +114,7 @@ function TokenPanel(props: {
       }
     } catch (err) {
       console.error("Could not generate token", err);
-      setState({ type: "ERROR", message: err.toString() });
+      setState({ type: "ERROR", message: "Could not generate token" });
     }
   }
 
