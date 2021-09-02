@@ -1,7 +1,6 @@
 import { CaseScenario, TestScenario } from "./state";
-import { Button, Card, Container } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import React from "react";
-import ScenarioChooser from "./ScenarioChooser";
 import CaseChooser from "./CaseChooser";
 
 interface ActiveScenarioProps {
@@ -39,7 +38,7 @@ export default function ActiveScenarios(props: ActiveScenarioProps) {
             </a>
           </li>
         </ul>
-        {cases === undefined || cases.length == 0 ? (
+        {cases === undefined || cases.length === 0 ? (
           ""
         ) : (
           <ul>

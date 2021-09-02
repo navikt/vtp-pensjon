@@ -37,7 +37,7 @@ async function deleteScenario(scenarioId: string): Promise<void> {
   await fetch("/api/testscenarios/" + scenarioId, { method: "delete" });
 }
 
-export default () => {
+const Testcenario = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   async function handleCreateScenario(templateKey: string) {
@@ -81,3 +81,5 @@ export default () => {
     </Container>
   );
 };
+
+export default Testcenario

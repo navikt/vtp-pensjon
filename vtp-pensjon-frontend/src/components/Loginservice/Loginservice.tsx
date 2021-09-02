@@ -8,21 +8,22 @@ interface User {
   lastName: string;
   redirect: string;
 }
-export default (props: RouteComponentProps<{}>) => {
+
+const Loginservice = (props: RouteComponentProps) => {
   const [users, setUsers] = useState<User[]>([]);
 
-  async function fetchUsers() {
-    const response = await fetch(
-      "/rest/loginservice/users" + props.location.search
-    );
-    const data: User[] = await response.json();
-    setUsers(data);
-  }
-
   useEffect(() => {
+    const fetchUsers = async function () {
+      const response = await fetch(
+          "/rest/loginservice/users" + props.location.search
+      );
+      const data: User[] = await response.json();
+      setUsers(data);
+    }
+
     fetchUsers();
     return () => {};
-  }, []);
+  }, [props.location.search]);
 
   return (
     <Container fluid>
@@ -37,3 +38,5 @@ export default (props: RouteComponentProps<{}>) => {
     </Container>
   );
 };
+
+export default Loginservice

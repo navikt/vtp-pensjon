@@ -84,13 +84,19 @@ function TokenPanel(props: {
 
   useEffect(() => {
     (async function () {
-      setCommand(await generateCommand(getRequest()));
+      setCommand(await generateCommand(props.requestSupplier({
+        clientId: clientId,
+        resource: resource,
+        scope: scope,
+        tenantId: tenantId,
+        username: username,
+      })));
     })();
-  }, [clientId, username, tenantId]);
+  }, [clientId, username, tenantId, props, resource, scope]);
 
   async function generateToken(request: Request): Promise<string> {
     const response = await fetch(request);
-    if (response.status / 100 != 2) {
+    if (response.status / 100 !== 2) {
       throw Error(
         "status: " +
           response.statusText +
@@ -114,7 +120,7 @@ function TokenPanel(props: {
       }
     } catch (err) {
       console.error("Could not generate token", err);
-      setState({ type: "ERROR", message: err.toString() });
+      setState({ type: "ERROR", message: "Could not generate token" });
     }
   }
 
@@ -207,7 +213,7 @@ function TokenPanel(props: {
   );
 }
 
-export default () => {
+const TokenGenerator = () => {
   return (
     <Container fluid>
       <Row>
@@ -254,3 +260,5 @@ export default () => {
     </Container>
   );
 };
+
+export default TokenGenerator

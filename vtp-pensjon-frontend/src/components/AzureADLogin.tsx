@@ -47,7 +47,7 @@ type State =
       error: Error;
     };
 
-function imageUrl(user: string): string {
+function imageUrl(): string {
   return "/assets/saksbehandler.svg";
 }
 
@@ -76,7 +76,7 @@ const Login: React.FC<{ usersUrl: string; queryParams: string }> = (props) => {
       );
 
     return () => {};
-  }, []);
+  }, [props.usersUrl, props.queryParams]);
 
   if (state.type === "LOADING") {
     return <div>Loading...</div>;
@@ -98,7 +98,7 @@ const Login: React.FC<{ usersUrl: string; queryParams: string }> = (props) => {
                 <Col sm={1}>
                   <img
                     className="img-fluid"
-                    src={imageUrl(user.username)}
+                    src={imageUrl()}
                     alt="Bruker"
                     style={{
                       maxHeight: "80px",
@@ -157,7 +157,7 @@ const Login: React.FC<{ usersUrl: string; queryParams: string }> = (props) => {
   }
 };
 
-export function OpenAMLogin(props: RouteComponentProps<{}>) {
+export function OpenAMLogin(props: RouteComponentProps) {
   return (
     <Login
       usersUrl="/rest/isso/oauth2/users"
