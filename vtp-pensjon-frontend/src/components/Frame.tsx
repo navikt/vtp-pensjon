@@ -22,6 +22,9 @@ const Frame = (props: Props) => (
           <Link className="nav-link" to="/snitch">
             Snitch
           </Link>
+          <Link className="nav-link" to="/unleash">
+            Unleash
+          </Link>
           <Link className="nav-link" to="/tokenGenerator">
             Generer token
           </Link>

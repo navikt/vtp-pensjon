@@ -10,6 +10,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { AzureADLogin, OpenAMLogin } from "./components/AzureADLogin";
 import TokenGenerator from "./components/TokenGenerator/TokenGenerator";
 import Loginservice from "./components/Loginservice/Loginservice";
+import {Unleash} from "./components/Unleash/unleash";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/loginservice/login" component={Loginservice} />
             <Route path="/openam/authorize" component={OpenAMLogin} />
             <Route path="/tokenGenerator" component={TokenGenerator} />
+            <Route path="/unleash" component={Unleash} />
             <Route exact path="/">
               <Testscenario />
             </Route>
