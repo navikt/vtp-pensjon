@@ -3,16 +3,13 @@ import { Link } from "react-router-dom";
 import {
   Navbar,
   Nav,
-  Button,
-  FormControl,
-  Form,
-  NavDropdown,
 } from "react-bootstrap";
 
 interface Props {
   children?: React.ReactNode;
 }
-export default (props: Props) => (
+
+const Frame = (props: Props) => (
   <>
     <Navbar variant="dark" bg="dark" expand="lg">
       <Navbar.Brand href="/">VTP Pensjon</Navbar.Brand>
@@ -37,3 +34,5 @@ export default (props: Props) => (
     {props.children}
   </>
 );
+
+export default Frame

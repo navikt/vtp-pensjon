@@ -81,7 +81,7 @@ export default function PrettyPrintedPayloadBody(
       case "application/pdf":
         return (
           <div className="embed-responsive embed-responsive-1by1">
-            <iframe
+            <iframe title="Document"
               className="embed-responsive-item"
               src={`data:application/pdf;base64,${content}`}
               frameBorder="0"

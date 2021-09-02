@@ -90,7 +90,7 @@ function TokenPanel(props: {
 
   async function generateToken(request: Request): Promise<string> {
     const response = await fetch(request);
-    if (response.status / 100 != 2) {
+    if (response.status / 100 !== 2) {
       throw Error(
         "status: " +
           response.statusText +
@@ -207,7 +207,7 @@ function TokenPanel(props: {
   );
 }
 
-export default () => {
+const TokenGenerator = () => {
   return (
     <Container fluid>
       <Row>
@@ -254,3 +254,5 @@ export default () => {
     </Container>
   );
 };
+
+export default TokenGenerator

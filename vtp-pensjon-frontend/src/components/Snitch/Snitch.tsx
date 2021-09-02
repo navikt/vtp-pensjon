@@ -19,7 +19,7 @@ export function badgeVariant(status: number): Variant {
   }
 }
 
-export default () => {
+const Snitch = () => {
   const [selectedRequest, setSelectedRequest] =
     useState<RequestResponse | null>(null);
 
@@ -58,3 +58,5 @@ export default () => {
     </Container>
   );
 };
+
+export default Snitch
