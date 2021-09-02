@@ -84,9 +84,15 @@ function TokenPanel(props: {
 
   useEffect(() => {
     (async function () {
-      setCommand(await generateCommand(getRequest()));
+      setCommand(await generateCommand(props.requestSupplier({
+        clientId: clientId,
+        resource: resource,
+        scope: scope,
+        tenantId: tenantId,
+        username: username,
+      })));
     })();
-  }, [clientId, username, tenantId]);
+  }, [clientId, username, tenantId, props, resource, scope]);
 
   async function generateToken(request: Request): Promise<string> {
     const response = await fetch(request);
