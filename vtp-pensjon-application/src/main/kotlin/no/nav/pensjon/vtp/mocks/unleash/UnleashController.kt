@@ -1,27 +1,29 @@
 package no.nav.pensjon.vtp.mocks.unleash
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import java.time.LocalDate.now
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("/rest/unleash")
-class UnleashController {
+class UnleashController(
+    private val featureRepository: FeatureRepository
+) {
     @GetMapping("/api/client/features")
     fun features() = FeatureResource(
-        features = listOf(
-            Feature(
-                name = "pensjon.tp-ejb-adapter.tp-nais",
-                description = "Controls the use of tjenestepensjon on nais / was",
-                enabled = true
-            )
-        )
+        features = featureRepository.findAll()
     )
+
+    @PutMapping("/api/client/features")
+    fun updateFeature(@RequestBody feature: Feature) {
+        featureRepository.save(feature)
+    }
+
+    @DeleteMapping("/api/client/features/{name}")
+    fun deleteFeature(@PathVariable name: String) {
+        featureRepository.deleteByName(name)
+    }
 
     @PostMapping("/api/client/metrics")
     fun metrics(response: HttpServletResponse) = with(response) {
@@ -68,17 +70,4 @@ class UnleashController {
     )
 
     data class FeatureResource(val version: Int = 1, val features: List<Feature>)
-
-    data class Feature(
-        val name: String,
-        val description: String,
-        val enabled: Boolean,
-        val strategies: List<Strategy> = listOf(Strategy("default")),
-        val variants: String? = null,
-        val createdAt: String = now().toString()
-    )
-
-    data class Strategy(
-        val name: String
-    )
 }
