@@ -1,13 +1,13 @@
 apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
-  name: vtp
-  namespace: t4
+  name: vtp-pensjon
+  namespace: teampensjon
   labels:
-    team: teamforeldrepenger
+    team: teampensjon
 spec:
-  image: repo.adeo.no:5443/vtp-pensjon:0.7 # Required. Docker image.
-  port: 8063 # Required. The port number which is exposed by the container and should receive HTTP traffic.
+  image: ghcr.io/navikt/vtp-pensjon/vtp-pensjon:t4-version-only-anno-09.11.2020
+  port: 8060 # Required. The port number which is exposed by the container and should receive HTTP traffic.
   liveness: # HTTP endpoint that signals 200 OK when the application is running.
     path: /rest/isAlive
     initialDelay: 20
@@ -28,8 +28,6 @@ spec:
     cpuThresholdPercentage: 80 # total cpu percentage threshold on deployment, at which point it will increase number of pods if current < max
   leaderElection: false # Optional. If true, a http endpoint will be available at $ELECTOR_PATH that return the current leader
   # Compare this value with the $HOSTNAME to see if the current instance is the leader
-  istio: # Optional.
-    enabled: false # Optional. When true, envoy-proxy sidecar will be injected into pod and https urls envvars will be rewritten
   resources: # Optional. See: http://kubernetes.io/docs/user-guide/compute-resources/
     limits:
       cpu: "2000m" # app will have its cpu usage throttled if exceeding this limit
@@ -38,7 +36,7 @@ spec:
       cpu: "600m"
       memory: "1024Mi"
   ingresses: # Optional. List of ingress URLs that will route HTTP traffic to the application.
-    - "https://vtp-t4.nais.preprod.local/"
+    - "https://vtp-pensjon-t4.nais.preprod.local/"
   vault:
     enabled: false
   env:
@@ -46,7 +44,4 @@ spec:
       value: "true"
     - name: VTP_LDAP_DISABLE
       value: "true"
-    - name: NO_NAV_MODIG_SECURITY_APPCERT_KEYSTORE
-      value: "/etc/ssl/certs/java/cacerts"
-    - name: NO_NAV_MODIG_SECURITY_APPCERT_PASSWORD
-      value: "changeme"
+

@@ -5,12 +5,12 @@ ENV DUMMYPROP=fraDockerfile
 
 ARG JAR_FILE
 
+USER root
 # Curl brukes av healthcheck i docker-compose.
 RUN apt-get -qq update && apt-get -qq -y install curl
 RUN mkdir /app/lib
 COPY server/target/lib/*.jar /app/lib/
 COPY model/scenarios/ /app/model/scenarios/
-RUN chmod -R 777 /app/model/scenarios/
 
 COPY server/kafkasecurity.conf /app/
 COPY server/src/main/resources/logback.xml logback.xml
