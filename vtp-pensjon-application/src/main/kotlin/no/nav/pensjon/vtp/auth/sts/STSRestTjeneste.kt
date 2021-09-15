@@ -3,6 +3,8 @@ package no.nav.pensjon.vtp.auth.sts
 import io.swagger.annotations.Api
 import no.nav.pensjon.vtp.auth.OidcTokenGenerator
 import no.nav.pensjon.vtp.auth.getUser
+import org.apache.commons.codec.binary.Base64
+import org.apache.commons.codec.binary.Base64.encodeBase64String
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType
 import org.jose4j.jwt.NumericDate.now
 import org.springframework.beans.factory.annotation.Value
@@ -86,7 +88,7 @@ class STSRestTjeneste(
         .header("Pragma", "no-cache")
         .body(
             SAMLResponse(
-                access_token = asBase64(
+                access_token = encodeBase64String(
                     samlTokenGenerator.issueToken("CN=InternBruker,OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local")
                         .toByteArray()
                 ),
