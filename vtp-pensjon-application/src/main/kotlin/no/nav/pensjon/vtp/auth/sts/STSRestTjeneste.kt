@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity.ok
 import org.springframework.http.ResponseEntity.status
 import org.springframework.web.bind.annotation.*
 import java.io.StringWriter
-import java.time.ZonedDateTime
 import java.util.Base64.getUrlEncoder
 import javax.xml.bind.JAXB.marshal
 
@@ -42,7 +41,7 @@ class STSRestTjeneste(
         ),
         token_type = "Bearer",
         issued_token_type = subject_token_type,
-        expires_in = ZonedDateTime.now().plusHours(6)
+        expires_in = 3600L
     )
 
     @GetMapping(value = ["/token"])
@@ -93,7 +92,7 @@ class STSRestTjeneste(
                 ),
                 token_type = "Bearer",
                 issued_token_type = "urn:ietf:params:oauth:token-type:saml2",
-                expires_in = ZonedDateTime.now().plusHours(6)
+                expires_in = 3600L
             )
         )
 
@@ -101,7 +100,7 @@ class STSRestTjeneste(
         val access_token: String,
         val issued_token_type: String,
         val token_type: String,
-        val expires_in: ZonedDateTime
+        val expires_in: Long
     )
 
     data class UserTokenResponse(
