@@ -3,24 +3,19 @@ package no.nav.pensjon.vtp.auth.sts
 import io.swagger.annotations.Api
 import no.nav.pensjon.vtp.auth.OidcTokenGenerator
 import no.nav.pensjon.vtp.auth.getUser
-import org.apache.commons.codec.binary.Base64.encodeBase64String
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType
 import org.jose4j.jwt.NumericDate.now
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpStatus.OK
 import org.springframework.http.HttpStatus.UNAUTHORIZED
-import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.http.ResponseEntity.status
 import org.springframework.web.bind.annotation.*
 import java.io.StringWriter
-import java.time.LocalDateTime.MAX
-import java.time.ZoneId.systemDefault
 import java.time.ZonedDateTime
-import java.time.ZonedDateTime.of
 import java.util.Base64.getUrlEncoder
-import javax.xml.bind.JAXB
+import javax.xml.bind.JAXB.marshal
 
 @RestController
 @Api(tags = ["Security Token Service"])
@@ -36,17 +31,18 @@ class STSRestTjeneste(
         @RequestParam grant_type: String,
         @RequestParam subject_token_type: String,
         @RequestParam subject_token: String
-    ): SAMLResponse {
-        val xmlString = xmlMarshal(generator.buildRequestSecurityTokenResponseType("urn:oasis:names:tc:SAML:2.0:assertion"))
-
-        return SAMLResponse(
-            access_token = getUrlEncoder().withoutPadding().encodeToString(xmlString.toByteArray()),
-            decodedToken = xmlString,
-            token_type = "Bearer",
-            issued_token_type = subject_token_type,
-            expires_in = of(MAX, systemDefault())
-        )
-    }
+    ) = SAMLResponse(
+        access_token = asBase64(
+            xmlMarshal(
+                generator.buildRequestSecurityTokenResponseType(
+                    "urn:oasis:names:tc:SAML:2.0:assertion"
+                )
+            )
+        ),
+        token_type = "Bearer",
+        issued_token_type = subject_token_type,
+        expires_in = ZonedDateTime.now().plusHours(6)
+    )
 
     @GetMapping(value = ["/token"])
     fun dummyToken(
@@ -85,35 +81,25 @@ class STSRestTjeneste(
             )
 
     @GetMapping(value = ["/samltoken"])
-    fun dummyToken(): ResponseEntity<SAMLResponse> {
-        val samlToken =
-            samlTokenGenerator.issueToken("CN=InternBruker,OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local")
-
-        return status(OK)
-            .header("Cache-Control", "no-store")
-            .header("Pragma", "no-cache")
-            .body(
-                SAMLResponse(
-                    access_token = encodeBase64String(samlToken.toByteArray()),
-                    decodedToken = samlToken,
-                    token_type = "Bearer",
-                    issued_token_type = "urn:ietf:params:oauth:token-type:saml2",
-                    expires_in = of(MAX, systemDefault())
-                )
+    fun dummyToken() = status(OK)
+        .header("Cache-Control", "no-store")
+        .header("Pragma", "no-cache")
+        .body(
+            SAMLResponse(
+                access_token = asBase64(
+                    samlTokenGenerator.issueToken("CN=InternBruker,OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local")
+                        .toByteArray()
+                ),
+                token_type = "Bearer",
+                issued_token_type = "urn:ietf:params:oauth:token-type:saml2",
+                expires_in = ZonedDateTime.now().plusHours(6)
             )
-    }
-
-    private fun xmlMarshal(buildRequestSecurityTokenResponseType: RequestSecurityTokenResponseType?): String {
-        val sw = StringWriter()
-        JAXB.marshal(buildRequestSecurityTokenResponseType, sw)
-        return sw.toString()
-    }
+        )
 
     data class SAMLResponse(
         val access_token: String,
         val issued_token_type: String,
         val token_type: String,
-        val decodedToken: String,
         val expires_in: ZonedDateTime
     )
 
@@ -127,4 +113,11 @@ class STSRestTjeneste(
         val error: String,
         val error_description: String
     )
+
+    companion object {
+        private fun xmlMarshal(buildRequestSecurityTokenResponseType: RequestSecurityTokenResponseType) =
+            StringWriter().also { marshal(buildRequestSecurityTokenResponseType, it) }.toString().toByteArray()
+
+        private fun asBase64(data: ByteArray) = getUrlEncoder().withoutPadding().encodeToString(data)
+    }
 }
