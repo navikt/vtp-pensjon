@@ -3,7 +3,6 @@ package no.nav.pensjon.vtp.auth.sts
 import io.swagger.annotations.Api
 import no.nav.pensjon.vtp.auth.OidcTokenGenerator
 import no.nav.pensjon.vtp.auth.getUser
-import org.apache.commons.codec.binary.Base64
 import org.apache.commons.codec.binary.Base64.encodeBase64String
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType
 import org.jose4j.jwt.NumericDate.now
