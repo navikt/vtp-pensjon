@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.mocks.psak
+package no.nav.pensjon.vtp.mocks.tp
 
 import no.nav.inf.psak.tjenestepensjon.*
 import no.nav.lib.pen.psakpselv.asbo.tjenestepensjon.ASBOPenTjenestepensjon
