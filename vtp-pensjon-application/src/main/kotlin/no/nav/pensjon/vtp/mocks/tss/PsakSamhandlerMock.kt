@@ -6,6 +6,7 @@ import no.nav.lib.pen.psakpselv.asbo.samhandler.ASBOPenFinnSamhandlerRequest
 import no.nav.lib.pen.psakpselv.asbo.samhandler.ASBOPenHentSamhandlerRequest
 import no.nav.lib.pen.psakpselv.asbo.samhandler.ASBOPenSamhandler
 import no.nav.lib.pen.psakpselv.asbo.samhandler.ASBOPenSamhandlerListe
+import no.nav.lib.pen.psakpselv.fault.samhandler.FaultPenSamhandlerIkkeFunnet
 import no.nav.lib.pen.psakpselv.fault.samhandler.ObjectFactory
 import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
@@ -119,5 +120,5 @@ class PsakSamhandlerMock(
                     alternativeIder = it.alternativeIder
                 }
             }
-            ?: throw HentSamhandlerFaultPenSamhandlerIkkeFunnetMsg("Samhandler med tssEksternId=${request.idTSSEkstern} ikke funnet")
+            ?: throw HentSamhandlerFaultPenSamhandlerIkkeFunnetMsg("Samhandler med tssEksternId=${request.idTSSEkstern} ikke funnet", FaultPenSamhandlerIkkeFunnet())
 }
