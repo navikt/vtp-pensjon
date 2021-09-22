@@ -21,6 +21,13 @@
                 "fom": "now()-P50Y"
 			}
 		],
+		"statsborgerskap": [{
+			"land": "NOR",
+			"fom": null,
+			"tom": null,
+			"endringstype": "ny",
+			"endringstidspunkt": null
+		}],
 		"sivilstand": [
 			{
 				"kode": "GIFT"
@@ -37,6 +44,13 @@
 				"fom": "now()-P50Y"
 			}
 		],
+		"statsborgerskap": [{
+			"land": "NOR",
+			"fom": null,
+			"tom": null,
+			"endringstype": "ny",
+			"endringstidspunkt": null
+		}],
 		"sivilstand": [
 			{
 				"kode": "GIFT"

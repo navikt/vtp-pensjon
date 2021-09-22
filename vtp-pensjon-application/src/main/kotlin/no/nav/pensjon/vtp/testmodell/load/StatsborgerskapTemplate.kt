@@ -9,5 +9,5 @@ data class StatsborgerskapTemplate(
     val tom: LocalDate?,
     val endringstype: Endringstype?,
     val endringstidspunkt: LocalDate?,
-    val land: Landkode
+    val land: Landkode?
 )

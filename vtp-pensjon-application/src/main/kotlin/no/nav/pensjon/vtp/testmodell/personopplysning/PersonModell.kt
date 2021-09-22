@@ -66,8 +66,8 @@ data class PersonModell(
         return personstatus?.firstOrNull() ?: PersonstatusModell(BOSA)
     }
 
-    fun getStatsborgerskapFoo(): StatsborgerskapModell {
-        return statsborgerskap?.firstOrNull() ?: StatsborgerskapModell(Landkode.NOR)
+    fun getStatsborgerskapFoo(): StatsborgerskapModell? {
+        return statsborgerskap?.firstOrNull()
     }
 
     fun getSpråk2Bokstaver(): String {

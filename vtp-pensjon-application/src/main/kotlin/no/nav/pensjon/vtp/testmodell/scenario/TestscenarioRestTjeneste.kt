@@ -116,6 +116,8 @@ class TestscenarioRestTjeneste(
             variabler = testscenario.vars,
             personopplysninger = TestscenarioPersonopplysningDto(
                 soekerIdent = testscenario.personopplysninger.søker.ident,
+                soekerStatsborgerskap = testscenario.personopplysninger.søker.statsborgerskap.orEmpty().joinToString { it.land.toString() },
+                annenPartStatsborgerskap = testscenario.personopplysninger.annenPart?.statsborgerskap.orEmpty().joinToString { it.land.toString() },
                 annenpartIdent = testscenario.personopplysninger.annenPart?.ident,
                 soekerAktoerIdent = testscenario.personopplysninger.søker.aktørIdent,
                 annenPartAktoerIdent = testscenario.personopplysninger.annenPart?.aktørIdent,

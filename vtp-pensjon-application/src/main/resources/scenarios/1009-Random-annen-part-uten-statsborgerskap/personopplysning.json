@@ -1,14 +1,19 @@
 {
 	"søker": {
 		"ident": "${for1}",
-		"fornavn": "Donald",
-		"etternavn": "Duck",
-		"fødselsdato": "${for1_fødselsdato}",
+		"fødselsdato": "now()-P50Y",
 		"kjønn": "M",
 		"geografiskTilknytning": {
 			"type": "Land",
 			"kode": "NOR"
 		},
+		"statsborgerskap": [{
+			"land": "NOR",
+			"fom": null,
+			"tom": null,
+			"endringstype": "ny",
+			"endringstidspunkt": null
+		}],
 		"adresser": [
 			{
 				"@type": "ref",
@@ -23,13 +28,6 @@
                 "fom": "now()-P50Y"
 			}
 		],
-		"statsborgerskap": [{
-			"land": "NOR",
-			"fom": null,
-			"tom": null,
-			"endringstype": "ny",
-			"endringstidspunkt": null
-		}],
 		"sivilstand": [
 			{
 				"kode": "GIFT"
@@ -38,9 +36,7 @@
 	},
 	"annenPart": {
 		"ident": "${for2}",
-		"fornavn": "Dolly",
-		"etternavn": "Duck",
-		"fødselsdato": "${for2_fødselsdato}",
+		"fødselsdato": "now()-P50Y",
 		"kjønn": "K",
 		"personstatus": [
 			{
@@ -48,18 +44,18 @@
 				"fom": "now()-P50Y"
 			}
 		],
-		"statsborgerskap": [{
-			"land": "NOR",
-			"fom": null,
-			"tom": null,
-			"endringstype": "ny",
-			"endringstidspunkt": null
-		}],
 		"sivilstand": [
 			{
 				"kode": "GIFT"
 			}
-		]
+		],
+		"statsborgerskap": [{
+			"land": null,
+			"fom": null,
+			"tom": null,
+			"endringstype": "ny",
+			"endringstidspunkt": null
+		}]
 	},
 	"familierelasjoner": [
 		{
