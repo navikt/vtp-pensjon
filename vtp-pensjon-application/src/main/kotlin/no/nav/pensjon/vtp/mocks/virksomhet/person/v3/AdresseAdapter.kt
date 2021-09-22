@@ -114,8 +114,8 @@ fun gyldighetsperiode(fom: LocalDate?, tom: LocalDate?) = Gyldighetsperiode().ap
     this.tom = tom?.asXMLGregorianCalendar()
 }
 
-fun landkoder(land: Landkode) = Landkoder().apply {
+fun landkoder(land: Landkode?) = Landkoder().apply {
     kodeverksRef = "Landkoder"
-    kodeRef = land.name
-    value = land.name
+    kodeRef = land?.name
+    value = land?.name
 }

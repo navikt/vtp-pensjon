@@ -7,8 +7,14 @@ data class TestscenarioPersonopplysningDto(
     @JsonProperty("soekerIdent")
     val soekerIdent: String? = null,
 
+    @JsonProperty("soekerStatsborgerskap")
+    val soekerStatsborgerskap: String? = null,
+
     @JsonProperty("annenpartIdent")
     val annenpartIdent: String? = null,
+
+    @JsonProperty("annenPartStatsborgerskap")
+    val annenPartStatsborgerskap: String? = null,
 
     @JsonProperty("soekerAktoerIdent")
     val soekerAktoerIdent: String? = null,

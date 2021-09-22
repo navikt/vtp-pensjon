@@ -25,13 +25,13 @@ fun statsborgerskap(data: List<StatsborgerskapModell>) = data
         }
     }
 
-fun statsborgerskap(st: StatsborgerskapModell) = Statsborgerskap().apply {
+fun statsborgerskap(st: StatsborgerskapModell?) = Statsborgerskap().apply {
     endretAv = ENDRET_AV
 
-    endringstidspunkt = st.fom?.asXMLGregorianCalendar()
+    endringstidspunkt = st?.fom?.asXMLGregorianCalendar()
     endringstype = Endringstyper.NY
 
-    land = landkoder(st.land)
+    land = landkoder(st?.land)
 }
 
 fun periode(fom: LocalDate, tom: LocalDate) = Periode().apply {

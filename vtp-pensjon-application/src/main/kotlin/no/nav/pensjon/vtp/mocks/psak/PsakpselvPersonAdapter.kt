@@ -98,8 +98,8 @@ class PsakpselvPersonAdapter(
                 erEgenansatt = false
                 brukerprofil = ASBOPenBrukerprofil()
                 personUtland = ASBOPenPersonUtland().apply {
-                    statsborgerKode = "NOR"
-                    statsborgerskap = "NOR"
+                    statsborgerKode = søker.statsborgerskap?.firstOrNull()?.land?.toString()
+                    statsborgerskap = søker.statsborgerskap?.firstOrNull()?.land?.toString()
                 }
                 historikk = createHistorikk()
 

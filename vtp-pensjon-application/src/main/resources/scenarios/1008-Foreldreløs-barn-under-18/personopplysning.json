@@ -21,6 +21,13 @@
                 "fom": "now()-P1Y"
 			}
 		],
+		"statsborgerskap": [{
+			"land": "NOR",
+			"fom": null,
+			"tom": null,
+			"endringstype": "ny",
+			"endringstidspunkt": null
+		}],
 		"sivilstand": [
 			{
 				"kode": "UGIF"
