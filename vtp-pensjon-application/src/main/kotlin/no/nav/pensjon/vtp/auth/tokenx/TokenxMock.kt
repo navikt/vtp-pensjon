@@ -24,17 +24,19 @@ class TokenxMock(
     @ApiOperation(value = "TokenX well-known URL", notes = "Mock impl av TokenX well-known URL. ")
     fun wellKnown(req: HttpServletRequest): WellKnownResponse {
         return WellKnownResponse(
-            issuer = linkTo<TokenxMock> { dummy() }.toUri(),
+            issuer = issuer(),
             jwks_uri = linkTo<TokenxMock> { jwks() }.toUri(),
-            token_endpoint = linkTo<TokenxMock> { token(
-                req,
-                grantType = "",
-                client_assertion_type = "",
-                client_assertion = "",
-                subject_token_type = "",
-                subject_token = "",
-                audience = ""
-            ) }.toUri().withoutQueryParameters(),
+            token_endpoint = linkTo<TokenxMock> {
+                token(
+                    req,
+                    grantType = "",
+                    client_assertion_type = "",
+                    client_assertion = "",
+                    subject_token_type = "",
+                    subject_token = "",
+                    audience = ""
+                )
+            }.toUri().withoutQueryParameters(),
         )
     }
 
@@ -55,41 +57,43 @@ class TokenxMock(
     ) = TokenResponse(
         access_token = accessToken(
             jsonWebKeySupport = jsonWebKeySupport,
-            issuer = baseUrl(req.serverName, req.serverPort),
+            issuer = issuer(),
             audience = audience
         )
     ).asResponseEntity()
+
+    data class TokenResponse(
+        val access_token: String,
+        val issued_token_type: String = "urn:ietf:params:oauth:token-type:access_token",
+        val token_type: String = "Bearer",
+        val expiresIn: Int = 3600
+    )
+
+    data class WellKnownResponse(
+        val issuer: URI,
+        val token_endpoint: URI,
+        val jwks_uri: URI,
+        val grant_types_supported: List<String> = listOf("urn:ietf:params:oauth:grant-type:token-exchange"),
+        val token_endpoint_auth_methods_supported: List<String> = listOf("private_key_jwt"),
+        val token_endpoint_auth_signing_alg_values_supported: List<String> = listOf("RS256"),
+        val subject_types_supported: List<String> = listOf("public"),
+    )
+
+    companion object {
+        private fun issuer() = linkTo<TokenxMock> { dummy() }.toUri()
+
+        private fun accessToken(
+            jsonWebKeySupport: JsonWebKeySupport,
+            issuer: URI,
+            audience: String
+        ) = jsonWebKeySupport.createRS256Token(
+            JwtClaims().apply {
+                setIssuer(issuer.toString())
+                setAudience(audience)
+                setExpirationTimeMinutesInTheFuture(60F)
+                setIssuedAtToNow()
+                setNotBeforeMinutesInThePast(0F)
+            }.toJson()
+        ).compactSerialization
+    }
 }
-
-private fun accessToken(
-    jsonWebKeySupport: JsonWebKeySupport,
-    issuer: String,
-    audience: String
-) = jsonWebKeySupport.createRS256Token(
-    JwtClaims().apply {
-        setIssuer(issuer)
-        setAudience(audience)
-        setExpirationTimeMinutesInTheFuture(60F)
-        setIssuedAtToNow()
-        setNotBeforeMinutesInThePast(0F)
-    }.toJson()
-).compactSerialization
-
-private fun baseUrl(serverAddress: String, serverPort: Int) = "http://$serverAddress:$serverPort/rest/tokenx"
-
-data class TokenResponse(
-    val access_token: String,
-    val issued_token_type: String = "urn:ietf:params:oauth:token-type:access_token",
-    val token_type: String = "Bearer",
-    val expiresIn: Int = 3600
-)
-
-data class WellKnownResponse(
-    val issuer: URI,
-    val token_endpoint: URI,
-    val jwks_uri: URI,
-    val grant_types_supported: List<String> = listOf("urn:ietf:params:oauth:grant-type:token-exchange"),
-    val token_endpoint_auth_methods_supported: List<String> = listOf("private_key_jwt"),
-    val token_endpoint_auth_signing_alg_values_supported: List<String> = listOf("RS256"),
-    val subject_types_supported: List<String> = listOf("public"),
-)
