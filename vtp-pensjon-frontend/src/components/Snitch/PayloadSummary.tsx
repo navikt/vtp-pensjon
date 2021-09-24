@@ -1,4 +1,4 @@
-import { Badge, Card } from "react-bootstrap";
+import {Badge, Card} from "react-bootstrap";
 import React from "react";
 import { Payload } from "./types";
 import PrettyPrintedPayloadBody from "./PrettyPrintedPayloadBody";

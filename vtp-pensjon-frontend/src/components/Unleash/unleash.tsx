@@ -51,7 +51,7 @@ function AddFeatureForm(props: { name: string, enabled: boolean, onNameChange: (
     </Form>
 }
 
-function AddFeatureModal(props: { show: Boolean, onClose: () => void, onAddFeature: (feature: Feature) => void,
+function AddFeatureModal(props: { show: boolean, onClose: () => void, onAddFeature: (feature: Feature) => void,
     name: string, enabled: boolean, onNameChange: (name: string) => void, onEnabledChange: (enabled: boolean) => void
 }) {
     return <Modal

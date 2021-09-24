@@ -2,6 +2,8 @@ import { parse as parseContentType } from "content-type";
 import React from "react";
 import xmlFormatter from "xml-formatter";
 import ReactJson from "react-json-view";
+import CopyToClipboard from "react-copy-to-clipboard";
+import {Button} from "react-bootstrap";
 
 function decodeBody(value: string): string {
   return decodeURIComponent(
@@ -52,6 +54,17 @@ function asWwwFormUrlencoded(content: string): JSX.Element {
   );
 }
 
+function CopyToClipboardButton(props: { text: string }): JSX.Element {
+  return <div className="clearfix">
+    <div style={{paddingBottom: "6px"}} className="float-right">
+      <CopyToClipboard text={props.text}>
+        <Button variant="outline-primary" size="sm">
+          Kopier til utklippstavle ⧉
+        </Button>
+      </CopyToClipboard>
+    </div>
+  </div>
+}
 export default function PrettyPrintedPayloadBody(
   props: BodyProps
 ): JSX.Element {
@@ -64,16 +77,28 @@ export default function PrettyPrintedPayloadBody(
     const contentType = parseContentType(props.contentType).type;
     switch (contentType) {
       case "application/json":
-        return <pre>{asJson(decodeBody(content))}</pre>;
+        return <>
+          <CopyToClipboardButton text={decodeBody(content)}/>
+          <pre>{asJson(decodeBody(content))}</pre>
+        </>;
 
       case "application/xml":
-        return <pre>{asXml(decodeBody(content))}</pre>;
+        return <>
+          <CopyToClipboardButton text={decodeBody(content)}/>
+          <pre>{asXml(decodeBody(content))}</pre>
+        </>;
 
       case "text/xml":
-        return <pre>{asXml(decodeBody(content))}</pre>;
+        return <>
+          <CopyToClipboardButton text={decodeBody(content)}/>
+          <pre>{asXml(decodeBody(content))}</pre>
+        </>;
 
       case "text/html":
-        return <pre>{decodeBody(content)}</pre>;
+        return <>
+          <CopyToClipboardButton text={decodeBody(content)}/>
+          <pre>{decodeBody(content)}</pre>
+        </>;
 
       case "application/x-www-form-urlencoded":
         return asWwwFormUrlencoded(decodeBody(content));
