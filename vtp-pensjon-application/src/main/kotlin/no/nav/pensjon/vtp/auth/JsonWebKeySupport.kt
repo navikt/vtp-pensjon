@@ -9,16 +9,14 @@ import java.security.interfaces.RSAPublicKey
 
 @Component
 class JsonWebKeySupport(private val jwk: RsaJsonWebKey) {
-    fun jwks() = JwksList(
-        keys = listOf(
-            Jwks(
-                kty = "RSA",
-                alg = "RS256",
-                use = "sig",
-                kid = "1",
-                n = encode((jwk.publicKey as RSAPublicKey).modulus.toByteArray()),
-                e = encode(jwk.getRsaPublicKey().publicExponent.toByteArray())
-            )
+    fun jwks() = listOf(
+        Jwks(
+            kty = "RSA",
+            alg = "RS256",
+            use = "sig",
+            kid = "1",
+            n = encode((jwk.publicKey as RSAPublicKey).modulus.toByteArray()),
+            e = encode(jwk.getRsaPublicKey().publicExponent.toByteArray())
         )
     )
 
@@ -30,8 +28,6 @@ class JsonWebKeySupport(private val jwk: RsaJsonWebKey) {
         val n: String,
         val e: String
     )
-
-    data class JwksList(val keys: List<Jwks>)
 
     fun createRS256Token(string: String?): JsonWebSignature {
         with(JsonWebSignature()) {

@@ -1,10 +1,14 @@
 package no.nav.pensjon.vtp.auth.tokenx
 
 import io.swagger.annotations.ApiOperation
-import no.nav.pensjon.vtp.auth.*
+import no.nav.pensjon.vtp.auth.JsonWebKeySupport
+import no.nav.pensjon.vtp.util.asResponseEntity
+import no.nav.pensjon.vtp.util.withoutQueryParameters
 import org.jose4j.jwt.JwtClaims
+import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.web.bind.annotation.*
+import java.net.URI
 import javax.servlet.http.HttpServletRequest
 
 @RestController
@@ -12,14 +16,25 @@ import javax.servlet.http.HttpServletRequest
 class TokenxMock(
     private val jsonWebKeySupport: JsonWebKeySupport
 ) {
+    // dummy method to get URI
+    @GetMapping
+    fun dummy() = "pong".asResponseEntity()
+
     @GetMapping(value = ["/.well-known/oauth-authorization-server"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "TokenX well-known URL", notes = "Mock impl av TokenX well-known URL. ")
     fun wellKnown(req: HttpServletRequest): WellKnownResponse {
-        val baseUrl = baseUrl(req.serverName, req.serverPort)
         return WellKnownResponse(
-            issuer = baseUrl,
-            jwks_uri = "$baseUrl/jwks",
-            token_endpoint = "$baseUrl/token",
+            issuer = linkTo<TokenxMock> { dummy() }.toUri(),
+            jwks_uri = linkTo<TokenxMock> { jwks() }.toUri(),
+            token_endpoint = linkTo<TokenxMock> { token(
+                req,
+                grantType = "",
+                client_assertion_type = "",
+                client_assertion = "",
+                subject_token_type = "",
+                subject_token = "",
+                audience = ""
+            ) }.toUri().withoutQueryParameters(),
         )
     }
 
@@ -43,7 +58,7 @@ class TokenxMock(
             issuer = baseUrl(req.serverName, req.serverPort),
             audience = audience
         )
-    )
+    ).asResponseEntity()
 }
 
 private fun accessToken(
@@ -70,9 +85,9 @@ data class TokenResponse(
 )
 
 data class WellKnownResponse(
-    val issuer: String = "temp",
-    val token_endpoint: String,
-    val jwks_uri: String,
+    val issuer: URI,
+    val token_endpoint: URI,
+    val jwks_uri: URI,
     val grant_types_supported: List<String> = listOf("urn:ietf:params:oauth:grant-type:token-exchange"),
     val token_endpoint_auth_methods_supported: List<String> = listOf("private_key_jwt"),
     val token_endpoint_auth_signing_alg_values_supported: List<String> = listOf("RS256"),
