@@ -2,7 +2,6 @@ package no.nav.pensjon.vtp.auth.idporten
 
 import io.swagger.annotations.ApiOperation
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport
-import no.nav.pensjon.vtp.auth.UserSummary
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import no.nav.pensjon.vtp.util.asResponseEntity
 import no.nav.pensjon.vtp.util.withoutQueryParameters
@@ -11,7 +10,11 @@ import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.util.HtmlUtils
+import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import javax.servlet.http.HttpServletRequest
 
 @RestController
@@ -32,18 +35,16 @@ class IdPortenMock(
     fun wellKnown(req: HttpServletRequest): WellKnownResponse {
         return WellKnownResponse(
             issuer = issuer(),
-            authorization_endpoint = linkTo<IdPortenMock> { getUsers("foo") }.toUri().withoutQueryParameters(),
+            authorization_endpoint = linkTo<IdPortenMock> { loginUI("foo", "bar") }.toUri().withoutQueryParameters(),
             jwks_uri = linkTo<IdPortenMock> { jwks() }.toUri(),
             userinfo_endpoint = linkTo<IdPortenMock> { userinfo() }.toUri(),
             token_endpoint = linkTo<IdPortenMock> {
                 token(
-                    req,
                     grantType = "",
                     client_assertion_type = "",
                     client_assertion = "",
-                    subject_token_type = "",
-                    subject_token = "",
-                    audience = ""
+                    client_id = "",
+                    code = "",
                 )
             }.toUri().withoutQueryParameters(),
         )
@@ -51,7 +52,7 @@ class IdPortenMock(
 
     @GetMapping("/jwks")
     @ApiOperation(value = "Idporten public key set")
-    fun jwks() = jsonWebKeySupport.jwks()
+    fun jwks() = Keys(jsonWebKeySupport.jwks())
 
     @GetMapping("/privateKey")
     @ApiOperation(value = "Idporten public key set")
@@ -60,28 +61,78 @@ class IdPortenMock(
     @PostMapping("/token")
     @ApiOperation(value = "Exchange token via tokendings")
     fun token(
-        req: HttpServletRequest,
-        @RequestParam("grant_type", defaultValue = "urn:ietf:params:oauth:grant-type:token-exchange") grantType: String,
-        @RequestParam("client_assertion_type", defaultValue = "urn:ietf:params:oauth:grant-type:token-exchange") client_assertion_type: String,
+        @RequestParam("grant_type") grantType: String,
+        @RequestParam("code") code: String,
+        @RequestParam("client_id") client_id: String,
         @RequestParam("client_assertion") client_assertion: String,
-        @RequestParam("subject_token_type", defaultValue = "urn:ietf:params:oauth:token-type:jwt") subject_token_type: String,
-        @RequestParam("subject_token") subject_token: String,
-        @RequestParam("audience") audience: String,
+        @RequestParam("client_assertion_type") client_assertion_type: String,
     ) = TokenResponse(
         access_token = accessToken(
             jsonWebKeySupport = jsonWebKeySupport,
             issuer = issuer(),
-            audience = audience
-        )
-    ).asResponseEntity()
+            audience = client_id,
+            pid = code,
+        ),
+        expires_in = 3600,
+        id_token = accessToken(
+            jsonWebKeySupport = jsonWebKeySupport,
+            issuer = issuer(),
+            audience = client_id,
+            pid = code,
+        ),
+        refresh_token = "refresh:$code",
+        scope = client_id,
+        ).asResponseEntity()
 
+
+    // Deprecated: Use the /#/loginservice/login endpoint instead. Leave this legacy endpoint just for a little while, while consumers update.
+    @GetMapping(value = ["/login-ui"])
+    fun loginUI(@RequestParam("redirect_uri") redirect: String, @RequestParam("nonce") nonce: String): ResponseEntity<String> {
+        val persons = personModellRepository.findAll()
+
+
+        val usersText = if (persons.isNotEmpty()) {
+            persons
+                .joinToString("\n") { (fnr, _, fornavn, etternavn) ->
+                    val redirectUriString = URLEncoder.encode(UriComponentsBuilder.fromUri(URI(redirect)).queryParam("code", fnr).queryParam("nonce", nonce).build().toUri().toString(), StandardCharsets.UTF_8)
+
+                    val navn = "$fornavn $etternavn"
+                    "<a href=\"login?fnr=$fnr&redirect_uri=$redirectUriString\">$navn</a> ($fnr)<br>"
+                }
+        } else {
+            "Det finnes ingen personer i VTP akkurat nå. Prøv å <a href=\"/#/\">laste inn et scenario</a>!"
+        }
+
+        return """
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Velg bruker</title>
+    </head>
+
+    <body>
+        <div style="text-align:center;width:100%;">
+            <h1>ID-porten Mock</h1>
+            <h3>Velg bruker:</h3>
+            $usersText
+            <form method="get" action="login-redirect-with-cookie">
+                <input type="hidden" name="redirect" value="${HtmlUtils.htmlEscape(redirect)}">
+                <input name="fnr" placeholder="Fyll inn et annet fødselsnummer" style="width: 200px">
+                <input type="submit">
+            </form>
+        </div>
+    </body>
+</html>
+""".asResponseEntity()
+    }
 
     @GetMapping(value = ["/login"])
     fun doLogin(@RequestParam("redirect_uri") redirect: String, @RequestParam("fnr") fnr: String): ResponseEntity<*> {
-        // TODO: legg på kode
         return ResponseEntity
             .status(HttpStatus.TEMPORARY_REDIRECT)
-            .location(URI(redirect))
+            .location(
+                URI(redirect)
+            )
             .build<Any>()
     }
 
@@ -98,9 +149,10 @@ class IdPortenMock(
 
     data class TokenResponse(
         val access_token: String,
-        val issued_token_type: String = "urn:ietf:params:oauth:token-type:access_token",
-        val token_type: String = "Bearer",
-        val expiresIn: Int = 3600
+        val expires_in: Int,
+        val id_token: String,
+        val refresh_token: String,
+        val scope: String,
     )
 
     data class WellKnownResponse(
@@ -135,13 +187,16 @@ class IdPortenMock(
         val redirect: URI
     )
 
+    open class Keys(val keys: List<JsonWebKeySupport.Jwks>)
+
     companion object {
         private fun issuer() = linkTo<IdPortenMock> { dummy() }.toUri()
 
         private fun accessToken(
             jsonWebKeySupport: JsonWebKeySupport,
             issuer: URI,
-            audience: String
+            audience: String,
+            pid: String,
         ) = jsonWebKeySupport.createRS256Token(
             JwtClaims().apply {
                 setIssuer(issuer.toString())
@@ -149,6 +204,7 @@ class IdPortenMock(
                 setExpirationTimeMinutesInTheFuture(60F)
                 setIssuedAtToNow()
                 setNotBeforeMinutesInThePast(0F)
+                subject = pid
             }.toJson()
         ).compactSerialization
     }
