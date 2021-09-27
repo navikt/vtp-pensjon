@@ -44,6 +44,10 @@ class TokenxMock(
     @ApiOperation(value = "TokenX public key set")
     fun jwks() = jsonWebKeySupport.jwks()
 
+    @GetMapping("/privateKey")
+    @ApiOperation(value = "TokenX public key set")
+    fun privateKey() = jsonWebKeySupport.privateKey()
+
     @PostMapping("/token")
     @ApiOperation(value = "Exchange token via tokendings")
     fun token(

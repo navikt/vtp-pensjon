@@ -11,6 +11,7 @@ import { AzureADLogin, OpenAMLogin } from "./components/AzureADLogin";
 import TokenGenerator from "./components/TokenGenerator/TokenGenerator";
 import Loginservice from "./components/Loginservice/Loginservice";
 import {Unleash} from "./components/Unleash/unleash";
+import IdPorten from "./components/IdPorten/IdPorten";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               component={AzureADLogin}
             />
             <Route path="/loginservice/login" component={Loginservice} />
+            <Route path="/idporten/login" component={IdPorten} />
             <Route path="/openam/authorize" component={OpenAMLogin} />
             <Route path="/tokenGenerator" component={TokenGenerator} />
             <Route path="/unleash" component={Unleash} />

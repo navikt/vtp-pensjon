@@ -6,6 +6,12 @@ import org.jose4j.jws.AlgorithmIdentifiers.RSA_USING_SHA256
 import org.jose4j.jws.JsonWebSignature
 import org.springframework.stereotype.Component
 import java.security.interfaces.RSAPublicKey
+import java.util.UUID
+
+import com.nimbusds.jose.jwk.KeyUse
+import com.nimbusds.jose.jwk.RSAKey
+import java.security.interfaces.RSAPrivateKey
+
 
 @Component
 class JsonWebKeySupport(private val jwk: RsaJsonWebKey) {
@@ -19,6 +25,12 @@ class JsonWebKeySupport(private val jwk: RsaJsonWebKey) {
             e = encode(jwk.getRsaPublicKey().publicExponent.toByteArray())
         )
     )
+
+    fun privateKey() = RSAKey.Builder(jwk.publicKey as RSAPublicKey)
+        .privateKey(jwk.privateKey as RSAPrivateKey)
+        .keyUse(KeyUse.SIGNATURE)
+        .keyID(UUID.randomUUID().toString())
+        .build().toJSONString()
 
     data class Jwks(
         val kty: String,
