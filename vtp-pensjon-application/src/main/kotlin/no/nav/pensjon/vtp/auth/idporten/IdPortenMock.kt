@@ -7,14 +7,13 @@ import no.nav.pensjon.vtp.util.asResponseEntity
 import no.nav.pensjon.vtp.util.withoutQueryParameters
 import org.jose4j.jwt.JwtClaims
 import org.springframework.hateoas.server.mvc.linkTo
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.TEMPORARY_REDIRECT
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.util.HtmlUtils
-import org.springframework.web.util.UriComponentsBuilder
+import org.springframework.web.util.UriComponentsBuilder.fromUriString
 import java.net.URI
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
+import java.net.URLEncoder.encode
+import java.nio.charset.StandardCharsets.UTF_8
 import javax.servlet.http.HttpServletRequest
 
 @RestController
@@ -23,7 +22,7 @@ class IdPortenMock(
     private val jsonWebKeySupport: JsonWebKeySupport,
     private val personModellRepository: PersonModellRepository,
 ) {
-    // dummy method to get URI
+    // dummy method to get issuer URI
     @GetMapping
     fun dummy() = "pong".asResponseEntity()
 
@@ -52,7 +51,7 @@ class IdPortenMock(
 
     @GetMapping("/jwks")
     @ApiOperation(value = "Idporten public key set")
-    fun jwks() = Keys(jsonWebKeySupport.jwks())
+    fun jwks() = Keys(jsonWebKeySupport.jwks()).asResponseEntity()
 
     @GetMapping("/privateKey")
     @ApiOperation(value = "Idporten public key set")
@@ -82,70 +81,61 @@ class IdPortenMock(
         ),
         refresh_token = "refresh:$code",
         scope = client_id,
-        ).asResponseEntity()
+    ).asResponseEntity()
 
-
-    // Deprecated: Use the /#/loginservice/login endpoint instead. Leave this legacy endpoint just for a little while, while consumers update.
     @GetMapping(value = ["/login-ui"])
-    fun loginUI(@RequestParam("redirect_uri") redirect: String, @RequestParam("nonce") nonce: String): ResponseEntity<String> {
-        val persons = personModellRepository.findAll()
+    fun loginUI(
+        @RequestParam("redirect_uri") redirect: String,
+        @RequestParam("nonce") nonce: String
+    ) = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ID-porten Mock</title>
+</head>
 
+<body>
+    <div style="text-align:center;width:100%;">
+        <h1>ID-porten Mock</h1>
+        ${users(redirect, nonce)}
+    </div>
+</body>
+</html>
+""".asResponseEntity()
 
-        val usersText = if (persons.isNotEmpty()) {
-            persons
-                .joinToString("\n") { (fnr, _, fornavn, etternavn) ->
-                    val redirectUriString = URLEncoder.encode(UriComponentsBuilder.fromUri(URI(redirect)).queryParam("code", fnr).queryParam("nonce", nonce).build().toUri().toString(), StandardCharsets.UTF_8)
+    private fun users(redirect: String, nonce: String) = personModellRepository.findAll().let { persons ->
+        if (persons.isNotEmpty()) {
+            persons.joinToString("\n") {
+                val redirectUriString = encode(
+                    fromUriString(redirect)
+                        .queryParam("code", it.ident)
+                        .queryParam("nonce", nonce)
+                        .build().toUri().toString(),
+                    UTF_8
+                )
 
-                    val navn = "$fornavn $etternavn"
-                    "<a href=\"login?fnr=$fnr&redirect_uri=$redirectUriString\">$navn</a> ($fnr)<br>"
-                }
+                "<a href=\"login?fnr=${it.ident}&redirect_uri=$redirectUriString\">${it.fornavn} ${it.etternavn}</a> (${it.ident})<br>"
+            }
         } else {
             "Det finnes ingen personer i VTP akkurat nå. Prøv å <a href=\"/#/\">laste inn et scenario</a>!"
         }
-
-        return """
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Velg bruker</title>
-    </head>
-
-    <body>
-        <div style="text-align:center;width:100%;">
-            <h1>ID-porten Mock</h1>
-            <h3>Velg bruker:</h3>
-            $usersText
-            <form method="get" action="login-redirect-with-cookie">
-                <input type="hidden" name="redirect" value="${HtmlUtils.htmlEscape(redirect)}">
-                <input name="fnr" placeholder="Fyll inn et annet fødselsnummer" style="width: 200px">
-                <input type="submit">
-            </form>
-        </div>
-    </body>
-</html>
-""".asResponseEntity()
     }
 
     @GetMapping(value = ["/login"])
-    fun doLogin(@RequestParam("redirect_uri") redirect: String, @RequestParam("fnr") fnr: String): ResponseEntity<*> {
-        return ResponseEntity
-            .status(HttpStatus.TEMPORARY_REDIRECT)
-            .location(
-                URI(redirect)
-            )
-            .build<Any>()
-    }
+    fun doLogin(@RequestParam("redirect_uri") redirect: String, @RequestParam("fnr") fnr: String) = ResponseEntity
+        .status(TEMPORARY_REDIRECT)
+        .location(URI(redirect))
+        .build<Any>()
 
     @GetMapping(value = ["/users"])
-    fun getUsers(@RequestParam("redirect_uri") redirect: String): List<UserSummary> =
-        personModellRepository.findAll().map {
-            UserSummary(
-                ident = it.ident,
-                firstName = it.fornavn,
-                lastName = it.etternavn,
-                redirect = linkTo<IdPortenMock> { doLogin(redirect, it.ident) }.toUri()
-            )
-        }
+    fun getUsers(@RequestParam("redirect_uri") redirect: String) = personModellRepository.findAll().map {
+        UserSummary(
+            ident = it.ident,
+            firstName = it.fornavn,
+            lastName = it.etternavn,
+            redirect = linkTo<IdPortenMock> { doLogin(redirect, it.ident) }.toUri()
+        )
+    }
 
     data class TokenResponse(
         val access_token: String,
@@ -174,7 +164,12 @@ class IdPortenMock(
         val ui_locales_supported: List<String> = listOf("nb", "nn", "en", "se"),
         val acr_values_supported: List<String> = listOf("Level3", "Level4"),
         val frontchannel_logout_supported: Boolean = true,
-        val token_endpoint_auth_methods_supported: List<String> = listOf("client_secret_post", "client_secret_basic", "private_key_jwt", "none"),
+        val token_endpoint_auth_methods_supported: List<String> = listOf(
+            "client_secret_post",
+            "client_secret_basic",
+            "private_key_jwt",
+            "none"
+        ),
         val request_parameter_supported: Boolean = true,
         val request_uri_parameter_supported: Boolean = false,
         val request_object_signing_alg_values_supported: List<String> = listOf("RS256", "RS384", "RS512"),
@@ -187,7 +182,7 @@ class IdPortenMock(
         val redirect: URI
     )
 
-    open class Keys(val keys: List<JsonWebKeySupport.Jwks>)
+    data class Keys(val keys: List<JsonWebKeySupport.Jwks>)
 
     companion object {
         private fun issuer() = linkTo<IdPortenMock> { dummy() }.toUri()
