@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder.fromUriString
 import java.net.URI
 import java.net.URLEncoder.encode
 import java.nio.charset.StandardCharsets.UTF_8
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 @RestController
@@ -34,7 +35,7 @@ class IdPortenMock(
     fun wellKnown(req: HttpServletRequest): WellKnownResponse {
         return WellKnownResponse(
             issuer = issuer(),
-            authorization_endpoint = linkTo<IdPortenMock> { loginUI("foo", "bar") }.toUri().withoutQueryParameters(),
+            authorization_endpoint = linkTo<IdPortenMock> { loginUI("foo", "bar", "foobar") }.toUri().withoutQueryParameters(),
             jwks_uri = linkTo<IdPortenMock> { jwks() }.toUri(),
             userinfo_endpoint = linkTo<IdPortenMock> { userinfo() }.toUri(),
             token_endpoint = linkTo<IdPortenMock> {
@@ -71,6 +72,7 @@ class IdPortenMock(
             issuer = issuer(),
             audience = client_id,
             pid = code,
+            sid = UUID.randomUUID().toString(),
         ),
         expires_in = 3600,
         id_token = accessToken(
@@ -78,6 +80,7 @@ class IdPortenMock(
             issuer = issuer(),
             audience = client_id,
             pid = code,
+            sid = UUID.randomUUID().toString(),
         ),
         refresh_token = "refresh:$code",
         scope = client_id,
@@ -86,7 +89,8 @@ class IdPortenMock(
     @GetMapping(value = ["/login-ui"])
     fun loginUI(
         @RequestParam("redirect_uri") redirect: String,
-        @RequestParam("nonce") nonce: String
+        @RequestParam("nonce") nonce: String,
+        @RequestParam("state") state: String,
     ) = """
 <!DOCTYPE html>
 <html>
@@ -97,19 +101,20 @@ class IdPortenMock(
 <body>
     <div style="text-align:center;width:100%;">
         <h1>ID-porten Mock</h1>
-        ${users(redirect, nonce)}
+        ${users(redirect, nonce, state)}
     </div>
 </body>
 </html>
 """.asResponseEntity()
 
-    private fun users(redirect: String, nonce: String) = personModellRepository.findAll().let { persons ->
+    private fun users(redirect: String, nonce: String, state: String) = personModellRepository.findAll().let { persons ->
         if (persons.isNotEmpty()) {
             persons.joinToString("\n") {
                 val redirectUriString = encode(
                     fromUriString(redirect)
                         .queryParam("code", it.ident)
                         .queryParam("nonce", nonce)
+                        .queryParam("state", state)
                         .build().toUri().toString(),
                     UTF_8
                 )
@@ -192,6 +197,7 @@ class IdPortenMock(
             issuer: URI,
             audience: String,
             pid: String,
+            sid: String,
         ) = jsonWebKeySupport.createRS256Token(
             JwtClaims().apply {
                 setIssuer(issuer.toString())
@@ -200,6 +206,8 @@ class IdPortenMock(
                 setIssuedAtToNow()
                 setNotBeforeMinutesInThePast(0F)
                 subject = pid
+                setClaim("sid", sid)
+                setClaim("acr", "Level4")
             }.toJson()
         ).compactSerialization
     }
