@@ -53,8 +53,8 @@ class LoginService(
         }
 
     // Deprecated: Use the /#/loginservice/login endpoint instead. Leave this legacy endpoint just for a little while, while consumers update.
-    @GetMapping(value = ["/login"], produces = [TEXT_HTML_VALUE])
-    fun login(@RequestParam("redirect") redirect: String): String {
+    @GetMapping(value = ["/login"])
+    fun login(@RequestParam("redirect", required = false) redirect: String?): String {
         val persons = personModellRepository.findAll()
 
         val usersText = if (persons.isNotEmpty()) {
@@ -82,7 +82,7 @@ class LoginService(
             <h3>Velg bruker:</h3>
             $usersText
             <form method="get" action="login-redirect-with-cookie">
-                <input type="hidden" name="redirect" value="${HtmlUtils.htmlEscape(redirect)}">
+                <input type="hidden" name="redirect" value="${HtmlUtils.htmlEscape(redirect!!)}">
                 <input name="fnr" placeholder="Fyll inn et annet fødselsnummer" style="width: 200px">
                 <input type="submit">
             </form>

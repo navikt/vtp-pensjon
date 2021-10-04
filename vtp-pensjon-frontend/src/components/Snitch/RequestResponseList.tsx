@@ -19,8 +19,8 @@ export default function RequestResponseList(props: RequestResponseListProps) {
           <th>Method</th>
           <th>Path</th>
           <th>Status</th>
-          <th>HandlerClass</th>
-          <th>HandlerMethod</th>
+          <th className="d-none d-lg-table-cell">HandlerClass</th>
+          <th className="d-none d-xl-table-cell">HandlerMethod</th>
         </tr>
       </thead>
       <tbody>
@@ -45,8 +45,8 @@ export default function RequestResponseList(props: RequestResponseListProps) {
                   {request.status}
                 </Badge>
               </td>
-              <td>{request.handlerClass}</td>
-              <td>{request.handlerMethod}</td>
+              <td className="d-none d-lg-table-cell">{request.handlerClass}</td>
+              <td className="d-none d-xl-table-cell">{request.handlerMethod}</td>
             </tr>
           );
         })}
