@@ -1,17 +1,15 @@
 package no.nav.pensjon.vtp.auth
 
+import com.nimbusds.jose.jwk.KeyUse
+import com.nimbusds.jose.jwk.RSAKey
 import org.jose4j.base64url.Base64Url.encode
 import org.jose4j.jwk.RsaJsonWebKey
 import org.jose4j.jws.AlgorithmIdentifiers.RSA_USING_SHA256
 import org.jose4j.jws.JsonWebSignature
 import org.springframework.stereotype.Component
+import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.util.UUID
-
-import com.nimbusds.jose.jwk.KeyUse
-import com.nimbusds.jose.jwk.RSAKey
-import java.security.interfaces.RSAPrivateKey
-
 
 @Component
 class JsonWebKeySupport(private val jwk: RsaJsonWebKey) {

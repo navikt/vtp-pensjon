@@ -9,7 +9,6 @@ import org.jose4j.lang.JoseException
 import org.springframework.http.HttpCookie
 import org.springframework.http.HttpHeaders.SET_COOKIE
 import org.springframework.http.HttpStatus.TEMPORARY_REDIRECT
-import org.springframework.http.MediaType.TEXT_HTML_VALUE
 import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

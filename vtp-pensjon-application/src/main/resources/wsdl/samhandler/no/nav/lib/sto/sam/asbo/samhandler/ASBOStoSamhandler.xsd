@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samhandler" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samhandler">
+    <xsd:include schemaLocation="ASBOStoAvdeling.xsd"/>
+    <xsd:complexType name="ASBOStoSamhandler">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="navn" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="sprak" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="samhandlerType" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="offentligId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="idType" type="xsd:string"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="avdelinger" type="bons0:ASBOStoAvdeling"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

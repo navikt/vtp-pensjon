@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" xmlns:bons2="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samhandler" xmlns:bons3="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/samhandler" xmlns:tns="http://nav-cons-sto-sam-samhandler/no/nav/inf" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SAMSamhandler" targetNamespace="http://nav-cons-sto-sam-samhandler/no/nav/inf">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://nav-cons-sto-sam-samhandler/no/nav/inf" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" xmlns:bons2="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samhandler" xmlns:bons3="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/samhandler" xmlns:tns="http://nav-cons-sto-sam-samhandler/no/nav/inf" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/samhandler" schemaLocation="../lib/sto/sam/fault/samhandler/FaultStoOffentligIdIkkeFunnet.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samhandler" schemaLocation="../lib/sto/sam/asbo/samhandler/ASBOStoHentSamhandlerRequest.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samhandler" schemaLocation="../lib/sto/sam/asbo/samhandler/ASBOStoSamhandler.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" schemaLocation="../lib/sto/sam/fault/FaultStoGenerisk.xsd"/>
+      <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/samhandler" schemaLocation="../lib/sto/sam/fault/samhandler/FaultStoSamhandlerIkkeFunnet.xsd"/>
+      <xsd:element name="hentSamhandler">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="hentSamhandlerRequest" nillable="true" type="bons2:ASBOStoHentSamhandlerRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="hentSamhandlerResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="hentSamhandlerResponse" nillable="true" type="bons2:ASBOStoSamhandler"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="hentSamhandler_faultStoGenerisk" type="bons1:FaultStoGenerisk"/>
+      <xsd:element name="hentSamhandler_faultStoSamhandlerIkkeFunnet" type="bons3:FaultStoSamhandlerIkkeFunnet"/>
+            <xsd:element name="opprettSamhandler">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="opprettSamhandlerRequest" nillable="true" type="bons2:ASBOStoSamhandler"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+            <xsd:element name="opprettSamhandlerResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="opprettSamhandlerResponse" nillable="true" type="bons2:ASBOStoSamhandler"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+            <xsd:element name="FaultStoOffentligIdIkkeFunnet_element" nillable="true" type="bons3:FaultStoOffentligIdIkkeFunnet"/>
+            <xsd:element name="lagreSamhandler">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="lagreSamhandlerRequest" nillable="true" type="bons2:ASBOStoSamhandler"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+            <xsd:element name="lagreSamhandlerResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="lagreSamhandlerResponse" nillable="true" type="bons2:ASBOStoSamhandler"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+        </xsd:schema>
+  </wsdl:types>
+    <wsdl:message name="hentSamhandlerRequestMsg">
+    <wsdl:part element="tns:hentSamhandler" name="hentSamhandlerParameters"/>
+  </wsdl:message>
+    <wsdl:message name="hentSamhandlerResponseMsg">
+    <wsdl:part element="tns:hentSamhandlerResponse" name="hentSamhandlerResult"/>
+  </wsdl:message>
+    <wsdl:message name="hentSamhandler_faultStoGeneriskMsg">
+    <wsdl:part element="tns:hentSamhandler_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="hentSamhandler_faultStoSamhandlerIkkeFunnetMsg">
+    <wsdl:part element="tns:hentSamhandler_faultStoSamhandlerIkkeFunnet" name="faultStoSamhandlerIkkeFunnet"/>
+  </wsdl:message>
+    <wsdl:message name="opprettSamhandlerRequestMsg">
+    <wsdl:part element="tns:opprettSamhandler" name="opprettSamhandlerParameters"/>
+  </wsdl:message>
+    <wsdl:message name="opprettSamhandlerResponseMsg">
+    <wsdl:part element="tns:opprettSamhandlerResponse" name="opprettSamhandlerResult"/>
+  </wsdl:message>
+    <wsdl:message name="opprettSamhandler_faultStoGeneriskMsg">
+    <wsdl:part element="tns:hentSamhandler_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="opprettSamhandler_faultStoOffentligIdIkkeFunnetMsg">
+    <wsdl:part element="tns:FaultStoOffentligIdIkkeFunnet_element" name="faultStoOffentligIdIkkeFunnet"/>
+  </wsdl:message>
+    <wsdl:message name="lagreSamhandlerRequestMsg">
+    <wsdl:part element="tns:lagreSamhandler" name="lagreSamhandlerParameters"/>
+  </wsdl:message>
+    <wsdl:message name="lagreSamhandlerResponseMsg">
+    <wsdl:part element="tns:lagreSamhandlerResponse" name="lagreSamhandlerResult"/>
+  </wsdl:message>
+    <wsdl:message name="lagreSamhandler_faultStoGeneriskMsg">
+    <wsdl:part element="tns:hentSamhandler_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="lagreSamhandler_faultStoSamhandlerIkkeLagretMsg">
+    <wsdl:part element="tns:hentSamhandler_faultStoSamhandlerIkkeFunnet" name="faultStoSamhandlerIkkeLagret"/>
+  </wsdl:message>
+    <wsdl:portType name="SAMSamhandler">
+    <wsdl:operation name="hentSamhandler">
+      <wsdl:input message="tns:hentSamhandlerRequestMsg" name="hentSamhandlerRequest"/>
+      <wsdl:output message="tns:hentSamhandlerResponseMsg" name="hentSamhandlerResponse"/>
+      <wsdl:fault message="tns:hentSamhandler_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+      <wsdl:fault message="tns:hentSamhandler_faultStoSamhandlerIkkeFunnetMsg" name="faultStoSamhandlerIkkeFunnet"/>
+    </wsdl:operation>
+        <wsdl:operation name="lagreSamhandler">
+      <wsdl:input message="tns:lagreSamhandlerRequestMsg" name="lagreSamhandlerRequest"/>
+      <wsdl:output message="tns:lagreSamhandlerResponseMsg" name="lagreSamhandlerResponse"/>
+      <wsdl:fault message="tns:lagreSamhandler_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+      <wsdl:fault message="tns:lagreSamhandler_faultStoSamhandlerIkkeLagretMsg" name="faultStoSamhandlerIkkeLagret"/>
+    </wsdl:operation>
+        <wsdl:operation name="opprettSamhandler">
+      <wsdl:input message="tns:opprettSamhandlerRequestMsg" name="opprettSamhandlerRequest"/>
+      <wsdl:output message="tns:opprettSamhandlerResponseMsg" name="opprettSamhandlerResponse"/>
+      <wsdl:fault message="tns:opprettSamhandler_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+      <wsdl:fault message="tns:opprettSamhandler_faultStoOffentligIdIkkeFunnetMsg" name="faultStoOffentligIdIkkeFunnet"/>
+    </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>
