@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak">
+    <xsd:include schemaLocation="ASBOStoYtelseskomponent.xsd"/>
+  <xsd:complexType name="ASBOStoKrigOgGammelYrkesskade">
+    <xsd:complexContent>
+      <xsd:extension base="bons0:ASBOStoYtelseskomponent">
+                <xsd:sequence>
+          <xsd:element minOccurs="0" name="pensjonsgrad" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="grunnlagForUtbetaling" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="kapitalUtlosning" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="poengtall" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="forholdstallYG" type="xsd:double"/>
+          <xsd:element minOccurs="0" name="mendel" type="xsd:string"/>
+        </xsd:sequence>
+            </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:schema>

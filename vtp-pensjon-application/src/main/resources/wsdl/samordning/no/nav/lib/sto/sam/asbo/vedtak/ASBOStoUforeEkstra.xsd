@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak">
+  <xsd:complexType name="ASBOStoUforeEkstra">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="uforeEkstraId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="inntektKode1" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="inntektKode2" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="oieu" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="oifu" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="tak" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="fpp" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="fppGaranti" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="fppGarantiKode" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="redusertAntFppAr" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

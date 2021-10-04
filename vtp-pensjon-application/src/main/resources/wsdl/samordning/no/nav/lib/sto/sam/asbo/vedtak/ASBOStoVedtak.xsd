@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:bons2="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak"
+	xmlns:bons3="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo"
+	targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak">
+
+	<xsd:include
+		schemaLocation="ASBOStoBeregningsResultatUforetrygd.xsd">
+	</xsd:include>
+	<xsd:include schemaLocation="ASBOStoBeregning2011.xsd"></xsd:include>
+	<xsd:include schemaLocation="ASBOStoAFPEO.xsd" />
+	<xsd:import
+		namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo"
+		schemaLocation="../ASBOStoEndringsInfo.xsd">
+	</xsd:import>
+	<xsd:include schemaLocation="ASBOStoKravhode.xsd" />
+	<xsd:include schemaLocation="ASBOStoVilkarsvedtak.xsd" />
+	<xsd:include schemaLocation="ASBOStoBeregning.xsd" />
+	<xsd:complexType name="ASBOStoVedtak">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="vedtakId"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="gjelderFnr"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="virkningFom"
+				type="xsd:date" />
+			<xsd:element minOccurs="0" name="virkningTom"
+				type="xsd:date" />
+			<xsd:element minOccurs="0" name="lopendeFom"
+				type="xsd:date" />
+			<xsd:element minOccurs="0" name="lopendeTom"
+				type="xsd:date" />
+			<xsd:element minOccurs="0" name="vedtaksKode"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="vedtakStatusKode"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="saksId" type="xsd:string" />
+			<xsd:element minOccurs="0" name="saksKode"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="ansvarligSaksbehandler"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="attesterer"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="attestertDato"
+				type="xsd:date" />
+			<xsd:element minOccurs="0" name="vedtaksDato"
+				type="xsd:date" />
+			<xsd:element minOccurs="0" name="tilIverksettelseDato"
+				type="xsd:date" />
+			<xsd:element minOccurs="0" name="sendtSamordningDato"
+				type="xsd:date" />
+			<xsd:element minOccurs="0" name="samordnetDato"
+				type="xsd:date" />
+			<xsd:element minOccurs="0" name="iverksattDato"
+				type="xsd:date" />
+			<xsd:element minOccurs="0" name="etterbetaling"
+				type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="utvidetSamordningsfrist"
+				type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="vedtakLast"
+				type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="behandlingKode"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="annenPengemottaker"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="kravhode"
+				type="bons2:ASBOStoKravhode" />
+			<xsd:element maxOccurs="unbounded" minOccurs="0"
+				name="vilkarsvedtakListe" type="bons2:ASBOStoVilkarsvedtak" />
+			<xsd:element maxOccurs="unbounded" minOccurs="0"
+				name="beregningListe" type="bons2:ASBOStoBeregning" />
+			<xsd:element minOccurs="0" name="endringsInfo"
+				type="bons3:ASBOStoEndringsInfo" />
+			<xsd:element minOccurs="0" name="hovedkravlinjeResultat"
+				type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="instillingsverdi"
+				type="xsd:string">
+			</xsd:element>
+
+			<xsd:element minOccurs="0" name="klageAnkeResultat"
+				type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="sendtNavi"
+				type="xsd:boolean">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="simulertFeilUtbetalingTom"
+				type="xsd:date">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="virkGammeltVedtak"
+				type="xsd:date">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="afpeo"
+				type="bons2:ASBOStoAFPEO">
+			</xsd:element>
+
+			<xsd:element minOccurs="0" name="regelverkKode"
+				type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="beregning2011Liste"
+				type="bons2:ASBOStoBeregning2011" maxOccurs="unbounded">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="beregningsresultatUforetrygdListe"
+				type="bons2:ASBOStoBeregningsResultatUforetrygd"
+				maxOccurs="unbounded">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person">
+  <xsd:complexType name="ASBOStoPersonUtland">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="statsborgerskap" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="statsborgerskapFom" type="xsd:date"/>
+      <xsd:element minOccurs="0" name="statsborgerKode" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="innvandretKode" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="innvandretFra" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="innvandretDato" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="utvandretKode" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="utvandretTil" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="utvandretDato" type="xsd:date"/>
+        </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

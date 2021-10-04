@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak">
+    <xsd:include schemaLocation="ASBOStoYtelseskomponent.xsd"/>
+    <xsd:complexType name="ASBOStoEktefelletillegg">
+    <xsd:complexContent>
+      <xsd:extension base="bons0:ASBOStoYtelseskomponent">
+                <xsd:sequence>
+      <xsd:element minOccurs="0" name="fribelop" type="xsd:string"/>
+                </xsd:sequence>
+                  
+            </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo">
+    <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person" schemaLocation="person/ASBOStoPersonUtland.xsd"/>
+    <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person" schemaLocation="person/ASBOStoUtbetalingsinformasjon.xsd"/>
+    <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person" schemaLocation="person/ASBOStoBrukerprofil.xsd"/>
+    <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person" schemaLocation="person/ASBOStoBostedsAdresse.xsd"/>
+    <xsd:include schemaLocation="ASBOStoAdresse.xsd"/>
+    <xsd:complexType name="ASBOStoPerson">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="fnr" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="kortnavn" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="fornavn" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="mellomnavn" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="etternavn" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="statusKode" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="status" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="diskresjonskode" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="dodsdato" type="xsd:date"/>
+            <xsd:element minOccurs="0" name="umyndiggjortDato" type="xsd:date"/>
+            <xsd:element minOccurs="0" name="sivilstand" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="sivilstandDato" type="xsd:date"/>
+            <xsd:element minOccurs="0" name="tlfPrivat" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="tlfJobb" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="tlfMobil" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="epost" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="sprakKode" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="sprakBeskrivelse" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="sprakDatoFom" type="xsd:date"/>
+            <xsd:element minOccurs="0" name="navEnhet" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="erEgenansatt" type="xsd:boolean"/>
+            <xsd:element minOccurs="0" name="bostedsAdresse" type="bons0:ASBOStoBostedsAdresse"/>
+            <xsd:element minOccurs="0" name="postAdresse" type="bons1:ASBOStoAdresse"/>
+            <xsd:element minOccurs="0" name="tilleggsAdresse" type="bons1:ASBOStoAdresse"/>
+            <xsd:element minOccurs="0" name="utenlandsAdresse" type="bons1:ASBOStoAdresse"/>
+            <xsd:element minOccurs="0" name="utbetalingsinformasjon" type="bons0:ASBOStoUtbetalingsinformasjon"/>
+            <xsd:element minOccurs="0" name="personUtland" type="bons0:ASBOStoPersonUtland"/>
+            <xsd:element minOccurs="0" name="brukerprofil" type="bons0:ASBOStoBrukerprofil"/>
+        </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

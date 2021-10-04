@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sak/asbo" xmlns:bons2="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samordning">
+    <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak" schemaLocation="../vedtak/ASBOStoSamordningInfo.xsd"/>
+    <xsd:complexType name="ASBOStoVarsleTPSamordningRequest">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="tpnr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="tssEksternId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="fnr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="samordningInfo" type="bons2:ASBOStoSamordningInfo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

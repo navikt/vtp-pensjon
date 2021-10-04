@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samordning">
+  <xsd:complexType name="ASBOStoVarsleManglendeRefusjonskravRequest">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="tpnr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="tssEksternId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="fnr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="samId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="svarfristDato" type="xsd:date"/>
+      <xsd:element minOccurs="0" name="opprinneligmeldingDato" type="xsd:date"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

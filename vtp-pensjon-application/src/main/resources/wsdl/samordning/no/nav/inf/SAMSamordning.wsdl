@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samordning" xmlns:bons2="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" xmlns:bons5="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/samordning" xmlns:tns="http://nav-cons-sto-sam-samordning/no/nav/inf" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SAMSamordning" targetNamespace="http://nav-cons-sto-sam-samordning/no/nav/inf">
+  <wsdl:types>
+    <xsd:schema xmlns:Q1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/samordning" xmlns:bons4="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/" targetNamespace="http://nav-cons-sto-sam-samordning/no/nav/inf" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samordning" xmlns:bons2="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" xmlns:bons5="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/samordning" xmlns:tns="http://nav-cons-sto-sam-samordning/no/nav/inf" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" schemaLocation="../lib/sto/sam/fault/FaultStoPersonIkkeFunnet.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samordning" schemaLocation="../lib/sto/sam/asbo/samordning/ASBOStoVarsleVedtakSamordningRequest.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samordning" schemaLocation="../lib/sto/sam/asbo/samordning/ASBOStoVarsleTPSamordningRequest.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" schemaLocation="../lib/sto/sam/fault/FaultStoGenerisk.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/samordning" schemaLocation="../lib/sto/sam/fault/samordning/FaultStoTPNummerIkkeGyldig.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/samordning" schemaLocation="../lib/sto/sam/fault/samordning/FaultStoTSSEksternIdIkkeFunnet.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/samordning" schemaLocation="../lib/sto/sam/fault/samordning/FaultStoNAVHarIkkeWSGrensesnittMotTPOrdningen.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samordning" schemaLocation="../lib/sto/sam/asbo/samordning/ASBOStoVarsleManglendeRefusjonskravRequest.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samordning" schemaLocation="../lib/sto/sam/asbo/samordning/ASBOStoVarsleEndringPersonaliaRequest.xsd"/>
+            <xsd:element name="varsleEndringPersonalia">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="varsleEndringPersonaliaRequest" nillable="true" type="bons1:ASBOStoVarsleEndringPersonaliaRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="varsleEndringPersonaliaResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="varsleEndringPersonaliaResponse" nillable="true" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="varsleManglendeRefusjonskrav">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="varsleManglendeRefusjonskravRequest" nillable="true" type="bons1:ASBOStoVarsleManglendeRefusjonskravRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="varsleManglendeRefusjonskravResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="varsleManglendeRefusjonskravResponse" nillable="true" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="varsleTPSamordning">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="varsleTPSamordningRequest" nillable="true" type="bons1:ASBOStoVarsleTPSamordningRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="varsleTPSamordningResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="varsleTPSamordningResponse" nillable="true" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="varsleVedtakSamordning">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="varsleVedtakSamordningRequest" nillable="true" type="bons1:ASBOStoVarsleVedtakSamordningRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="varsleVedtakSamordningResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="varsleVedtakSamordningResponse" nillable="true" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+            <xsd:element name="varsleEndringPersonalia_faultStoGenerisk" type="bons2:FaultStoGenerisk"/>
+            <xsd:element name="varsleManglendeRefusjonskrav_faultStoGenerisk" type="bons2:FaultStoGenerisk"/>
+            <xsd:element name="varsleManglendeRefusjonskrav_faultStoTPNummerIkkeGyldig" type="Q1:FaultStoTPNummerIkkeGyldig"/>
+            <xsd:element name="varsleTPSamordning_faultStoGenerisk" type="bons2:FaultStoGenerisk"/>
+            <xsd:element name="varsleVedtakSamordning_faultStoGenerisk" type="bons2:FaultStoGenerisk"/>
+            <xsd:element name="varsleEndringPersonalia_faultStoTSSEksternIdIkkeFunnet" type="Q1:FaultStoTSSEksternIdIkkeFunnet"/>
+            <xsd:element name="varsleTPSamordning_faultStoTSSEksternIdIkkeFunnet" type="Q1:FaultStoTSSEksternIdIkkeFunnet"/>
+            <xsd:element name="varsleVedtakSamordning_faultStoPersonIkkeFunnet" type="bons2:FaultStoPersonIkkeFunnet"/>
+            <xsd:element name="varsleVedtakSamordning_faultStoTSSEksternIdIkkeFunnet" type="Q1:FaultStoTSSEksternIdIkkeFunnet"/>
+            <xsd:element name="varsleEndringPersonalia_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen" type="Q1:FaultStoNAVHarIkkeWSGrensesnittMotTPOrdningen"/>
+            <xsd:element name="varsleManglendeRefusjonskrav_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen" type="Q1:FaultStoNAVHarIkkeWSGrensesnittMotTPOrdningen"/>
+            <xsd:element name="varsleTPSamordning_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen" type="Q1:FaultStoNAVHarIkkeWSGrensesnittMotTPOrdningen"/>
+            <xsd:element name="varsleVedtakSamordning_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen" type="Q1:FaultStoNAVHarIkkeWSGrensesnittMotTPOrdningen"/>
+        </xsd:schema>
+  </wsdl:types>
+    <wsdl:message name="varsleEndringPersonaliaRequestMsg">
+    <wsdl:part element="tns:varsleEndringPersonalia" name="varsleEndringPersonaliaParameters"/>
+  </wsdl:message>
+    <wsdl:message name="varsleEndringPersonaliaResponseMsg">
+    <wsdl:part element="tns:varsleEndringPersonaliaResponse" name="varsleEndringPersonaliaResult"/>
+  </wsdl:message>
+    <wsdl:message name="varsleManglendeRefusjonskravRequestMsg">
+    <wsdl:part element="tns:varsleManglendeRefusjonskrav" name="varsleManglendeRefusjonskravParameters"/>
+  </wsdl:message>
+    <wsdl:message name="varsleManglendeRefusjonskravResponseMsg">
+    <wsdl:part element="tns:varsleManglendeRefusjonskravResponse" name="varsleManglendeRefusjonskravResult"/>
+  </wsdl:message>
+    <wsdl:message name="varsleTPSamordningRequestMsg">
+    <wsdl:part element="tns:varsleTPSamordning" name="varsleTPSamordningParameters"/>
+  </wsdl:message>
+    <wsdl:message name="varsleTPSamordningResponseMsg">
+    <wsdl:part element="tns:varsleTPSamordningResponse" name="varsleTPSamordningResult"/>
+  </wsdl:message>
+    <wsdl:message name="varsleVedtakSamordningRequestMsg">
+    <wsdl:part element="tns:varsleVedtakSamordning" name="varsleVedtakSamordningParameters"/>
+  </wsdl:message>
+    <wsdl:message name="varsleVedtakSamordningResponseMsg">
+    <wsdl:part element="tns:varsleVedtakSamordningResponse" name="varsleVedtakSamordningResult"/>
+  </wsdl:message>
+    <wsdl:message name="varsleEndringPersonalia_faultStoGeneriskMsg">
+    <wsdl:part element="tns:varsleEndringPersonalia_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="varsleManglendeRefusjonskrav_faultStoGeneriskMsg">
+    <wsdl:part element="tns:varsleManglendeRefusjonskrav_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="varsleManglendeRefusjonskrav_faultStoTPNummerIkkeGyldigMsg">
+    <wsdl:part element="tns:varsleManglendeRefusjonskrav_faultStoTPNummerIkkeGyldig" name="faultStoTPNummerIkkeGyldig"/>
+  </wsdl:message>
+    <wsdl:message name="varsleTPSamordning_faultStoGeneriskMsg">
+    <wsdl:part element="tns:varsleTPSamordning_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="varsleVedtakSamordning_faultStoGeneriskMsg">
+    <wsdl:part element="tns:varsleVedtakSamordning_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="varsleEndringPersonalia_faultStoTSSEksternIdIkkeFunnetMsg">
+    <wsdl:part element="tns:varsleEndringPersonalia_faultStoTSSEksternIdIkkeFunnet" name="faultStoTSSEksternIdIkkeFunnet"/>
+  </wsdl:message>
+    <wsdl:message name="varsleTPSamordning_faultStoTSSEksternIdIkkeFunnetMsg">
+    <wsdl:part element="tns:varsleTPSamordning_faultStoTSSEksternIdIkkeFunnet" name="faultStoTSSEksternIdIkkeFunnet"/>
+  </wsdl:message>
+    <wsdl:message name="varsleVedtakSamordning_faultStoPersonIkkeFunnetMsg">
+    <wsdl:part element="tns:varsleVedtakSamordning_faultStoPersonIkkeFunnet" name="faultStoPersonIkkeFunnet"/>
+  </wsdl:message>
+    <wsdl:message name="varsleVedtakSamordning_faultStoTSSEksternIdIkkeFunnetMsg">
+    <wsdl:part element="tns:varsleVedtakSamordning_faultStoTSSEksternIdIkkeFunnet" name="faultStoTSSEksternIdIkkeFunnet"/>
+  </wsdl:message>
+    <wsdl:message name="varsleEndringPersonalia_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningenMsg">
+    <wsdl:part element="tns:varsleEndringPersonalia_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen" name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen"/>
+  </wsdl:message>
+    <wsdl:message name="varsleManglendeRefusjonskrav_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningenMsg">
+    <wsdl:part element="tns:varsleManglendeRefusjonskrav_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen" name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen"/>
+  </wsdl:message>
+    <wsdl:message name="varsleTPSamordning_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningenMsg">
+    <wsdl:part element="tns:varsleTPSamordning_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen" name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen"/>
+  </wsdl:message>
+    <wsdl:message name="varsleVedtakSamordning_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningenMsg">
+    <wsdl:part element="tns:varsleVedtakSamordning_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen" name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen"/>
+  </wsdl:message>
+    <wsdl:portType name="SAMSamordning">
+    <wsdl:operation name="varsleEndringPersonalia">
+      <wsdl:input message="tns:varsleEndringPersonaliaRequestMsg" name="varsleEndringPersonaliaRequest"/>
+      <wsdl:output message="tns:varsleEndringPersonaliaResponseMsg" name="varsleEndringPersonaliaResponse"/>
+            <wsdl:fault message="tns:varsleEndringPersonalia_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+            <wsdl:fault message="tns:varsleEndringPersonalia_faultStoTSSEksternIdIkkeFunnetMsg" name="faultStoTSSEksternIdIkkeFunnet"/>
+            <wsdl:fault message="tns:varsleEndringPersonalia_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningenMsg" name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen"/>
+        </wsdl:operation>
+    <wsdl:operation name="varsleManglendeRefusjonskrav">
+      <wsdl:input message="tns:varsleManglendeRefusjonskravRequestMsg" name="varsleManglendeRefusjonskravRequest"/>
+      <wsdl:output message="tns:varsleManglendeRefusjonskravResponseMsg" name="varsleManglendeRefusjonskravResponse"/>
+            <wsdl:fault message="tns:varsleManglendeRefusjonskrav_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+            <wsdl:fault message="tns:varsleManglendeRefusjonskrav_faultStoTPNummerIkkeGyldigMsg" name="faultStoTPNummerIkkeGyldig"/>
+            <wsdl:fault message="tns:varsleManglendeRefusjonskrav_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningenMsg" name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen"/>
+        </wsdl:operation>
+    <wsdl:operation name="varsleTPSamordning">
+      <wsdl:input message="tns:varsleTPSamordningRequestMsg" name="varsleTPSamordningRequest"/>
+      <wsdl:output message="tns:varsleTPSamordningResponseMsg" name="varsleTPSamordningResponse"/>
+            <wsdl:fault message="tns:varsleTPSamordning_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+            <wsdl:fault message="tns:varsleTPSamordning_faultStoTSSEksternIdIkkeFunnetMsg" name="faultStoTSSEksternIdIkkeFunnet"/>
+            <wsdl:fault message="tns:varsleTPSamordning_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningenMsg" name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen"/>
+        </wsdl:operation>
+    <wsdl:operation name="varsleVedtakSamordning">
+      <wsdl:input message="tns:varsleVedtakSamordningRequestMsg" name="varsleVedtakSamordningRequest"/>
+      <wsdl:output message="tns:varsleVedtakSamordningResponseMsg" name="varsleVedtakSamordningResponse"/>
+            <wsdl:fault message="tns:varsleVedtakSamordning_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+            <wsdl:fault message="tns:varsleVedtakSamordning_faultStoPersonIkkeFunnetMsg" name="faultStoPersonIkkeFunnet"/>
+            <wsdl:fault message="tns:varsleVedtakSamordning_faultStoTSSEksternIdIkkeFunnetMsg" name="faultStoTSSEksternIdIkkeFunnet"/>
+            <wsdl:fault message="tns:varsleVedtakSamordning_faultStoNAVHarIkkeWSGrensesnittMotTPOrdningenMsg" name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

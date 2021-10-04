@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak"
+	xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak">
+	<xsd:include schemaLocation="ASBOStoSluttpoengtall.xsd"></xsd:include>
+	<xsd:complexType name="ASBOStoBeregning2011">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="beregningId"
+				type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="virkningFom"
+				type="xsd:date">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="virkningTom"
+				type="xsd:date">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="uttaksgrad"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="basisgp"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="basistp"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="basispt"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="forholdstall_uttak"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="forholdstall_67"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="grunnpensjon"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="gpRestpensjon"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="grunnpensjonsats"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="tilleggspensjon"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="tpRestpensjon"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="pensjonstillegg"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="ptRestpensjon"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="totalBelop"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="resultatKode"
+				type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="mndGrunnpensjon"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="mndTilleggspensjon"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="mndPensjonstillegg"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="spt"
+				type="bons0:ASBOStoSluttpoengtall">
+			</xsd:element>
+
+			<xsd:element minOccurs="0" name="ypt"
+				type="bons0:ASBOStoSluttpoengtall">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="anvendtTrygdetid"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="yrkesskadegrad"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="bruttoBarnetilleggFellesbarn" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="nettoBarnetilleggFellesbarn" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="antallBarnetilleggFellesbarn" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="bruttoBarnetilleggSerkullsbarn" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="nettoBarnetilleggSerkullsbarn" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="antallBarnetilleggSerkullsbarn" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="ektefelletillegg"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="minstenivatilleggPensjonistpar" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="minstenivatilleggIndividuelt" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="afpLivsvarig"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="afpKronetillegg"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="afpKompensasjonstillegg"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="forholdstallKompensasjonstillegg" type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="afpOpptjeningTotalbelop"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="sptAvdod"
+				type="bons0:ASBOStoSluttpoengtall">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="optAvdod"
+				type="bons0:ASBOStoSluttpoengtall">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="yptAvdod"
+				type="bons0:ASBOStoSluttpoengtall">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="anvendtTrygdetidAvdod"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="fnrAvdod"
+				type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="yrkesskadegradAvdod"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="uforegrad"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="skjermingstillegg"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="skjermingsgrad"
+				type="xsd:double">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

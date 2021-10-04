@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak">
+    <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" schemaLocation="../ASBOStoEndringsInfo.xsd"/>
+    <xsd:complexType name="ASBOStoTrygdetidKonvensjon">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="trygdetidKonvensjonId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="framtidigTrygdetidAr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="framtidigTrygdetidA10Brutto" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="framtidigTrygdetidA10Netto" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="framtidigTrygdetidA10Redusert" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="trygdetidA10AnvAr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="trygdetidA10Nevner" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="trygdetidA10Teller" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="trygdetidA10FaktiskMnd" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="endringsInfo" type="bons0:ASBOStoEndringsInfo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

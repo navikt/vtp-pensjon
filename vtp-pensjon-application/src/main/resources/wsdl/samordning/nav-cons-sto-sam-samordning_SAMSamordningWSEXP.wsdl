@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="SAMSamordningWSEXP_SAMSamordningHttp_Service" targetNamespace="http://nav-cons-sto-sam-samordning/no/nav/inf/Binding" xmlns:Port_0="http://nav-cons-sto-sam-samordning/no/nav/inf" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:this="http://nav-cons-sto-sam-samordning/no/nav/inf/Binding">
+  <wsdl:import namespace="http://nav-cons-sto-sam-samordning/no/nav/inf" location="no/nav/inf/SAMSamordning.wsdl">
+    </wsdl:import>
+  <wsdl:binding name="SAMSamordningWSEXP_SAMSamordningHttpBinding" type="Port_0:SAMSamordning">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="varsleEndringPersonalia">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="varsleEndringPersonaliaRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="varsleEndringPersonaliaResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoTSSEksternIdIkkeFunnet">
+        <soap:fault name="faultStoTSSEksternIdIkkeFunnet" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen">
+        <soap:fault name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="varsleManglendeRefusjonskrav">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="varsleManglendeRefusjonskravRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="varsleManglendeRefusjonskravResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen">
+        <soap:fault name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoTPNummerIkkeGyldig">
+        <soap:fault name="faultStoTPNummerIkkeGyldig" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="varsleTPSamordning">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="varsleTPSamordningRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="varsleTPSamordningResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoTSSEksternIdIkkeFunnet">
+        <soap:fault name="faultStoTSSEksternIdIkkeFunnet" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen">
+        <soap:fault name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="varsleVedtakSamordning">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="varsleVedtakSamordningRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="varsleVedtakSamordningResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoTSSEksternIdIkkeFunnet">
+        <soap:fault name="faultStoTSSEksternIdIkkeFunnet" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoPersonIkkeFunnet">
+        <soap:fault name="faultStoPersonIkkeFunnet" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen">
+        <soap:fault name="faultStoNAVHarIkkeWSGrensesnittMotTPOrdningen" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SAMSamordningWSEXP_SAMSamordningHttpService">
+    <wsdl:port name="SAMSamordningWSEXP_SAMSamordningHttpPort" binding="this:SAMSamordningWSEXP_SAMSamordningHttpBinding">
+      <soap:address location="http://localhost:9080/nav-cons-sto-sam-samordningWeb/sca/SAMSamordningWSEXP"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person">
+    <xsd:include schemaLocation="ASBOStoMatrikkelAdresse.xsd"/>
+    <xsd:include schemaLocation="ASBOStoOffentligAdresse.xsd"/>
+    <xsd:complexType name="ASBOStoBostedsAdresse">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="boadresse1" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="boadresse2" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="bolignr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="postnr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="poststed" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="kommunenr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="navEnhet" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="fom" type="xsd:date"/>
+      <xsd:element minOccurs="0" name="offentligAdresse" type="bons0:ASBOStoOffentligAdresse"/>
+      <xsd:element minOccurs="0" name="matrikkelAdresse" type="bons0:ASBOStoMatrikkelAdresse"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

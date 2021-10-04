@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person">
+    <xsd:include schemaLocation="ASBOStoNorskKonto.xsd"/>
+    <xsd:complexType name="ASBOStoUtbetalingsinformasjon">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="norskKonto" type="bons0:ASBOStoNorskKonto"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

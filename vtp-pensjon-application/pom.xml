@@ -694,6 +694,17 @@
                                         <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault=no.nav.lib.sto.sam.fault</extraarg>
                                     </extraargs>
                                 </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/wsdl/samordning/nav-cons-sto-sam-samordning_SAMSamordningWSEXP.wsdl</wsdl>
+                                    <extraargs>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo=no.nav.lib.sto.sam.asbo</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person=no.nav.lib.sto.sam.asbo.person</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault=no.nav.lib.sto.sam.fault</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
                             </wsdlOptions>
                         </configuration>
                     </execution>
