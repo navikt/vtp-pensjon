@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak">	<xsd:import schemaLocation="../ASBOStoEndringsInfo.xsd" namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo"></xsd:import>
+	<xsd:complexType name="ASBOStoKravhode">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="kravId" type="xsd:string" />
+			<xsd:element minOccurs="0" name="kravGjelderKode" type="xsd:string" />
+			<xsd:element minOccurs="0" name="kravStatusKode" type="xsd:string" />
+			<xsd:element minOccurs="0" name="mottattDato" type="xsd:date" />
+			<xsd:element minOccurs="0" name="onsketVirkningsDato" type="xsd:date" />
+			<xsd:element minOccurs="0" name="komplettDato" type="xsd:date" />
+			<xsd:element minOccurs="0" name="boddArbeidUtland" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="vurdereTrygdeavtale" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="norgeBehandlendeLand" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="initiertAv" type="xsd:string" />
+			<xsd:element minOccurs="0" name="kravVelgKode" type="xsd:string" />
+			<xsd:element minOccurs="0" name="tilbakekreving" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="avdodFnr" type="xsd:string" />
+			<xsd:element minOccurs="0" name="afpOrdningKode" type="xsd:string" />
+			<xsd:element minOccurs="0" name="afpTillegg" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="organisasjonsnr" type="xsd:string" />
+			<xsd:element minOccurs="0" name="kollektiveVilkar" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="farFnr" type="xsd:string" />
+			<xsd:element minOccurs="0" name="morFnr" type="xsd:string" />
+			<xsd:element minOccurs="0" name="boddArbeidUtlandFar" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="boddArbeidUtlandMor" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="boddArbeidUtlandAvdod" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="behandlingKode" type="xsd:string" />
+			<xsd:element minOccurs="0" name="basertPaKravId" type="xsd:string" />
+			<xsd:element minOccurs="0" name="brukOpptjeningFra65I66Aret" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="erBeregnet" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="grunnlagLast" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="gyldigVilkarsproving" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="kravLast" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="overforOmsorgspoeng" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="hentetTps" type="xsd:boolean" />
+			<xsd:element minOccurs="0" name="endringsInfo" type="bons1:ASBOStoEndringsInfo" />
+			<xsd:element minOccurs="0" name="regelverkKode" type="xsd:string"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

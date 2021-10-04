@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak">
+    <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" schemaLocation="../ASBOStoEndringsInfo.xsd"/>
+    <xsd:include schemaLocation="ASBOStoSluttpoengtall.xsd"/>
+    <xsd:complexType name="ASBOStoBeregningNokkelinfo">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="beregningNokkelinfoId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="fnr" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="grunnlagsrolleKode" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="beregningId" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="tt_anv" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="anvendtIBeregningen" type="xsd:boolean"/>
+            <xsd:element minOccurs="0" name="spt" type="bons0:ASBOStoSluttpoengtall"/>
+            <xsd:element minOccurs="0" name="ypt" type="bons0:ASBOStoSluttpoengtall"/>
+            <xsd:element minOccurs="0" name="opt" type="bons0:ASBOStoSluttpoengtall"/>
+            <xsd:element minOccurs="0" name="endringsInfo" type="bons1:ASBOStoEndringsInfo"/>
+        </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

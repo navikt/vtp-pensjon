@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+	xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo"
+	xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak">
+	<xsd:import schemaLocation="../ASBOStoEndringsInfo.xsd"
+		namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo">
+	</xsd:import>
+	<xsd:include schemaLocation="ASBOStoFramtidigPensjonspoengtall.xsd" />	<xsd:complexType name="ASBOStoPoengrekke">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="poengAr" type="xsd:string" />
+			<xsd:element minOccurs="0" name="poengArFor92"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="poengArEtter91"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="poengArFaktisk"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="tidligerePenInntekt"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="tidligerePenInntektFaktor"
+				type="xsd:string" />
+			<xsd:element minOccurs="0"
+				name="poengtallAntattArligInntekt" type="xsd:string" />
+			<xsd:element minOccurs="0" name="framtidigPenpoengtall"
+				type="bons1:ASBOStoFramtidigPensjonspoengtall" />
+			<xsd:element minOccurs="0"
+				name="framtidigPenpoengtallOmregnet"
+				type="bons1:ASBOStoFramtidigPensjonspoengtall" />
+			<xsd:element minOccurs="0" name="paNo" type="xsd:string" />
+			<xsd:element minOccurs="0" name="sisteFppAr"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="sisteFppArNorden"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="sisteFppArEos"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="paEosFor92"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="paEosEtter91"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="paNordiskFramtBrutto"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="paNordiskFramtNetto"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="endringsInfo"
+				type="bons0:ASBOStoEndringsInfo" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

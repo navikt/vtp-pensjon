@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samordning"
+	xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samordning">
+	<xsd:include schemaLocation="ASBOStoVedtakfaktaAAP.xsd"></xsd:include>
+	<xsd:complexType name="ASBOStoArbeidOgAktivitetsvedtak">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="vedtakId" type="xsd:string" />
+			<xsd:element minOccurs="0" name="gjelderFnr" type="xsd:string" />
+			<xsd:element minOccurs="0" name="virkningFom" type="xsd:date" />
+			<xsd:element minOccurs="0" name="virkningTom" type="xsd:date" />
+			<xsd:element minOccurs="0" name="vedtakstypeKode" type="xsd:string" />
+			<xsd:element minOccurs="0" name="vedtakstatusKode" type="xsd:string" />
+			<xsd:element minOccurs="0" name="sakstypeKode" type="xsd:string" />
+			<xsd:element minOccurs="0" name="navEnhet" type="xsd:string" />
+			<xsd:element minOccurs="0" name="utfallKode" type="xsd:string" />
+			<xsd:element minOccurs="0" name="rettighetKode" type="xsd:string" />
+			<xsd:element minOccurs="0" name="vedtakfaktaAAP" type="bons0:ASBOStoVedtakfaktaAAP" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

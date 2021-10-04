@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak"
+	xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo">
+	<xsd:import schemaLocation="../ASBOStoEndringsInfo.xsd"
+		namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo">
+	</xsd:import>
+	<xsd:complexType name="ASBOStoAFPEO">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="afpeoId"
+				type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="ieoBeregnet"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="ifuBeregnet"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="fpiBeregnet"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="iiap" type="xsd:int"></xsd:element>
+			<xsd:element minOccurs="0" name="behandlingKode"
+				type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="gruppeKode"
+				type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="avvik" type="xsd:int"></xsd:element>
+			<xsd:element minOccurs="0" name="tpiBeregnet"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="afpeoResultatKode"
+				type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="fradragBeregnetArbeidsinntekt" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="fullAFP" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="utbetaltAFP"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="korrigertAFP"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="forMyeUtbetalt"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="forLiteUtbetalt"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="endringsInfo"
+				type="bons0:ASBOStoEndringsInfo">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

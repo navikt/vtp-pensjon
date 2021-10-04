@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak">
+    <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" schemaLocation="../ASBOStoEndringsInfo.xsd"/>
+    <xsd:complexType name="ASBOStoTrygdetidEOS">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="trygdetidEosId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="framtidigTrygdetidEos" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="framtidigTrygdetidEosRedusert" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="trygdetidEosAnvendtAr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="trygdetidEosAnvendtMnd" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="trygdetidEosNevner" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="trygdetidEosProRataMnd" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="trygdetidEosTeller" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="trygdetidEosTeoretiskMnd" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="trygdetidLilPa" type="xsd:boolean"/>
+            <xsd:element minOccurs="0" name="trygdetidKonvensjonAr" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="endringsInfo" type="bons0:ASBOStoEndringsInfo"/>
+        </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+	xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak">	<xsd:import schemaLocation="../ASBOStoEndringsInfo.xsd"
+		namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo">
+	</xsd:import>
+	<xsd:complexType name="ASBOStoVilkarsvedtak">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="vilkarsvedtakId"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="anbefaltResultatKode"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="vilkarsvedtakResultatKode"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="anvendtVurderingKode"
+				type="xsd:string" />
+			<xsd:element minOccurs="0"
+				name="vilkarsvedtakResultatSpesKode" type="xsd:string" />
+			<xsd:element minOccurs="0" name="kravlinjeKode"
+				type="xsd:string" />			<xsd:element minOccurs="0" name="innstillingKode"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="virkningFom"
+				type="xsd:date" />
+			<xsd:element minOccurs="0" name="virkningTom"
+				type="xsd:date" />
+			<xsd:element minOccurs="0" name="forsteVirkningsDato"
+				type="xsd:date" />
+			<xsd:element minOccurs="0" name="gjelderFnr"
+				type="xsd:string" />
+			<xsd:element minOccurs="0" name="endringsInfo"
+				type="bons1:ASBOStoEndringsInfo" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sak/asbo" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samordning">
+    <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" schemaLocation="../ASBOStoPerson.xsd"/>
+    <xsd:complexType name="ASBOStoVarsleEndringPersonaliaRequest">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="tpnr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="tssEksternId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="opprinneligFnr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="endretPerson" type="bons1:ASBOStoPerson"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

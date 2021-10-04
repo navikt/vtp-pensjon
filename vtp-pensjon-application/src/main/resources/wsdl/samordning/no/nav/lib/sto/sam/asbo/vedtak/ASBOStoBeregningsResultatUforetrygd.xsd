@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+	targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/vedtak"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:complexType name="ASBOStoBeregningsResultatUforetrygd">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="inntektForUforhet"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="nettoUforetrygdOrdinar"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="bruttoUforetrygdOrdinar"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="uforegrad"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="yrkesskadegrad"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="nettoBarnetilleggSerkullsbarn" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="bruttoBarnetilleggSerkullsbarn" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="nettoBarnetilleggFellesbarn" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="bruttoBarnetilleggFellesbarn" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="nettoGjenlevendetillegg"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="bruttoGjenlevendetillegg"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="nettoEktefelletillegg"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="resultatKode"
+				type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="virkningFom"
+				type="xsd:date">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="virkningTom"
+				type="xsd:date">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="inntektEtterUforhet"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="anvendtTrygdetid"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="benyttetSivilstand"
+				type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="beregningsgrunnlagOrdiner"
+				type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="beregningsgrunnlagYrkesskade" type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="beregningsgrunnlagOrdinerAvdod" type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="beregningsgrunnlagYrkesskadeAvdod" type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="anvendtTrygdetidAvdod"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="yrkesskadegradAvdod"
+				type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0"
+				name="inntektBruktIInntektsavkorting" type="xsd:int">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>
