@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bons2="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/trekk" xmlns:bons3="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/trekk">
+    <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" schemaLocation="../ASBOStoEndringsInfo.xsd"/>
+    <xsd:include schemaLocation="ASBOStoTrekk.xsd"/>
+    <xsd:include schemaLocation="ASBOStoMaksbelop.xsd"/>
+    <xsd:include schemaLocation="ASBOStoFagomrade.xsd"/>
+    <xsd:complexType name="ASBOStoAndreTrekk">
+    <xsd:complexContent>
+      <xsd:extension base="bons2:ASBOStoTrekk">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="kreditorOffnr" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="kreditorAvdelingsnr" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="kreditorNavn" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="kreditorRef" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="kreditorKid" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="tssEksternId" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="prioritet" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="prioritetFom" type="xsd:date"/>
+                    <xsd:element minOccurs="0" name="trekkAlternativKode" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="trekkAlternativBeskrivelse" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="sats" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="belopSaldotrekk" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="belopTrukket" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="datoOppfolging" type="xsd:date"/>
+                    <xsd:element minOccurs="0" name="endringsInfo" type="bons3:ASBOStoEndringsInfo"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="fagomradeListe" type="bons2:ASBOStoFagomrade"/>
+                    <xsd:element minOccurs="0" name="maksbelop" type="bons2:ASBOStoMaksbelop"/>
+                </xsd:sequence>
+                  
+            </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:schema>

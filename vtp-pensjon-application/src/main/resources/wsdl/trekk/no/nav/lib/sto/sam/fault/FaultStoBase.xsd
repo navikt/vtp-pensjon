@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault">
+  <xsd:complexType name="FaultStoBase">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="errorMessage" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="errorSource" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="errorType" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="rootCause" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="dateTimeStamp" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="availabilityStatus" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="availabilityMessage" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

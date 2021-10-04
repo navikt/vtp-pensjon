@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/trekk" xmlns:bons2="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" xmlns:bons3="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/trekk" xmlns:tns="http://nav-cons-sto-sam-trekk/no/nav/inf" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SAMTrekk" targetNamespace="http://nav-cons-sto-sam-trekk/no/nav/inf">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://nav-cons-sto-sam-trekk/no/nav/inf" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/trekk" xmlns:bons2="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" xmlns:bons3="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/trekk" xmlns:tns="http://nav-cons-sto-sam-trekk/no/nav/inf" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/trekk" schemaLocation="../lib/sto/sam/fault/trekk/FaultStoKreditorIkkeReg.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/trekk" schemaLocation="../lib/sto/sam/fault/trekk/FaultStoMinstEtFagomrUgyldMotTrekktype.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/trekk" schemaLocation="../lib/sto/sam/fault/trekk/FaultStoOppgittFagomrIkkeTillattForOppgittTrekkAlt.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/trekk" schemaLocation="../lib/sto/sam/fault/trekk/FaultStoKreditorAvdMaaOppgis.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/trekk" schemaLocation="../lib/sto/sam/fault/trekk/FaultStoDebitorIkkeReg.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/trekk" schemaLocation="../lib/sto/sam/fault/trekk/FaultStoTrekkvedtakFinnesFraFoer.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/trekk" schemaLocation="../lib/sto/sam/fault/trekk/FaultStoMaksBelopGyldigIkkeOppdat.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/trekk" schemaLocation="../lib/sto/sam/fault/trekk/FaultStoTSSEkstIdIkkeISamsvarMedKrediOffNr.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/trekk" schemaLocation="../lib/sto/sam/asbo/trekk/ASBOStoAndreTrekkListe.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/trekk" schemaLocation="../lib/sto/sam/fault/trekk/FaultStoFagomrIkkeGyldForTrekkvedtak.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" schemaLocation="../lib/sto/sam/fault/FaultStoGenerisk.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/trekk" schemaLocation="../lib/sto/sam/fault/trekk/FaultStoFagomrGyldigIkkeOppdat.xsd"/>
+            <xsd:element name="opprettAndreTrekk">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="opprettAndreTrekkRequest" nillable="true" type="bons1:ASBOStoAndreTrekkListe"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+            <xsd:element name="opprettAndreTrekk_faultStoGenerisk" type="bons2:FaultStoGenerisk"/>
+            <xsd:element name="opprettAndreTrekk_faultStoDebitorIkkeReg" type="bons3:FaultStoDebitorIkkeReg"/>
+            <xsd:element name="opprettAndreTrekk_faultStoFagomrGyldigIkkeOppdat" type="bons3:FaultStoFagomrGyldigIkkeOppdat"/>
+            <xsd:element name="opprettAndreTrekk_faultStoFagomrIkkeGyldForTrekkvedtak" type="bons3:FaultStoFagomrIkkeGyldForTrekkvedtak"/>
+            <xsd:element name="opprettAndreTrekk_faultStoKreditorAvdMaaOppgis" type="bons3:FaultStoKreditorAvdMaaOppgis"/>
+            <xsd:element name="opprettAndreTrekk_faultStoKreditorIkkeReg" type="bons3:FaultStoKreditorIkkeReg"/>
+            <xsd:element name="opprettAndreTrekk_faultStoMaksBelopGyldigIkkeOppdat" type="bons3:FaultStoMaksBelopGyldigIkkeOppdat"/>
+            <xsd:element name="opprettAndreTrekk_faultStoMinstEtFagomrUgyldMotTrekktype" type="bons3:FaultStoMinstEtFagomrUgyldMotTrekktype"/>
+            <xsd:element name="opprettAndreTrekk_faultStoOppgittFagomrIkkeTillattForOppgittTrekkAlt" type="bons3:FaultStoOppgittFagomrIkkeTillattForOppgittTrekkAlt"/>
+            <xsd:element name="opprettAndreTrekk_faultStoTrekkvedtakFinnesFraFoer" type="bons3:FaultStoTrekkvedtakFinnesFraFoer"/>
+            <xsd:element name="opprettAndreTrekk_faultStoTSSEkstIdIkkeISamsvarMedKrediOffNr" type="bons3:FaultStoTSSEkstIdIkkeISamsvarMedKrediOffNr"/>
+            <xsd:element name="opprettAndreTrekkResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="opprettAndreTrekkResponse" nillable="true" type="bons1:ASBOStoAndreTrekkListe"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+        </xsd:schema>
+  </wsdl:types>
+    <wsdl:message name="opprettAndreTrekk_faultStoGeneriskMsg">
+    <wsdl:part element="tns:opprettAndreTrekk_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="opprettAndreTrekk_faultStoDebitorIkkeRegMsg">
+    <wsdl:part element="tns:opprettAndreTrekk_faultStoDebitorIkkeReg" name="faultStoDebitorIkkeReg"/>
+  </wsdl:message>
+    <wsdl:message name="opprettAndreTrekk_faultStoFagomrGyldigIkkeOppdatMsg">
+    <wsdl:part element="tns:opprettAndreTrekk_faultStoFagomrGyldigIkkeOppdat" name="faultStoFagomrGyldigIkkeOppdat"/>
+  </wsdl:message>
+    <wsdl:message name="opprettAndreTrekk_faultStoFagomrIkkeGyldForTrekkvedtakMsg">
+    <wsdl:part element="tns:opprettAndreTrekk_faultStoFagomrIkkeGyldForTrekkvedtak" name="faultStoFagomrIkkeGyldForTrekkvedtak"/>
+  </wsdl:message>
+    <wsdl:message name="opprettAndreTrekk_faultStoKreditorAvdMaaOppgisMsg">
+    <wsdl:part element="tns:opprettAndreTrekk_faultStoKreditorAvdMaaOppgis" name="faultStoKreditorAvdMaaOppgis"/>
+  </wsdl:message>
+    <wsdl:message name="opprettAndreTrekk_faultStoKreditorIkkeRegMsg">
+    <wsdl:part element="tns:opprettAndreTrekk_faultStoKreditorIkkeReg" name="faultStoKreditorIkkeReg"/>
+  </wsdl:message>
+    <wsdl:message name="opprettAndreTrekk_faultStoMaksBelopGyldigIkkeOppdatMsg">
+    <wsdl:part element="tns:opprettAndreTrekk_faultStoMaksBelopGyldigIkkeOppdat" name="faultStoMaksBelopGyldigIkkeOppdat"/>
+  </wsdl:message>
+    <wsdl:message name="opprettAndreTrekk_faultStoMinstEtFagomrUgyldMotTrekktypeMsg">
+    <wsdl:part element="tns:opprettAndreTrekk_faultStoMinstEtFagomrUgyldMotTrekktype" name="faultStoMinstEtFagomrUgyldMotTrekktype"/>
+  </wsdl:message>
+    <wsdl:message name="opprettAndreTrekk_faultStoOppgittFagomrIkkeTillattForOppgittTrekkAltMsg">
+    <wsdl:part element="tns:opprettAndreTrekk_faultStoOppgittFagomrIkkeTillattForOppgittTrekkAlt" name="faultStoOppgittFagomrIkkeTillattForOppgittTrekkAlt"/>
+  </wsdl:message>
+    <wsdl:message name="opprettAndreTrekk_faultStoTSSEkstIdIkkeISamsvarMedKrediOffNrMsg">
+    <wsdl:part element="tns:opprettAndreTrekk_faultStoTSSEkstIdIkkeISamsvarMedKrediOffNr" name="faultStoTSSEkstIdIkkeISamsvarMedKrediOffNr"/>
+  </wsdl:message>
+    <wsdl:message name="opprettAndreTrekkRequestMsg">
+    <wsdl:part element="tns:opprettAndreTrekk" name="opprettAndreTrekkParameters"/>
+  </wsdl:message>
+    <wsdl:message name="opprettAndreTrekkResponseMsg">
+    <wsdl:part element="tns:opprettAndreTrekkResponse" name="opprettAndreTrekkResult"/>
+  </wsdl:message>
+    <wsdl:portType name="SAMTrekk">
+    <wsdl:operation name="opprettAndreTrekk">
+      <wsdl:input message="tns:opprettAndreTrekkRequestMsg" name="opprettAndreTrekkRequest"/>
+      <wsdl:output message="tns:opprettAndreTrekkResponseMsg" name="opprettAndreTrekkResponse"/>
+            <wsdl:fault message="tns:opprettAndreTrekk_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+            <wsdl:fault message="tns:opprettAndreTrekk_faultStoDebitorIkkeRegMsg" name="faultStoDebitorIkkeReg"/>
+            <wsdl:fault message="tns:opprettAndreTrekk_faultStoFagomrGyldigIkkeOppdatMsg" name="faultStoFagomrGyldigIkkeOppdat"/>
+            <wsdl:fault message="tns:opprettAndreTrekk_faultStoFagomrIkkeGyldForTrekkvedtakMsg" name="faultStoFagomrIkkeGyldForTrekkvedtak"/>
+            <wsdl:fault message="tns:opprettAndreTrekk_faultStoKreditorAvdMaaOppgisMsg" name="faultStoKreditorAvdMaaOppgis"/>
+            <wsdl:fault message="tns:opprettAndreTrekk_faultStoKreditorIkkeRegMsg" name="faultStoKreditorIkkeReg"/>
+            <wsdl:fault message="tns:opprettAndreTrekk_faultStoMaksBelopGyldigIkkeOppdatMsg" name="faultStoMaksBelopGyldigIkkeOppdat"/>
+            <wsdl:fault message="tns:opprettAndreTrekk_faultStoMinstEtFagomrUgyldMotTrekktypeMsg" name="faultStoMinstEtFagomrUgyldMotTrekktype"/>
+            <wsdl:fault message="tns:opprettAndreTrekk_faultStoOppgittFagomrIkkeTillattForOppgittTrekkAltMsg" name="faultStoOppgittFagomrIkkeTillattForOppgittTrekkAlt"/>
+            <wsdl:fault message="tns:opprettAndreTrekk_faultStoTSSEkstIdIkkeISamsvarMedKrediOffNrMsg" name="faultStoTSSEkstIdIkkeISamsvarMedKrediOffNr"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>
