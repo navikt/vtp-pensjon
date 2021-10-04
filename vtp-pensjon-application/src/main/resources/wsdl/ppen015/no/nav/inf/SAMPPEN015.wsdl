@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/ppen015" xmlns:tns="http://nav-cons-sto-sam-ppen015/no/nav/inf/PPEN015" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PPEN015" targetNamespace="http://nav-cons-sto-sam-ppen015/no/nav/inf/PPEN015">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://nav-cons-sto-sam-ppen015/no/nav/inf/PPEN015" xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/ppen015" xmlns:tns="http://nav-cons-sto-sam-ppen015/no/nav/inf/PPEN015" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/ppen015" schemaLocation="../lib/sto/sam/asbo/ppen015/ASBOStoMottaSamhandlerSvarRequest.xsd"/>
+            <xsd:element name="mottaSamhandlerSvar">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="samhandlerSvarRequest" nillable="true" type="bons0:ASBOStoMottaSamhandlerSvarRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+            <xsd:element name="mottaSamhandlerSvarResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+        </xsd:schema>
+  </wsdl:types>
+    <wsdl:message name="mottaSamhandlerSvarRequestMsg">
+    <wsdl:part element="tns:mottaSamhandlerSvar" name="mottaSamhandlerSvarParameters"/>
+  </wsdl:message>
+    <wsdl:message name="mottaSamhandlerSvarResponseMsg">
+    <wsdl:part element="tns:mottaSamhandlerSvarResponse" name="mottaSamhandlerSvarResult"/>
+  </wsdl:message>
+    <wsdl:portType name="SAMPPEN015">
+    <wsdl:operation name="mottaSamhandlerSvar">
+      <wsdl:input message="tns:mottaSamhandlerSvarRequestMsg" name="mottaSamhandlerSvarRequest"/>
+            <wsdl:output message="tns:mottaSamhandlerSvarResponseMsg" name="mottaSamhandlerSvarResponse"/>
+        </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

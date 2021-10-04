@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions name="SAMPPEN015WSEXP_SAMPPEN015Http_Service" targetNamespace="http://nav-cons-sto-sam-ppen015/no/nav/inf/PPEN015/Binding" xmlns:Port_0="http://nav-cons-sto-sam-ppen015/no/nav/inf/PPEN015" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:this="http://nav-cons-sto-sam-ppen015/no/nav/inf/PPEN015/Binding" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import location="no/nav/inf/SAMPPEN015.wsdl" namespace="http://nav-cons-sto-sam-ppen015/no/nav/inf/PPEN015"/>
+  <wsdl:binding name="SAMPPEN015WSEXP_SAMPPEN015HttpBinding" type="Port_0:SAMPPEN015">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="mottaSamhandlerSvar">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="mottaSamhandlerSvarRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="mottaSamhandlerSvarResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SAMPPEN015WSEXP_SAMPPEN015HttpService">
+    <wsdl:port binding="this:SAMPPEN015WSEXP_SAMPPEN015HttpBinding" name="SAMPPEN015WSEXP_SAMPPEN015HttpPort">
+      <soap:address location="http://localhost:9080/nav-cons-sto-sam-ppen015Web/sca/SAMPPEN015WSEXP"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
