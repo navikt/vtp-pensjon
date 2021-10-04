@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samhandler" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/samhandler">
+    <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" schemaLocation="../ASBOStoAdresse.xsd"/>
+    <xsd:complexType name="ASBOStoKonto">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="kontoType" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="kontonummer" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="banknavn" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="bankkode" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="swiftkode" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="valuta" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="bankadresse" type="bons1:ASBOStoAdresse"/>
+        </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

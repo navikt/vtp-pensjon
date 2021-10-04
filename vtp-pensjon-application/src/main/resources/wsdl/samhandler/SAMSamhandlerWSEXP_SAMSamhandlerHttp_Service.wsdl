@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="SAMSamhandlerWSEXP_SAMSamhandlerHttp_Service" targetNamespace="http://nav-cons-sto-sam-samhandler/no/nav/inf/Binding" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:Port_0="http://nav-cons-sto-sam-samhandler/no/nav/inf" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:this="http://nav-cons-sto-sam-samhandler/no/nav/inf/Binding">
+  <wsdl:import namespace="http://nav-cons-sto-sam-samhandler/no/nav/inf" location="no/nav/inf/SAMSamhandler.wsdl"/>
+  <wsdl:binding name="SAMSamhandlerWSEXP_SAMSamhandlerHttpBinding" type="Port_0:SAMSamhandler">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="hentSamhandler">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="hentSamhandlerRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="hentSamhandlerResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoSamhandlerIkkeFunnet">
+        <soap:fault name="faultStoSamhandlerIkkeFunnet" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="lagreSamhandler">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="lagreSamhandlerRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="lagreSamhandlerResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoSamhandlerIkkeLagret">
+        <soap:fault name="faultStoSamhandlerIkkeLagret" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="opprettSamhandler">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="opprettSamhandlerRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="opprettSamhandlerResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoOffentligIdIkkeFunnet">
+        <soap:fault name="faultStoOffentligIdIkkeFunnet" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SAMSamhandlerWSEXP_SAMSamhandlerHttpService">
+    <wsdl:port name="SAMSamhandlerWSEXP_SAMSamhandlerHttpPort" binding="this:SAMSamhandlerWSEXP_SAMSamhandlerHttpBinding">
+      <soap:address location="http://localhost:9080/nav-cons-sto-sam-samhandlerWeb/sca/SAMSamhandlerWSEXP"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

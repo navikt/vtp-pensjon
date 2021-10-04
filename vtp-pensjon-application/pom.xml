@@ -683,6 +683,9 @@
                                         <extraarg>http://nav-cons-sto-sam-person/no/nav/inf/Binding=no.nav.inf.binding</extraarg>
                                     </extraargs>
                                 </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/wsdl/samhandler/SAMSamhandlerWSEXP_SAMSamhandlerHttp_Service.wsdl</wsdl>
+                                </wsdlOption>
                             </wsdlOptions>
                         </configuration>
                     </execution>
