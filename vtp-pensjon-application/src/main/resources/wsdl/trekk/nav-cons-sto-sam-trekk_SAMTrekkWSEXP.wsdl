@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:Port_0="http://nav-cons-sto-sam-trekk/no/nav/inf" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:this="http://nav-cons-sto-sam-trekk/no/nav/inf/Binding" name="SAMTrekkWSEXP_SAMTrekkHttp_Service" targetNamespace="http://nav-cons-sto-sam-trekk/no/nav/inf/Binding">
+  <wsdl:import location="no/nav/inf/SAMTrekk.wsdl" namespace="http://nav-cons-sto-sam-trekk/no/nav/inf"/>
+  <wsdl:binding name="SAMTrekkWSEXP_SAMTrekkHttpBinding" type="Port_0:SAMTrekk">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="opprettAndreTrekk">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="opprettAndreTrekkRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="opprettAndreTrekkResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoDebitorIkkeReg">
+        <soap:fault name="faultStoDebitorIkkeReg" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoFagomrGyldigIkkeOppdat">
+        <soap:fault name="faultStoFagomrGyldigIkkeOppdat" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoFagomrIkkeGyldForTrekkvedtak">
+        <soap:fault name="faultStoFagomrIkkeGyldForTrekkvedtak" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoKreditorAvdMaaOppgis">
+        <soap:fault name="faultStoKreditorAvdMaaOppgis" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoKreditorIkkeReg">
+        <soap:fault name="faultStoKreditorIkkeReg" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoMaksBelopGyldigIkkeOppdat">
+        <soap:fault name="faultStoMaksBelopGyldigIkkeOppdat" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoMinstEtFagomrUgyldMotTrekktype">
+        <soap:fault name="faultStoMinstEtFagomrUgyldMotTrekktype" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoOppgittFagomrIkkeTillattForOppgittTrekkAlt">
+        <soap:fault name="faultStoOppgittFagomrIkkeTillattForOppgittTrekkAlt" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoTSSEkstIdIkkeISamsvarMedKrediOffNr">
+        <soap:fault name="faultStoTSSEkstIdIkkeISamsvarMedKrediOffNr" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SAMTrekkWSEXP_SAMTrekkHttpService">
+    <wsdl:port binding="this:SAMTrekkWSEXP_SAMTrekkHttpBinding" name="SAMTrekkWSEXP_SAMTrekkHttpPort">
+      <soap:address location="http://localhost:9080/nav-cons-sto-sam-trekkWeb/sca/SAMTrekkWSEXP"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
