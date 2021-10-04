@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/tjenestepensjon">
+    <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" schemaLocation="../ASBOStoEndringsInfo.xsd"/>
+    <xsd:complexType name="ASBOStoTjenestepensjonSimulering">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="simuleringId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="brukePensjoneringFom" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="brukeLivsvarigTom" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="simuleringFom" type="xsd:date"/>
+      <xsd:element minOccurs="0" name="simuleringTom" type="xsd:date"/>
+      <xsd:element minOccurs="0" name="alderUtbetalingStart" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="antallUtbetalingStopp" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="belop" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="endringsInfo" type="bons0:ASBOStoEndringsInfo"/>
+        </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

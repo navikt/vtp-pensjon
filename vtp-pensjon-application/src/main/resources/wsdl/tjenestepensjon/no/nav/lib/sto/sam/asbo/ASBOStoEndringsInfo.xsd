@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo">
+  <xsd:complexType name="ASBOStoEndringsInfo">
+    <xsd:sequence>
+            <xsd:element minOccurs="0" name="opprettetAvId" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="opprettetAvNavn" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="opprettetAvEnhetId" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="opprettetAvEnhetNavn" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="opprettetDato" type="xsd:date"/>
+            <xsd:element minOccurs="0" name="endretAvId" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="endretAvNavn" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="endretAvEnhetId" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="endretAvEnhetNavn" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="endretDato" type="xsd:date"/>
+            <xsd:element minOccurs="0" name="kildeId" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="kildeNavn" type="xsd:string"/>
+        </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

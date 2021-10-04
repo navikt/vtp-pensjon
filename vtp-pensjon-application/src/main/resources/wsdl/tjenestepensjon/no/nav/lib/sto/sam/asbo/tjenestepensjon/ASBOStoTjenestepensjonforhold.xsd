@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:Q1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/tjenestepensjon" xmlns:bons0="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/tjenestepensjon" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/tjenestepensjon">
+    <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo" schemaLocation="../ASBOStoEndringsInfo.xsd"/>
+    <xsd:include schemaLocation="ASBOStoTjenestepensjonSimulering.xsd"/>
+    <xsd:include schemaLocation="ASBOStoTjenestepensjonYtelse.xsd"/>
+    <xsd:complexType name="ASBOStoTjenestepensjonforhold">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="forholdId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="tssEksternId" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="navn" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="tpnr" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="harUtlandPensjon" type="xsd:boolean"/>
+            <xsd:element minOccurs="0" name="samtykkeSimuleringKode" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="samtykkeDato" type="xsd:date"/>
+            <xsd:element minOccurs="0" name="harSimulering" type="xsd:boolean"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="tjenestepensjonYtelseListe" type="Q1:ASBOStoTjenestepensjonYtelse"/>
+            <xsd:element minOccurs="0" name="tjenestepensjonSimulering" type="Q1:ASBOStoTjenestepensjonSimulering"/>
+            <xsd:element minOccurs="0" name="endringsInfo" type="bons0:ASBOStoEndringsInfo"/>
+        </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
