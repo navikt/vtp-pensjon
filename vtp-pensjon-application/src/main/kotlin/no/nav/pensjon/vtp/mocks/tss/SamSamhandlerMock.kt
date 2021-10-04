@@ -3,15 +3,12 @@ package no.nav.pensjon.vtp.mocks.tss
 import nav_cons_sto_sam_samhandler.no.nav.inf.HentSamhandlerFaultStoGeneriskMsg
 import nav_cons_sto_sam_samhandler.no.nav.inf.HentSamhandlerFaultStoSamhandlerIkkeFunnetMsg
 import nav_cons_sto_sam_samhandler.no.nav.inf.SAMSamhandler
-import nav_lib_cons_sto_sam.no.nav.lib.sto.sam.asbo.ASBOStoAdresse
-import nav_lib_cons_sto_sam.no.nav.lib.sto.sam.asbo.ObjectFactory
-import nav_lib_cons_sto_sam.no.nav.lib.sto.sam.asbo.samhandler.ASBOStoAvdeling
-import nav_lib_cons_sto_sam.no.nav.lib.sto.sam.asbo.samhandler.ASBOStoHentSamhandlerRequest
-import nav_lib_cons_sto_sam.no.nav.lib.sto.sam.asbo.samhandler.ASBOStoKonto
-import nav_lib_cons_sto_sam.no.nav.lib.sto.sam.asbo.samhandler.ASBOStoSamhandler
-import nav_lib_cons_sto_sam.no.nav.lib.sto.sam.fault.FaultStoGenerisk
+import nav_lib_cons_sto_sam.no.nav.lib.sto.sam.asbo.samhandler.*
 import nav_lib_cons_sto_sam.no.nav.lib.sto.sam.fault.samhandler.FaultStoSamhandlerIkkeFunnet
+import nav_lib_cons_sto_sam.no.nav.lib.sto.sam.fault.samhandler.ObjectFactory
 import no.nav.lib.pen.psakpselv.asbo.ASBOPenAdresse
+import no.nav.lib.sto.sam.asbo.ASBOStoAdresse
+import no.nav.lib.sto.sam.fault.FaultStoGenerisk
 import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.pensjon.vtp.testmodell.tss.SamhandlerRepository
@@ -23,11 +20,11 @@ import javax.xml.ws.ResponseWrapper
 @SoapService(path = ["/esb/nav-cons-sto-sam-samhandlerWeb/sca/SAMSamhandlerWSEXP"])
 @WebService(targetNamespace = "http://nav-cons-sto-sam-samhandler/no/nav/inf", name = "SAMSamhandler")
 @XmlSeeAlso(
-    ObjectFactory::class,
     nav_lib_cons_sto_sam.no.nav.lib.sto.sam.asbo.samhandler.ObjectFactory::class,
-    nav_lib_cons_sto_sam.no.nav.lib.sto.sam.fault.samhandler.ObjectFactory::class,
+    ObjectFactory::class,
+    no.nav.lib.sto.sam.asbo.ObjectFactory::class,
     nav_cons_sto_sam_samhandler.no.nav.inf.ObjectFactory::class,
-    nav_lib_cons_sto_sam.no.nav.lib.sto.sam.fault.ObjectFactory::class
+    no.nav.lib.sto.sam.fault.ObjectFactory::class
 )
 @HandlerChain(file = "/Handler-chain.xml")
 class SamSamhandlerMock(

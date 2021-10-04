@@ -6,6 +6,7 @@ import no.nav.inf.ObjectFactory
 import no.nav.inf.SAMPerson
 import no.nav.lib.sto.sam.asbo.ASBOStoPerson
 import no.nav.lib.sto.sam.asbo.person.*
+import no.nav.lib.sto.sam.fault.FaultStoGenerisk
 import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import no.nav.pensjon.vtp.util.asGregorianCalendar
@@ -42,7 +43,7 @@ class SAMPersonMock(
         @WebParam(name = "hentPersonRequest", targetNamespace = "")
         hentPersonRequest: ASBOStoHentPersonRequest?
     ): ASBOStoPerson {
-        return getASBOPenPerson(hentPersonRequest?.fnr ?: throw HentPersonFaultStoGeneriskMsg("Missing `fnr` param"))
+        return getASBOPenPerson(hentPersonRequest?.fnr ?: throw HentPersonFaultStoGeneriskMsg("Missing `fnr` param", FaultStoGenerisk()))
             ?: throw HentPersonFaultStoPersonIkkeFunnetMsg("Person with fnr=${hentPersonRequest.fnr} not found")
     }
 
