@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/tjenestepensjon" xmlns:bons2="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" xmlns:bons3="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/tjenestepensjon" xmlns:tns="http://nav-cons-sto-sam-tjenestepensjon/no/nav/inf" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SAMTjenestepensjon" targetNamespace="http://nav-cons-sto-sam-tjenestepensjon/no/nav/inf">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://nav-cons-sto-sam-tjenestepensjon/no/nav/inf" xmlns:bons1="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/tjenestepensjon" xmlns:bons2="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" xmlns:bons3="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/tjenestepensjon" xmlns:tns="http://nav-cons-sto-sam-tjenestepensjon/no/nav/inf" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault" schemaLocation="../lib/sto/sam/fault/FaultStoGenerisk.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/tjenestepensjon" schemaLocation="../lib/sto/sam/fault/tjenestepensjon/FaultStoKanIkkeSletteIverksattDato.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/tjenestepensjon" schemaLocation="../lib/sto/sam/fault/tjenestepensjon/FaultStoElementetHarOverlappendePeriode.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/tjenestepensjon" schemaLocation="../lib/sto/sam/fault/tjenestepensjon/FaultStoElementetFinnesIkke.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/tjenestepensjon" schemaLocation="../lib/sto/sam/fault/tjenestepensjon/FaultStoTomDatoForanFomDato.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/tjenestepensjon" schemaLocation="../lib/sto/sam/fault/tjenestepensjon/FaultStoElementetErUgyldig.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault/tjenestepensjon" schemaLocation="../lib/sto/sam/fault/tjenestepensjon/FaultStoElementetErDuplikat.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/tjenestepensjon" schemaLocation="../lib/sto/sam/asbo/tjenestepensjon/ASBOStoTjenestepensjon.xsd"/>
+            <xsd:import namespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/tjenestepensjon" schemaLocation="../lib/sto/sam/asbo/tjenestepensjon/ASBOStoFinnTjenestepensjonsforholdRequest.xsd"/>
+            <xsd:element name="finnTjenestepensjonsforhold">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="finnTjenestepensjonsforholdRequest" nillable="true" type="bons1:ASBOStoFinnTjenestepensjonsforholdRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="finnTjenestepensjonsforholdResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="finnTjenestepensjonsforholdResponse" nillable="true" type="bons1:ASBOStoTjenestepensjon"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="lagreTjenestepensjonYtelse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="lagreTjenestepensjonYtelseRequest" nillable="true" type="bons1:ASBOStoTjenestepensjonYtelse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="lagreTjenestepensjonYtelseResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="lagreTjenestepensjonYtelseResponse" nillable="true" type="bons1:ASBOStoTjenestepensjonYtelse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="opprettTjenestepensjonYtelse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="opprettTjenestepensjonYtelseRequest" nillable="true" type="bons1:ASBOStoTjenestepensjonforhold"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="opprettTjenestepensjonYtelseResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="opprettTjenestepensjonYtelseResponse" nillable="true" type="bons1:ASBOStoTjenestepensjonYtelse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="slettTjenestepensjonYtelse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="slettTjenestepensjonYtelseRequest" nillable="true" type="bons1:ASBOStoTjenestepensjonYtelse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="slettTjenestepensjonYtelseResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="slettTjenestepensjonYtelseResponse" nillable="true" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+            <xsd:element name="finnTjenestepensjonsforhold_faultStoGenerisk" type="bons2:FaultStoGenerisk"/>
+            <xsd:element name="finnTjenestepensjonsforhold_faultStoElementetFinnesIkke" type="bons3:FaultStoElementetFinnesIkke"/>
+            <xsd:element name="finnTjenestepensjonsforhold_faultStoTomDatoForanFomDato" type="bons3:FaultStoTomDatoForanFomDato"/>
+            <xsd:element name="slettTjenestepensjonYtelse_faultStoGenerisk" type="bons2:FaultStoGenerisk"/>
+            <xsd:element name="slettTjenestepensjonYtelse_faultStoElementetErUgyldig" type="bons3:FaultStoElementetErUgyldig"/>
+            <xsd:element name="opprettTjenestepensjonYtelse_faultStoGenerisk" type="bons2:FaultStoGenerisk"/>
+            <xsd:element name="opprettTjenestepensjonYtelse_faultStoElementetHarOverlappendePeriode" type="bons3:FaultStoElementetHarOverlappendePeriode"/>
+            <xsd:element name="opprettTjenestepensjonYtelse_faultStoKanIkkeSletteIverksattDato" type="bons3:FaultStoKanIkkeSletteIverksattDato"/>
+            <xsd:element name="opprettTjenestepensjonYtelse_faultStoTomDatoForanFomDato" type="bons3:FaultStoTomDatoForanFomDato"/>
+            <xsd:element name="lagreTjenestepensjonYtelse_faultStoGenerisk" type="bons2:FaultStoGenerisk"/>
+            <xsd:element name="lagreTjenestepensjonYtelse_faultStoElementetHarOverlappendePeriode" type="bons3:FaultStoElementetHarOverlappendePeriode"/>
+            <xsd:element name="lagreTjenestepensjonYtelse_faultStoKanIkkeSletteIverksattDato" type="bons3:FaultStoKanIkkeSletteIverksattDato"/>
+            <xsd:element name="lagreTjenestepensjonYtelse_faultStoTomDatoForanFomDato" type="bons3:FaultStoTomDatoForanFomDato"/>
+            <xsd:element name="opprettTjenestepensjonsforhold">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="opprettTjenestepensjonsforholdRequest" nillable="true" type="bons1:ASBOStoTjenestepensjon"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+            <xsd:element name="opprettTjenestepensjonsforholdResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="opprettTjenestepensjonsforholdResponse" nillable="true" type="bons1:ASBOStoTjenestepensjonforhold"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+            <xsd:element name="opprettTjenestepensjonsforhold_faultStoGenerisk" type="bons2:FaultStoGenerisk"/>
+            <xsd:element name="opprettTjenestepensjonsforhold_faultStoElementetErDuplikat" type="bons3:FaultStoElementetErDuplikat"/>
+            <xsd:element name="lagreTjenestepensjonYtelse_faultStoElementetErDuplikat" type="bons3:FaultStoElementetErDuplikat"/>
+            <xsd:element name="opprettTjenestepensjonYtelse_faultStoElementetErDuplikat" type="bons3:FaultStoElementetErDuplikat"/>
+        </xsd:schema>
+  </wsdl:types>
+    <wsdl:message name="finnTjenestepensjonsforholdRequestMsg">
+    <wsdl:part element="tns:finnTjenestepensjonsforhold" name="finnTjenestepensjonsforholdParameters"/>
+  </wsdl:message>
+    <wsdl:message name="finnTjenestepensjonsforholdResponseMsg">
+    <wsdl:part element="tns:finnTjenestepensjonsforholdResponse" name="finnTjenestepensjonsforholdResult"/>
+  </wsdl:message>
+    <wsdl:message name="lagreTjenestepensjonYtelseRequestMsg">
+    <wsdl:part element="tns:lagreTjenestepensjonYtelse" name="lagreTjenestepensjonYtelseParameters"/>
+  </wsdl:message>
+    <wsdl:message name="lagreTjenestepensjonYtelseResponseMsg">
+    <wsdl:part element="tns:lagreTjenestepensjonYtelseResponse" name="lagreTjenestepensjonYtelseResult"/>
+  </wsdl:message>
+    <wsdl:message name="opprettTjenestepensjonYtelseRequestMsg">
+    <wsdl:part element="tns:opprettTjenestepensjonYtelse" name="opprettTjenestepensjonYtelseParameters"/>
+  </wsdl:message>
+    <wsdl:message name="opprettTjenestepensjonYtelseResponseMsg">
+    <wsdl:part element="tns:opprettTjenestepensjonYtelseResponse" name="opprettTjenestepensjonYtelseResult"/>
+  </wsdl:message>
+    <wsdl:message name="slettTjenestepensjonYtelseRequestMsg">
+    <wsdl:part element="tns:slettTjenestepensjonYtelse" name="slettTjenestepensjonYtelseParameters"/>
+  </wsdl:message>
+    <wsdl:message name="slettTjenestepensjonYtelseResponseMsg">
+    <wsdl:part element="tns:slettTjenestepensjonYtelseResponse" name="slettTjenestepensjonYtelseResult"/>
+  </wsdl:message>
+    <wsdl:message name="finnTjenestepensjonsforhold_faultStoGeneriskMsg">
+    <wsdl:part element="tns:finnTjenestepensjonsforhold_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="finnTjenestepensjonsforhold_faultStoElementetFinnesIkkeMsg">
+    <wsdl:part element="tns:finnTjenestepensjonsforhold_faultStoElementetFinnesIkke" name="faultStoElementetFinnesIkke"/>
+  </wsdl:message>
+    <wsdl:message name="finnTjenestepensjonsforhold_faultStoTomDatoForanFomDatoMsg">
+    <wsdl:part element="tns:finnTjenestepensjonsforhold_faultStoTomDatoForanFomDato" name="faultStoTomDatoForanFomDato"/>
+  </wsdl:message>
+    <wsdl:message name="slettTjenestepensjonYtelse_faultStoGeneriskMsg">
+    <wsdl:part element="tns:slettTjenestepensjonYtelse_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="slettTjenestepensjonYtelse_faultStoElementetErUgyldigMsg">
+    <wsdl:part element="tns:slettTjenestepensjonYtelse_faultStoElementetErUgyldig" name="faultStoElementetErUgyldig"/>
+  </wsdl:message>
+    <wsdl:message name="opprettTjenestepensjonYtelse_faultStoGeneriskMsg">
+    <wsdl:part element="tns:opprettTjenestepensjonYtelse_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="opprettTjenestepensjonYtelse_faultStoElementetHarOverlappendePeriodeMsg">
+    <wsdl:part element="tns:opprettTjenestepensjonYtelse_faultStoElementetHarOverlappendePeriode" name="faultStoElementetHarOverlappendePeriode"/>
+  </wsdl:message>
+    <wsdl:message name="opprettTjenestepensjonYtelse_faultStoKanIkkeSletteIverksattDatoMsg">
+    <wsdl:part element="tns:opprettTjenestepensjonYtelse_faultStoKanIkkeSletteIverksattDato" name="faultStoKanIkkeSletteIverksattDato"/>
+  </wsdl:message>
+    <wsdl:message name="opprettTjenestepensjonYtelse_faultStoTomDatoForanFomDatoMsg">
+    <wsdl:part element="tns:opprettTjenestepensjonYtelse_faultStoTomDatoForanFomDato" name="faultStoTomDatoForanFomDato"/>
+  </wsdl:message>
+    <wsdl:message name="lagreTjenestepensjonYtelse_faultStoGeneriskMsg">
+    <wsdl:part element="tns:lagreTjenestepensjonYtelse_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="lagreTjenestepensjonYtelse_faultStoElementetHarOverlappendePeriodeMsg">
+    <wsdl:part element="tns:lagreTjenestepensjonYtelse_faultStoElementetHarOverlappendePeriode" name="faultStoElementetHarOverlappendePeriode"/>
+  </wsdl:message>
+    <wsdl:message name="lagreTjenestepensjonYtelse_faultStoKanIkkeSletteIverksattDatoMsg">
+    <wsdl:part element="tns:lagreTjenestepensjonYtelse_faultStoKanIkkeSletteIverksattDato" name="faultStoKanIkkeSletteIverksattDato"/>
+  </wsdl:message>
+    <wsdl:message name="lagreTjenestepensjonYtelse_faultStoTomDatoForanFomDatoMsg">
+    <wsdl:part element="tns:lagreTjenestepensjonYtelse_faultStoTomDatoForanFomDato" name="faultStoTomDatoForanFomDato"/>
+  </wsdl:message>
+    <wsdl:message name="opprettTjenestepensjonsforholdRequestMsg">
+    <wsdl:part element="tns:opprettTjenestepensjonsforhold" name="opprettTjenestepensjonsforholdParameters"/>
+  </wsdl:message>
+    <wsdl:message name="opprettTjenestepensjonsforholdResponseMsg">
+    <wsdl:part element="tns:opprettTjenestepensjonsforholdResponse" name="opprettTjenestepensjonsforholdResult"/>
+  </wsdl:message>
+    <wsdl:message name="opprettTjenestepensjonsforhold_faultStoGeneriskMsg">
+    <wsdl:part element="tns:opprettTjenestepensjonsforhold_faultStoGenerisk" name="faultStoGenerisk"/>
+  </wsdl:message>
+    <wsdl:message name="opprettTjenestepensjonsforhold_faultStoElementetErDuplikatMsg">
+    <wsdl:part element="tns:opprettTjenestepensjonsforhold_faultStoElementetErDuplikat" name="faultStoElementetErDuplikat"/>
+  </wsdl:message>
+    <wsdl:message name="lagreTjenestepensjonYtelse_faultStoElementetErDuplikatMsg">
+    <wsdl:part element="tns:lagreTjenestepensjonYtelse_faultStoElementetErDuplikat" name="faultStoElementetErDuplikat"/>
+  </wsdl:message>
+    <wsdl:message name="opprettTjenestepensjonYtelse_faultStoElementetErDuplikatMsg">
+    <wsdl:part element="tns:opprettTjenestepensjonYtelse_faultStoElementetErDuplikat" name="faultStoElementetErDuplikat"/>
+  </wsdl:message>
+    <wsdl:portType name="SAMTjenestepensjon">
+    <wsdl:operation name="finnTjenestepensjonsforhold">
+      <wsdl:input message="tns:finnTjenestepensjonsforholdRequestMsg" name="finnTjenestepensjonsforholdRequest"/>
+      <wsdl:output message="tns:finnTjenestepensjonsforholdResponseMsg" name="finnTjenestepensjonsforholdResponse"/>
+            <wsdl:fault message="tns:finnTjenestepensjonsforhold_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+            <wsdl:fault message="tns:finnTjenestepensjonsforhold_faultStoElementetFinnesIkkeMsg" name="faultStoElementetFinnesIkke"/>
+            <wsdl:fault message="tns:finnTjenestepensjonsforhold_faultStoTomDatoForanFomDatoMsg" name="faultStoTomDatoForanFomDato"/>
+        </wsdl:operation>
+    <wsdl:operation name="lagreTjenestepensjonYtelse">
+      <wsdl:input message="tns:lagreTjenestepensjonYtelseRequestMsg" name="lagreTjenestepensjonYtelseRequest"/>
+      <wsdl:output message="tns:lagreTjenestepensjonYtelseResponseMsg" name="lagreTjenestepensjonYtelseResponse"/>
+            <wsdl:fault message="tns:lagreTjenestepensjonYtelse_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+            <wsdl:fault message="tns:lagreTjenestepensjonYtelse_faultStoElementetHarOverlappendePeriodeMsg" name="faultStoElementetHarOverlappendePeriode"/>
+            <wsdl:fault message="tns:lagreTjenestepensjonYtelse_faultStoKanIkkeSletteIverksattDatoMsg" name="faultStoKanIkkeSletteIverksattDato"/>
+            <wsdl:fault message="tns:lagreTjenestepensjonYtelse_faultStoTomDatoForanFomDatoMsg" name="faultStoTomDatoForanFomDato"/>
+            <wsdl:fault message="tns:lagreTjenestepensjonYtelse_faultStoElementetErDuplikatMsg" name="faultStoElementetErDuplikat"/>
+        </wsdl:operation>
+    <wsdl:operation name="opprettTjenestepensjonYtelse">
+      <wsdl:input message="tns:opprettTjenestepensjonYtelseRequestMsg" name="opprettTjenestepensjonYtelseRequest"/>
+      <wsdl:output message="tns:opprettTjenestepensjonYtelseResponseMsg" name="opprettTjenestepensjonYtelseResponse"/>
+            <wsdl:fault message="tns:opprettTjenestepensjonYtelse_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+            <wsdl:fault message="tns:opprettTjenestepensjonYtelse_faultStoElementetHarOverlappendePeriodeMsg" name="faultStoElementetHarOverlappendePeriode"/>
+            <wsdl:fault message="tns:opprettTjenestepensjonYtelse_faultStoKanIkkeSletteIverksattDatoMsg" name="faultStoKanIkkeSletteIverksattDato"/>
+            <wsdl:fault message="tns:opprettTjenestepensjonYtelse_faultStoTomDatoForanFomDatoMsg" name="faultStoTomDatoForanFomDato"/>
+            <wsdl:fault message="tns:opprettTjenestepensjonYtelse_faultStoElementetErDuplikatMsg" name="faultStoElementetErDuplikat"/>
+        </wsdl:operation>
+    <wsdl:operation name="slettTjenestepensjonYtelse">
+      <wsdl:input message="tns:slettTjenestepensjonYtelseRequestMsg" name="slettTjenestepensjonYtelseRequest"/>
+      <wsdl:output message="tns:slettTjenestepensjonYtelseResponseMsg" name="slettTjenestepensjonYtelseResponse"/>
+            <wsdl:fault message="tns:slettTjenestepensjonYtelse_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+            <wsdl:fault message="tns:slettTjenestepensjonYtelse_faultStoElementetErUgyldigMsg" name="faultStoElementetErUgyldig"/>
+        </wsdl:operation>
+        <wsdl:operation name="opprettTjenestepensjonsforhold">
+      <wsdl:input message="tns:opprettTjenestepensjonsforholdRequestMsg" name="opprettTjenestepensjonsforholdRequest"/>
+      <wsdl:output message="tns:opprettTjenestepensjonsforholdResponseMsg" name="opprettTjenestepensjonsforholdResponse"/>
+      <wsdl:fault message="tns:opprettTjenestepensjonsforhold_faultStoGeneriskMsg" name="faultStoGenerisk"/>
+      <wsdl:fault message="tns:opprettTjenestepensjonsforhold_faultStoElementetErDuplikatMsg" name="faultStoElementetErDuplikat"/>
+    </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

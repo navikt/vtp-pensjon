@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/tjenestepensjon">
+  <xsd:complexType name="ASBOStoFinnTjenestepensjonsforholdRequest">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="hentSamhandlerInfo" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="forholdId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="ytelseId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="fnr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="fom" type="xsd:date"/>
+      <xsd:element minOccurs="0" name="tom" type="xsd:date"/>
+      <xsd:element minOccurs="0" name="tssEksternId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

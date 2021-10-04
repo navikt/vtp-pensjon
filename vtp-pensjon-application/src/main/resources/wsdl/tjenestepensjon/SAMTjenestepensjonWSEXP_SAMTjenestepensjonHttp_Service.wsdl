@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="SAMTjenestepensjonWSEXP_SAMTjenestepensjonHttp_Service" targetNamespace="http://nav-cons-sto-sam-tjenestepensjon/no/nav/inf/Binding" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:Port_0="http://nav-cons-sto-sam-tjenestepensjon/no/nav/inf" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:this="http://nav-cons-sto-sam-tjenestepensjon/no/nav/inf/Binding" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="http://nav-cons-sto-sam-tjenestepensjon/no/nav/inf" location="no/nav/inf/SAMTjenestepensjon.wsdl"/>
+  <wsdl:binding name="SAMTjenestepensjonWSEXP_SAMTjenestepensjonHttpBinding" type="Port_0:SAMTjenestepensjon">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="finnTjenestepensjonsforhold">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="finnTjenestepensjonsforholdRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="finnTjenestepensjonsforholdResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoElementetFinnesIkke">
+        <soap:fault name="faultStoElementetFinnesIkke" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoTomDatoForanFomDato">
+        <soap:fault name="faultStoTomDatoForanFomDato" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="lagreTjenestepensjonYtelse">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="lagreTjenestepensjonYtelseRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="lagreTjenestepensjonYtelseResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoElementetHarOverlappendePeriode">
+        <soap:fault name="faultStoElementetHarOverlappendePeriode" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoElementetErDuplikat">
+        <soap:fault name="faultStoElementetErDuplikat" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoKanIkkeSletteIverksattDato">
+        <soap:fault name="faultStoKanIkkeSletteIverksattDato" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoTomDatoForanFomDato">
+        <soap:fault name="faultStoTomDatoForanFomDato" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="opprettTjenestepensjonYtelse">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="opprettTjenestepensjonYtelseRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="opprettTjenestepensjonYtelseResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoElementetHarOverlappendePeriode">
+        <soap:fault name="faultStoElementetHarOverlappendePeriode" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoElementetErDuplikat">
+        <soap:fault name="faultStoElementetErDuplikat" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoKanIkkeSletteIverksattDato">
+        <soap:fault name="faultStoKanIkkeSletteIverksattDato" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoTomDatoForanFomDato">
+        <soap:fault name="faultStoTomDatoForanFomDato" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="slettTjenestepensjonYtelse">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="slettTjenestepensjonYtelseRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="slettTjenestepensjonYtelseResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoElementetErUgyldig">
+        <soap:fault name="faultStoElementetErUgyldig" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="opprettTjenestepensjonsforhold">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="opprettTjenestepensjonsforholdRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="opprettTjenestepensjonsforholdResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="faultStoGenerisk">
+        <soap:fault name="faultStoGenerisk" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faultStoElementetErDuplikat">
+        <soap:fault name="faultStoElementetErDuplikat" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SAMTjenestepensjonWSEXP_SAMTjenestepensjonHttpService">
+    <wsdl:port name="SAMTjenestepensjonWSEXP_SAMTjenestepensjonHttpPort" binding="this:SAMTjenestepensjonWSEXP_SAMTjenestepensjonHttpBinding">
+      <soap:address location="http://localhost:9080/nav-cons-sto-sam-tjenestepensjonWeb/sca/SAMTjenestepensjonWSEXP"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
