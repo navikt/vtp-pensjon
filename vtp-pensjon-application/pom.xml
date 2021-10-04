@@ -669,6 +669,20 @@
                             </defaultOptions>
                             <wsdlOptions>
                                 <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/wsdl/ppen015/nav-cons-sto-sam-ppen015_SAMPPEN015WSEXP.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/wsdl/samhandler/SAMSamhandlerWSEXP_SAMSamhandlerHttp_Service.wsdl</wsdl>
+                                    <extraargs>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo=no.nav.lib.sto.sam.asbo</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person=no.nav.lib.sto.sam.asbo.person</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault=no.nav.lib.sto.sam.fault</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+                                <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/wsdl/samperson/SAMPersonWSEXP_SAMPersonHttp_Service.wsdl</wsdl>
                                     <extraargs>
                                         <extraarg>-p</extraarg>
@@ -681,17 +695,6 @@
                                         <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault=no.nav.lib.sto.sam.fault</extraarg>
                                         <extraarg>-p</extraarg>
                                         <extraarg>http://nav-cons-sto-sam-person/no/nav/inf/Binding=no.nav.inf.binding</extraarg>
-                                    </extraargs>
-                                </wsdlOption>
-                                <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/wsdl/samhandler/SAMSamhandlerWSEXP_SAMSamhandlerHttp_Service.wsdl</wsdl>
-                                    <extraargs>
-                                        <extraarg>-p</extraarg>
-                                        <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo=no.nav.lib.sto.sam.asbo</extraarg>
-                                        <extraarg>-p</extraarg>
-                                        <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/asbo/person=no.nav.lib.sto.sam.asbo.person</extraarg>
-                                        <extraarg>-p</extraarg>
-                                        <extraarg>http://nav-lib-cons-sto-sam/no/nav/lib/sto/sam/fault=no.nav.lib.sto.sam.fault</extraarg>
                                     </extraargs>
                                 </wsdlOption>
                                 <wsdlOption>
