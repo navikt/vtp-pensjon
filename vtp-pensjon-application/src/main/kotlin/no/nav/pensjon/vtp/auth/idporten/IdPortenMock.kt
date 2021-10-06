@@ -2,6 +2,7 @@ package no.nav.pensjon.vtp.auth.idporten
 
 import io.swagger.annotations.ApiOperation
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport
+import no.nav.pensjon.vtp.auth.JsonWebKeySupport.*
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import no.nav.pensjon.vtp.util.asResponseEntity
 import no.nav.pensjon.vtp.util.withoutQueryParameters
@@ -186,8 +187,6 @@ class IdPortenMock(
         val lastName: String,
         val redirect: URI
     )
-
-    data class Keys(val keys: List<JsonWebKeySupport.Jwks>)
 
     companion object {
         private fun issuer() = linkTo<IdPortenMock> { dummy() }.toUri()

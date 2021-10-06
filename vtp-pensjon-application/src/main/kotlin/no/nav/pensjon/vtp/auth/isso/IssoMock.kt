@@ -4,7 +4,9 @@ import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import no.nav.pensjon.vtp.auth.*
+import no.nav.pensjon.vtp.auth.JsonWebKeySupport.*
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsattService
+import no.nav.pensjon.vtp.util.asResponseEntity
 import org.apache.http.client.utils.URIBuilder
 import org.jose4j.jwt.NumericDate.now
 import org.springframework.beans.factory.annotation.Value
@@ -153,7 +155,7 @@ class IssoMock(
 
     @GetMapping(value = ["/oauth2/connect/jwk_uri"])
     @ApiOperation(value = "oauth2/connect/jwk_uri", notes = "Mock impl av Oauth2 jwk_uri")
-    fun authorize() = oidcTokenGenerator.jwks()
+    fun authorize() = Keys(oidcTokenGenerator.jwks()).asResponseEntity()
 
     /**
      * brukes til autentisere bruker slik at en slipper å autentisere senere. OpenAM mikk-makk .

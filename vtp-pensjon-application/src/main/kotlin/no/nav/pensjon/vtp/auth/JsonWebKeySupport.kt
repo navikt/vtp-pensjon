@@ -39,6 +39,8 @@ class JsonWebKeySupport(private val jwk: RsaJsonWebKey) {
         val e: String
     )
 
+    data class Keys(val keys: List<Jwks>)
+
     fun createRS256Token(string: String?): JsonWebSignature {
         with(JsonWebSignature()) {
             payload = string

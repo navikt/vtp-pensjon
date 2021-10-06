@@ -2,7 +2,9 @@ package no.nav.pensjon.vtp.auth.maskinporten
 
 import com.nimbusds.jose.JOSEObject
 import com.nimbusds.jwt.JWTClaimsSet
+import no.nav.pensjon.vtp.auth.JsonWebKeySupport.*
 import no.nav.pensjon.vtp.auth.OidcTokenGenerator
+import no.nav.pensjon.vtp.util.asResponseEntity
 import org.jose4j.jwt.NumericDate
 import org.jose4j.jwt.NumericDate.now
 import org.springframework.beans.factory.annotation.Value
@@ -36,7 +38,7 @@ class MaskinportenMock(
     private fun LinkBuilder.toPathUri() = toUri().run { URI(scheme, null, host, port, path, null, null) }
 
     @GetMapping("/jwk")
-    fun jwks() = ok(oidcTokenGenerator.jwks())
+    fun jwks() = Keys(oidcTokenGenerator.jwks()).asResponseEntity()
 
     @PostMapping("/token", consumes = [APPLICATION_FORM_URLENCODED_VALUE])
     fun token(

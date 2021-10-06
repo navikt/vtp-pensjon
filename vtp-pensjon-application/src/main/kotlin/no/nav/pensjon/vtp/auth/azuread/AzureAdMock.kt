@@ -2,8 +2,10 @@ package no.nav.pensjon.vtp.auth.azuread
 
 import io.swagger.annotations.ApiOperation
 import no.nav.pensjon.vtp.auth.*
+import no.nav.pensjon.vtp.auth.JsonWebKeySupport.*
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsattService
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
+import no.nav.pensjon.vtp.util.asResponseEntity
 import org.apache.http.client.utils.URIBuilder
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.MediaType.TEXT_HTML_VALUE
@@ -36,7 +38,7 @@ class AzureAdMock(
         )
 
     @GetMapping(value = ["/{tenant}/discovery/v2.0/keys"])
-    fun authorize(@PathVariable tenant: String) = jsonWebKeySupport.jwks()
+    fun authorize(@PathVariable tenant: String) = Keys(jsonWebKeySupport.jwks()).asResponseEntity()
 
     @PostMapping(value = ["/{tenant}/oauth2/v2.0/token"])
     fun accessToken(
