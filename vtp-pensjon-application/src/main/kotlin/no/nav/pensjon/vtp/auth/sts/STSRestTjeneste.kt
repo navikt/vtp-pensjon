@@ -1,8 +1,10 @@
 package no.nav.pensjon.vtp.auth.sts
 
 import io.swagger.annotations.Api
+import no.nav.pensjon.vtp.auth.JsonWebKeySupport
 import no.nav.pensjon.vtp.auth.OidcTokenGenerator
 import no.nav.pensjon.vtp.auth.getUser
+import no.nav.pensjon.vtp.util.asResponseEntity
 import org.apache.commons.codec.binary.Base64.encodeBase64String
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType
 import org.jose4j.jwt.NumericDate.now
@@ -95,6 +97,9 @@ class STSRestTjeneste(
                 expires_in = 3600L
             )
         )
+
+    @GetMapping("/jwks")
+    fun jwks() = JsonWebKeySupport.Keys(oidcTokenGenerator.jwks()).asResponseEntity()
 
     data class SAMLResponse(
         val access_token: String,
