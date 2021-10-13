@@ -2,6 +2,8 @@ package no.nav.pensjon.vtp.configuration.graphql
 
 import graphql.GraphQL
 import graphql.scalars.datetime.DateScalar
+import graphql.scalars.datetime.DateTimeScalar
+import graphql.scalars.java.JavaPrimitives
 import graphql.schema.GraphQLSchema
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
@@ -28,27 +30,11 @@ class GraphQLConfig(
         val typeRegistry = SchemaParser().parse(sdl)
         val runtimeWiring: RuntimeWiring = RuntimeWiring.newRuntimeWiring()
             .scalar(DateScalar.INSTANCE)
+            .scalar(DateTimeScalar.INSTANCE)
+            .scalar(JavaPrimitives.GraphQLLong)
             .type(
                 TypeRuntimeWiring.newTypeWiring("Query")
                     .dataFetcher("hentPerson", PersonDataFetcher(personModellRepository))
-            )
-            .type(
-                TypeRuntimeWiring.newTypeWiring("Person")
-            )
-            .type(
-                TypeRuntimeWiring.newTypeWiring("Metadata")
-            )
-            .type(
-                TypeRuntimeWiring.newTypeWiring("Navn")
-            )
-            .type(
-                TypeRuntimeWiring.newTypeWiring("Foedsel")
-            )
-            .type(
-                TypeRuntimeWiring.newTypeWiring("Doedsfall")
-            )
-            .type(
-                TypeRuntimeWiring.newTypeWiring("Statsborgerskap")
             )
             .build()
         val schemaGenerator = SchemaGenerator()

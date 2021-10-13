@@ -8,13 +8,10 @@ import java.time.LocalDate
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = As.PROPERTY)
 @JsonSubTypes(
-    JsonSubTypes.Type(
-        UstrukturertAdresseModell::class
-    ),
-    JsonSubTypes.Type(GateadresseModell::class), JsonSubTypes.Type(AdresseRefModell::class),
-    JsonSubTypes.Type(
-        PostboksadresseModell::class
-    )
+    JsonSubTypes.Type(UstrukturertAdresseModell::class),
+    JsonSubTypes.Type(GateadresseModell::class),
+    JsonSubTypes.Type(AdresseRefModell::class),
+    JsonSubTypes.Type(PostboksadresseModell::class)
 )
 interface AdresseModell {
     val fom: LocalDate?
