@@ -39,7 +39,6 @@ class PersonDataFetcher(val personModellRepository: PersonModellRepository) : Da
                 bostedsadresse = adresser.mapBostedsadresser(),
             )
         }
-
 }
 
 private fun <T : Any> T.asList() = listOf(this)

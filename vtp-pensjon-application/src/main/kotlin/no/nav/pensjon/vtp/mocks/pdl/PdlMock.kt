@@ -22,9 +22,6 @@ class PdlMock(private val graphQL: GraphQL) {
             .build()
             .let { graphQL.execute(it) }
             .toSpecification()
-
-    @GetMapping(path = ["/schema"])
-    fun schema() = graphQL.graphQLSchema
 }
 
 data class PdlRequest(val query: String, val variables: Map<String, Any>)
