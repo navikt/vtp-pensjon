@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.mocks.psak
+package no.nav.pensjon.vtp.mocks.pdl
 
 import graphql.ExecutionInput
 import graphql.GraphQL
@@ -22,6 +22,9 @@ class PdlMock(private val graphQL: GraphQL) {
             .build()
             .let { graphQL.execute(it) }
             .toSpecification()
+
+    @GetMapping(path = ["/schema"])
+    fun schema() = graphQL.graphQLSchema
 }
 
 data class PdlRequest(val query: String, val variables: Map<String, Any>)

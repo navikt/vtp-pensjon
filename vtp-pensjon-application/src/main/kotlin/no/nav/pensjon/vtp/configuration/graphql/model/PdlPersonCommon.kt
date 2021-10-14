@@ -3,6 +3,16 @@ package no.nav.pensjon.vtp.configuration.graphql.model
 import java.time.LocalDateTime
 import java.util.*
 
+data class Person(
+    val navn: List<Navn> = emptyList(),
+    val foedsel: List<Foedsel> = emptyList(),
+    val doedsfall: List<Doedsfall> = emptyList(),
+    val statsborgerskap: List<Statsborgerskap> = emptyList(),
+    val bostedsadresse: List<Bostedsadresse> = emptyList(),
+    val kontaktadresse: List<Kontaktadresse> = emptyList(),
+    val oppholdsadresse: List<Oppholdsadresse> = emptyList()
+)
+
 data class Foedsel(
     val foedselsaar: Int? = null,
     val foedselsdato: Date? = null,

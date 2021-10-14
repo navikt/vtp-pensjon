@@ -8,8 +8,7 @@ import graphql.schema.GraphQLSchema
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
-import graphql.schema.idl.TypeRuntimeWiring
-import no.nav.pensjon.vtp.configuration.graphql.model.*
+import no.nav.pensjon.vtp.configuration.graphql.model.PersonDataFetcher
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.core.io.ResourceLoader
@@ -25,19 +24,19 @@ class GraphQLConfig(
     @PostConstruct
     fun graphQL(): GraphQL = GraphQL.newGraphQL(buildSchema()).build()
 
-    private fun buildSchema(): GraphQLSchema {
-        val sdl = resourceLoader.getResource("classpath:pdl-schema.graphql").file
-        val typeRegistry = SchemaParser().parse(sdl)
-        val runtimeWiring: RuntimeWiring = RuntimeWiring.newRuntimeWiring()
-            .scalar(DateScalar.INSTANCE)
-            .scalar(DateTimeScalar.INSTANCE)
-            .scalar(JavaPrimitives.GraphQLLong)
-            .type(
-                TypeRuntimeWiring.newTypeWiring("Query")
-                    .dataFetcher("hentPerson", PersonDataFetcher(personModellRepository))
-            )
-            .build()
-        val schemaGenerator = SchemaGenerator()
-        return schemaGenerator.makeExecutableSchema(typeRegistry, runtimeWiring)
-    }
+    private fun buildSchema(): GraphQLSchema = SchemaGenerator().makeExecutableSchema(typeRegistry(), runtimeWiring())
+
+    private fun runtimeWiring() = RuntimeWiring.newRuntimeWiring().apply {
+        scalar(DateScalar.INSTANCE)
+        scalar(DateTimeScalar.INSTANCE)
+        scalar(JavaPrimitives.GraphQLLong)
+        type("Query") {
+            it.dataFetcher("hentPerson", PersonDataFetcher(personModellRepository))
+        }
+    }.build()
+
+    private fun typeRegistry() =
+        resourceLoader.getResource("classpath:pdl-schema.graphql").let {
+            SchemaParser().parse(it.file)
+        }
 }
