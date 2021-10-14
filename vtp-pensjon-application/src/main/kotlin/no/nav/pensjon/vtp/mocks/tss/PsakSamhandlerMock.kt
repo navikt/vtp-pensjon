@@ -60,7 +60,7 @@ class PsakSamhandlerMock(
         ASBOPenSamhandlerListe().apply {
             samhandlere = samhandlerRepository.findAll()
                 .filter {
-                    (request.navn == null || request.navn == it.navn) &&
+                    (request.navn == null || it.navn.contains(request.navn, ignoreCase = true)) &&
                         (request.samhandlerType == null || request.samhandlerType == it.samhandlerType) &&
                         (request.idType == null || request.idType == it.idType) &&
                         (request.offentligId == null || request.offentligId == it.offentligId)
