@@ -1484,7 +1484,7 @@
       "properties": {
         "datoMottatt": {
           "type": "string",
-          "format": "date-time",
+          "format": "date",
           "example": "2020-01-01",
           "description": "Dato forsendelsen ble mottatt fra avsender. Dersom datoMottatt er tom, settes verdien til dagens dato.\n Feltet kan kun settes for inngående journalposter."
         },

@@ -28,7 +28,7 @@ fun tilModell(journalpostRequest: OpprettJournalpostRequest) =
         arkivtema = journalpostRequest.tema?.let { Arkivtema.valueOf(it) },
         bruker = journalpostRequest.bruker?.let { mapAvsenderFraBruker(it) },
         sakId = journalpostRequest.sak?.fagsakId,
-        mottattDato = journalpostRequest.datoMottatt?.toLocalDateTime() ?: now(),
+        mottattDato = journalpostRequest.datoMottatt?.atStartOfDay() ?: now(),
         dokumentModellList = journalpostRequest.dokumenter
             .mapIndexed { index, dokument ->
                 if (index == 0) {
