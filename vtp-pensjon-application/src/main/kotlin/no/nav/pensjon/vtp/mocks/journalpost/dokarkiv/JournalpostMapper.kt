@@ -4,7 +4,6 @@ import no.nav.dokarkiv.generated.model.Bruker
 import no.nav.dokarkiv.generated.model.Dokument
 import no.nav.dokarkiv.generated.model.DokumentVariant
 import no.nav.dokarkiv.generated.model.OpprettJournalpostRequest
-import no.nav.dokarkiv.generated.model.OpprettJournalpostRequest.JournalpostType
 import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentModell
 import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentVariantInnhold
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostBruker
@@ -25,10 +24,10 @@ import java.time.LocalDateTime.now
 // journalpostRequest.kanal
 fun tilModell(journalpostRequest: OpprettJournalpostRequest) =
     JournalpostModell(
-        journalposttype = mapJournalposttype(journalpostRequest.journalpostType),
+        journalposttype = mapJournalposttype(journalpostRequest.journalposttype),
         arkivtema = journalpostRequest.tema?.let { Arkivtema.valueOf(it) },
         bruker = journalpostRequest.bruker?.let { mapAvsenderFraBruker(it) },
-        sakId = journalpostRequest.sak?.arkivsaksnummer,
+        sakId = journalpostRequest.sak?.fagsakId,
         mottattDato = journalpostRequest.datoMottatt?.toLocalDateTime() ?: now(),
         dokumentModellList = journalpostRequest.dokumenter
             .mapIndexed { index, dokument ->
@@ -59,7 +58,6 @@ fun mapAvsenderFraBruker(bruker: Bruker): JournalpostBruker {
 // dokument.dokumentvarianter
 private fun mapDokument(dokument: Dokument, dokumentTilknyttetJournalpost: DokumentTilknyttetJournalpost) =
     DokumentModell(
-        dokumentkategori = dokument.dokumentKategori?.let { Dokumentkategori.fromCode(it) },
         tittel = dokument.tittel,
         dokumentVariantInnholdListe = dokument.dokumentvarianter
             ?.map { mapDokumentVariant(it) },
@@ -72,19 +70,10 @@ private fun mapDokumentVariant(dokumentVariant: DokumentVariant) = DokumentVaria
     dokumentInnhold = dokumentVariant.fysiskDokument
 )
 
-private fun mapJournalposttype(type: JournalpostType): Journalposttyper {
-    return when {
-        type.toString().equals("INNGAAENDE", ignoreCase = true) -> {
-            INNGAAENDE_DOKUMENT
-        }
-        type.toString().equals("UTGAAENDE", ignoreCase = true) -> {
-            UTGAAENDE_DOKUMENT
-        }
-        type.toString().equals("NOTAT", ignoreCase = true) -> {
-            NOTAT
-        }
-        else -> {
-            throw IllegalArgumentException("Verdi journalposttype ikke støttet")
-        }
+private fun mapJournalposttype(type: OpprettJournalpostRequest.Journalposttype): Journalposttyper {
+    return when (type) {
+        OpprettJournalpostRequest.Journalposttype.iNNGAAENDE -> INNGAAENDE_DOKUMENT
+        OpprettJournalpostRequest.Journalposttype.uTGAAENDE -> UTGAAENDE_DOKUMENT
+        OpprettJournalpostRequest.Journalposttype.nOTAT -> NOTAT
     }
 }

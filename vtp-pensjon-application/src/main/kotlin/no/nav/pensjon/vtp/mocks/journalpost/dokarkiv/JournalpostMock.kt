@@ -20,14 +20,13 @@ class JournalpostMock(private val journalRepository: JournalRepository) {
             OpprettJournalpostResponse(
                 dokumenter = journalpostModell.dokumentModellList
                     .map {
-                        DokumentInfo(
+                        DokumentInfoId(
                             dokumentInfoId = it.dokumentId ?: throw IllegalStateException("Stored dokument without id")
                         )
                     },
                 journalpostId = journalpostModell.journalpostId
                     ?: throw IllegalStateException("Stored journalpost without id"),
-                journalpostferdigstilt = true,
-                journalstatus = journalpostModell.journalStatus.name
+                journalpostferdigstilt = forsoekFerdigstill,
             )
         }
     )
