@@ -1,4 +1,6 @@
 scalar Date
+scalar DateTime
+scalar Long
 
 schema {
     query: Query
@@ -9,10 +11,13 @@ type Query {
 }
 
 type Person {
-    navn: Navn
+    navn: [Navn!]!
     foedsel: Foedsel
     statsborgerskap: Statsborgerskap
     doedsfall : Doedsfall
+    bostedsadresse(historikk: Boolean = false): [Bostedsadresse!]!
+    kontaktadresse(historikk: Boolean = false): [Kontaktadresse!]!
+    oppholdsadresse(historikk: Boolean = false):[Oppholdsadresse!]!
 }
 
 type Navn {
@@ -21,6 +26,8 @@ type Navn {
     etternavn: String!
     forkortetNavn: String
     gyldigFraOgMed: Date
+
+    folkeregistermetadata: Folkeregistermetadata
     metadata: Metadata!
 }
 
@@ -47,6 +54,146 @@ type Doedsfall {
 }
 
 type Metadata {
-    historisk: Boolean!
+    opplysningsId: String
     master: String!
+    endringer: [Endring!]!
+    historisk: Boolean!
+}
+
+type Endring {
+    type: EndringsType!
+    registrert: DateTime!
+    registrertAv: String!
+    systemkilde: String!
+    kilde: String!
+}
+
+enum EndringsType {
+    OPPRETT
+    KORRIGER
+    OPPHOER
+}
+
+type Folkeregistermetadata {
+    ajourholdstidspunkt: DateTime
+    gyldighetstidspunkt: DateTime
+    opphoerstidspunkt: DateTime
+    kilde: String
+    aarsak: String
+    sekvens: Int
+}
+
+type Bostedsadresse {
+    angittFlyttedato: Date
+    gyldigFraOgMed: DateTime
+    gyldigTilOgMed: DateTime
+
+    coAdressenavn: String
+    vegadresse: Vegadresse
+    matrikkeladresse: Matrikkeladresse
+    utenlandskAdresse: UtenlandskAdresse
+    ukjentBosted: UkjentBosted
+
+    folkeregistermetadata: Folkeregistermetadata
+    metadata: Metadata!
+}
+
+type Kontaktadresse {
+    gyldigFraOgMed: DateTime
+    gyldigTilOgMed: DateTime
+    type: KontaktadresseType!
+
+    coAdressenavn: String
+    postboksadresse: Postboksadresse
+    vegadresse: Vegadresse
+    postadresseIFrittFormat: PostadresseIFrittFormat
+    utenlandskAdresse: UtenlandskAdresse
+    utenlandskAdresseIFrittFormat: UtenlandskAdresseIFrittFormat
+
+    folkeregistermetadata: Folkeregistermetadata
+    metadata: Metadata!
+}
+
+type Oppholdsadresse {
+    gyldigFraOgMed: DateTime
+    gyldigTilOgMed: DateTime
+
+    coAdressenavn: String
+    utenlandskAdresse: UtenlandskAdresse
+    vegadresse: Vegadresse
+    matrikkeladresse: Matrikkeladresse
+    oppholdAnnetSted: String
+
+    folkeregistermetadata: Folkeregistermetadata
+    metadata: Metadata!
+}
+
+enum KontaktadresseType {
+    Innland,
+    Utland
+}
+
+type Postboksadresse {
+    postbokseier: String
+    postboks: String!
+    postnummer: String
+}
+
+type PostadresseIFrittFormat {
+    adresselinje1: String
+    adresselinje2: String
+    adresselinje3: String
+    postnummer: String
+}
+
+type Vegadresse {
+    matrikkelId: Long
+    husnummer: String
+    husbokstav: String
+    bruksenhetsnummer: String
+    adressenavn: String
+    kommunenummer: String
+    bydelsnummer: String
+    tilleggsnavn: String
+    postnummer: String
+    koordinater: Koordinater
+}
+
+type Matrikkeladresse {
+    matrikkelId: Long
+    bruksenhetsnummer: String
+    tilleggsnavn: String
+    postnummer: String
+    kommunenummer: String
+    koordinater: Koordinater
+}
+
+type UtenlandskAdresse {
+    adressenavnNummer: String
+    bygningEtasjeLeilighet: String
+    postboksNummerNavn: String
+    postkode: String
+    bySted: String
+    regionDistriktOmraade: String
+    landkode: String!
+}
+
+type UkjentBosted {
+    bostedskommune: String
+}
+
+type Koordinater {
+    x: Float
+    y: Float
+    z: Float
+    kvalitet: Int
+}
+
+type UtenlandskAdresseIFrittFormat {
+    adresselinje1: String
+    adresselinje2: String
+    adresselinje3: String
+    postkode: String
+    byEllerStedsnavn: String
+    landkode: String!
 }
