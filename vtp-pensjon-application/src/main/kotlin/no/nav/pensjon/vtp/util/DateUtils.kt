@@ -40,3 +40,16 @@ fun LocalDateTime.asXMLGregorianCalendar(): XMLGregorianCalendar =
 fun Calendar.toLocalDate(): LocalDate = ofInstant(toInstant(), timeZone.toZoneId()).toLocalDate()
 
 fun XMLGregorianCalendar.asLocalDate(): LocalDate = toGregorianCalendar().toZonedDateTime().toLocalDate()
+
+/**
+ * Compares two date periods to see if they are overlapping.
+ *
+ * See the answer from the following stack overflow question for explanation.
+ * https://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap/325964.
+ */
+fun isOverlapping(startA: LocalDate?, endA: LocalDate?, startB: LocalDate?, endB: LocalDate?) =
+    (endB == null || startA == null || startA <= endB) &&
+        (endA == null || startB == null || endA >= startB)
+
+fun isOverlapping(startA: Calendar?, endA: Calendar?, startB: Calendar?, endB: Calendar?) =
+    isOverlapping(startA?.toLocalDate(), endA?.toLocalDate(), startB?.toLocalDate(), endB?.toLocalDate())
