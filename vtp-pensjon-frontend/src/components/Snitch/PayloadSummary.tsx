@@ -35,9 +35,9 @@ export default function PayloadSummary(props: PayloadProps) {
   let contentBadges;
   if (message.contentLength && message.contentLength > 0) {
     contentBadges = (
-      <div className="float-right">
-        <Badge variant="primary">{message.contentType}</Badge>{" "}
-        <Badge variant="primary">{message.contentLength}</Badge>
+      <div className="float-end">
+        <Badge pill={true} bg="primary">{message.contentType}</Badge>{" "}
+        <Badge pill={true} bg="primary">{message.contentLength}</Badge>
       </div>
     );
   }
@@ -45,8 +45,10 @@ export default function PayloadSummary(props: PayloadProps) {
   return (
     <Card>
       <Card.Header>
-        {title}
-        {contentBadges}
+          <Card.Title>
+              {title}
+            {contentBadges}
+          </Card.Title>
       </Card.Header>
       <Card.Body className="pb-0">
         <dl className="row">

@@ -174,7 +174,7 @@ export function Unleash() {
 
     return <Container style={{paddingTop: "12px"}}>
         <h1>Features
-                <Button className={"float-right"} variant={"success"}
+                <Button className={"float-end"} variant={"success"}
                         onClick={showNewFeature}>
                     Add feature
                 </Button>

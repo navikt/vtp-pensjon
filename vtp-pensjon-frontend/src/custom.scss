@@ -1,0 +1,16 @@
+// Trying to model the screen sizes based on equipment used by developers in NAV
+$grid-breakpoints: (
+        xs: 0,
+        // 13 inch laptops
+        sm: 1020px,
+        // 15 and 16 inch scaled from 3070
+        md: 1320px,
+        // 24" - often 1920
+        lg: 1908px,
+        // 27" - often 2560
+        xl: 2520px,
+        // Ultra wide screens
+        xxl: 2640px
+);
+
+@import '~bootstrap/scss/bootstrap.scss';

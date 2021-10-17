@@ -10,10 +10,43 @@ function sortByTimestamp(
   );
 }
 
-export default function useSnitchDataStream(): RequestResponse[] {
+export default function useSnitchDataStream(): [RequestResponse[], () => void, (path: string) => void] {
   const [requests, setRequests] = useState<RequestResponse[]>([]);
 
-  useEffect(() => {
+    function clear() {
+        fetch("/snitch/requestResponses",
+            {
+                method: "DELETE"
+            })
+            .then(() =>
+                setRequests(() => {
+                    return sortByTimestamp([]);
+                })
+            )
+    }
+
+    function ignorePath(path: string) {
+        fetch("/snitch/ignoredPaths" + path,
+            {
+                method: "PUT"
+            })
+            .then(() => fetchAccessLog());
+    }
+
+    function fetchAccessLog() {
+        fetch("/data/requestResponses")
+            .then((response) => response.json())
+            .then((result) =>
+                setRequests((state) => {
+                    return sortByTimestamp([
+                        ...result._embedded.requestResponses,
+                        ...state,
+                    ]);
+                })
+            );
+    }
+
+    useEffect(() => {
     console.log("Opening Stomp/snitch connection.");
     // Start subscription before fetching existing data. A reverse order may lose data between existing data
     // is fetched and a subscription is started
@@ -21,11 +54,12 @@ export default function useSnitchDataStream(): RequestResponse[] {
       window.location.hostname
     }:${window.location.port}/api/ws`;
     const client = Stomp.client(websocketUrl);
-    client.debug = () => {}; // do nothing
+    client.debug = (str) => console.log(str)
 
     let subscription: StompSubscription;
     client.onConnect = () => {
       subscription = client.subscribe("/topic/snitch", (message) => {
+        console.log("Got message", message);
         setRequests((state) => {
           return sortByTimestamp([JSON.parse(message.body), ...state]);
         });
@@ -36,24 +70,14 @@ export default function useSnitchDataStream(): RequestResponse[] {
     };
 
     client.activate();
+        fetchAccessLog();
 
-    fetch("/data/requestResponses")
-      .then((response) => response.json())
-      .then((result) =>
-        setRequests((state) => {
-          return sortByTimestamp([
-            ...result._embedded.requestResponses,
-            ...state,
-          ]);
-        })
-      );
-
-    return () => {
+        return () => {
       console.log("Closing Stomp/snitch connection.");
       subscription && subscription.unsubscribe();
-      client.deactivate();
+      client.deactivate().then(() => console.log("Deactivated"))
     };
   }, []);
 
-  return requests;
+  return [requests, clear, ignorePath];
 }
