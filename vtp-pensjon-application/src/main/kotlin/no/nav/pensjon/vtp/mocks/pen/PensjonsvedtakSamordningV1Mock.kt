@@ -66,6 +66,6 @@ class PensjonsvedtakSamordningV1Mock : PensjonsvedtakSamordningV1 {
         className = "no.nav.tjeneste.virksomhet.pensjonsvedtaksamordning.v1.HentVedtakListeResponse"
     )
     override fun hentVedtakListe(@WebParam(name = "request", targetNamespace = "") request: HentVedtakListeRequest?): HentVedtakListeResponse {
-        TODO("Not yet implemented")
+        return HentVedtakListeResponse().also { it.vedtakListe }
     }
 }

@@ -11,7 +11,6 @@ import no.nav.lib.sto.sam.asbo.ASBOStoAdresse
 import no.nav.lib.sto.sam.fault.FaultStoGenerisk
 import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
-import no.nav.pensjon.vtp.testmodell.tss.SamhandlerRepository
 import javax.jws.*
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper

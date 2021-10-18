@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.testmodell.tss
+package no.nav.pensjon.vtp.mocks.tss
 
 import no.nav.lib.pen.psakpselv.asbo.samhandler.ASBOPenSamhandler
 

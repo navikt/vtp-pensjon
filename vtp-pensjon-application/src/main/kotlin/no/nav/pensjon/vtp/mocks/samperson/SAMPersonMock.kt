@@ -59,7 +59,7 @@ class SAMPersonMock(
                     etternavn = it.etternavn
                     statusKode = null
                     status = null
-                    diskresjonskode = it.diskresjonskode?.name
+                    diskresjonskode = it.diskresjonskode?.name ?: ""
 
                     dodsdato = it.dødsdato?.asGregorianCalendar()
 
