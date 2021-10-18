@@ -51,6 +51,14 @@
 			"endringstype": "ny",
 			"endringstidspunkt": null
 		}],
+		"adresser": [
+			{
+				"@type": "ref",
+				"fom": "now() - P1Y",
+				"adresseType": "BOSTEDSADRESSE",
+				"land": "NOR"
+			}
+		],
 		"sivilstand": [
 			{
 				"kode": "GIFT"
