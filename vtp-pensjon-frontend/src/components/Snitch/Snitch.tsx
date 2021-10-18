@@ -1,62 +1,67 @@
-import React, { CSSProperties, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
-import { RequestResponse } from "./types";
+import React, {CSSProperties, useState} from "react";
+import {Col, Container, Row} from "react-bootstrap";
+import {RequestResponse} from "./types";
 import RequestResponseList from "./RequestResponseList";
 import PayloadSummary from "./PayloadSummary";
-import RequestResponseSummary from "./RequestResponseSummary";
 import useSnitchDataStream from "./useSnitchDataStream";
-import { Variant } from "react-bootstrap/types";
+import {Variant} from "react-bootstrap/types";
 
-export function badgeVariant(status: number): Variant {
-  if (status >= 200 && status <= 299) {
-    return "success";
-  } else if (status >= 400 && status <= 499) {
-    return "warning";
-  } else if (status >= 500 && status <= 599) {
-    return "danger";
-  } else {
-    return "primary";
-  }
+export function badgeBackground(status: number): Variant {
+    if (status >= 200 && status <= 299) {
+        return "success";
+    } else if (status >= 400 && status <= 499) {
+        return "warning";
+    } else if (status >= 500 && status <= 599) {
+        return "danger";
+    } else {
+        return "primary";
+    }
 }
 
 const Snitch = () => {
-  const [selectedRequest, setSelectedRequest] =
-    useState<RequestResponse | null>(null);
+    const [selectedRequest, setSelectedRequest] =
+        useState<RequestResponse | null>(null);
 
-  const requests = useSnitchDataStream();
+    const [requests, clear, ignorePath] = useSnitchDataStream();
 
-  const scrollable: CSSProperties = {
-    overflowX: "scroll",
-    height: "calc(100vh - 70px)",
-  };
+    const scrollable: CSSProperties = {
+        overflowX: "scroll",
+        height: "calc(100vh - 70px)",
+    };
 
-  const requestToShow = selectedRequest != null ? selectedRequest : requests[0];
+    const requestToShow = selectedRequest != null ? selectedRequest : requests[0];
 
-  return (
-    <Container fluid>
-      <Row>
-        <Col className="w-50" style={scrollable}>
-          <RequestResponseList
-            requests={requests}
-            selectedRequest={requestToShow}
-            setSelectedRequest={setSelectedRequest}
-          />
-        </Col>
-        <Col className="w-50" style={scrollable}>
-          {requestToShow != null && (
-            <>
-              <RequestResponseSummary request={requestToShow} />
-              <PayloadSummary title="Request" message={requestToShow.request} />
-              <PayloadSummary
-                title="Response"
-                message={requestToShow.response}
-              />
-            </>
-          )}
-        </Col>
-      </Row>
-    </Container>
-  );
+    return (
+        <Container fluid>
+            <Row className="pt-2">
+                <Col sm={6} md={6} lg={6} xl={4} xxl={4} style={scrollable}>
+                    <RequestResponseList
+                        requests={requests}
+                        selectedRequest={requestToShow}
+                        setSelectedRequest={setSelectedRequest}
+                        onClear={clear}
+                        onIgnorePath={ignorePath}
+                    />
+                </Col>
+                {requestToShow != null && (
+                    <Col sm={6} md={6} lg={6} xl={8} xxl={8}>
+                        <Row>
+                            <Col sm={12} md={12} lg={12} xl={6} xxl={6}>
+                                <PayloadSummary title="Request" message={requestToShow.request}/>
+                            </Col>
+                            <Col sm={12} md={12} lg={12} xl={6} xxl={6}>
+                                <div className="pt-2 d-xl-none"/>
+                                <PayloadSummary
+                                    title="Response"
+                                    message={requestToShow.response}
+                                />
+                            </Col>
+                        </Row>
+                    </Col>
+                )}
+            </Row>
+        </Container>
+    );
 };
 
 export default Snitch

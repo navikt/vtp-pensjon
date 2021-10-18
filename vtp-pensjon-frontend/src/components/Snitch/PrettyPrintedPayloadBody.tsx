@@ -5,7 +5,7 @@ import ReactJson from "react-json-view";
 import CopyToClipboard from "react-copy-to-clipboard";
 import {Button} from "react-bootstrap";
 
-function decodeBody(value: string): string {
+export function decodeBody(value: string): string {
   return decodeURIComponent(
     atob(value)
       .split("")
@@ -56,7 +56,7 @@ function asWwwFormUrlencoded(content: string): JSX.Element {
 
 function CopyToClipboardButton(props: { text: string }): JSX.Element {
   return <div className="clearfix">
-    <div style={{paddingBottom: "6px"}} className="float-right">
+    <div style={{paddingBottom: "6px"}} className="float-end">
       <CopyToClipboard text={props.text}>
         <Button variant="outline-primary" size="sm">
           Kopier til utklippstavle ⧉

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
-import "bootstrap/dist/css/bootstrap.min.css";
+import './custom.scss';
 
 import Frame from "./components/Frame";
 import Snitch from "./components/Snitch/Snitch";

@@ -2,7 +2,6 @@ package no.nav.pensjon.vtp.snitch
 
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
 import org.springframework.core.annotation.Order
-import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Component
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
@@ -47,8 +46,7 @@ fun asHeadersMap(
 @Component
 @Order(HIGHEST_PRECEDENCE + 1)
 class SnitchFilter(
-    private val requestResponseRepository: RequestResponseRepository,
-    private val simpMessagingTemplate: SimpMessagingTemplate
+    private val snitchService: SnitchService,
 ) : Filter {
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, filterChain: FilterChain) {
         if (request is HttpServletRequest && response is HttpServletResponse &&
@@ -60,14 +58,13 @@ class SnitchFilter(
             try {
                 filterChain.doFilter(requestWrapper, responseWrapper)
 
-                val requestResponse = requestResponseRepository.save(requestResponse(requestWrapper, responseWrapper))
-                simpMessagingTemplate.convertAndSend("/topic/snitch", requestResponse)
+                snitchService.save(requestResponse(requestWrapper, responseWrapper))
 
                 responseWrapper.copyBodyToResponse()
             } catch (e: Exception) {
                 val stringWriter = StringWriter()
                 e.printStackTrace(PrintWriter(stringWriter))
-                requestResponseRepository.save(
+                snitchService.save(
                     requestResponse(
                         requestWrapper,
                         responseWrapper

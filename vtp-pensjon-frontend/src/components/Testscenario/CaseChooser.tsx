@@ -55,15 +55,13 @@ export default function CaseChooser(props: CaseChooserProps) {
             </option>
           ))}
         </select>
-        <InputGroup.Append>
-          <Button
-            variant="outline-secondary"
-            disabled={selectedCase == null}
-            onClick={() => selectedCase != null && createCase(selectedCase)}
-          >
-            Create
-          </Button>
-        </InputGroup.Append>
+        <Button
+          variant="outline-secondary"
+          disabled={selectedCase == null}
+          onClick={() => selectedCase != null && createCase(selectedCase)}
+        >
+          Create
+        </Button>
       </InputGroup>
     </div>
   );

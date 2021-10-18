@@ -18,7 +18,7 @@ export default function ActiveScenarios(props: ActiveScenarioProps) {
         <Button
           size="sm"
           variant="danger"
-          className="float-right"
+          className="float-end"
           onClick={onDelete}
         >
           Delete

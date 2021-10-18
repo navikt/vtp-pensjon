@@ -1,6 +1,6 @@
 import { TestScenarioTemplate } from "./state";
 import React, { useState } from "react";
-import { Button, InputGroup } from "react-bootstrap";
+import {Button, InputGroup} from "react-bootstrap";
 
 interface ScenarioChooserProps {
   templates: TestScenarioTemplate[];
@@ -24,7 +24,6 @@ export default function ScenarioChooser(props: ScenarioChooserProps) {
           </option>
         ))}
       </select>
-      <InputGroup.Append>
         <Button
           variant="outline-secondary"
           disabled={selectedScenario == null}
@@ -32,7 +31,6 @@ export default function ScenarioChooser(props: ScenarioChooserProps) {
         >
           Create
         </Button>
-      </InputGroup.Append>
     </InputGroup>
   );
 }
