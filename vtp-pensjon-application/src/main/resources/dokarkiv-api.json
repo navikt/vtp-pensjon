@@ -9,7 +9,7 @@
     },
     "license": {}
   },
-  "host": "dokarkiv-t8.nais.preprod.local",
+  "host": "dokarkiv-q2.dev.intern.nav.no",
   "basePath": "/",
   "tags": [
     {
@@ -27,10 +27,6 @@
     {
       "name": "journalpost-intern-rest-controller",
       "description": "Interne tjenester mot journalpost"
-    },
-    {
-      "name": "sak-controller",
-      "description": "Sak Controller"
     }
   ],
   "paths": {
@@ -101,6 +97,71 @@
             "description": "Authorization",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "temaer",
+            "in": "path",
+            "description": "temaer",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FinnMottatteJournalposterResponse"
+            }
+          },
+          "400": {
+            "description": "Kall mangler enn eller flere påkrevde headere"
+          },
+          "401": {
+            "description": "Konsument har ikke tilgang til å kalle tjenesten."
+          },
+          "403": {
+            "description": "Konsument har ikke tilgang til å kalle tjenesten"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          },
+          {
+            "NavConsumerToken": []
+          }
+        ],
+        "deprecated": false
+      }
+    },
+    "/rest/intern/journalpostapi/v1/finnMottatteJournalposter/{temaer}/{eldreEnn}": {
+      "get": {
+        "tags": [
+          "journalpost-intern-rest-controller"
+        ],
+        "summary": "Finner ubehandlede journalposts som er eldre enn \"eldreEnn\" dager og har tema lik input",
+        "operationId": "finnMottatteJournalposterMedTemaEldreEnnUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "eldreEnn",
+            "in": "path",
+            "description": "eldreEnn",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
           },
           {
             "name": "temaer",
@@ -407,7 +468,7 @@
           {
             "name": "forsoekFerdigstill",
             "in": "query",
-            "description": "Angir hvorvidt tjenesten skal forsøke å ferdigstille eller ikke. Dette vil å sette journalposten i en status som indikerer at journalføring er komplett, og låser journalposten for senere endringer.\nJournalposten blir uansett opprettet, men kun ferdigstilt dersom den oppfyller krav til struktur og metadata som beskrevet under ferdigstillJournalpost.",
+            "description": "Angir hvorvidt tjenesten skal forsøke å ferdigstille eller ikke. Dette vil å sette journalposten i en status som indikerer at journalføring er komplett, \n og låser journalposten for senere endringer. Journalposten blir uansett opprettet, men kun ferdigstilt dersom den oppfyller krav til struktur og metadata som beskrevet under ferdigstillJournalpost.\n Dersom det feiler å ferdigstille journalposten og den har status \"midlertidig\" og journalførendeEnhet==\"9999\" skal journalførendeEnhet settes til null.Sjekk \"journalpostferdigstilt\" på responsen for å være sikker på at journalposten faktisk ble ferdigstilt.",
             "required": false,
             "type": "string",
             "allowEmptyValue": false,
@@ -448,6 +509,9 @@
           "403": {
             "description": "Bruker mangler tilgang til å opprette journalpost på tema"
           },
+          "409": {
+            "description": "Journalpost med angitt eksternReferanseId finnes allerede for angitt kanal.\nGjelder bare kanal SKAN_IM og HELSENETTET"
+          },
           "500": {
             "description": "Internal server error"
           }
@@ -480,9 +544,10 @@
           {
             "name": "journalpostId",
             "in": "path",
-            "description": "journalpostId",
+            "description": "Angir JournalpostId som skal oppdatere f,.eks. 467011764",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "default": "467011764"
           },
           {
             "in": "body",
@@ -509,60 +574,6 @@
           },
           "404": {
             "description": "Journalpost ikke funnet"
-          },
-          "500": {
-            "description": "* Internal server error"
-          }
-        },
-        "security": [
-          {
-            "Authorization": []
-          },
-          {
-            "NavConsumerToken": []
-          }
-        ],
-        "deprecated": false
-      }
-    },
-    "/rest/journalpostapi/v1/journalpost/{journalpostId}/feilregistrer/avbryt": {
-      "patch": {
-        "tags": [
-          "feilregistrer-journalpost-rest-controller"
-        ],
-        "summary": "Tar en opprettet journalpost ut av ordinær saksbehandling",
-        "operationId": "avbrytUsingPATCH",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "name": "journalpostId",
-            "in": "path",
-            "description": "IDen til journalposten som skal feilregistreres",
-            "required": true,
-            "type": "string",
-            "x-example": "77778888"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "* OK",
-            "schema": {
-              "type": "string"
-            }
-          },
-          "400": {
-            "description": "* Feil i aksjonslogg"
-          },
-          "401": {
-            "description": "* Ugyldig OIDC token. Denne feilen gis dersom tokenet ikke har riktig format eller er utgått."
-          },
-          "404": {
-            "description": "* Journalpost ikke funnet"
           },
           "500": {
             "description": "* Internal server error"
@@ -651,6 +662,114 @@
             "name": "journalpostId",
             "in": "path",
             "description": "IDen til journalposten som skal feilregistreres",
+            "required": true,
+            "type": "string",
+            "x-example": "77778888"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "* OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "* Feil i aksjonslogg"
+          },
+          "401": {
+            "description": "* Ugyldig OIDC token. Denne feilen gis dersom tokenet ikke har riktig format eller er utgått."
+          },
+          "404": {
+            "description": "* Journalpost ikke funnet"
+          },
+          "500": {
+            "description": "* Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          },
+          {
+            "NavConsumerToken": []
+          }
+        ],
+        "deprecated": false
+      }
+    },
+    "/rest/journalpostapi/v1/journalpost/{journalpostId}/feilregistrer/settStatusAvbryt": {
+      "patch": {
+        "tags": [
+          "feilregistrer-journalpost-rest-controller"
+        ],
+        "summary": "Tar en opprettet journalpost ut av ordinær saksbehandling",
+        "operationId": "avbrytUsingPATCH",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "journalpostId",
+            "in": "path",
+            "description": "IDen til journalposten som skal settes til avbryt",
+            "required": true,
+            "type": "string",
+            "x-example": "77778888"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "* OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "* Feil i aksjonslogg"
+          },
+          "401": {
+            "description": "* Ugyldig OIDC token. Denne feilen gis dersom tokenet ikke har riktig format eller er utgått."
+          },
+          "404": {
+            "description": "* Journalpost ikke funnet"
+          },
+          "500": {
+            "description": "* Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          },
+          {
+            "NavConsumerToken": []
+          }
+        ],
+        "deprecated": false
+      }
+    },
+    "/rest/journalpostapi/v1/journalpost/{journalpostId}/feilregistrer/settStatusUtgår": {
+      "patch": {
+        "tags": [
+          "feilregistrer-journalpost-rest-controller"
+        ],
+        "summary": "Tar en opprettet journalpost ut av ordinær saksbehandling",
+        "operationId": "utgaarUsingPATCH",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "journalpostId",
+            "in": "path",
+            "description": "IDen til journalposten som skal settes til utgått",
             "required": true,
             "type": "string",
             "x-example": "77778888"
@@ -934,238 +1053,6 @@
         ],
         "deprecated": false
       }
-    },
-    "/rest/saker": {
-      "get": {
-        "tags": [
-          "sak-controller"
-        ],
-        "summary": "Finner saker for angitte søkekriterier",
-        "operationId": "finnSakerUsingGET",
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "name": "X-Correlation-ID",
-            "in": "header",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "aktoerId",
-            "in": "query",
-            "description": "Filtrering på saker opprettet for en aktør (person)",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "applikasjon",
-            "in": "query",
-            "description": "Filtrering på applikasjon (iht felles kodeverk)",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "fagsakNr",
-            "in": "query",
-            "description": "Filtrering på fagsakNr",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "orgnr",
-            "in": "query",
-            "description": "Filtrering på saker opprettet for en organisasjon",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "tema",
-            "in": "query",
-            "description": "Filtrering på tema (iht felles kodeverk)",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/SakJson"
-              }
-            }
-          },
-          "400": {
-            "description": "Ugyldig input"
-          },
-          "401": {
-            "description": "Konsument mangler gyldig token"
-          },
-          "500": {
-            "description": "Ukjent feilsituasjon har oppstått i Sak"
-          },
-          "503": {
-            "description": "En eller flere tjenester som sak er avhengig av er ikke tilgjengelige eller svarer ikke."
-          }
-        },
-        "security": [
-          {
-            "Authorization": []
-          },
-          {
-            "Basic": []
-          },
-          {
-            "Saml": []
-          }
-        ],
-        "deprecated": false
-      },
-      "post": {
-        "tags": [
-          "sak-controller"
-        ],
-        "summary": "Oppretter en ny sak",
-        "description": "Merk at en sak enten skal tilhøre en aktør <b>eller</b> et foretak. Begge er p.t. ikke tillatt. ",
-        "operationId": "opprettSakUsingPOST",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "name": "X-Correlation-ID",
-            "in": "header",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "sakJson",
-            "description": "Saken som skal opprettes",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/SakJson"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ResponseEntity"
-            }
-          },
-          "201": {
-            "description": "Saken er opprettet",
-            "schema": {
-              "$ref": "#/definitions/ResponseEntity"
-            }
-          },
-          "400": {
-            "description": "Ugyldig input"
-          },
-          "401": {
-            "description": "Konsument mangler gyldig token"
-          },
-          "403": {
-            "description": "Konsument har ikke tilgang til å gjennomføre handlingen"
-          },
-          "409": {
-            "description": "Det finnes allerede en sak for angitt kombinasjon av fagsaknr og applikasjon for aktør eller orgnr"
-          },
-          "500": {
-            "description": "Ukjent feilsituasjon har oppstått i Sak"
-          },
-          "503": {
-            "description": "En eller flere tjenester som sak er avhengig av er ikke tilgjengelige eller svarer ikke."
-          }
-        },
-        "security": [
-          {
-            "Authorization": []
-          },
-          {
-            "Basic": []
-          },
-          {
-            "Saml": []
-          }
-        ],
-        "deprecated": false
-      }
-    },
-    "/rest/saker/{id}": {
-      "get": {
-        "tags": [
-          "sak-controller"
-        ],
-        "summary": "Henter sak for en gitt id",
-        "operationId": "hentSakUsingGET",
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "name": "X-Correlation-ID",
-            "in": "header",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "id",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/SakJson"
-            }
-          },
-          "401": {
-            "description": "Konsument mangler gyldig token"
-          },
-          "403": {
-            "description": "Konsument har ikke tilgang til å gjennomføre handlingen"
-          },
-          "404": {
-            "description": "Det finnes ingen sak for angitt id"
-          },
-          "500": {
-            "description": "Ukjent feilsituasjon har oppstått i Sak"
-          },
-          "503": {
-            "description": "En eller flere tjenester som sak er avhengig av er ikke tilgjengelige eller svarer ikke."
-          }
-        },
-        "security": [
-          {
-            "Authorization": []
-          },
-          {
-            "Basic": []
-          },
-          {
-            "Saml": []
-          }
-        ],
-        "deprecated": false
-      }
     }
   },
   "securityDefinitions": {
@@ -1194,13 +1081,13 @@
       "properties": {
         "id": {
           "type": "string",
-          "example": 999263550,
+          "example": "09071844797",
           "description": "Identifikatoren til avsender/mottaker. Dette er normalt et fødselsnummer eller organisasjonsnummer, men valideres ikke. Dersom det ønskes å nullstille denne verdien, kan den settes til en tom string."
         },
         "idType": {
           "type": "string",
-          "example": "ORGNR",
-          "description": "Angir hvilken type identifikator som er benyttet i AvsenderMottaker.id.\nPåkrevd dersom `id` er satt.",
+          "example": "FNR",
+          "description": "Angir hvilken type identifikator som er benyttet i AvsenderMottaker.id.\nPåkrevd dersom `id` er satt. * FNR\n* ORGNR\n* HPRNR\n* UTL_ORG",
           "enum": [
             "FNR",
             "ORGNR",
@@ -1208,14 +1095,9 @@
             "UTL_ORG"
           ]
         },
-        "land": {
-          "type": "string",
-          "example": "Norge",
-          "description": "Landet forsendelsen er mottatt fra eller sendt til. Feltet skal i utgangspunktet kun settes dersom avsender eller mottaker er en institusjon med adresse i utlandet."
-        },
         "navn": {
           "type": "string",
-          "example": "NAV",
+          "example": "Hansen, Per",
           "description": "Navnet til avsender/mottaker.\nNavn på personbrukere skal lagres på formatet etternavn, fornavn mellomnavn"
         }
       },
@@ -1230,7 +1112,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "example": 12345678910,
+          "example": "09071844797",
           "description": "Brukerens fødselsnummer (11 siffer) eller organisasjonsnummer (9 siffer)"
         },
         "idType": {
@@ -1249,26 +1131,21 @@
     "Dokument": {
       "type": "object",
       "properties": {
+        "tittel": {
+          "type": "string",
+          "example": "Søknad om dagpenger ved permittering",
+          "description": "Dokumentets tittel, f.eks. \"Søknad om dagpenger ved permittering\".\nDokumentets tittel blir synlig i brukers journal på nav.no, samt i Gosys."
+        },
         "brevkode": {
           "type": "string",
-          "example": "NAV 14-05.09",
-          "description": "Typen dokument. Brevkoden sier noe om dokumentets innhold og oppbygning.\nFor inngående dokumenter kan brevkoden være en NAV-skjemaID f.eks. \"NAV 14-05.09\" eller en SED-id.\nBrevkode skal ikke settes for ustrukturert, uklassifisert dokumentasjon, f.eks. brukeropplastede vedlegg."
-        },
-        "dokumentKategori": {
-          "type": "string",
-          "example": "SOK",
-          "description": "Dokumentets kategori, for eksempel SOK (søknad), SED eller FORVALTNINGSNOTAT."
+          "example": "NAV 04-01.04",
+          "description": "Typen dokument. Brevkoden sier noe om dokumentets innhold og oppbygning.\nFor inngående dokumenter kan brevkoden være en NAV-skjemaID f.eks. \"NAV 04-01.04\" eller en SED-id.\nBrevkode skal ikke settes for ustrukturert, uklassifisert dokumentasjon, f.eks. brukeropplastede vedlegg."
         },
         "dokumentvarianter": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/DokumentVariant"
           }
-        },
-        "tittel": {
-          "type": "string",
-          "example": "Søknad om foreldrepenger ved fødsel",
-          "description": "Dokumentets tittel, f.eks. \"Søknad om foreldrepenger ved fødsel\" eller \"Legeerklæring\".\nDokumentets tittel blir synlig i brukers journal på nav.no, samt i Gosys."
         }
       },
       "title": "Dokument"
@@ -1279,23 +1156,34 @@
         "dokumentInfoId"
       ],
       "properties": {
-        "brevkode": {
-          "type": "string",
-          "example": "NAV 14-05.09",
-          "description": "Kode som sier noe om dokumentets innhold og oppbygning.\nFor inngående dokumenter kan brevkoden være en NAV-skjemaID f.eks. \"NAV 14-05.09\" eller en SED-id.\nBrevkode skal ikke settes for ustrukturert, uklassifisert dokumentasjon, f.eks. brukeropplastede vedlegg.\n"
-        },
         "dokumentInfoId": {
           "type": "string",
-          "example": 123,
+          "example": "485227498",
           "description": "ID til dokumentinfo-objektet i Joark"
+        },
+        "brevkode": {
+          "type": "string",
+          "example": "NAV 04-01.04",
+          "description": "Kode som sier noe om dokumentets innhold og oppbygning.\nFor inngående dokumenter kan brevkoden være en NAV-skjemaID f.eks. \"NAV 04-01.04\" eller en SED-id.\nBrevkode skal ikke settes for ustrukturert, uklassifisert dokumentasjon, f.eks. brukeropplastede vedlegg.\n"
         },
         "tittel": {
           "type": "string",
-          "example": "Søknad om foreldrepenger ved fødsel",
-          "description": "Tittel som beskriver dokumentet, for eksempel \"Søknad om foreldrepenger ved fødsel\".\nDokumentets tittel blir synlig i brukers journal på nav.no, samt i NAVs fagsystemer."
+          "example": "Søknad om dagpenger ved permittering",
+          "description": "Tittel som beskriver dokumentet, for eksempel \"Søknad om dagpenger ved permittering\".\nDokumentets tittel blir synlig i brukers journal på nav.no, samt i NAVs fagsystemer."
         }
       },
       "title": "DokumentInfo"
+    },
+    "DokumentInfoId": {
+      "type": "object",
+      "properties": {
+        "dokumentInfoId": {
+          "type": "string",
+          "example": 123,
+          "description": "Id til et dokumentInfo-objekt som peker på det arkiverte dokumentet."
+        }
+      },
+      "title": "DokumentInfoId"
     },
     "DokumentVariant": {
       "type": "object",
@@ -1305,11 +1193,6 @@
         "variantformat"
       ],
       "properties": {
-        "filnavn": {
-          "type": "string",
-          "example": "eksempeldokument.pdf",
-          "description": "Navnet filen skal ha i arkivet."
-        },
         "filtype": {
           "type": "string",
           "example": "PDFA",
@@ -1318,8 +1201,8 @@
         "fysiskDokument": {
           "type": "string",
           "format": "byte",
-          "example": "AAAAAAAA",
-          "description": "Selve dokumentet"
+          "example": "U8O4a25hZCBvbSBkYWdwZW5nZXIgdmVkIHBlcm1pdHRlcmluZw==",
+          "description": "Selve dokumentet.  Hvis filtype er PDF/XML, ved fysisk dokument brukes bytearray."
         },
         "variantformat": {
           "type": "string",
@@ -1403,10 +1286,32 @@
         "journalfoerendeEnhet"
       ],
       "properties": {
+        "datoJournal": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-02-20",
+          "description": "Dato for ferdigstilling av dokumentet i Infotrygd."
+        },
+        "datoSendtPrint": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-02-20",
+          "description": "Datoen journalposten ble plukket ut til Sentral Print."
+        },
         "journalfoerendeEnhet": {
           "type": "string",
           "example": 9999,
           "description": "NAV-enheten som personen som utfører journalføring jobber for. Ved automatisk journalføring uten mennesker involvert, skal enhet settes til \"9999\"."
+        },
+        "journalfortAvNavn": {
+          "type": "string",
+          "example": "srvbruker",
+          "description": "Navn på saksbehandler eller system som journalførte."
+        },
+        "opprettetAvNavn": {
+          "type": "string",
+          "example": "srvbruker",
+          "description": "Navn på saksbehandler eller system som opprettet journalposten."
         }
       },
       "title": "FerdigstillJournalpostRequest"
@@ -1469,6 +1374,39 @@
       },
       "title": "LeggTilLogiskVedleggResponse"
     },
+    "MottaDokumentUtgaaendeSkanningRequest": {
+      "type": "object",
+      "properties": {
+        "batchnavn": {
+          "type": "string",
+          "description": "navn på batch"
+        },
+        "datoMottatt": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2019-11-29"
+        },
+        "dokumentvarianter": {
+          "type": "array",
+          "description": "liste av skannede dokumenter",
+          "items": {
+            "$ref": "#/definitions/DokumentVariant"
+          }
+        },
+        "mottakskanal": {
+          "type": "string",
+          "description": "Mottakskanal for dokument"
+        },
+        "tilleggsopplysninger": {
+          "type": "array",
+          "description": "Liste med Tilleggsopplysninger",
+          "items": {
+            "$ref": "#/definitions/Tilleggsopplysning"
+          }
+        }
+      },
+      "title": "MottaDokumentUtgaaendeSkanningRequest"
+    },
     "OppdaterDistribusjonsinfoRequest": {
       "type": "object",
       "properties": {
@@ -1486,29 +1424,32 @@
     "OppdaterJournalpostRequest": {
       "type": "object",
       "properties": {
-        "avsenderMottaker": {
-          "description": "Avsender eller mottaker av forsendelsen.\n\nSkal ikke settes for notater.",
-          "$ref": "#/definitions/AvsenderMottaker"
+        "tittel": {
+          "type": "string",
+          "example": "Søknad om dagpenger ved permittering",
+          "description": "Tittel som beskriver forsendelsen samlet, for eksempel \"Søknad om dagpenger ved permittering\""
+        },
+        "tema": {
+          "type": "string",
+          "example": "DAG",
+          "description": "Temaet som forsendelsen tilhører, for eksempel “DAG” (Dagpenger).\nTema er påkrevd dersom Sak oppgis."
         },
         "behandlingstema": {
           "type": "string",
           "example": "ab0001",
-          "description": "Behandlingstema for forsendelsen, for eksempel ab0001 (Ordinære dagpenger)."
+          "description": "Behandlingstema for forsendelsen, for eksempel ab0001 (Ordinære dagpenger).\nLovlige verdier finnes i i Felles Kodeverksløsning."
+        },
+        "avsenderMottaker": {
+          "description": "Avsender eller mottaker av forsendelsen.\n\nSkal ikke settes for notater.",
+          "$ref": "#/definitions/AvsenderMottaker"
         },
         "bruker": {
           "description": "Brukeren som forsendelsen gjelder.",
           "$ref": "#/definitions/Bruker"
         },
-        "datoMottatt": {
-          "type": "string",
-          "format": "date-time",
-          "example": "2019-11-29",
-          "description": "Dato forsendelsen ble mottatt fra avsender. Feltet kan kun settes for inngående journalposter."
-        },
-        "datoRetur": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Dato forsendelsen ble mottatt i retur. Feltet kan kun settes for utgående journalposter."
+        "sak": {
+          "description": "Saken i PSAK eller GSAK som dokumentene skal journalføres mot.\nNB: Dersom journalposten tilhører en fagsak i et fagsystem, må konsument selv sørge for å opprette en GSAK-sak med mapping til fagsaken. Alternativt kan fagsystemet benytte tjenesten knyttTilSak, som knytter journalposten til en fagsak eller generell sak.",
+          "$ref": "#/definitions/Sak"
         },
         "dokumenter": {
           "type": "array",
@@ -1516,32 +1457,6 @@
           "items": {
             "$ref": "#/definitions/DokumentInfo"
           }
-        },
-        "journalfoerendeEnhet": {
-          "type": "string",
-          "example": 9999,
-          "description": "NAV-enheten som har journalført, eventuelt skal journalføre, forsendelsen. Ved automatisk journalføring uten mennesker involvert skal enhet settes til \"9999\"."
-        },
-        "sak": {
-          "description": "Saken i PSAK eller GSAK som dokumentene skal journalføres mot.\nNB: Dersom journalposten tilhører en fagsak i et fagsystem, må konsument selv sørge for å opprette en GSAK-sak med mapping til fagsaken. Alternativt kan fagsystemet benytte tjenesten knyttTilSak, som knytter journalposten til en fagsak eller generell sak.",
-          "$ref": "#/definitions/Sak"
-        },
-        "tema": {
-          "type": "string",
-          "example": "FOR",
-          "description": "Fagområdet som forsendelsen tilhører, for eksempel \"FOR\" for Foreldrepenger"
-        },
-        "tilleggsopplysninger": {
-          "type": "array",
-          "description": "Fagsystemene som arkiverer kan legge til egne fagspesifikke attributter per journalpost. Disse er representert som et skjemaløst nøkkel-verdi-sett og valideres ikke ved arkivering. Et eksempel på et slikt sett kan være nøkkel: bucid og verdi: 21521.",
-          "items": {
-            "$ref": "#/definitions/Tilleggsopplysning"
-          }
-        },
-        "tittel": {
-          "type": "string",
-          "example": "Ettersendelse til søknad om foreldrepenger",
-          "description": "Tittel som beskriver forsendelsen samlet, for eksempel \"Ettersendelse til søknad om foreldrepenger\""
         }
       },
       "title": "OppdaterJournalpostRequest"
@@ -1554,7 +1469,7 @@
       "properties": {
         "journalpostId": {
           "type": "string",
-          "example": 22345678,
+          "example": "467011764",
           "description": "JournalpostId som har blitt oppdatert (og forsøkt endelig journalført)"
         }
       },
@@ -1564,44 +1479,26 @@
       "type": "object",
       "required": [
         "dokumenter",
-        "journalpostType"
+        "journalposttype"
       ],
       "properties": {
-        "avsenderMottaker": {
-          "description": "Avsender av forsendelsen",
-          "$ref": "#/definitions/AvsenderMottaker"
-        },
-        "behandlingstema": {
-          "type": "string",
-          "example": "ab0001",
-          "description": "Behandlingstema for forsendelsen, for eksempel ab0001 (Ordinære dagpenger)."
-        },
-        "bruker": {
-          "$ref": "#/definitions/Bruker"
-        },
         "datoMottatt": {
           "type": "string",
-          "format": "date-time",
-          "example": "2019-11-29",
+          "format": "date",
+          "example": "2020-01-01",
           "description": "Dato forsendelsen ble mottatt fra avsender. Dersom datoMottatt er tom, settes verdien til dagens dato.\n Feltet kan kun settes for inngående journalposter."
-        },
-        "dokumenter": {
-          "type": "array",
-          "description": "Første dokument blir tilknyttet som hoveddokument på journalposten. Øvrige dokumenter tilknyttes som vedlegg. Rekkefølgen på vedlegg beholdes ikke ved uthenting av journalpost.",
-          "items": {
-            "$ref": "#/definitions/Dokument"
-          }
         },
         "eksternReferanseId": {
           "type": "string",
-          "description": "Unik id for forsendelsen som kan brukes til sporing gjennom verdikjeden.\nEksempler på eksternReferanseId kan være sykmeldingsId for sykmeldinger, Altinn ArchiveReference for Altinn-skjema eller SEDid for SED."
+          "example": "a0f480a3-8ab2-4c56-8c93-e53bb35bec2b",
+          "description": "Unik id for forsendelsen som kan brukes til sporing gjennom verdikjeden.\nEksempler på eksternReferanseId kan være en GUID, sykmeldingsId for sykmeldinger, Altinn ArchiveReference for Altinn-skjema eller SEDid for SED.\n\nNB: Det er duplikatkontroll på eksternReferanseId. Dersom man sender inn en eksternReferanseId som allerede finnes i arkivet, vil tjenesten kaste feil (409 Conflict)."
         },
-        "journalfoerendeEnhet": {
+        "tittel": {
           "type": "string",
-          "example": 9999,
-          "description": "NAV-enheten som har journalført, eventuelt skal journalføre, forsendelsen. Ved automatisk journalføring uten mennesker involvert skal enhet settes til \"9999\".\nKonsument må sette journalfoerendeEnhet dersom tjenesten skal ferdigstille journalføringen."
+          "example": "Søknad om dagpenger ved permittering",
+          "description": "Tittel som beskriver forsendelsen samlet, feks \"Søknad om dagpenger ved permittering\"."
         },
-        "journalpostType": {
+        "journalposttype": {
           "type": "string",
           "example": "INNGAAENDE",
           "enum": [
@@ -1610,30 +1507,43 @@
             "NOTAT"
           ]
         },
+        "tema": {
+          "type": "string",
+          "example": "DAG",
+          "description": "Temaet som forsendelsen tilhører, for eksempel “DAG” (Dagpenger).\nTema er påkrevd dersom Sak oppgis."
+        },
+        "behandlingstema": {
+          "type": "string",
+          "example": "ab0001",
+          "description": "Behandlingstema for forsendelsen, for eksempel ab0001 (Ordinære dagpenger).\nLovlige verdier finnes i i Felles Kodeverksløsning."
+        },
         "kanal": {
           "type": "string",
           "example": "NAV_NO",
           "description": "Kanalen som ble brukt ved innsending eller distribusjon. F.eks. NAV_NO, ALTINN eller EESSI."
         },
+        "journalfoerendeEnhet": {
+          "type": "string",
+          "example": "0701",
+          "description": "NAV-enheten som har journalført, eventuelt skal journalføre, forsendelsen. Ved automatisk journalføring uten mennesker involvert skal enhet settes til \"9999\".\nKonsument må sette journalfoerendeEnhet dersom tjenesten skal ferdigstille journalføringen."
+        },
+        "avsenderMottaker": {
+          "description": "Avsender av forsendelsen",
+          "$ref": "#/definitions/AvsenderMottaker"
+        },
+        "bruker": {
+          "$ref": "#/definitions/Bruker"
+        },
         "sak": {
           "description": "Saken som journalposten hører til",
           "$ref": "#/definitions/Sak"
         },
-        "tema": {
-          "type": "string",
-          "example": "FOR",
-          "description": "Temaet som forsendelsen tilhører, for eksempel \"FOR\" (foreldrepenger)."
-        },
-        "tilleggsopplysninger": {
+        "dokumenter": {
           "type": "array",
+          "description": "Første dokument blir tilknyttet som hoveddokument på journalposten. Øvrige dokumenter tilknyttes som vedlegg. Rekkefølgen på vedlegg beholdes ikke ved uthenting av journalpost.",
           "items": {
-            "$ref": "#/definitions/Tilleggsopplysning"
+            "$ref": "#/definitions/Dokument"
           }
-        },
-        "tittel": {
-          "type": "string",
-          "example": "Ettersendelse til søknad om foreldrepenger",
-          "description": "Tittel som beskriver forsendelsen samlet, feks \"Ettersendelse til søknad om foreldrepenger\"."
         }
       },
       "title": "OpprettJournalpostRequest"
@@ -1641,151 +1551,41 @@
     "OpprettJournalpostResponse": {
       "type": "object",
       "required": [
-        "journalpostId",
-        "journalstatus"
+        "journalpostId"
       ],
       "properties": {
-        "dokumenter": {
-          "type": "array",
-          "description": "Dokumentene på journalposten.",
-          "items": {
-            "$ref": "#/definitions/DokumentInfo"
-          }
-        },
         "journalpostId": {
           "type": "string",
-          "example": 12345678,
-          "description": "JournalpostId som har blit opprettet"
+          "example": "467010363",
+          "description": "JournalpostId som har blitt opprettet"
         },
         "journalpostferdigstilt": {
           "type": "boolean",
           "example": true,
           "description": "True eller False for om journalpost ble ferdigstilt"
         },
-        "journalstatus": {
-          "type": "string",
-          "example": "ENDELIG",
-          "description": "Journalstatus for journalpost.\n* MIDLERTIDIG - hvis journalpost er opprettet\n* ENDELIG - hvis journalpost er opprett og endelig journalført\n\n Feltet er deprekert og vil bli fjernet i fremtiden. Bruk journalpostferdigstilt i stedet."
-        },
-        "melding": {
-          "type": "string",
-          "example": "null",
-          "description": "Melding"
+        "dokumenter": {
+          "type": "array",
+          "description": "Dokumentene på journalposten.",
+          "items": {
+            "$ref": "#/definitions/DokumentInfoId"
+          }
         }
       },
       "title": "OpprettJournalpostResponse"
     },
-    "ResponseEntity": {
-      "type": "object",
-      "properties": {
-        "body": {
-          "type": "object"
-        },
-        "statusCode": {
-          "type": "string",
-          "enum": [
-            "100 CONTINUE",
-            "101 SWITCHING_PROTOCOLS",
-            "102 PROCESSING",
-            "103 CHECKPOINT",
-            "200 OK",
-            "201 CREATED",
-            "202 ACCEPTED",
-            "203 NON_AUTHORITATIVE_INFORMATION",
-            "204 NO_CONTENT",
-            "205 RESET_CONTENT",
-            "206 PARTIAL_CONTENT",
-            "207 MULTI_STATUS",
-            "208 ALREADY_REPORTED",
-            "226 IM_USED",
-            "300 MULTIPLE_CHOICES",
-            "301 MOVED_PERMANENTLY",
-            "302 FOUND",
-            "302 MOVED_TEMPORARILY",
-            "303 SEE_OTHER",
-            "304 NOT_MODIFIED",
-            "305 USE_PROXY",
-            "307 TEMPORARY_REDIRECT",
-            "308 PERMANENT_REDIRECT",
-            "400 BAD_REQUEST",
-            "401 UNAUTHORIZED",
-            "402 PAYMENT_REQUIRED",
-            "403 FORBIDDEN",
-            "404 NOT_FOUND",
-            "405 METHOD_NOT_ALLOWED",
-            "406 NOT_ACCEPTABLE",
-            "407 PROXY_AUTHENTICATION_REQUIRED",
-            "408 REQUEST_TIMEOUT",
-            "409 CONFLICT",
-            "410 GONE",
-            "411 LENGTH_REQUIRED",
-            "412 PRECONDITION_FAILED",
-            "413 PAYLOAD_TOO_LARGE",
-            "413 REQUEST_ENTITY_TOO_LARGE",
-            "414 URI_TOO_LONG",
-            "414 REQUEST_URI_TOO_LONG",
-            "415 UNSUPPORTED_MEDIA_TYPE",
-            "416 REQUESTED_RANGE_NOT_SATISFIABLE",
-            "417 EXPECTATION_FAILED",
-            "418 I_AM_A_TEAPOT",
-            "419 INSUFFICIENT_SPACE_ON_RESOURCE",
-            "420 METHOD_FAILURE",
-            "421 DESTINATION_LOCKED",
-            "422 UNPROCESSABLE_ENTITY",
-            "423 LOCKED",
-            "424 FAILED_DEPENDENCY",
-            "426 UPGRADE_REQUIRED",
-            "428 PRECONDITION_REQUIRED",
-            "429 TOO_MANY_REQUESTS",
-            "431 REQUEST_HEADER_FIELDS_TOO_LARGE",
-            "451 UNAVAILABLE_FOR_LEGAL_REASONS",
-            "500 INTERNAL_SERVER_ERROR",
-            "501 NOT_IMPLEMENTED",
-            "502 BAD_GATEWAY",
-            "503 SERVICE_UNAVAILABLE",
-            "504 GATEWAY_TIMEOUT",
-            "505 HTTP_VERSION_NOT_SUPPORTED",
-            "506 VARIANT_ALSO_NEGOTIATES",
-            "507 INSUFFICIENT_STORAGE",
-            "508 LOOP_DETECTED",
-            "509 BANDWIDTH_LIMIT_EXCEEDED",
-            "510 NOT_EXTENDED",
-            "511 NETWORK_AUTHENTICATION_REQUIRED"
-          ]
-        },
-        "statusCodeValue": {
-          "type": "integer",
-          "format": "int32"
-        }
-      },
-      "title": "ResponseEntity"
-    },
     "Sak": {
       "type": "object",
       "properties": {
-        "arkivsaksnummer": {
-          "type": "string",
-          "example": 111111111,
-          "description": "Saksnummeret i PSAK eller GSAK (SAK). Må være et numerisk heltall.\nSkal kun settes dersom sakstype = ARKIVSAK.\nFeltet skal kun brukes etter avtale."
-        },
-        "arkivsaksystem": {
-          "type": "string",
-          "example": "GSAK",
-          "description": "Skal kun settes dersom sakstype = ARKIVSAK.\nFeltet skal kun brukes etter avtale.",
-          "enum": [
-            "GSAK",
-            "PSAK"
-          ]
-        },
         "fagsakId": {
           "type": "string",
-          "example": 111111111,
+          "example": "10695768",
           "description": "Iden til fagsaken i fagsystemet (altså ikke applikasjonen SAK).\nSkal kun settes dersom sakstype = FAGSAK"
         },
         "fagsaksystem": {
           "type": "string",
-          "example": "FS38",
-          "description": "Fagsystemet som saken behandles i. Lovlige verdier er \n* FS38 (Melosys)\n* FS36 (Foreldrepengeløsningen)\n* UFM (Unntak fra medlemskap)\n* AO01 (Arena)\n* AO11 (Grisen)\n* IT01 (Infotrygd)\n* OEBS\n* PP01\n* PP01\n* K9\n* BISYS\nSkal kun settes dersom sakstype = FAGSAK",
+          "example": "AO01",
+          "description": "Fagsystemet som saken behandles i. Lovlige verdier er \n* FS38 (Melosys)\n* FS36 (Foreldrepengeløsningen)\n* UFM (Unntak fra medlemskap)\n* AO01 (Arena)\n* AO11 (Grisen)\n* IT01 (Infotrygd)\n* OEBS\n* PP01\n* PP01\n* K9\n* BISYS\n* BA (Barnetrygd)\n* EF (Enslig forsørger)\n* KONT (Kontantstøtte)\n* SUPSTONAD (Supplerende Stønad)\n* OMSORGSPENGER\n* HJELPEMIDLER\nSkal kun settes dersom sakstype = FAGSAK",
           "enum": [
             "FS38",
             "FS36",
@@ -1793,10 +1593,17 @@
             "OEBS",
             "OB36",
             "AO01",
+            "AO11",
             "IT01",
             "PP01",
             "K9",
-            "BISYS"
+            "BISYS",
+            "BA",
+            "EF",
+            "KONT",
+            "SUPSTONAD",
+            "OMSORGSPENGER",
+            "HJELPEMIDLER"
           ]
         },
         "sakstype": {
@@ -1811,47 +1618,6 @@
         }
       },
       "title": "Sak"
-    },
-    "SakJson": {
-      "type": "object",
-      "properties": {
-        "aktoerId": {
-          "type": "string",
-          "example": 10038999999,
-          "description": "Id til aktøren saken gjelder"
-        },
-        "applikasjon": {
-          "type": "string",
-          "example": "IT01",
-          "description": "Kode for applikasjon iht. felles kodeverk"
-        },
-        "fagsakNr": {
-          "type": "string",
-          "description": "Fagsaknr for den aktuelle saken - hvis aktuelt"
-        },
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "opprettetAv": {
-          "type": "string",
-          "description": "Brukerident til den som opprettet saken"
-        },
-        "opprettetTidspunkt": {
-          "type": "string",
-          "description": "Opprettet tidspunkt iht. ISO-8601"
-        },
-        "orgnr": {
-          "type": "string",
-          "description": "Orgnr til foretaket saken gjelder"
-        },
-        "tema": {
-          "type": "string",
-          "example": "AAP",
-          "description": "Kode for tema iht. felles kodeverk"
-        }
-      },
-      "title": "SakJson"
     },
     "TilknyttVedleggRequest": {
       "type": "object",
