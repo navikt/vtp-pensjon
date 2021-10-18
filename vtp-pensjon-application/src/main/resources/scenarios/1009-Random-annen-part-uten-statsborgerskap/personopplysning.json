@@ -49,6 +49,14 @@
 				"kode": "GIFT"
 			}
 		],
+		"adresser": [
+			{
+				"@type": "ref",
+				"fom": "now() - P1Y",
+				"adresseType": "BOSTEDSADRESSE",
+				"land": "NOR"
+			}
+		],
 		"statsborgerskap": [{
 			"land": null,
 			"fom": null,
