@@ -13,4 +13,5 @@ data class DokumentModell(
     val dokumentTilknyttetJournalpost: DokumentTilknyttetJournalpost,
     val dokumentVariantInnholdListe: List<DokumentVariantInnhold>? = null,
     val dokumentkategori: Dokumentkategori? = null,
+    val brevkode: String? = null,
 )

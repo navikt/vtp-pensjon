@@ -11,7 +11,7 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity.notFound
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime.now
+import java.time.LocalDate
 
 @RestController
 @Api(tags = ["Journalføringsmock"])
@@ -36,7 +36,7 @@ class JournalforingRestTjeneste(private val journalRepository: JournalRepository
                 xml,
                 fnr,
                 dokumenttypeId,
-                now()
+                LocalDate.now(),
             )
         ).journalpostId
             ?: throw IllegalStateException("Missing journalpostId for saved journalPost")

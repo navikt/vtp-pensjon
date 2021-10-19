@@ -12,13 +12,12 @@ import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.*
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.HOVEDDOKUMENT
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.VEDLEGG
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalposttyper.*
-import java.time.LocalDateTime.now
+import java.time.LocalDate
 
 // TODO: utvid med nødvendig mapping
 // TODO: Hvordan håndteres denne (getAvsenderMottaker) sammenlignet med bruker? & Map felter videre
 // journalpostRequest.avsenderMottaker
 // journalpostRequest.behandlingstema
-// journalpostRequest.tittel
 // journalpostRequest.tilleggsopplysninger
 // journalpostRequest.eksternReferanseId
 // journalpostRequest.kanal
@@ -28,7 +27,8 @@ fun tilModell(journalpostRequest: OpprettJournalpostRequest) =
         arkivtema = journalpostRequest.tema?.let { Arkivtema.valueOf(it) },
         bruker = journalpostRequest.bruker?.let { mapAvsenderFraBruker(it) },
         sakId = journalpostRequest.sak?.fagsakId,
-        mottattDato = journalpostRequest.datoMottatt?.atStartOfDay() ?: now(),
+        fagsystemId = journalpostRequest.sak?.fagsaksystem?.value,
+        mottattDato = journalpostRequest.datoMottatt ?: LocalDate.now(),
         dokumentModellList = journalpostRequest.dokumenter
             .mapIndexed { index, dokument ->
                 if (index == 0) {
@@ -40,7 +40,8 @@ fun tilModell(journalpostRequest: OpprettJournalpostRequest) =
                     mapDokument(dokument, VEDLEGG)
                 }
             },
-        journalStatus = Journalstatus.MOTTATT
+        journalStatus = Journalstatus.MOTTATT,
+        tittel = journalpostRequest.tittel,
     )
 
 fun mapAvsenderFraBruker(bruker: Bruker): JournalpostBruker {
@@ -53,15 +54,14 @@ fun mapAvsenderFraBruker(bruker: Bruker): JournalpostBruker {
 
 // TODO: Map videre felter
 // dokument.dokumentKategori
-// dokument.brevkode
-// dokument.dokumentKategori
 // dokument.dokumentvarianter
 private fun mapDokument(dokument: Dokument, dokumentTilknyttetJournalpost: DokumentTilknyttetJournalpost) =
     DokumentModell(
         tittel = dokument.tittel,
         dokumentVariantInnholdListe = dokument.dokumentvarianter
             ?.map { mapDokumentVariant(it) },
-        dokumentTilknyttetJournalpost = dokumentTilknyttetJournalpost
+        dokumentTilknyttetJournalpost = dokumentTilknyttetJournalpost,
+        brevkode = dokument.brevkode,
     )
 
 private fun mapDokumentVariant(dokumentVariant: DokumentVariant) = DokumentVariantInnhold(

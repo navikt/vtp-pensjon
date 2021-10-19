@@ -8,5 +8,6 @@ interface JournalRepository {
     fun finnJournalposterMedFnr(fnr: String): List<JournalpostModell>
     fun finnJournalposterMedSakId(sakId: String): List<JournalpostModell>
     fun finnJournalpostMedJournalpostId(journalpostId: String): JournalpostModell?
+    fun finnJournalpostMedDokumentId(dokumentId: String): JournalpostModell?
     fun save(journalpostModell: JournalpostModell): JournalpostModell
 }

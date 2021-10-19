@@ -4,13 +4,36 @@ import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import no.nav.dokarkiv.generated.model.*
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity.*
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.util.UriComponentsBuilder
+import java.net.InetAddress
+import java.net.URI
 
 @RestController
 @Api(tags = ["Dokarkiv"])
-@RequestMapping("/rest/dokarkiv/rest/journalpostapi/v1")
+@RequestMapping(JournalpostMock.BASE_PATH)
 class JournalpostMock(private val journalRepository: JournalRepository) {
+
+    companion object {
+        const val BASE_PATH = "/rest/dokarkiv/rest/journalpostapi/v1"
+
+        const val JOURNALPOST_ID_PARAM = "journalpostid"
+        const val FIL_UUID_PARAM = "filUuid"
+        const val HENT_JOURNALPOST_SUB_PATH = "/journalpost/{$JOURNALPOST_ID_PARAM}/fil/{$FIL_UUID_PARAM}"
+
+        fun buildHentJournalpostFilUri(journalpostId: String, filUuid: String): URI {
+            return UriComponentsBuilder.newInstance()
+                .scheme("http")
+                .host(InetAddress.getLocalHost().canonicalHostName)
+                .port(8060)
+                .path(BASE_PATH)
+                .path(HENT_JOURNALPOST_SUB_PATH)
+                .build(mapOf(JOURNALPOST_ID_PARAM to journalpostId, FIL_UUID_PARAM to filUuid))
+        }
+    }
+
     @PostMapping(value = ["/journalpost"])
     fun lagJournalpost(
         @RequestBody opprettJournalpostRequest: OpprettJournalpostRequest,
@@ -54,4 +77,16 @@ class JournalpostMock(private val journalRepository: JournalRepository) {
     @ApiOperation(value = "Ferdigstill journalpost")
     fun ferdigstillJournalpost(@RequestBody ferdigstillJournalpostRequest: FerdigstillJournalpostRequest) =
         ok("OK")
+
+    @GetMapping(value = [HENT_JOURNALPOST_SUB_PATH], produces = [MediaType.APPLICATION_PDF_VALUE])
+    @ApiOperation(value = "Hent journalpost fil")
+    fun hentJournalpostFil(
+        @PathVariable(JOURNALPOST_ID_PARAM) journalpostId: String,
+        @PathVariable(FIL_UUID_PARAM) filUuid: String,
+    ) = journalRepository.finnJournalpostMedJournalpostId(journalpostId)
+        ?.dokumentModellList
+        ?.flatMap { it.dokumentVariantInnholdListe ?: emptyList() }
+        ?.firstOrNull { it.uuid == filUuid }
+        ?.let { ok(it.dokumentInnhold) }
+        ?: notFound().build()
 }
