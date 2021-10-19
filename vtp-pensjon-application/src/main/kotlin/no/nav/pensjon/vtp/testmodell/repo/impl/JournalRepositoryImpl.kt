@@ -34,6 +34,10 @@ class JournalRepositoryImpl : JournalRepository {
         return journalposter[journalpostId]
     }
 
+    override fun finnJournalpostMedDokumentId(dokumentId: String): JournalpostModell? =
+        journalposter.values
+            .firstOrNull { it.dokumentModellList.any { dok -> dok.dokumentId == dokumentId } }
+
     override fun save(journalpostModell: JournalpostModell): JournalpostModell {
         val journalpostId: String = journalpostModell.journalpostId?.let {
             if (it.isNotEmpty()) {

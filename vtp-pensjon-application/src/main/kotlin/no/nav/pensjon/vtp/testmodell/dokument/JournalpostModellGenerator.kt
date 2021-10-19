@@ -3,20 +3,24 @@ package no.nav.pensjon.vtp.testmodell.dokument
 import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentModell
 import no.nav.pensjon.vtp.testmodell.dokument.modell.DokumentVariantInnhold
 import no.nav.pensjon.vtp.testmodell.dokument.modell.JournalpostModell
-import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.*
-import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Arkivfiltype.*
-import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.*
-import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalposttyper.*
-import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalstatus.*
-import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Variantformat.*
-import java.time.LocalDateTime
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Arkivfiltype.PDF
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Arkivfiltype.XML
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumentTilknyttetJournalpost.HOVEDDOKUMENT
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalposttyper.INNGAAENDE_DOKUMENT
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalstatus
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalstatus.JOURNALFØRT
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Variantformat.ARKIV
+import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Variantformat.FULLVERSJON
+import java.time.LocalDate
+import java.util.*
 
 object JournalpostModellGenerator {
     fun lagJournalpostStrukturertDokument(
         innhold: String?,
         fnr: String?,
         dokumenttypeId: DokumenttypeId?,
-        mottattDato: LocalDateTime,
+        mottattDato: LocalDate,
     ) = JournalpostModell(
         journalStatus = JOURNALFØRT,
         avsenderFnr = fnr,
@@ -34,7 +38,9 @@ object JournalpostModellGenerator {
                         dokumentInnhold = innhold?.toByteArray() ?: ByteArray(0)
                     ),
                     DokumentVariantInnhold(
-                        filType = PDF, variantFormat = ARKIV, dokumentInnhold = ByteArray(0)
+                        filType = PDF,
+                        variantFormat = ARKIV,
+                        dokumentInnhold = ByteArray(0)
                     )
 
                 )
@@ -53,7 +59,10 @@ object JournalpostModellGenerator {
                     dokumentTilknyttetJournalpost = HOVEDDOKUMENT,
                     dokumentVariantInnholdListe = listOf(
                         DokumentVariantInnhold(
-                            filType = PDF, variantFormat = ARKIV, dokumentInnhold = ByteArray(0)
+                            uuid = UUID.randomUUID().toString(),
+                            filType = PDF,
+                            variantFormat = ARKIV,
+                            dokumentInnhold = ByteArray(0)
                         )
                     )
                 )
