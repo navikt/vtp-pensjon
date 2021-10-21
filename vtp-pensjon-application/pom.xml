@@ -67,6 +67,11 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.pensjon</groupId>
+                <artifactId>pen-arkiv-esb-wsclient-legacy</artifactId>
+                <version>0.1.6-10dd8386f529</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.pensjon</groupId>
                 <artifactId>pen-esb-wsclient-legacy</artifactId>
                 <version>0.1.6-10dd8386f529</version>
             </dependency>
@@ -358,6 +363,10 @@
         <dependency>
             <groupId>no.nav.pensjon</groupId>
             <artifactId>pen-esb-wsclient-legacy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon</groupId>
+            <artifactId>pen-arkiv-esb-wsclient-legacy</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.pensjon</groupId>
