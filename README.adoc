@@ -46,7 +46,9 @@ Bygg prosjektet med `mvn clean install`, bygg deretter docker-imaget med
 vtp-pensjon:latest
 
 ===== Hente docker-image bygget i pipe:
-
+Logg inn på docker med github PAT:
+https://confluence.adeo.no/display/PEN/GitHub#GitHub-GitHubContainerRegistry
+deretter:
 docker pull docker.pkg.github.com/navikt/vtp-pensjon/vtp-pensjon
 
 ==== Utvikle front-end separat
