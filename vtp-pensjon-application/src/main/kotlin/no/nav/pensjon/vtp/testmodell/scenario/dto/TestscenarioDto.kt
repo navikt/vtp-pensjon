@@ -2,6 +2,7 @@ package no.nav.pensjon.vtp.testmodell.scenario.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import no.nav.pensjon.vtp.testmodell.scenario.pensjon.PensjonTestScenario
 
 data class TestscenarioDto(
     @JsonProperty("templateKey")
@@ -19,6 +20,9 @@ data class TestscenarioDto(
     @JsonInclude(content = JsonInclude.Include.NON_EMPTY)
     @JsonProperty("variabler")
     val variabler: Map<String, String?>,
+
+    @JsonProperty("pensjonTestScenario")
+    val pensjonTestScenario: PensjonTestScenario,
 
     @JsonProperty("scenariodata")
     val scenariodataDto: TestscenariodataDto,

@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.testmodell.identer
 
+import no.nav.pensjon.vtp.testmodell.enums.Kjonn
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 
@@ -11,4 +12,6 @@ class IdenterIndeks {
     fun getIdenter(unikScenarioId: String): LokalIdentIndeks {
         return identer.computeIfAbsent(unikScenarioId) { LokalIdentIndeks(it, identGenerator) }
     }
+
+    fun getRandomFnr(kjonn: Kjonn) = identGenerator.tilfeldigFnr(kjonn)
 }

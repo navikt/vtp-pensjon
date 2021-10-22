@@ -29,7 +29,7 @@ import javax.xml.ws.ResponseWrapper
 class SamTjenestepensjonMock(
     private val samhandlerRepository: SamhandlerRepository,
     private val tjenestepensjonRepository: TjenestepensjonRepository,
-    private val tjenestepensjonService: SequenceService,
+    private val tjenestepensjonService: TjenestepensjonService,
 ) : SAMTjenestepensjon {
     @WebMethod
     @RequestWrapper(
@@ -61,7 +61,7 @@ class SamTjenestepensjonMock(
                     TODO("Update of Ytelse is not implemented")
                 }
 
-                val ytelseId = tjenestepensjonService.getNextVal("tjenestepensjonYtelse")
+                val ytelseId = tjenestepensjonService.ytelseIdIdNextVal()
 
                 val tjenestepensjon = tjenestepensjonRepository.findByForholdForholdId(request.forholdId)
                     ?: throw OpprettTjenestepensjonYtelseFaultStoGeneriskMsg("No tjenestepensjon exists with forholdId=${request.forholdId}")
@@ -89,7 +89,7 @@ class SamTjenestepensjonMock(
                     endringsInfo = request.endringsInfo,
                     ytelser = forhold.ytelser union asSet(
                         Ytelse(
-                            ytelseId = ytelseId.toString(),
+                            ytelseId = ytelseId,
                             innmeldtFom = ytelse.innmeldtFom,
                             ytelseKode = ytelse.ytelseKode,
                             ytelseBeskrivelse = ytelse.ytelseBeskrivelse,
@@ -110,7 +110,7 @@ class SamTjenestepensjonMock(
                     )
                 )
                 return ytelse.also {
-                    it.ytelseId = ytelseId.toString()
+                    it.ytelseId = ytelseId
                 }
             }
     }
@@ -167,7 +167,7 @@ class SamTjenestepensjonMock(
                     throw OpprettTjenestepensjonsforholdFaultStoGeneriskMsg("Simulering is no longer supported by tp")
                 }
 
-                val forholdId = tjenestepensjonService.getNextVal("tjenestepensjonForhold")
+                val forholdId = tjenestepensjonService.forholdIdNextVal()
 
                 val tjenestepensjon = tjenestepensjonRepository.findById(request.fnr).orElse(null)
                     ?: Tjenestepensjon(pid = request.fnr)
@@ -182,7 +182,7 @@ class SamTjenestepensjonMock(
                         endringsInfo = request.endringsInfo,
                         forhold = tjenestepensjon.forhold union asSet(
                             Forhold(
-                                forholdId = forholdId.toString(),
+                                forholdId = forholdId,
                                 tssEksternId = forhold.tssEksternId,
                                 navn = forhold.navn,
                                 tpnr = forhold.tpnr,
@@ -197,7 +197,7 @@ class SamTjenestepensjonMock(
                     )
                 )
                 return forhold.also {
-                    it.forholdId = forholdId.toString()
+                    it.forholdId = forholdId
                 }
             }
             ?: throw OpprettTjenestepensjonsforholdFaultStoGeneriskMsg("Request was null")

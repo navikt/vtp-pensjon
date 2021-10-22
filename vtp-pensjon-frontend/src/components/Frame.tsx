@@ -11,7 +11,7 @@ interface Props {
 
 const Frame = (props: Props) => (
   <>
-    <Navbar variant="dark" bg="dark" expand="lg">
+    <Navbar variant="dark" bg="dark" expand="sm">
       <Navbar.Brand href="/">VTP Pensjon</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse>

@@ -63,9 +63,7 @@ class SamSamordningMock : SAMSamordning {
     override fun varsleTPSamordning(
         @WebParam(name = "varsleTPSamordningRequest", targetNamespace = "")
         varsleTPSamordningRequest: ASBOStoVarsleTPSamordningRequest?
-    ): String {
-        TODO("Not yet implemented")
-    }
+    ): String = "Okie-Dokie"
 
     @WebMethod
     @RequestWrapper(

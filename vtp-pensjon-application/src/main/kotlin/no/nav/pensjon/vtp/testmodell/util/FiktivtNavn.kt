@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.testmodell.util
 
+import no.nav.pensjon.vtp.testmodell.enums.Kjonn
 import no.nav.pensjon.vtp.testmodell.kodeverk.Kjønn
 import no.nav.pensjon.vtp.testmodell.kodeverk.Sivilstander
 import no.nav.pensjon.vtp.testmodell.load.PersonTemplate
@@ -24,11 +25,13 @@ object FiktivtNavn {
 
     fun getRandomName(kjønn: Kjønn): PersonNavn {
         return if (kjønn == Kjønn.K) {
-            getRandomFemaleName(getRandom(etternavn))
+            getRandomFemaleName(getRandomEtternavn())
         } else {
-            getRandomMaleName(getRandom(etternavn))
+            getRandomMaleName(getRandomEtternavn())
         }
     }
+
+    fun getRandomEtternavn() = getRandom(etternavn)
 
     fun getRandomName(kjønn: Kjønn, etternavn: String): PersonNavn {
         return if (kjønn == Kjønn.K) {
@@ -49,6 +52,9 @@ object FiktivtNavn {
             getRandomName(kjønn)
         }
     }
+
+    fun getRandomFornavn(kjonn: Kjonn) =
+        if (kjonn == Kjonn.KVINNE) getRandom(fornavnKvinner) else getRandom(fornavnMenn)
 
     fun getRandomFemaleName(lastName: String): PersonNavn {
         return PersonNavn(getRandom(fornavnKvinner), lastName, Kjønn.K)

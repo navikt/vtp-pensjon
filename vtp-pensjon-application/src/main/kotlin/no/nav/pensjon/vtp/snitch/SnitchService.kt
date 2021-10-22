@@ -24,6 +24,5 @@ class SnitchService(
     fun ignorePath(path: String) {
         val current = preferences()
         snitchPreferencesRepository.save(current.copy(ignoredPaths = current.ignoredPaths union setOf(path)))
-        requestResponseRepository.deleteAllByPath(path)
     }
 }

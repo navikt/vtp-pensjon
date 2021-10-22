@@ -8,5 +8,8 @@ class SamhandlerRepository(
     fun findByTssEksternId(tssEksternId: String): ASBOPenSamhandler? =
         samhandlere.firstOrNull { s -> s.avdelinger.any { a -> a.idTSSEkstern == tssEksternId } }
 
+    fun findByTpNr(tpNr: String): ASBOPenSamhandler? =
+        samhandlere.firstOrNull { s -> s.alternativeIder.any { a -> a.alternativIdKode == "TPNR" && a.alternativId == tpNr } }
+
     fun findAll() = samhandlere
 }

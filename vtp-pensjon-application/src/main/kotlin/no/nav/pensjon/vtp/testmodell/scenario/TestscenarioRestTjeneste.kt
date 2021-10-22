@@ -123,6 +123,7 @@ class TestscenarioRestTjeneste(
                 annenPartAktoerIdent = testscenario.personopplysninger.annenPart?.aktørIdent,
                 fødselsdato = testscenario.personopplysninger.søker.fødselsdato
             ),
+            pensjonTestScenario = testscenarioService.getPensjonTestScenario(testscenario.personopplysninger.søker),
             scenariodataDto = TestscenariodataDto(
                 testscenario.søkerInntektYtelse?.inntektskomponentModell,
                 testscenario.søkerInntektYtelse?.arbeidsforholdModell

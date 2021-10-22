@@ -1,5 +1,8 @@
 package no.nav.pensjon.vtp.testmodell.identer
 
+import no.nav.pensjon.vtp.testmodell.enums.Kjonn
+import no.nav.pensjon.vtp.testmodell.enums.Kjonn.KVINNE
+
 interface IdentGenerator {
     /**
      * Bruk denne når kjønn ikke har betydning for anvendt FNR. (Bør normalt brukes slik at en sikrer at applikasjonen ikke gjør antagelser om
@@ -7,6 +10,12 @@ interface IdentGenerator {
      */
     fun tilfeldigFnr(): String
 
+    fun tilfeldigFnr(kjonn: Kjonn): String =
+        if (kjonn == KVINNE) {
+            tilfeldigKvinneFnr(null)
+        } else {
+            tilfeldigMannFnr(null)
+        }
     /** Returnerer FNR for mann > 18 år
      * @param foedselsdato
      */
