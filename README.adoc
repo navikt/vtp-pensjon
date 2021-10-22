@@ -49,7 +49,7 @@ vtp-pensjon:latest
 Logg inn på docker med github PAT:
 https://confluence.adeo.no/display/PEN/GitHub#GitHub-GitHubContainerRegistry
 deretter:
-docker pull docker.pkg.github.com/navikt/vtp-pensjon/vtp-pensjon
+docker pull docker pull ghcr.io/navikt/vtp-pensjon/vtp-pensjon
 
 ==== Utvikle front-end separat
 
