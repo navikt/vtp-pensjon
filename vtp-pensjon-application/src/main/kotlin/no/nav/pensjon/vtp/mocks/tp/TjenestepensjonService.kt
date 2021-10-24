@@ -49,6 +49,6 @@ class TjenestepensjonService(
     fun ytelseIdIdNextVal() = sequenceService.getNextVal("tjenestepensjonYtelse").toString()
 
     fun getTpNrByTssEksternId(tssEksternId: String) = samhandlerRepository.findByTssEksternId(tssEksternId)
-            ?.let { it.alternativeIder.tpNr() ?: it.offentligId }
-            ?: throw FinnTjenestepensjonsforholdFaultStoElementetFinnesIkkeMsg("Samhandler med tssEksternId=$tssEksternId fantes ikke")
+        ?.let { it.alternativeIder.tpNr() ?: it.offentligId }
+        ?: throw FinnTjenestepensjonsforholdFaultStoElementetFinnesIkkeMsg("Samhandler med tssEksternId=$tssEksternId fantes ikke")
 }

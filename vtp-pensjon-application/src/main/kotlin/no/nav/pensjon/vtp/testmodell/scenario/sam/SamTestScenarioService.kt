@@ -46,21 +46,21 @@ class SamTestScenarioService(
         )
 
         private fun no.nav.pensjon.vtp.mocks.tp.Tjenestepensjon.asDto(tpNrLookup: (String) -> String) = Tjenestepensjon(
-                forhold = forhold.map { forhold ->
-                    Forhold(
-                        tpNr = tpNrLookup(forhold.tssEksternId),
-                        forholdId = forhold.forholdId!!.toLong(),
-                        ytelser = forhold.ytelser.map { ytelse ->
-                            Ytelse(
-                                type = ytelse.ytelseKode!!,
-                                ytelseId = ytelse.ytelseId.toLong(),
-                                innmeldtFom = ytelse.innmeldtFom.toLocalDate(),
-                                iverksattFom = ytelse.iverksattFom?.toLocalDate(),
-                                iverksattTom = ytelse.iverksattTom?.toLocalDate(),
-                            )
-                        }.toSet()
-                    )
-                }.toSet()
-            )
+            forhold = forhold.map { forhold ->
+                Forhold(
+                    tpNr = tpNrLookup(forhold.tssEksternId),
+                    forholdId = forhold.forholdId!!.toLong(),
+                    ytelser = forhold.ytelser.map { ytelse ->
+                        Ytelse(
+                            type = ytelse.ytelseKode!!,
+                            ytelseId = ytelse.ytelseId.toLong(),
+                            innmeldtFom = ytelse.innmeldtFom.toLocalDate(),
+                            iverksattFom = ytelse.iverksattFom?.toLocalDate(),
+                            iverksattTom = ytelse.iverksattTom?.toLocalDate(),
+                        )
+                    }.toSet()
+                )
+            }.toSet()
+        )
     }
 }

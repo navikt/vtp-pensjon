@@ -168,7 +168,7 @@ class SamTjenestepensjonMock(
                 }
 
                 val samhandler = samhandlerRepository.findByTssEksternId(forhold.tssEksternId)
-                        ?: throw FinnTjenestepensjonsforholdFaultStoElementetFinnesIkkeMsg("Samhandler med tssEksternId=${forhold.tssEksternId} fantes ikke")
+                    ?: throw FinnTjenestepensjonsforholdFaultStoElementetFinnesIkkeMsg("Samhandler med tssEksternId=${forhold.tssEksternId} fantes ikke")
 
                 val forholdId = tjenestepensjonService.forholdIdNextVal()
 

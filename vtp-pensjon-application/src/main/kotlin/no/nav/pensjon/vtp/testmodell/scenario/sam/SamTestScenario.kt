@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.testmodell.scenario.sam
 
+import no.nav.tjeneste.virksomhet.pensjonsvedtaksamordning.v1.informasjon.pensjonsvedtaksamordning.*
 import java.time.LocalDate
 
 data class SamTestScenario(
@@ -13,7 +14,7 @@ data class SamTestScenario(
     val sivilstand: String? = null,
     val dodsdato: LocalDate? = null,
 
-    val tjenestepensjon: Tjenestepensjon? = null
+    val tjenestepensjon: Tjenestepensjon? = null,
 )
 
 data class Tjenestepensjon(
