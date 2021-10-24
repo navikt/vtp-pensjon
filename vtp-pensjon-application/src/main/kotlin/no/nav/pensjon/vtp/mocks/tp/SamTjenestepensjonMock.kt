@@ -167,6 +167,9 @@ class SamTjenestepensjonMock(
                     throw OpprettTjenestepensjonsforholdFaultStoGeneriskMsg("Simulering is no longer supported by tp")
                 }
 
+                val samhandler = samhandlerRepository.findByTssEksternId(forhold.tssEksternId)
+                    ?: throw FinnTjenestepensjonsforholdFaultStoElementetFinnesIkkeMsg("Samhandler med tssEksternId=${forhold.tssEksternId} fantes ikke")
+
                 val forholdId = tjenestepensjonService.forholdIdNextVal()
 
                 val tjenestepensjon = tjenestepensjonRepository.findById(request.fnr).orElse(null)
@@ -184,8 +187,8 @@ class SamTjenestepensjonMock(
                             Forhold(
                                 forholdId = forholdId,
                                 tssEksternId = forhold.tssEksternId,
-                                navn = forhold.navn,
-                                tpnr = forhold.tpnr,
+                                navn = samhandler.let { it.avdelinger.tjenestepensjon().avdelingNavn ?: it.navn },
+                                tpnr = samhandler.let { it.alternativeIder.tpNr() ?: it.offentligId },
                                 harUtlandPensjon = forhold.harUtlandPensjon,
                                 samtykkeSimuleringKode = forhold.samtykkeSimuleringKode,
                                 samtykkeDato = forhold.samtykkeDato,
