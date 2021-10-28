@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.testmodell.scenario.sam
 
-import no.nav.tjeneste.virksomhet.pensjonsvedtaksamordning.v1.informasjon.pensjonsvedtaksamordning.*
 import java.time.LocalDate
 
 data class SamTestScenario(
