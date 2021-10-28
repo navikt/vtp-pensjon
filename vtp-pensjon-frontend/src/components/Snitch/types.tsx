@@ -9,6 +9,7 @@ export interface RequestResponse {
   id: string;
   timestamp: string;
   path: string;
+  queryString: String | null;
   url: string;
   method: string;
   handlerClass: string;

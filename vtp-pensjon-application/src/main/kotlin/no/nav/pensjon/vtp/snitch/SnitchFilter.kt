@@ -83,6 +83,7 @@ class SnitchFilter(
     ) = RequestResponse(
         timestamp = now(),
         path = URL(requestWrapper.requestURL.toString()).path,
+        queryString = requestWrapper.queryString,
         url = fullURL(requestWrapper),
         method = requestWrapper.method,
         status = responseWrapper.status,
