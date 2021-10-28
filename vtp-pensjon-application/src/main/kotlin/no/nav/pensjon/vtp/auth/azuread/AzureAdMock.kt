@@ -1,5 +1,7 @@
 package no.nav.pensjon.vtp.auth.azuread
 
+import com.nimbusds.jose.JOSEObject
+import com.nimbusds.jwt.JWTClaimsSet
 import io.swagger.annotations.ApiOperation
 import no.nav.pensjon.vtp.auth.*
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport.*
@@ -8,6 +10,8 @@ import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import no.nav.pensjon.vtp.util.asResponseEntity
 import org.apache.http.client.utils.URIBuilder
 import org.springframework.hateoas.server.mvc.linkTo
+import org.springframework.http.HttpHeaders.AUTHORIZATION
+import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.TEMPORARY_REDIRECT
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.MediaType.TEXT_HTML_VALUE
@@ -40,7 +44,7 @@ class AzureAdMock(
                 .toUri()
         } else {
             val query = fromUriString(getFrontendUrl(req) + "/azuread/$tenant/v2.0/authorize")
-                .queryParams(requestParams).build().getQuery()
+                .queryParams(requestParams).build().query
 
             fromUriString(getFrontendUrl(req))
                 .fragment("/azuread/$tenant/v2.0/authorize?" + query)
@@ -51,7 +55,7 @@ class AzureAdMock(
         return ResponseEntity
             .status(TEMPORARY_REDIRECT)
             .location(uri)
-            .build<Any>()
+            .build()
     }
 
     @GetMapping(value = ["/{tenant}/v2.0/.well-known/openid-configuration"], produces = [APPLICATION_JSON_VALUE])
@@ -82,11 +86,15 @@ class AzureAdMock(
     ): ResponseEntity<*> {
         return when (grantType) {
             "authorization_code" -> {
+                val codeSplit = code.split(";")
+                val ansattId = codeSplit[0]
+                val nonce = if (codeSplit.size > 1) codeSplit[1] else null
+
                 ok(
                     Oauth2AccessTokenResponse(
-                        idToken = createIdToken(code = code, tenant = tenant, clientId = clientId, scope = scope, sid = code),
-                        refreshToken = createIdToken(code = code, tenant = tenant, clientId = clientId, scope = scope, sid = code),
-                        accessToken = createIdToken(code = code, tenant = tenant, clientId = clientId, scope = scope, sid = code),
+                        idToken = createIdToken(ansattId = ansattId, tenant = tenant, clientId = clientId, nonce = nonce, scope = scope, sid = code),
+                        refreshToken = createIdToken(ansattId = ansattId, tenant = tenant, clientId = clientId, nonce = nonce, scope = scope, sid = code),
+                        accessToken = createIdToken(ansattId = ansattId, tenant = tenant, clientId = clientId, nonce = nonce, scope = scope, sid = code),
                     )
                 )
             }
@@ -94,17 +102,30 @@ class AzureAdMock(
                 if (refreshToken == null) {
                     badRequest().body("Missing required parameter 'request_token'")
                 } else {
-                    val usernameWithNonce = refreshToken.substring(8)
+                    val claims = JWTClaimsSet.parse(JOSEObject.parse(refreshToken).payload.toJSONObject())
                     ok(
                         Oauth2AccessTokenResponse(
                             idToken = createIdToken(
-                                code = usernameWithNonce,
+                                ansattId = claims.subject,
                                 tenant = tenant,
                                 clientId = clientId,
                                 scope = scope,
+                                nonce = claims.getStringClaimOrNull("nonce")
                             ),
-                            refreshToken = "refresh:$usernameWithNonce",
-                            accessToken = "access:$usernameWithNonce"
+                            refreshToken = createIdToken(
+                                ansattId = claims.subject,
+                                tenant = tenant,
+                                clientId = clientId,
+                                scope = scope,
+                                nonce = claims.getStringClaimOrNull("nonce")
+                            ),
+                            accessToken = createIdToken(
+                                ansattId = claims.subject,
+                                tenant = tenant,
+                                clientId = clientId,
+                                scope = scope,
+                                nonce = claims.getStringClaimOrNull("nonce")
+                            )
                         )
                     )
                 }
@@ -115,22 +136,22 @@ class AzureAdMock(
         }
     }
 
-    private fun createIdToken(code: String, tenant: String, clientId: String, scope: String? = null, sid: String? = null): String {
-        val codeData = code.split(";".toRegex()).toTypedArray()
-        val ansattId = codeData[0]
-        val user = ansattService.findByCn(codeData[0]) ?: throw RuntimeException("Fant ikke NAV-ansatt med brukernavn $ansattId")
+    private fun createIdToken(ansattId: String, tenant: String, clientId: String, nonce: String? = null, scope: String? = null, sid: String? = null): String {
+        val user = ansattService.findByCn(ansattId)
+            ?: throw RuntimeException("Fant ikke NAV-ansatt med brukernavn $ansattId")
 
         return azureOidcToken(
             sub = "$clientId:$ansattId",
             jsonWebKeySupport = jsonWebKeySupport,
             email = user.email,
-            nonce = if (codeData.size > 1) codeData[1] else null,
+            nonce = nonce,
             issuer = getIssuer(tenant),
             groups = user.groups.map { ldapGroupName: String -> toAzureGroupId(ldapGroupName) },
             aud = listOf(clientId),
             additionalClaims = mapOf(
                 "tid" to tenant,
-                "oid" to UUID.nameUUIDFromBytes(user.cn.toByteArray()).toString(), // user id - which is normally a UUID in Azure AD
+                "oid" to UUID.nameUUIDFromBytes(user.cn.toByteArray())
+                    .toString(), // user id - which is normally a UUID in Azure AD
                 "name" to user.displayName,
                 "preferred_username" to user.email,
             ),
@@ -187,14 +208,42 @@ class AzureAdMock(
     ) = createUser(ansattRequest.groups).let { (cn) ->
         Oauth2AccessTokenResponse(
             idToken = createIdToken(
-                code = cn,
+                ansattId = cn,
                 tenant = tenant,
-                clientId = clientId
+                clientId = clientId,
             ),
-            refreshToken = "refresh:$cn",
-            accessToken = "access:$cn"
+            refreshToken = createIdToken(
+                ansattId = cn,
+                tenant = tenant,
+                clientId = clientId,
+            ),
+            accessToken = createIdToken(
+                ansattId = cn,
+                tenant = tenant,
+                clientId = clientId,
+            )
         )
     }
+
+    @PostMapping("/{tenant}/v2.0/ansatt")
+    fun newAnsatt(
+        @PathVariable("tenant") tenant: String,
+        @RequestHeader(AUTHORIZATION) authorization: String?,
+        @RequestBody ansattRequest: AnsattRequest
+    ): ResponseEntity<*> = getUser(authorization)
+        ?.let { clientId ->
+            createUser(ansattRequest.groups).let { (cn) ->
+                val sid = UUID.randomUUID().toString()
+                ok(
+                    Oauth2AccessTokenResponse(
+                        idToken = createIdToken(ansattId = cn, tenant = tenant, clientId = clientId, scope = "foo", sid = sid),
+                        refreshToken = createIdToken(ansattId = cn, tenant = tenant, clientId = clientId, scope = "foo", sid = sid),
+                        accessToken = createIdToken(ansattId = cn, tenant = tenant, clientId = clientId, scope = "foo", sid = sid),
+                    )
+                )
+            }
+        }
+        ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing basic authorization header")
 
     fun createUser(groups: List<String>) = ansattService.addAnnsatt(groups = groups, enheter = emptyList(), generated = true)
 
@@ -214,3 +263,6 @@ class AzureAdMock(
         return "https://login.microsoftonline.com/$tenant/v2.0"
     }
 }
+
+private fun JWTClaimsSet.getStringClaimOrNull(name: String): String? =
+    getClaim(name) as? String
