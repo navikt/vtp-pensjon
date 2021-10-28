@@ -12,6 +12,7 @@ data class RequestResponse(
     val timestamp: LocalDateTime,
     val method: String,
     val path: String,
+    val queryString: String?,
     val url: String,
     val status: Int,
     val handler: String?,

@@ -7,12 +7,17 @@ import no.nav.pensjon.vtp.testmodell.ansatt.AnsattService
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import no.nav.pensjon.vtp.util.asResponseEntity
 import org.apache.http.client.utils.URIBuilder
+import org.springframework.hateoas.server.mvc.linkTo
+import org.springframework.http.HttpStatus.TEMPORARY_REDIRECT
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.MediaType.TEXT_HTML_VALUE
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.badRequest
 import org.springframework.http.ResponseEntity.ok
+import org.springframework.util.LinkedMultiValueMap
+import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.util.UriComponentsBuilder.fromUriString
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -21,16 +26,39 @@ import javax.servlet.http.HttpServletResponse
 @RequestMapping("/rest/AzureAd")
 class AzureAdMock(
     private val ansattService: AnsattService,
-    private val jsonWebKeySupport: JsonWebKeySupport
+    private val jsonWebKeySupport: JsonWebKeySupport,
 ) {
     @GetMapping(value = ["/isAlive"], produces = [TEXT_HTML_VALUE])
     fun isAliveMock() = ok("Azure AD is OK")
+
+    @GetMapping("/{tenant}/v2.0/authorize")
+    fun authorize(req: HttpServletRequest, @PathVariable("tenant") tenant: String, @RequestParam requestParams: MultiValueMap<String, String>): ResponseEntity<Any> {
+        val uri = if (requestParams.isEmpty()) {
+            fromUriString(getFrontendUrl(req))
+                .fragment("/azuread/$tenant/v2.0/authorize")
+                .build()
+                .toUri()
+        } else {
+            val query = fromUriString(getFrontendUrl(req) + "/azuread/$tenant/v2.0/authorize")
+                .queryParams(requestParams).build().getQuery()
+
+            fromUriString(getFrontendUrl(req))
+                .fragment("/azuread/$tenant/v2.0/authorize?" + query)
+                .build()
+                .toUri()
+        }
+
+        return ResponseEntity
+            .status(TEMPORARY_REDIRECT)
+            .location(uri)
+            .build<Any>()
+    }
 
     @GetMapping(value = ["/{tenant}/v2.0/.well-known/openid-configuration"], produces = [APPLICATION_JSON_VALUE])
     @ApiOperation(value = "Azure AD Discovery url", notes = "Mock impl av Azure AD discovery urlen. ")
     fun wellKnown(req: HttpServletRequest, @PathVariable("tenant") tenant: String, @RequestParam("p") profile: String?) =
         WellKnownResponse(
-            frontendUrl = getFrontendUrl(req),
+            authorizationEndpoint = linkTo<AzureAdMock> { authorize(req, tenant, LinkedMultiValueMap()) }.toUri(),
             baseUrl = getBaseUrl(req),
             graphUrl = getGraphUrl(req),
             tenant = tenant,
@@ -38,7 +66,7 @@ class AzureAdMock(
         )
 
     @GetMapping(value = ["/{tenant}/discovery/v2.0/keys"])
-    fun authorize(@PathVariable tenant: String) = Keys(jsonWebKeySupport.jwks()).asResponseEntity()
+    fun keys(@PathVariable tenant: String) = Keys(jsonWebKeySupport.jwks()).asResponseEntity()
 
     @PostMapping(value = ["/{tenant}/oauth2/v2.0/token"])
     fun accessToken(
@@ -56,9 +84,9 @@ class AzureAdMock(
             "authorization_code" -> {
                 ok(
                     Oauth2AccessTokenResponse(
-                        idToken = createIdToken(code = code, tenant = tenant, clientId = clientId, scope = scope),
-                        refreshToken = "refresh:$code",
-                        accessToken = "access:$code"
+                        idToken = createIdToken(code = code, tenant = tenant, clientId = clientId, scope = scope, sid = code),
+                        refreshToken = createIdToken(code = code, tenant = tenant, clientId = clientId, scope = scope, sid = code),
+                        accessToken = createIdToken(code = code, tenant = tenant, clientId = clientId, scope = scope, sid = code),
                     )
                 )
             }
@@ -87,11 +115,13 @@ class AzureAdMock(
         }
     }
 
-    private fun createIdToken(code: String, tenant: String, clientId: String, scope: String? = null): String {
+    private fun createIdToken(code: String, tenant: String, clientId: String, scope: String? = null, sid: String? = null): String {
         val codeData = code.split(";".toRegex()).toTypedArray()
-        val user = ansattService.findByCn(codeData[0]) ?: throw RuntimeException("Fant ikke NAV-ansatt med brukernavn ${codeData[0]}")
+        val ansattId = codeData[0]
+        val user = ansattService.findByCn(codeData[0]) ?: throw RuntimeException("Fant ikke NAV-ansatt med brukernavn $ansattId")
 
         return azureOidcToken(
+            sub = "$clientId:$ansattId",
             jsonWebKeySupport = jsonWebKeySupport,
             email = user.email,
             nonce = if (codeData.size > 1) codeData[1] else null,
@@ -102,9 +132,10 @@ class AzureAdMock(
                 "tid" to tenant,
                 "oid" to UUID.nameUUIDFromBytes(user.cn.toByteArray()).toString(), // user id - which is normally a UUID in Azure AD
                 "name" to user.displayName,
-                "preferred_username" to user.email
+                "preferred_username" to user.email,
             ),
             scope = scope,
+            sid = sid,
         )
     }
 
@@ -121,13 +152,6 @@ class AzureAdMock(
         @RequestParam("nonce", defaultValue = "") nonce: String,
         @RequestParam("redirect_uri") redirectUri: String
     ): ResponseEntity<List<UserEntry>> {
-        val validScopes = listOf("openid", "profile", "offline_access")
-        val scopes = scope.split("\\s+".toRegex()).toTypedArray()
-
-        scopes.forEach {
-            require(validScopes.contains(it)) { "Unsupported scope [$it], supported scopes are: ${validScopes.joinToString(separator = ", ")}" }
-        }
-
         require(responseType == "code") { "Unsupported responseType [$responseType], should be 'code'" }
 
         Objects.requireNonNull(clientId, "Missing the ?client_id=xxx query parameter")

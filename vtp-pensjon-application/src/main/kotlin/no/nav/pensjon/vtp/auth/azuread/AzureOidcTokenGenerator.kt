@@ -1,12 +1,12 @@
 package no.nav.pensjon.vtp.auth.azuread
 
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport
-import org.apache.commons.codec.digest.DigestUtils
 import org.jose4j.jwt.JwtClaims
 import org.jose4j.jwt.NumericDate
 import org.springframework.util.ObjectUtils
 
 fun azureOidcToken(
+    sub: String,
     jsonWebKeySupport: JsonWebKeySupport,
     email: String,
     nonce: String?,
@@ -17,6 +17,7 @@ fun azureOidcToken(
     issuedAt: NumericDate = NumericDate.now(),
     additionalClaims: Map<String, String> = HashMap(),
     scope: String?,
+    sid: String?,
 ): String {
     val claims = JwtClaims()
     claims.issuer = issuer
@@ -25,9 +26,7 @@ fun azureOidcToken(
     claims.issuedAt = issuedAt
     claims.notBefore = issuedAt
 
-    // subject is just an Azure-specific ID. For mocking purposes, we just use a shasum, to have a
-    // consistent mapping between e-mail address (preferred_username) and Azure ID.
-    claims.subject = DigestUtils.sha256Hex(email)
+    claims.subject = sub
     claims.setClaim("preferred_username", email)
 
     claims.setClaim("ver", "2.0")
@@ -44,5 +43,6 @@ fun azureOidcToken(
     }
     claims.setClaim("groups", groups)
     scope?.let { claims.setClaim("scp", scope) }
+    sid?.let { claims.setClaim("sid", sid) }
     return jsonWebKeySupport.createRS256Token(claims.toJson()).compactSerialization
 }

@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.auth.azuread
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.net.URI
 import java.util.*
 
 /*
@@ -27,16 +28,13 @@ token_endpoint_auth_methods_supported: ["client_secret_post", "private_key_jwt",
 userinfo_endpoint: "https://graph.microsoft.com/oidc/userinfo"
 * */
 data class WellKnownResponse(
-    val frontendUrl: String,
+    @JsonProperty("authorization_endpoint")
+    val authorizationEndpoint: URI,
     val baseUrl: String,
     val graphUrl: String,
     val tenant: String,
     val profile: String?
 ) {
-    @get:JsonProperty("authorization_endpoint")
-    val authorizationEndpoint: String
-        get() = "$frontendUrl/azuread/$tenant/v2.0/authorize"
-
     @JsonProperty("claims_supported")
     val claimsSupported = Arrays.asList(
         "sub",

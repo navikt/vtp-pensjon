@@ -1,6 +1,8 @@
 package no.nav.pensjon.vtp.auth.azuread
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.nimbusds.jose.JOSEObject
+import com.nimbusds.jwt.JWTClaimsSet
 import io.swagger.annotations.Api
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
@@ -39,13 +41,15 @@ class MicrosoftGraphApiMock(private val ansatteIndeks: AnsatteIndeks) {
     }
 
     private fun getAnsatt(auth: String): Pair<String, NAVAnsatt> {
-        if (!auth.startsWith("Bearer access:")) {
+        if (!auth.startsWith("Bearer ")) {
             throw ResponseStatusException(FORBIDDEN, "Bad mock access token; must be on format Bearer access:<userid>")
         } else {
-            val ident = auth.substring(14).split(";".toRegex()).toTypedArray()[0]
-            val ansatt = ansatteIndeks.findByCn(ident)
-                ?: throw RuntimeException("Ansatt med ident $ident ikke funnet i VTP.")
-            return Pair(ident, ansatt)
+            val assertion = auth.substring("Bearer ".length)
+            val claims = JWTClaimsSet.parse(JOSEObject.parse(assertion).payload.toJSONObject())
+            val ansattId: String = claims.subject.split(":")[1]
+            val ansatt = ansatteIndeks.findByCn(ansattId)
+                ?: throw RuntimeException("Ansatt med ident $ansattId ikke funnet i VTP.")
+            return Pair(ansattId, ansatt)
         }
     }
 

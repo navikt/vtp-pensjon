@@ -42,10 +42,43 @@ function curlCommand(request: RequestResponse) {
 
   return `curl -X ${request.method} ${headers} ${data} ${request.url}`
 }
+
+function decode(string: string | null): string | null {
+  if (string) {
+    try {
+      return decodeURI(string)
+    } catch (e) {
+      return string
+    }
+  } else {
+    return string
+  }
+}
+
 export default function RequestResponseSummary(props: SummaryProps) {
   const { request } = props;
-  return <>
-    <dl className="row mb-0" style={{backgroundColor: "white"}}>
+
+  let queryParameters
+  if (props.request.queryString) {
+    queryParameters = (<div className="pt-3">
+      <h5>Query Parameters</h5>
+      <hr/>
+      <dl className="row mb-0">
+        {props.request.queryString.split("&").map(query => {
+          let [key, value] = query.split("=");
+          return <>
+          <dt className="col-sm-3 col-md-2">{key}</dt>
+          <dd className="col-sm-9 col-md-10">{decode(value)}</dd>
+          </>
+        })
+        }
+      </dl>
+      </div>)
+  } else {
+    queryParameters = <></>
+  }
+  return <div style={{backgroundColor: "white"}}>
+    <dl className="row mb-0">
       <dt className="col-sm-3 col-md-2">URL</dt>
       <dd className="col-sm-9 col-md-10">{request.url}</dd>
       {request.handler != null && (
@@ -65,6 +98,7 @@ export default function RequestResponseSummary(props: SummaryProps) {
           </>
       )}
     </dl>
+    {queryParameters}
     {request.stackTrace != null && (
         <>
           <h5>Stacktrace</h5>
@@ -72,5 +106,5 @@ export default function RequestResponseSummary(props: SummaryProps) {
         </>
     )}
     <CopyToClipboardButton text={curlCommand(request)}/>
-  </>;
+  </div>;
 }
