@@ -3,6 +3,8 @@ package no.nav.pensjon.vtp.mocks.samboer
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
+import no.nav.pensjon.vtp.testmodell.personopplysning.SamboerforholdModell
+import no.nav.pensjon.vtp.testmodell.util.SamboerId
 import no.nav.pensjon.vtp.util.asResponseEntity
 import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.HttpStatus
@@ -42,16 +44,33 @@ class Samboerforhold(
     @PostMapping("/api/samboer")
     fun registrerForhold(
         @RequestBody request: SamboerRequest,
-    ): HttpStatus {
-        println(request)
-        return HttpStatus.CREATED
-    }
+    ) = (personModellRepository.findById(request.fnrInnmelder)?.apply {
+            samboerforhold.add(
+                SamboerforholdModell(
+                    id = SamboerId.nextId(),
+                    innmelder = request.fnrInnmelder,
+                    motpart = request.fnrMotpart,
+                    fraOgMed = request.gyldigFraOgMed,
+                    tilOgMed = request.gyldigTilOgMed,
+                    opprettetAv = request.opprettetAv
+                )
+            )
+        }?.let {
+            personModellRepository.save(it)
+        }?.run { HttpStatus.OK } ?: HttpStatus.NOT_FOUND).asResponseEntity()
 
     @PutMapping("/api/forhold/{forholdId}/avslutt")
     @ApiOperation(value = "Avslutt samboerforhold")
     fun avsluttForhold(
         @PathVariable forholdId: String
-    ) = personModellRepository.findAll().find {
-        it.samboerforhold?.map { it.id }?.contains(forholdId) ?: false
-    }
+    ) = (personModellRepository.findById(
+        personModellRepository.findAll().find {
+                it.samboerforhold.map { it.id }.contains(forholdId)
+            }?.ident ?: "UKJENT"
+        )?.let {
+            it.samboerforhold.removeIf {
+                it.id == forholdId
+            }
+            personModellRepository.save(it)
+        }?.run { HttpStatus.OK } ?: HttpStatus.NOT_FOUND).asResponseEntity()
 }
