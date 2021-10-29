@@ -1,11 +1,11 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl
 
-import no.nav.pensjon.vtp.testmodell.util.SamboerId
 import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks
 import no.nav.pensjon.vtp.testmodell.load.*
 import no.nav.pensjon.vtp.testmodell.personopplysning.*
 import no.nav.pensjon.vtp.testmodell.util.FiktivtNavn.getAnnenPartName
 import no.nav.pensjon.vtp.testmodell.util.FiktivtNavn.getRandomName
+import no.nav.pensjon.vtp.testmodell.util.SamboerId
 import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
 
 class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, val vars: VariabelContainer) {
