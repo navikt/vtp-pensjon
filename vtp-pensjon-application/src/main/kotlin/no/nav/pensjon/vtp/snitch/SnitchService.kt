@@ -13,7 +13,6 @@ class SnitchService(
         if (!preferences().isIgnored(requestResponse)) {
             requestResponseRepository.save(requestResponse)
                 .also {
-                    println("Sending message")
                     simpMessagingTemplate.convertAndSend("/topic/snitch", it)
                 }
         }
