@@ -25,5 +25,6 @@ class RequestResponseRepositoryImpl(
 
     override fun deleteAll() {
         mongoTemplate.dropCollection<RequestResponse>()
+        setupCappedCollection()
     }
 }
