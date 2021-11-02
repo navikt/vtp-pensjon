@@ -1,33 +1,15 @@
 package no.nav.pensjon.vtp.mocks.samboer
 
-import java.net.URI
+import org.springframework.hateoas.RepresentationModel
 import java.time.LocalDate
 
-data class SamboerRequest(
+data class SamboerDTO(
     val fnrInnmelder: String,
     val fnrMotpart: String,
     val gyldigFraOgMed: LocalDate,
     val gyldigTilOgMed: LocalDate?,
     val opprettetAv: String,
-)
-
-data class SamboerResponse(
-    val fnrInnmelder: String,
-    val fnrMotpart: String,
-    val gyldigFraOgMed: LocalDate,
-    val gyldigTilOgMed: LocalDate?,
-    val opprettetAv: String,
-    val _links: Links,
-) {
-    data class Links(
-        val self: Link,
-        val avslutt: Link,
-    )
-}
-
-data class Link(
-    val href: URI,
-)
+) : RepresentationModel<SamboerDTO>()
 
 data class AvsluttForhold(
     val dato: LocalDate
