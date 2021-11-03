@@ -10,7 +10,6 @@ import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import no.nav.pensjon.vtp.util.asResponseEntity
 import org.apache.http.client.utils.URIBuilder
 import org.springframework.hateoas.server.mvc.linkTo
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.TEMPORARY_REDIRECT
