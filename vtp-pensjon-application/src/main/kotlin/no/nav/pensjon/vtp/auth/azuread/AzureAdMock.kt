@@ -10,6 +10,7 @@ import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import no.nav.pensjon.vtp.util.asResponseEntity
 import org.apache.http.client.utils.URIBuilder
 import org.springframework.hateoas.server.mvc.linkTo
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.TEMPORARY_REDIRECT
@@ -75,9 +76,10 @@ class AzureAdMock(
     @PostMapping(value = ["/{tenant}/oauth2/v2.0/token"])
     fun accessToken(
         req: HttpServletRequest,
+        @RequestHeader(AUTHORIZATION) authorization: String?,
         @PathVariable("tenant") tenant: String,
         @RequestParam("grant_type") grantType: String,
-        @RequestParam("client_id") clientId: String,
+        @RequestParam("client_id") inputClientId: String?,
         @RequestParam("realm") realm: String?,
         @RequestParam("code") code: String?,
         @RequestParam("refresh_token", required = false) refreshToken: String?,
@@ -85,6 +87,10 @@ class AzureAdMock(
         @RequestParam("requested_token_use", required = false) requestedTokenUse: String?,
         @RequestParam("assertion", required = false) assertion: String?,
     ): ResponseEntity<*> {
+        val clientId = getUser(authorization)
+            ?: inputClientId
+            ?: return badRequest().body("Must supply either a AUTHORIZATION header or client_id request param")
+
         return when (grantType) {
             "authorization_code" -> {
                 if (code == null) {
