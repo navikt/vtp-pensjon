@@ -10,7 +10,3 @@ data class SamboerDTO(
     val gyldigTilOgMed: LocalDate?,
     val opprettetAv: String,
 ) : RepresentationModel<SamboerDTO>()
-
-data class AvsluttForhold(
-    val dato: LocalDate
-)
