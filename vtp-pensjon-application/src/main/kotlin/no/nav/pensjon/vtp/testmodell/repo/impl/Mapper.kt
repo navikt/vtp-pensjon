@@ -71,7 +71,7 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
                     innmelder = getPersonIdent(i),
                     motpart = annenPartIdent,
                 )
-            }?.toMutableList() ?: mutableListOf()
+            } ?: emptyList()
         )
     }
 
