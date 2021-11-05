@@ -4,6 +4,7 @@ import nav_cons_sto_sam_tjenestepensjon.no.nav.inf.FinnTjenestepensjonsforholdFa
 import no.nav.pensjon.vtp.mocks.tss.SamhandlerRepository
 import no.nav.pensjon.vtp.mocks.tss.tjenestepensjon
 import no.nav.pensjon.vtp.mocks.tss.tpNr
+import no.nav.pensjon.vtp.testmodell.util.SequenceService
 import no.nav.pensjon.vtp.util.asGregorianCalendar
 import org.springframework.stereotype.Service
 

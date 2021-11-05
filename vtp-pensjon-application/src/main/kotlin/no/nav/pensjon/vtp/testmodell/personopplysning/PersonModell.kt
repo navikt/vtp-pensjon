@@ -32,7 +32,7 @@ data class PersonModell(
     val personstatus: List<PersonstatusModell>?,
     val adresser: List<AdresseModell>,
     val medlemskap: MedlemskapModell?,
-    var samboerforhold: MutableList<SamboerforholdModell> = mutableListOf(),
+    var samboerforhold: List<SamboerforholdModell>,
 ) {
     fun getAdresse(adresseType: AdresseType): AdresseModell? {
         return adresser.firstOrNull { it.adresseType == adresseType }
