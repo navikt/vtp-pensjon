@@ -5,8 +5,8 @@ import no.nav.pensjon.vtp.testmodell.load.*
 import no.nav.pensjon.vtp.testmodell.personopplysning.*
 import no.nav.pensjon.vtp.testmodell.util.FiktivtNavn.getAnnenPartName
 import no.nav.pensjon.vtp.testmodell.util.FiktivtNavn.getRandomName
-import no.nav.pensjon.vtp.testmodell.util.SamboerId
 import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
+import java.util.*
 
 class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, val vars: VariabelContainer) {
     fun mapFromLoad(l: PersonopplysningerTemplate): Personopplysninger {
@@ -137,7 +137,7 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
 
     private fun samboerforholdModell(load: SamboerforholdTemplate, innmelder: String, motpart: String?): SamboerforholdModell {
         return SamboerforholdModell(
-            id = SamboerId.nextId(),
+            id = UUID.randomUUID().toString(),
             innmelder = innmelder,
             motpart = motpart!!,
             fraOgMed = load.fraOgMed,
