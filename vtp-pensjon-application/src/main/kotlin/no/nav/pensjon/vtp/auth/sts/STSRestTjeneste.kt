@@ -46,7 +46,7 @@ class STSRestTjeneste(
         expires_in = 3600L
     )
 
-    @GetMapping(value = ["/token"])
+    @PostMapping(value = ["/token"])
     fun dummyToken(
         @RequestHeader(AUTHORIZATION) authorization: String?,
         @RequestParam grant_type: String?,

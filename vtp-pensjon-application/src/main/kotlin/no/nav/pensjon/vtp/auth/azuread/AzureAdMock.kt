@@ -75,28 +75,38 @@ class AzureAdMock(
     @PostMapping(value = ["/{tenant}/oauth2/v2.0/token"])
     fun accessToken(
         req: HttpServletRequest,
+        @RequestHeader(AUTHORIZATION) authorization: String?,
         @PathVariable("tenant") tenant: String,
         @RequestParam("grant_type") grantType: String,
-        @RequestParam("client_id") clientId: String,
+        @RequestParam("client_id") inputClientId: String?,
         @RequestParam("realm") realm: String?,
-        @RequestParam("code") code: String,
+        @RequestParam("code") code: String?,
         @RequestParam("refresh_token", required = false) refreshToken: String?,
-        @RequestParam("redirect_uri") redirectUri: String,
         @RequestParam("scope", required = false) scope: String?,
+        @RequestParam("requested_token_use", required = false) requestedTokenUse: String?,
+        @RequestParam("assertion", required = false) assertion: String?,
     ): ResponseEntity<*> {
+        val clientId = getUser(authorization)
+            ?: inputClientId
+            ?: return badRequest().body("Must supply either a AUTHORIZATION header or client_id request param")
+
         return when (grantType) {
             "authorization_code" -> {
-                val codeSplit = code.split(";")
-                val ansattId = codeSplit[0]
-                val nonce = if (codeSplit.size > 1) codeSplit[1] else null
+                if (code == null) {
+                    badRequest().body("Missing required parameter 'code'")
+                } else {
+                    val codeSplit = code.split(";")
+                    val ansattId = code.ansattIdFromCode()
+                    val nonce = if (codeSplit.size > 1) codeSplit[1] else null
 
-                ok(
-                    Oauth2AccessTokenResponse(
-                        idToken = createIdToken(ansattId = ansattId, tenant = tenant, clientId = clientId, nonce = nonce, scope = scope, sid = code),
-                        refreshToken = createIdToken(ansattId = ansattId, tenant = tenant, clientId = clientId, nonce = nonce, scope = scope, sid = code),
-                        accessToken = createIdToken(ansattId = ansattId, tenant = tenant, clientId = clientId, nonce = nonce, scope = scope, sid = code),
+                    ok(
+                        Oauth2AccessTokenResponse(
+                            idToken = createIdToken(ansattId = ansattId, tenant = tenant, clientId = clientId, nonce = nonce, scope = scope, sid = code),
+                            refreshToken = createIdToken(ansattId = ansattId, tenant = tenant, clientId = clientId, nonce = nonce, scope = scope, sid = code),
+                            accessToken = createIdToken(ansattId = ansattId, tenant = tenant, clientId = clientId, nonce = nonce, scope = scope, sid = code),
+                        )
                     )
-                )
+                }
             }
             "refresh_token" -> {
                 if (refreshToken == null) {
@@ -106,21 +116,61 @@ class AzureAdMock(
                     ok(
                         Oauth2AccessTokenResponse(
                             idToken = createIdToken(
-                                ansattId = claims.subject,
+                                ansattId = claims.subject.ansattIdFromSubject(),
                                 tenant = tenant,
                                 clientId = clientId,
                                 scope = scope,
                                 nonce = claims.getStringClaimOrNull("nonce")
                             ),
                             refreshToken = createIdToken(
-                                ansattId = claims.subject,
+                                ansattId = claims.subject.ansattIdFromSubject(),
                                 tenant = tenant,
                                 clientId = clientId,
                                 scope = scope,
                                 nonce = claims.getStringClaimOrNull("nonce")
                             ),
                             accessToken = createIdToken(
-                                ansattId = claims.subject,
+                                ansattId = claims.subject.ansattIdFromSubject(),
+                                tenant = tenant,
+                                clientId = clientId,
+                                scope = scope,
+                                nonce = claims.getStringClaimOrNull("nonce")
+                            )
+                        )
+                    )
+                }
+            }
+            "urn:ietf:params:oauth:grant-type:jwt-bearer" -> {
+                if (requestedTokenUse != "on_behalf_of") {
+                    badRequest().body("Unknown grant_type $grantType")
+                } else if (scope.isNullOrBlank()) {
+                    badRequest().body("Missing scope for on_behalf_of flow")
+                } else if (assertion.isNullOrBlank()) {
+                    badRequest().body("Missing assertion for on_behalf_of flow")
+                } else {
+                    val claims = JWTClaimsSet.parse(JOSEObject.parse(assertion).payload.toJSONObject())
+
+                    if (!claims.audience.contains(clientId)) {
+                        badRequest().body("Audience must contain clientId. Audience=${claims.audience.joinToString(",","[","]")} clientId=$clientId")
+                    }
+                    ok(
+                        Oauth2AccessTokenResponse(
+                            idToken = createIdToken(
+                                ansattId = claims.subject.ansattIdFromSubject(),
+                                tenant = tenant,
+                                clientId = clientId,
+                                scope = scope,
+                                nonce = claims.getStringClaimOrNull("nonce")
+                            ),
+                            refreshToken = createIdToken(
+                                ansattId = claims.subject.ansattIdFromSubject(),
+                                tenant = tenant,
+                                clientId = clientId,
+                                scope = scope,
+                                nonce = claims.getStringClaimOrNull("nonce")
+                            ),
+                            accessToken = createIdToken(
+                                ansattId = claims.subject.ansattIdFromSubject(),
                                 tenant = tenant,
                                 clientId = clientId,
                                 scope = scope,
@@ -262,7 +312,12 @@ class AzureAdMock(
     private fun getIssuer(tenant: String): String {
         return "https://login.microsoftonline.com/$tenant/v2.0"
     }
-}
 
-private fun JWTClaimsSet.getStringClaimOrNull(name: String): String? =
-    getClaim(name) as? String
+    companion object {
+        private fun String.ansattIdFromCode(): String = split(";")[0]
+        private fun String.ansattIdFromSubject(): String = split(":")[1]
+
+        private fun JWTClaimsSet.getStringClaimOrNull(name: String): String? =
+            getClaim(name) as? String
+    }
+}
