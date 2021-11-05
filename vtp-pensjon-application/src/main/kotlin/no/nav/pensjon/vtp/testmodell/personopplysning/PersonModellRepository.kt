@@ -7,4 +7,6 @@ interface PersonModellRepository : Repository<PersonModell, String> {
     fun findByAktørIdent(ident: String): PersonModell?
     fun findAll(): List<PersonModell>
     fun save(bruker: PersonModell): PersonModell?
+
+    fun findBySamboerforholdId(ident: String): PersonModell?
 }

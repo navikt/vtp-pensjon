@@ -24,5 +24,6 @@ data class PersonTemplate(
     val sivilstand: List<SivilstandTemplate>?,
     val personstatus: List<PersonstatusTemplate>?,
     val adresser: List<AdresseModell>?,
-    val medlemskap: MedlemskapModell?
+    val medlemskap: MedlemskapModell?,
+    val samboerforhold: List<SamboerforholdTemplate>?,
 )

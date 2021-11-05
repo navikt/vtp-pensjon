@@ -6,6 +6,7 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.*
 import no.nav.pensjon.vtp.testmodell.util.FiktivtNavn.getAnnenPartName
 import no.nav.pensjon.vtp.testmodell.util.FiktivtNavn.getRandomName
 import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
+import java.util.*
 
 class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, val vars: VariabelContainer) {
     fun mapFromLoad(l: PersonopplysningerTemplate): Personopplysninger {
@@ -13,12 +14,13 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
         val annenPart = l.annenPart?.let {
             personModell(
                 it,
-                getAnnenPartName(l.søker, l.søker.etternavn ?: fallbackName.etternavn, it.kjønn)
+                getAnnenPartName(l.søker, l.søker.etternavn ?: fallbackName.etternavn, it.kjønn),
+                getPersonIdent(it)
             )
         }
 
         return Personopplysninger(
-            søker = personModell(l.søker, fallbackName),
+            søker = personModell(l.søker, fallbackName, annenPart?.ident),
             annenPart = annenPart,
             familierelasjoner = l.familierelasjoner.map { familierelasjonModell(it) }
         )
@@ -44,7 +46,7 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
         )
     }
 
-    private fun personModell(i: PersonTemplate, fallbackName: PersonNavn): PersonModell {
+    private fun personModell(i: PersonTemplate, fallbackName: PersonNavn, annenPartIdent: String?): PersonModell {
         return PersonModell(
             ident = getPersonIdent(i),
             aktørIdent = getAktørIdent(i),
@@ -62,7 +64,14 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
             sivilstand = i.sivilstand?.map { sivilstandModell(it) },
             personstatus = i.personstatus?.map { personstatusModell(it) },
             adresser = getAdresser(i),
-            medlemskap = i.medlemskap
+            medlemskap = i.medlemskap,
+            samboerforhold = i.samboerforhold?.map {
+                samboerforholdModell(
+                    load = it,
+                    innmelder = getPersonIdent(i),
+                    motpart = annenPartIdent,
+                )
+            } ?: emptyList()
         )
     }
 
@@ -123,6 +132,17 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
             endringstype = load.endringstype,
             endringstidspunkt = load.endringstidspunkt,
             land = load.land
+        )
+    }
+
+    private fun samboerforholdModell(load: SamboerforholdTemplate, innmelder: String, motpart: String?): SamboerforholdModell {
+        return SamboerforholdModell(
+            id = UUID.randomUUID().toString(),
+            innmelder = innmelder,
+            motpart = motpart!!,
+            fraOgMed = load.fraOgMed,
+            tilOgMed = load.tilOgMed,
+            opprettetAv = load.opprettetAv,
         )
     }
 }

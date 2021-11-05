@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.http.ResponseEntity.status
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.RequestMethod.GET
+import org.springframework.web.bind.annotation.RequestMethod.POST
 import java.io.StringWriter
 import java.util.Base64.getUrlEncoder
 import javax.xml.bind.JAXB.marshal
@@ -46,7 +48,7 @@ class STSRestTjeneste(
         expires_in = 3600L
     )
 
-    @PostMapping(value = ["/token"])
+    @RequestMapping(value = ["/token"], method = [GET, POST])
     fun dummyToken(
         @RequestHeader(AUTHORIZATION) authorization: String?,
         @RequestParam grant_type: String?,
