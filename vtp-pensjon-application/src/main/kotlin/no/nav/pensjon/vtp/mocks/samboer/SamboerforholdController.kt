@@ -43,31 +43,28 @@ class SamboerforholdController(
     @ApiOperation(value = "Registrer samboerforhold")
     fun registrerForhold(
         @RequestBody request: SamboerDTO,
-    ) =
-        personModellRepository.findById(request.fnrInnmelder)?.apply {
-            copy(
-                samboerforhold = listOf(
-                    SamboerforholdModell(
-                        id = UUID.randomUUID().toString(),
-                        innmelder = request.fnrInnmelder,
-                        motpart = request.fnrMotpart,
-                        fraOgMed = request.gyldigFraOgMed,
-                        tilOgMed = request.gyldigTilOgMed,
-                        opprettetAv = request.opprettetAv
-                    )
+    ) = personModellRepository.findById(request.fnrInnmelder)?.apply {
+        copy(
+            samboerforhold = listOf(
+                SamboerforholdModell(
+                    id = UUID.randomUUID().toString(),
+                    innmelder = request.fnrInnmelder,
+                    motpart = request.fnrMotpart,
+                    fraOgMed = request.gyldigFraOgMed,
+                    tilOgMed = request.gyldigTilOgMed,
+                    opprettetAv = request.opprettetAv
                 )
             )
-                .let(personModellRepository::save)
-        }?.run { ResponseEntity.status(CREATED).build<Any>() }
-            ?: ResponseEntity.status(NOT_FOUND).build<Any>()
+        ).let(personModellRepository::save)
+        ResponseEntity.status(CREATED).build<Any>()
+    } ?: ResponseEntity.status(NOT_FOUND).build<Any>()
 
     @PutMapping("/api/forhold/{forholdId}/avslutt")
     @ApiOperation(value = "Avslutt samboerforhold")
     fun avsluttForhold(
         @PathVariable forholdId: String
-    ) = (
-        personModellRepository.findBySamboerforholdId(forholdId)
-        )?.run {
+    ) = personModellRepository.findBySamboerforholdId(forholdId)
+        ?.run {
             copy(samboerforhold = samboerforhold.filterNot { it.id == forholdId })
                 .let(personModellRepository::save)
             ResponseEntity.status(NO_CONTENT).build<Any>()
