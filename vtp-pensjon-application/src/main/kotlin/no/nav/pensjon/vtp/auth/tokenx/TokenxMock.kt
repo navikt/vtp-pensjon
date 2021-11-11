@@ -70,7 +70,7 @@ class TokenxMock(
         val access_token: String,
         val issued_token_type: String = "urn:ietf:params:oauth:token-type:access_token",
         val token_type: String = "Bearer",
-        val expiresIn: Int = 3600
+        val expires_in: Int = 3600
     )
 
     data class WellKnownResponse(
