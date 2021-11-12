@@ -2,7 +2,11 @@ package no.nav.pensjon.vtp.mocks.fpformidling
 
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import no.nav.pensjon.vtp.mocks.fpformidling.dto.*
+import no.nav.pensjon.vtp.mocks.fpformidling.dto.BehandlingUuidDto
+import no.nav.pensjon.vtp.mocks.fpformidling.dto.DokumentProdusertDto
+import no.nav.pensjon.vtp.mocks.fpformidling.dto.DokumentbestillingDto
+import no.nav.pensjon.vtp.mocks.fpformidling.dto.HentBrevmalerDto
+import no.nav.pensjon.vtp.mocks.fpformidling.dto.TekstFraSaksbehandlerDto
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
