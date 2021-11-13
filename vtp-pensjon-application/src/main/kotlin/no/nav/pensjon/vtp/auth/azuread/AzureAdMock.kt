@@ -77,7 +77,7 @@ class AzureAdMock(
         req: HttpServletRequest,
         @RequestHeader(AUTHORIZATION) authorization: String?,
         @PathVariable("tenant") tenant: String,
-        @RequestParam("grant_type") grantType: String,
+        @RequestParam("grant_type") grantType: String?,
         @RequestParam("client_id") inputClientId: String?,
         @RequestParam("realm") realm: String?,
         @RequestParam("code") code: String?,
@@ -101,9 +101,33 @@ class AzureAdMock(
 
                     ok(
                         Oauth2AccessTokenResponse(
-                            idToken = createIdToken(ansattId = ansattId, tenant = tenant, clientId = clientId, nonce = nonce, scope = scope, sid = code),
-                            refreshToken = createIdToken(ansattId = ansattId, tenant = tenant, clientId = clientId, nonce = nonce, scope = scope, sid = code),
-                            accessToken = createIdToken(ansattId = ansattId, tenant = tenant, clientId = clientId, nonce = nonce, scope = scope, sid = code),
+                            idToken = createToken(
+                                audience = listOf(clientId),
+                                ansattId = ansattId,
+                                tenant = tenant,
+                                clientId = clientId,
+                                nonce = nonce,
+                                scope = scope,
+                                sid = code
+                            ),
+                            refreshToken = createToken(
+                                audience = listOf(clientId),
+                                ansattId = ansattId,
+                                tenant = tenant,
+                                clientId = clientId,
+                                nonce = nonce,
+                                scope = scope,
+                                sid = code
+                            ),
+                            accessToken = createToken(
+                                audience = listOf(clientId),
+                                ansattId = ansattId,
+                                tenant = tenant,
+                                clientId = clientId,
+                                nonce = nonce,
+                                scope = scope,
+                                sid = code
+                            ),
                         )
                     )
                 }
@@ -115,21 +139,24 @@ class AzureAdMock(
                     val claims = JWTClaimsSet.parse(JOSEObject.parse(refreshToken).payload.toJSONObject())
                     ok(
                         Oauth2AccessTokenResponse(
-                            idToken = createIdToken(
+                            idToken = createToken(
+                                audience = listOf(clientId),
                                 ansattId = claims.subject.ansattIdFromSubject(),
                                 tenant = tenant,
                                 clientId = clientId,
                                 scope = scope,
                                 nonce = claims.getStringClaimOrNull("nonce")
                             ),
-                            refreshToken = createIdToken(
+                            refreshToken = createToken(
+                                audience = listOf(clientId),
                                 ansattId = claims.subject.ansattIdFromSubject(),
                                 tenant = tenant,
                                 clientId = clientId,
                                 scope = scope,
                                 nonce = claims.getStringClaimOrNull("nonce")
                             ),
-                            accessToken = createIdToken(
+                            accessToken = createToken(
+                                audience = listOf(clientId),
                                 ansattId = claims.subject.ansattIdFromSubject(),
                                 tenant = tenant,
                                 clientId = clientId,
@@ -140,6 +167,7 @@ class AzureAdMock(
                     )
                 }
             }
+            // https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-on-behalf-of-flow
             "urn:ietf:params:oauth:grant-type:jwt-bearer" -> {
                 if (requestedTokenUse != "on_behalf_of") {
                     badRequest().body("Unknown grant_type $grantType")
@@ -155,21 +183,24 @@ class AzureAdMock(
                     }
                     ok(
                         Oauth2AccessTokenResponse(
-                            idToken = createIdToken(
+                            idToken = createToken(
+                                audience = listOf(clientId),
                                 ansattId = claims.subject.ansattIdFromSubject(),
                                 tenant = tenant,
                                 clientId = clientId,
                                 scope = scope,
                                 nonce = claims.getStringClaimOrNull("nonce")
                             ),
-                            refreshToken = createIdToken(
+                            refreshToken = createToken(
+                                audience = listOf(clientId),
                                 ansattId = claims.subject.ansattIdFromSubject(),
                                 tenant = tenant,
                                 clientId = clientId,
                                 scope = scope,
                                 nonce = claims.getStringClaimOrNull("nonce")
                             ),
-                            accessToken = createIdToken(
+                            accessToken = createToken(
+                                audience = scope.split(" ").filter { it.startsWith("api://") }.map { it.substring("api://".length).replaceAfter("/","").replace("/", "") },
                                 ansattId = claims.subject.ansattIdFromSubject(),
                                 tenant = tenant,
                                 clientId = clientId,
@@ -180,13 +211,16 @@ class AzureAdMock(
                     )
                 }
             }
+            null -> {
+                badRequest().body("Missing required parameter grant_type")
+            }
             else -> {
                 badRequest().body("Unknown grant_type $grantType")
             }
         }
     }
 
-    private fun createIdToken(ansattId: String, tenant: String, clientId: String, nonce: String? = null, scope: String? = null, sid: String? = null): String {
+    private fun createToken(audience: List<String>, ansattId: String, tenant: String, clientId: String, nonce: String? = null, scope: String? = null, sid: String? = null): String {
         val user = ansattService.findByCn(ansattId)
             ?: throw RuntimeException("Fant ikke NAV-ansatt med brukernavn $ansattId")
 
@@ -197,7 +231,7 @@ class AzureAdMock(
             nonce = nonce,
             issuer = getIssuer(tenant),
             groups = user.groups.map { ldapGroupName: String -> toAzureGroupId(ldapGroupName) },
-            aud = listOf(clientId),
+            aud = audience,
             additionalClaims = mapOf(
                 "tid" to tenant,
                 "oid" to UUID.nameUUIDFromBytes(user.cn.toByteArray())
@@ -257,17 +291,20 @@ class AzureAdMock(
         @RequestBody ansattRequest: AnsattRequest
     ) = createUser(ansattRequest.groups).let { (cn) ->
         Oauth2AccessTokenResponse(
-            idToken = createIdToken(
+            idToken = createToken(
+                audience = listOf(clientId),
                 ansattId = cn,
                 tenant = tenant,
                 clientId = clientId,
             ),
-            refreshToken = createIdToken(
+            refreshToken = createToken(
+                audience = listOf(clientId),
                 ansattId = cn,
                 tenant = tenant,
                 clientId = clientId,
             ),
-            accessToken = createIdToken(
+            accessToken = createToken(
+                audience = listOf(clientId),
                 ansattId = cn,
                 tenant = tenant,
                 clientId = clientId,
@@ -286,9 +323,30 @@ class AzureAdMock(
                 val sid = UUID.randomUUID().toString()
                 ok(
                     Oauth2AccessTokenResponse(
-                        idToken = createIdToken(ansattId = cn, tenant = tenant, clientId = clientId, scope = "foo", sid = sid),
-                        refreshToken = createIdToken(ansattId = cn, tenant = tenant, clientId = clientId, scope = "foo", sid = sid),
-                        accessToken = createIdToken(ansattId = cn, tenant = tenant, clientId = clientId, scope = "foo", sid = sid),
+                        idToken = createToken(
+                            audience = listOf(clientId),
+                            ansattId = cn,
+                            tenant = tenant,
+                            clientId = clientId,
+                            scope = "foo",
+                            sid = sid
+                        ),
+                        refreshToken = createToken(
+                            audience = listOf(clientId),
+                            ansattId = cn,
+                            tenant = tenant,
+                            clientId = clientId,
+                            scope = "foo",
+                            sid = sid
+                        ),
+                        accessToken = createToken(
+                            audience = listOf(clientId),
+                            ansattId = cn,
+                            tenant = tenant,
+                            clientId = clientId,
+                            scope = "foo",
+                            sid = sid
+                        ),
                     )
                 )
             }
