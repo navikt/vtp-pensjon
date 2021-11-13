@@ -200,7 +200,7 @@ class AzureAdMock(
                                 nonce = claims.getStringClaimOrNull("nonce")
                             ),
                             accessToken = createToken(
-                                audience = scope.split(" ").filter { it.startsWith("api://") }.map { it.substring("api://".length).replaceAfter("/","").replace("/", "") },
+                                audience = scope.split(" ").filter { it.startsWith("api://") }.map { it.substring("api://".length).replaceAfter("/", "").replace("/", "") },
                                 ansattId = claims.subject.ansattIdFromSubject(),
                                 tenant = tenant,
                                 clientId = clientId,
