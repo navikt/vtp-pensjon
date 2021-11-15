@@ -5,10 +5,12 @@ import no.nav.pensjon.vtp.auth.JsonWebKeySupport
 import no.nav.pensjon.vtp.auth.OidcTokenGenerator
 import no.nav.pensjon.vtp.auth.getUser
 import no.nav.pensjon.vtp.util.asResponseEntity
+import no.nav.pensjon.vtp.util.withoutQueryParameters
 import org.apache.commons.codec.binary.Base64.encodeBase64String
 import org.apache.cxf.ws.security.sts.provider.model.RequestSecurityTokenResponseType
 import org.jose4j.jwt.NumericDate.now
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpStatus.OK
 import org.springframework.http.HttpStatus.UNAUTHORIZED
@@ -46,7 +48,7 @@ class STSRestTjeneste(
         token_type = "Bearer",
         issued_token_type = subject_token_type,
         expires_in = 3600L
-    )
+    ).asResponseEntity()
 
     @RequestMapping(value = ["/token"], method = [GET, POST])
     fun dummyToken(
@@ -102,6 +104,14 @@ class STSRestTjeneste(
 
     @GetMapping("/jwks")
     fun jwks() = JsonWebKeySupport.Keys(oidcTokenGenerator.jwks()).asResponseEntity()
+
+    @GetMapping("/.well-known/openid-configuration")
+    fun wellKnown() = WellKnown(
+        issuer = issuer,
+        token_endpoint = linkTo<STSRestTjeneste> { dummyToken(null, null, null) }.toUri().withoutQueryParameters(),
+        exchange_token_endpoint = linkTo<STSRestTjeneste> { dummySaml("dummy", "dummy", "dummy") }.toUri().withoutQueryParameters(),
+        jwks_uri = linkTo<STSRestTjeneste> { jwks() }.toUri().withoutQueryParameters(),
+    )
 
     data class SAMLResponse(
         val access_token: String,
