@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse
 class AzureAdMock(
     private val ansattService: AnsattService,
     private val jsonWebKeySupport: JsonWebKeySupport,
-    @Value("\${AZUREAD_OAUTH2_ISSUER}") private val issuer: String?,
+    @Value("\${AZUREAD_OAUTH2_ISSUER:null}") private val issuer: String?,
 ) {
     @GetMapping(value = ["/isAlive"], produces = [TEXT_HTML_VALUE])
     fun isAliveMock() = ok("Azure AD is OK")
