@@ -9,6 +9,7 @@ import no.nav.pensjon.vtp.testmodell.ansatt.AnsattService
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import no.nav.pensjon.vtp.util.asResponseEntity
 import org.apache.http.client.utils.URIBuilder
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpStatus
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletResponse
 class AzureAdMock(
     private val ansattService: AnsattService,
     private val jsonWebKeySupport: JsonWebKeySupport,
+    @Value("\${AZUREAD_OAUTH2_ISSUER}") private val issuer: String?,
 ) {
     @GetMapping(value = ["/isAlive"], produces = [TEXT_HTML_VALUE])
     fun isAliveMock() = ok("Azure AD is OK")
@@ -62,6 +64,7 @@ class AzureAdMock(
     @ApiOperation(value = "Azure AD Discovery url", notes = "Mock impl av Azure AD discovery urlen. ")
     fun wellKnown(req: HttpServletRequest, @PathVariable("tenant") tenant: String, @RequestParam("p") profile: String?) =
         WellKnownResponse(
+            issuer = getIssuer(tenant, profile),
             authorizationEndpoint = linkTo<AzureAdMock> { authorize(req, tenant, LinkedMultiValueMap()) }.toUri(),
             baseUrl = getBaseUrl(req),
             graphUrl = getGraphUrl(req),
@@ -367,9 +370,16 @@ class AzureAdMock(
         return req.scheme + "://" + req.serverName + ":" + req.serverPort + "/rest/MicrosoftGraphApi"
     }
 
-    private fun getIssuer(tenant: String): String {
-        return "https://login.microsoftonline.com/$tenant/v2.0"
-    }
+    private fun getIssuer(tenant: String, profile: String? = null) =
+        if (tenant == "NAVtestB2C.onmicrosoft.com") {
+            // Spesialhåndtering for Azure AD B2C.
+            // Veldig rart at Azure AD gjør det sånn, men vi får mocke det realistisk, det sparer oss
+            // for en del problemer andre steder (f.eks. LoginService sin issuer)
+            "https://login.microsoftonline.com/d38f25aa-eab8-4c50-9f28-ebf92c1256f2/v2.0" + if ("B2C_1A_idporten_ver1" == profile) "/" else ""
+        } else {
+            issuer
+                ?: "https://login.microsoftonline.com/$tenant/v2.0"
+        }
 
     companion object {
         private fun String.ansattIdFromCode(): String = split(";")[0]

@@ -28,6 +28,7 @@ token_endpoint_auth_methods_supported: ["client_secret_post", "private_key_jwt",
 userinfo_endpoint: "https://graph.microsoft.com/oidc/userinfo"
 * */
 data class WellKnownResponse(
+    val issuer: String,
     @JsonProperty("authorization_endpoint")
     val authorizationEndpoint: URI,
     val baseUrl: String,
@@ -76,18 +77,6 @@ data class WellKnownResponse(
 
     @JsonProperty("id_token_signing_alg_values_supported")
     val idTokenSigningAlgValuesSupported = Arrays.asList("RS256")
-
-    // Spesialhåndtering for Azure AD B2C.
-    // Veldig rart at Azure AD gjør det sånn, men vi får mocke det realistisk, det sparer oss
-    // for en del problemer andre steder (f.eks. LoginService sin issuer)
-    @get:JsonProperty("issuer")
-    val issuer: String
-        get() = // Spesialhåndtering for Azure AD B2C.
-            // Veldig rart at Azure AD gjør det sånn, men vi får mocke det realistisk, det sparer oss
-            // for en del problemer andre steder (f.eks. LoginService sin issuer)
-            if (tenant == "NAVtestB2C.onmicrosoft.com") {
-                "https://login.microsoftonline.com/d38f25aa-eab8-4c50-9f28-ebf92c1256f2/v2.0" + if ("B2C_1A_idporten_ver1" == profile) "/" else ""
-            } else "https://login.microsoftonline.com/$tenant/v2.0"
 
     @get:JsonProperty("jwks_uri")
     val jwksUri: String
