@@ -1,4 +1,16 @@
 import { RequestParameters } from "../RequestParameters";
+import {generateCommand} from "../CommandLineGenerator";
+
+async function doIdportenLogin(pid: String | undefined){
+    var response = await generateCommand(new Request(`rest/idporten/login?pid=${pid}&state=123&redirect=https://google.com`, {
+        method: "get",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        }
+    })).then(response => response)
+    console.log(response)
+}
+
 
 export function idportenRequestSupplier(
     requestParameters: RequestParameters
@@ -20,6 +32,10 @@ export function idportenRequestSupplier(
         requestParameters.clientAssertion === "" || requestParameters.clientAssertionType === "") {
         return undefined;
     } else {
+
+
+        doIdportenLogin(requestParameters.pid)
+
 
         let exp = new Date();
         exp.setSeconds(120);

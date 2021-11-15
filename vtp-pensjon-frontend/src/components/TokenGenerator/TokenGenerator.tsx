@@ -59,6 +59,7 @@ function TokenPanel(props: {
   code?: Foo;
   clientAssertionType?: Foo;
   grantType?: Foo;
+  pid?: Foo;
   requestSupplier: (
     requestParameters: RequestParameters
   ) => Request | undefined;
@@ -77,6 +78,7 @@ function TokenPanel(props: {
   const [clientAssertionType, setClientAssertionType] = useState<string | undefined>(props.clientAssertionType?.default)
   const [code, setCode] = useState<string | undefined>(props.code?.default)
   const [grantType] = useState<string | undefined>(props.grantType?.default)
+  const [pid, setPid] = useState<string | undefined>(props.pid?.default)
 
 
   function getRequest() {
@@ -91,7 +93,8 @@ function TokenPanel(props: {
       username: username,
       code: code,
       clientAssertionType: clientAssertionType,
-      grantType: grantType
+      grantType: grantType,
+      pid: pid
     });
   }
 
@@ -108,11 +111,12 @@ function TokenPanel(props: {
         username: username,
         code: code,
         clientAssertionType: clientAssertionType,
-        grantType: grantType
+        grantType: grantType,
+        pid: pid
       })));
     })();
   }, [clientId, username, tenantId, props, resource, scope, audience, clientAssertion, clientAssertionType,
-  code, grantType, subjectToken]);
+  code, grantType, subjectToken, pid]);
 
   async function generateToken(request: Request): Promise<string> {
     const response = await fetch(request);
@@ -218,7 +222,7 @@ function TokenPanel(props: {
           </Form.Group>
         )}
         {props.clientAssertion && (
-            <Form.Group className="mb-3" controlId="scope">
+            <Form.Group className="mb-3" controlId="client_assertion">
               <Form.Label>Client Assertion</Form.Label>
               <FormControl
                   placeholder="ClientAssertion"
@@ -230,7 +234,7 @@ function TokenPanel(props: {
             </Form.Group>
         )}
         {props.subjectToken && (
-            <Form.Group className="mb-3" controlId="scope">
+            <Form.Group className="mb-3" controlId="subject_token">
               <Form.Label>Subject Token</Form.Label>
               <FormControl
                   placeholder="SubjectToken"
@@ -254,7 +258,7 @@ function TokenPanel(props: {
             </Form.Group>
         )}
         {props.code && (
-            <Form.Group className="mb-3" controlId="audience">
+            <Form.Group className="mb-3" controlId="code">
               <Form.Label>Code</Form.Label>
               <FormControl
                   placeholder="Code"
@@ -266,14 +270,26 @@ function TokenPanel(props: {
             </Form.Group>
         )}
         {props.clientAssertionType && (
-            <Form.Group className="mb-3" controlId="ClientAssertionType">
-              <Form.Label>ClientAssertionType</Form.Label>
+            <Form.Group className="mb-3" controlId="client_assertion_type">
+              <Form.Label>Client Assertion Type</Form.Label>
               <FormControl
                   placeholder="ClientAssertionType"
                   aria-label="ClientAssertionType"
                   aria-describedby="generate-button"
                   value={clientAssertionType}
                   onChange={(e) => setClientAssertionType(e.target.value)}
+              />
+            </Form.Group>
+        )}
+        {props.pid && (
+            <Form.Group className="mb-3" controlId="pid">
+              <Form.Label>Pid</Form.Label>
+              <FormControl
+                  placeholder="Pid"
+                  aria-label="Pid"
+                  aria-describedby="generate-button"
+                  value={pid}
+                  onChange={(e) => setPid(e.target.value)}
               />
             </Form.Group>
         )}

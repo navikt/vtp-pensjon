@@ -10,4 +10,5 @@ export interface RequestParameters {
   code: string | undefined;
   clientAssertionType: string | undefined;
   grantType: string | undefined;
+  pid: string | undefined;
 }
