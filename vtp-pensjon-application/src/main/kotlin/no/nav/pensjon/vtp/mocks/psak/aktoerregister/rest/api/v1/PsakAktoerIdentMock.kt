@@ -35,7 +35,7 @@ class PsakAktoerIdentMock(private val personModellRepository: PersonModellReposi
         return requestIdenter.map { ident ->
             mapOf(ident to IdentinfoForAktoer(
                 identer = hentIdenter(ident)
-                    .filter { identinfo -> identinfo.identgruppe == identgruppe || identgruppe == null}
+                    .filter { identinfo -> identinfo.identgruppe == identgruppe || identgruppe == null }
             ))
         }.associate { it.entries.first().toPair() }
     }
@@ -49,7 +49,7 @@ class PsakAktoerIdentMock(private val personModellRepository: PersonModellReposi
     private fun createIdentInfoFromPerson(person: PersonModell): List<Identinfo> {
         return listOf(
             Identinfo(
-                ident= person.ident,
+                ident = person.ident,
                 identgruppe = PERSONIDENT_IDENTGRUPPE,
                 gjeldende = true
             ),
