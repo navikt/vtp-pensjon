@@ -2,7 +2,7 @@ import { RequestParameters } from "../RequestParameters";
 import {generateCommand} from "../CommandLineGenerator";
 
 async function doIdportenLogin(pid: String | undefined){
-    var response = await generateCommand(new Request(`rest/idporten/login?pid=${pid}&state=123&redirect=https://google.com`, {
+    var response = await generateCommand(new Request(`rest/idporten/login?pid=${pid}&state=123&nonce=1231&redirect=https://google.com`, {
         method: "get",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
