@@ -120,7 +120,6 @@ function TokenPanel(props: {
 
   async function generateToken(request: Request): Promise<string> {
     const response = await fetch(request);
-    console.log(response)
     if (response.status / 100 !== 2) {
       throw Error(
         "status: " +
@@ -366,7 +365,7 @@ const TokenGenerator = () => {
           />
         </Col>
         <Col>
-          <h2>Token Exchange</h2>
+          <h2>Tokenx</h2>
           <TokenPanel
               clientAssertion={{ default: "889640782" }}
               subjectToken={{default: "subject"}}
