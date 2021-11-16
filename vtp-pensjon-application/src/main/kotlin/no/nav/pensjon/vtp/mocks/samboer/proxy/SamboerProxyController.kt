@@ -21,16 +21,16 @@ class SamboerProxyController(
     fun hentSamboerforhold(
         @PathVariable("pid") pid: String
     ) = personModellRepository.findById(pid).let {
-            it?.samboerforhold?.map {
-                SamboerProxyDTO(
-                    fnrInnmelder = it.innmelder,
-                    fnrMotpart = it.motpart,
-                    gyldigFraOgMed = it.fraOgMed,
-                    gyldigTilOgMed = it.tilOgMed,
-                    opprettetAv = it.opprettetAv
-                )
-            }?.firstOrNull() ?: ResponseEntity.status(HttpStatus.NO_CONTENT).build<Any>()
-        }
+        it?.samboerforhold?.map {
+            SamboerProxyDTO(
+                fnrInnmelder = it.innmelder,
+                fnrMotpart = it.motpart,
+                gyldigFraOgMed = it.fraOgMed,
+                gyldigTilOgMed = it.tilOgMed,
+                opprettetAv = it.opprettetAv
+            )
+        }?.firstOrNull() ?: ResponseEntity.status(HttpStatus.NO_CONTENT).build<Any>()
+    }
 
     @PostMapping("api/proxy/samboer")
     @ApiOperation(value = "Opprett samboerforhold")
