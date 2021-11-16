@@ -1,6 +1,8 @@
 package no.nav.pensjon.vtp.mocks.psak.aktoerregister.rest.api.v1
 
 import io.swagger.annotations.Api
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import javax.validation.constraints.NotNull
@@ -20,36 +22,45 @@ private const val GJELDENDE = "gjeldende"
 @RestController
 @Api(tags = ["aktoerregister"])
 @RequestMapping("/rest/psak/aktoerregister/api/v1/identer")
-class PsakAktoerIdentMock {
-    private val personIdentMock = "01015746161"
-    private val aktoerIdMock = "1234567891011"
+class PsakAktoerIdentMock(private val personModellRepository: PersonModellRepository) {
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getIdenter(
         @RequestHeader(NAV_IDENTER_HEADER_KEY) requestIdenter: Set<String>,
-        @RequestParam(IDENTGRUPPE) identgruppe: @NotNull String?,
+        @RequestParam(IDENTGRUPPE) identgruppe: String?,
         @RequestParam(GJELDENDE) gjeldende: @NotNull Boolean
     ): Map<String, IdentinfoForAktoer> {
         validateRequest(requestIdenter)
 
-        val identinfo: Identinfo = if (AKTOERID_IDENTGRUPPE == identgruppe) {
+        return requestIdenter.map { ident ->
+            mapOf(ident to IdentinfoForAktoer(
+                identer = hentIdenter(ident)
+                    .filter { identinfo -> identgruppe.let { it.equals(identinfo.identgruppe) }.or(identgruppe.isNullOrEmpty()) }
+            ))
+        }.associate { it.entries.first().toPair() }
+    }
+
+    private fun hentIdenter(ident: String): List<Identinfo> {
+        return personModellRepository.findByIdentOrAktørIdent(ident, ident)
+            ?.let { createIdentInfoFromPerson(it) }
+            .orEmpty()
+    }
+
+    private fun createIdentInfoFromPerson(person: PersonModell): List<Identinfo> {
+        return listOf(
             Identinfo(
-                ident = aktoerIdMock,
+                ident= person.ident,
+                identgruppe = PERSONIDENT_IDENTGRUPPE,
+                gjeldende = true
+            ),
+            Identinfo(
+                ident = person.aktørIdent,
                 identgruppe = AKTOERID_IDENTGRUPPE,
                 gjeldende = true
             )
-        } else {
-            Identinfo(
-                ident = personIdentMock,
-                identgruppe = PERSONIDENT_IDENTGRUPPE,
-                gjeldende = true
-            )
-        }
-
-        return mapOf(
-            requestIdenter.first() to IdentinfoForAktoer(identer = listOf(identinfo))
         )
     }
+
 
     private fun validateRequest(identer: Set<String>) {
         require(identer.isNotEmpty()) { "Ville kastet \"MissingIdenterException\"" }
