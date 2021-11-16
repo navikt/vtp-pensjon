@@ -369,8 +369,8 @@ const TokenGenerator = () => {
           <h2>Token Exchange</h2>
           <TokenPanel
               clientAssertion={{ default: "889640782" }}
-              subjectToken={{default: "UwU"}}
-              audience={{default: "UwU"}}
+              subjectToken={{default: "subject"}}
+              audience={{default: "aud"}}
               requestSupplier={tokenxRequestSupplier}
               responseMapper={tokenxResponseMapper}
           />
