@@ -24,6 +24,8 @@ import {
 } from "./support/OpenAMSupport";
 import { stsRequestSupplier, stsResponseMapper } from "./support/StsSupport";
 import { RequestParameters } from "./RequestParameters";
+import {tokenxRequestSupplier, tokenxResponseMapper} from "./support/TokenExchangeSupport";
+import {idportenRequestSupplier, idportenResponseMapper} from "./support/IdPortenSupport";
 
 type State =
   | {
@@ -47,52 +49,74 @@ interface Foo {
 
 function TokenPanel(props: {
   clientId?: Foo;
+  clientAssertion?: Foo;
+  audience?: Foo;
+  subjectToken?: Foo;
   resource?: Foo;
   scope?: Foo;
   tenantId?: Foo;
   username?: Foo;
+  code?: Foo;
+  clientAssertionType?: Foo;
+  grantType?: Foo;
+  pid?: Foo;
   requestSupplier: (
     requestParameters: RequestParameters
   ) => Request | undefined;
   responseMapper: (response: Response) => Promise<string>;
 }) {
   const [state, setState] = useState<State>({ type: "NOT_LOADED" });
-  const [clientId, setClientId] = useState<string | undefined>(
-    props.clientId?.default
-  );
-  const [username, setUsername] = useState<string | undefined>(
-    props.username?.default
-  );
-  const [resource, setResource] = useState<string | undefined>(
-    props.resource?.default
-  );
-  const [scope, setScope] = useState<string | undefined>(props.scope?.default);
-  const [tenantId, setTenantId] = useState<string | undefined>(
-    props.tenantId?.default
-  );
-  const [command, setCommand] = useState<string | undefined>(undefined);
+  const [clientId, setClientId] = useState<string | undefined>(props.clientId?.default)
+  const [username, setUsername] = useState<string | undefined>(props.username?.default)
+  const [resource, setResource] = useState<string | undefined>(props.resource?.default)
+  const [scope, setScope] = useState<string | undefined>(props.scope?.default)
+  const [tenantId, setTenantId] = useState<string | undefined>(props.tenantId?.default)
+  const [command, setCommand] = useState<string | undefined>(undefined)
+  const [clientAssertion, setClientAssertion] = useState<string | undefined>(props.clientAssertion?.default)
+  const [audience, setAudience] = useState<string | undefined>(props.audience?.default)
+  const [subjectToken, setSubjectToken] = useState<string | undefined>(props.subjectToken?.default)
+  const [clientAssertionType, setClientAssertionType] = useState<string | undefined>(props.clientAssertionType?.default)
+  const [code, setCode] = useState<string | undefined>(props.code?.default)
+  const [grantType] = useState<string | undefined>(props.grantType?.default)
+  const [pid, setPid] = useState<string | undefined>(props.pid?.default)
+
 
   function getRequest() {
     return props.requestSupplier({
+      clientAssertion: clientAssertion,
+      audience: audience,
+      subjectToken: subjectToken,
       clientId: clientId,
       resource: resource,
       scope: scope,
       tenantId: tenantId,
       username: username,
+      code: code,
+      clientAssertionType: clientAssertionType,
+      grantType: grantType,
+      pid: pid
     });
   }
 
   useEffect(() => {
     (async function () {
       setCommand(await generateCommand(props.requestSupplier({
+        clientAssertion: clientAssertion,
+        audience: audience,
+        subjectToken: subjectToken,
         clientId: clientId,
         resource: resource,
         scope: scope,
         tenantId: tenantId,
         username: username,
+        code: code,
+        clientAssertionType: clientAssertionType,
+        grantType: grantType,
+        pid: pid
       })));
     })();
-  }, [clientId, username, tenantId, props, resource, scope]);
+  }, [clientId, username, tenantId, props, resource, scope, audience, clientAssertion, clientAssertionType,
+  code, grantType, subjectToken, pid]);
 
   async function generateToken(request: Request): Promise<string> {
     const response = await fetch(request);
@@ -196,6 +220,78 @@ function TokenPanel(props: {
             />
           </Form.Group>
         )}
+        {props.clientAssertion && (
+            <Form.Group className="mb-3" controlId="client_assertion">
+              <Form.Label>Client Assertion</Form.Label>
+              <FormControl
+                  placeholder="ClientAssertion"
+                  aria-label="ClientAssertion"
+                  aria-describedby="generate-button"
+                  value={clientAssertion}
+                  onChange={(e) => setClientAssertion(e.target.value)}
+              />
+            </Form.Group>
+        )}
+        {props.subjectToken && (
+            <Form.Group className="mb-3" controlId="subject_token">
+              <Form.Label>Subject Token</Form.Label>
+              <FormControl
+                  placeholder="SubjectToken"
+                  aria-label="SubjectToken"
+                  aria-describedby="generate-button"
+                  value={subjectToken}
+                  onChange={(e) => setSubjectToken(e.target.value)}
+              />
+            </Form.Group>
+        )}
+        {props.audience && (
+            <Form.Group className="mb-3" controlId="audience">
+              <Form.Label>Audience</Form.Label>
+              <FormControl
+                  placeholder="Audience"
+                  aria-label="Audience"
+                  aria-describedby="generate-button"
+                  value={audience}
+                  onChange={(e) => setAudience(e.target.value)}
+              />
+            </Form.Group>
+        )}
+        {props.code && (
+            <Form.Group className="mb-3" controlId="code">
+              <Form.Label>Code</Form.Label>
+              <FormControl
+                  placeholder="Code"
+                  aria-label="Code"
+                  aria-describedby="generate-button"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+              />
+            </Form.Group>
+        )}
+        {props.clientAssertionType && (
+            <Form.Group className="mb-3" controlId="client_assertion_type">
+              <Form.Label>Client Assertion Type</Form.Label>
+              <FormControl
+                  placeholder="ClientAssertionType"
+                  aria-label="ClientAssertionType"
+                  aria-describedby="generate-button"
+                  value={clientAssertionType}
+                  onChange={(e) => setClientAssertionType(e.target.value)}
+              />
+            </Form.Group>
+        )}
+        {props.pid && (
+            <Form.Group className="mb-3" controlId="pid">
+              <Form.Label>Pid</Form.Label>
+              <FormControl
+                  placeholder="Pid"
+                  aria-label="Pid"
+                  aria-describedby="generate-button"
+                  value={pid}
+                  onChange={(e) => setPid(e.target.value)}
+              />
+            </Form.Group>
+        )}
         <Button
           variant="outline-secondary"
           id="generate-button"
@@ -254,6 +350,28 @@ const TokenGenerator = () => {
             scope={{ default: "nav:pensjon/v1/tpregisteret" }}
             requestSupplier={maskinportenRequestSupplier}
             responseMapper={maskinportenResponseMapper}
+          />
+        </Col>
+        <Col>
+          <h2>Idporten</h2>
+          <TokenPanel
+              pid={{default:"12356788990"}}
+              code={{default: "1231"}}
+              clientId={{ default: "889640782" }}
+              clientAssertion={{default: "waew1"}}
+              clientAssertionType={{ default: "nav:pensjon/v1/tpregisteret" }}
+              requestSupplier={idportenRequestSupplier}
+              responseMapper={idportenResponseMapper}
+          />
+        </Col>
+        <Col>
+          <h2>Tokenx</h2>
+          <TokenPanel
+              clientAssertion={{ default: "889640782" }}
+              subjectToken={{default: "subject"}}
+              audience={{default: "aud"}}
+              requestSupplier={tokenxRequestSupplier}
+              responseMapper={tokenxResponseMapper}
           />
         </Col>
       </Row>
