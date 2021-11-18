@@ -123,6 +123,13 @@ class IdPortenMock(
         }
     }
 
+    @GetMapping(value = ["/login-helper"])
+    fun doLoginHelper(@RequestParam("pid") pid: String, @RequestParam("nonce", required = false) nonce: String, @RequestParam("state") state: String): ResponseEntity<Any> {
+        val idPortenSession = idPortenSessionRepository.save(IdPortenSession(pid = pid, nonce = nonce))
+
+        return ResponseEntity.status(200).body(idPortenSession.code)
+    }
+
     @GetMapping(value = ["/login"])
     fun doLogin(@RequestParam("redirect") redirect: String, @RequestParam("pid") pid: String, @RequestParam("nonce", required = false) nonce: String, @RequestParam("state") state: String): ResponseEntity<Any> {
         val idPortenSession = idPortenSessionRepository.save(IdPortenSession(pid = pid, nonce = nonce))

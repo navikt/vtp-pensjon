@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, {FormEvent, useContext, useEffect, useState} from "react";
 import {
   Button,
   Col,
@@ -25,7 +25,12 @@ import {
 import { stsRequestSupplier, stsResponseMapper } from "./support/StsSupport";
 import { RequestParameters } from "./RequestParameters";
 import {tokenxRequestSupplier, tokenxResponseMapper} from "./support/TokenExchangeSupport";
-import {idportenRequestSupplier, idportenResponseMapper} from "./support/IdPortenSupport";
+import {
+  idportenRequestSupplier,
+  idportenResponseMapper,
+} from "./support/IdPortenSupport";
+import TokenLogin from "./TokenLogin";
+import {DataContext} from "./IdportenLoginContext";
 
 type State =
   | {
@@ -57,7 +62,6 @@ function TokenPanel(props: {
   tenantId?: Foo;
   username?: Foo;
   code?: Foo;
-  clientAssertionType?: Foo;
   grantType?: Foo;
   pid?: Foo;
   requestSupplier: (
@@ -75,11 +79,9 @@ function TokenPanel(props: {
   const [clientAssertion, setClientAssertion] = useState<string | undefined>(props.clientAssertion?.default)
   const [audience, setAudience] = useState<string | undefined>(props.audience?.default)
   const [subjectToken, setSubjectToken] = useState<string | undefined>(props.subjectToken?.default)
-  const [clientAssertionType, setClientAssertionType] = useState<string | undefined>(props.clientAssertionType?.default)
-  const [code, setCode] = useState<string | undefined>(props.code?.default)
   const [grantType] = useState<string | undefined>(props.grantType?.default)
   const [pid, setPid] = useState<string | undefined>(props.pid?.default)
-
+  const {code} = useContext(DataContext)
 
   function getRequest() {
     return props.requestSupplier({
@@ -92,7 +94,6 @@ function TokenPanel(props: {
       tenantId: tenantId,
       username: username,
       code: code,
-      clientAssertionType: clientAssertionType,
       grantType: grantType,
       pid: pid
     });
@@ -110,13 +111,12 @@ function TokenPanel(props: {
         tenantId: tenantId,
         username: username,
         code: code,
-        clientAssertionType: clientAssertionType,
         grantType: grantType,
         pid: pid
       })));
     })();
-  }, [clientId, username, tenantId, props, resource, scope, audience, clientAssertion, clientAssertionType,
-  code, grantType, subjectToken, pid]);
+  }, [clientId, username, tenantId, props, resource, scope, audience, clientAssertion,
+    grantType, subjectToken, code, pid]);
 
   async function generateToken(request: Request): Promise<string> {
     const response = await fetch(request);
@@ -256,30 +256,6 @@ function TokenPanel(props: {
               />
             </Form.Group>
         )}
-        {props.code && (
-            <Form.Group className="mb-3" controlId="code">
-              <Form.Label>Code</Form.Label>
-              <FormControl
-                  placeholder="Code"
-                  aria-label="Code"
-                  aria-describedby="generate-button"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-              />
-            </Form.Group>
-        )}
-        {props.clientAssertionType && (
-            <Form.Group className="mb-3" controlId="client_assertion_type">
-              <Form.Label>Client Assertion Type</Form.Label>
-              <FormControl
-                  placeholder="ClientAssertionType"
-                  aria-label="ClientAssertionType"
-                  aria-describedby="generate-button"
-                  value={clientAssertionType}
-                  onChange={(e) => setClientAssertionType(e.target.value)}
-              />
-            </Form.Group>
-        )}
         {props.pid && (
             <Form.Group className="mb-3" controlId="pid">
               <Form.Label>Pid</Form.Label>
@@ -354,12 +330,13 @@ const TokenGenerator = () => {
         </Col>
         <Col>
           <h2>Idporten</h2>
+          <TokenLogin
+            pid={"213"}
+                />
           <TokenPanel
-              pid={{default:"12356788990"}}
-              code={{default: "1231"}}
+              code={{}}
               clientId={{ default: "889640782" }}
               clientAssertion={{default: "waew1"}}
-              clientAssertionType={{ default: "nav:pensjon/v1/tpregisteret" }}
               requestSupplier={idportenRequestSupplier}
               responseMapper={idportenResponseMapper}
           />
