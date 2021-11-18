@@ -8,10 +8,10 @@ const TokenLogin = (props: any) => {
     const {setCode} = useContext(DataContext)
     const updateContext = useCallback(function(res){
         setCode(res)
-    }, []);
+    }, [setCode]);
 
     useEffect(() => {
-        console.log("running event")
+        console.log("Idporten Login")
         fetch(`http://localhost:8060/rest/idporten/login-helper?pid=${pid}&state=123&nonce=1231`, {
                     method: 'GET',
                     headers: {
@@ -22,7 +22,7 @@ const TokenLogin = (props: any) => {
                 }).then(res => res.text().then(res => {
                     updateContext(res)
                 }))
-    }, [pid])
+    }, [pid, updateContext])
 
     return(
         <Form style={{ marginBottom: "12px" }}>

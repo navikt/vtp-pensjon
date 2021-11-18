@@ -12,7 +12,7 @@ import TokenGenerator from "./components/TokenGenerator/TokenGenerator";
 import Loginservice from "./components/Loginservice/Loginservice";
 import {Unleash} from "./components/Unleash/unleash";
 import IdPorten from "./components/IdPorten/IdPorten";
-import DataContextProvider, {DataContext} from "./components/TokenGenerator/IdportenLoginContext";
+import DataContextProvider from "./components/TokenGenerator/IdportenLoginContext";
 
 function App() {
   return (

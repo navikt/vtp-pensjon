@@ -62,7 +62,6 @@ function TokenPanel(props: {
   tenantId?: Foo;
   username?: Foo;
   code?: Foo;
-  clientAssertionType?: Foo;
   grantType?: Foo;
   pid?: Foo;
   requestSupplier: (
@@ -80,7 +79,6 @@ function TokenPanel(props: {
   const [clientAssertion, setClientAssertion] = useState<string | undefined>(props.clientAssertion?.default)
   const [audience, setAudience] = useState<string | undefined>(props.audience?.default)
   const [subjectToken, setSubjectToken] = useState<string | undefined>(props.subjectToken?.default)
-  const [clientAssertionType, setClientAssertionType] = useState<string | undefined>(props.clientAssertionType?.default)
   const [grantType] = useState<string | undefined>(props.grantType?.default)
   const [pid, setPid] = useState<string | undefined>(props.pid?.default)
   const {code} = useContext(DataContext)
@@ -96,7 +94,6 @@ function TokenPanel(props: {
       tenantId: tenantId,
       username: username,
       code: code,
-      clientAssertionType: clientAssertionType,
       grantType: grantType,
       pid: pid
     });
@@ -114,13 +111,12 @@ function TokenPanel(props: {
         tenantId: tenantId,
         username: username,
         code: code,
-        clientAssertionType: clientAssertionType,
         grantType: grantType,
         pid: pid
       })));
     })();
-  }, [clientId, username, tenantId, props, resource, scope, audience, clientAssertion, clientAssertionType,
-  grantType, subjectToken, pid]);
+  }, [clientId, username, tenantId, props, resource, scope, audience, clientAssertion,
+    grantType, subjectToken, code, pid]);
 
   async function generateToken(request: Request): Promise<string> {
     const response = await fetch(request);
