@@ -11,7 +11,7 @@ export function idportenRequestSupplier(
         throw Error("Must supply 'clientAssertion'");
     }
     if (requestParameters.code === undefined) {
-        throw Error("Must supply 'pid'")
+        throw Error("Must supply 'code'")
     }
 
     if (requestParameters.clientId === "" ||

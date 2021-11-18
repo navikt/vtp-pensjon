@@ -37,7 +37,6 @@ const TokenLogin = (props: any) => {
             />
         </Form.Group>
         </Form>
-
     )
 }
 

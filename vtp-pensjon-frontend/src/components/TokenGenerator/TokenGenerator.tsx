@@ -260,18 +260,6 @@ function TokenPanel(props: {
               />
             </Form.Group>
         )}
-        {props.clientAssertionType && (
-            <Form.Group className="mb-3" controlId="client_assertion_type">
-              <Form.Label>Client Assertion Type</Form.Label>
-              <FormControl
-                  placeholder="ClientAssertionType"
-                  aria-label="ClientAssertionType"
-                  aria-describedby="generate-button"
-                  value={clientAssertionType}
-                  onChange={(e) => setClientAssertionType(e.target.value)}
-              />
-            </Form.Group>
-        )}
         {props.pid && (
             <Form.Group className="mb-3" controlId="pid">
               <Form.Label>Pid</Form.Label>
@@ -357,7 +345,6 @@ const TokenGenerator = () => {
               responseMapper={idportenResponseMapper}
           />
         </Col>
-
         <Col>
           <h2>Tokenx</h2>
           <TokenPanel
