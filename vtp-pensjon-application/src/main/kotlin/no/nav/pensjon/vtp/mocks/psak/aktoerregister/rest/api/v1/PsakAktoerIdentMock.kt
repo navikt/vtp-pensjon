@@ -33,10 +33,12 @@ class PsakAktoerIdentMock(private val personModellRepository: PersonModellReposi
         validateRequest(requestIdenter)
 
         return requestIdenter.map { ident ->
-            mapOf(ident to IdentinfoForAktoer(
-                identer = hentIdenter(ident)
-                    .filter { identinfo -> identinfo.identgruppe == identgruppe || identgruppe == null }
-            ))
+            mapOf(
+                ident to IdentinfoForAktoer(
+                    identer = hentIdenter(ident)
+                        .filter { identinfo -> identinfo.identgruppe == identgruppe || identgruppe == null }
+                )
+            )
         }.associate { it.entries.first().toPair() }
     }
 
@@ -60,7 +62,6 @@ class PsakAktoerIdentMock(private val personModellRepository: PersonModellReposi
             )
         )
     }
-
 
     private fun validateRequest(identer: Set<String>) {
         require(identer.isNotEmpty()) { "Ville kastet \"MissingIdenterException\"" }
