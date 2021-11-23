@@ -22,7 +22,7 @@ class SamboerforholdController(
     @ApiOperation(value = "Henter alle samboerforhold")
     fun hentSamboer(
         @PathVariable("pid") pid: String
-    ): ResponseEntity<List<SamboerDTO>> = (
+    ): ResponseEntity<SamboerDTO> =
         personModellRepository.findById(pid).let {
             it?.samboerforhold?.map {
                 SamboerDTO(
@@ -33,11 +33,10 @@ class SamboerforholdController(
                     opprettetAv = it.opprettetAv
                 ).apply {
                     add(linkTo<SamboerforholdController> { hentSamboer(pid) }.withSelfRel())
-                    add(linkTo<SamboerforholdController> { avsluttForhold(it.id) }.withRel("avslutt"))
+                    // add(linkTo<SamboerforholdController> { avsluttForhold(it.id) }.withRel("avslutt"))
                 }
             }
-        } ?: emptyList()
-        ).asResponseEntity()
+        }?.first()?.asResponseEntity() ?: ResponseEntity.status(NOT_FOUND).build<SamboerDTO>()
 
     @PostMapping("/api/samboer")
     @ApiOperation(value = "Registrer samboerforhold")
