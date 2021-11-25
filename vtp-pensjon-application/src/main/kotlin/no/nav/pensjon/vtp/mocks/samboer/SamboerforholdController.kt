@@ -4,10 +4,10 @@ import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import no.nav.pensjon.vtp.testmodell.personopplysning.SamboerforholdModell
-import no.nav.pensjon.vtp.util.asResponseEntity
 import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.HttpStatus.*
 import org.springframework.http.ResponseEntity
+import org.springframework.http.ResponseEntity.noContent
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -22,9 +22,9 @@ class SamboerforholdController(
     @ApiOperation(value = "Henter alle samboerforhold")
     fun hentSamboer(
         @PathVariable("pid") pid: String
-    ): ResponseEntity<SamboerDTO> =
-        personModellRepository.findById(pid).let {
-            it?.samboerforhold?.map {
+    ): ResponseEntity<SamboerDTO> = personModellRepository.findById(pid)
+        ?.run {
+            samboerforhold.map {
                 SamboerDTO(
                     fnrInnmelder = it.innmelder,
                     fnrMotpart = it.motpart,
@@ -35,8 +35,10 @@ class SamboerforholdController(
                     add(linkTo<SamboerforholdController> { hentSamboer(pid) }.withSelfRel())
                     // add(linkTo<SamboerforholdController> { avsluttForhold(it.id) }.withRel("avslutt"))
                 }
-            }
-        }?.first()?.asResponseEntity() ?: ResponseEntity.status(NOT_FOUND).build<SamboerDTO>()
+            }.firstOrNull()
+        }
+        ?.let { ResponseEntity.ok(it) }
+        ?: noContent().build()
 
     @PostMapping("/api/samboer")
     @ApiOperation(value = "Registrer samboerforhold")
