@@ -5,7 +5,7 @@ on:
     branches:
       - vtp-pensjon-T4    # Push events on master branch
 env:
-  IMAGE_BASE: ghcr.io/${{ github.repository }}/vtp-pensjon-t4
+  IMAGE_BASE: ghcr.io/${{ github.repository }}/vtp-pensjon
 
 jobs:
   build:
@@ -37,6 +37,7 @@ jobs:
       - name: Build and push Docker image
         run: |
           COMMIT=$(git rev-parse --short=12 HEAD)
-          export VERSION="$TIME-$COMMIT"
+          export VERSION="$TIME-$COMMIT-t4-only"
+          export VERSION="$TIME-$COMMIT-t4-only"
           docker build --pull --tag ${IMAGE_BASE}:${VERSION} .
           docker push ${IMAGE_BASE}:${VERSION}
