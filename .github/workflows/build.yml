@@ -24,7 +24,7 @@ jobs:
             ${{ runner.os }}-maven-
       - id: build
         run: |
-          mvn package -B -Dfile.encoding=UTF-8
+          mvn clean install -B -Dfile.encoding=UTF-8
 
       - name: Log in to the Container registry
         uses: docker/login-action@v1
