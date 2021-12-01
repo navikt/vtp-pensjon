@@ -18,14 +18,13 @@ jobs:
           java-version: '11'
       - uses: actions/cache@v2
         with:
-          path: ~/.m2/repository
-          key: maven-${{ hashFiles('**server/pom.xml') }}
+          path: ~/.m2
+          key: "${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}"
           restore-keys: |
-            maven-${{ hashFiles('**server/pom.xml') }}
-            maven-
+            ${{ runner.os }}-maven-
       - id: build
         run: |
-          mvn clean install -Dfile.encoding=UTF-8
+          mvn package -B -Dfile.encoding=UTF-8
 
       - name: Log in to the Container registry
         uses: docker/login-action@v1
@@ -36,8 +35,9 @@ jobs:
 
       - name: Build and push Docker image
         run: |
+          TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
           COMMIT=$(git rev-parse --short=12 HEAD)
           export VERSION="$TIME-$COMMIT-t4-only"
-          export VERSION="$TIME-$COMMIT-t4-only"
+          echo "Building ${IMAGE_BASE}:$VERSION"
           docker build --pull --tag ${IMAGE_BASE}:${VERSION} .
           docker push ${IMAGE_BASE}:${VERSION}
