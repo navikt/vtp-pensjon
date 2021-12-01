@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teampensjon
 spec:
-  image: ghcr.io/navikt/vtp-pensjon/vtp-pensjon:t4-version-only-anno-09.11.2020
+  image: ghcr.io/navikt/vtp-pensjon/vtp-pensjon:2021.12.01-11.24-ef6b4a1bce49-t4-only
   port: 8060 # Required. The port number which is exposed by the container and should receive HTTP traffic.
   liveness: # HTTP endpoint that signals 200 OK when the application is running.
     path: /rest/isAlive
@@ -39,9 +39,4 @@ spec:
     - "https://vtp-pensjon-t4.nais.preprod.local/"
   vault:
     enabled: false
-  env:
-    - name: VTP_KAFKA_DISABLE
-      value: "true"
-    - name: VTP_LDAP_DISABLE
-      value: "true"
 

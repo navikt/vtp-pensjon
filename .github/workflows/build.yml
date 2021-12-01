@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - vtp-pensjon-T4    # Push events on master branch
+    paths-ignore:
+      - '.deploy'
 env:
   IMAGE_BASE: ghcr.io/${{ github.repository }}/vtp-pensjon
 
