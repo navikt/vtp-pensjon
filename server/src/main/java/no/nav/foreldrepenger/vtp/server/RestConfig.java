@@ -33,8 +33,6 @@ public class RestConfig {
 
     public void setup(TestscenarioBuilderRepository testScenarioRepository,
                       GsakRepo gsakRepo,
-                      LocalKafkaProducer localKafkaProducer,
-                      AdminClient kafkaAdminClient,
                       JournalRepository journalRepository,
                       PensjonTestdataService pensjonTestdataService) {
         // Setup RESTEasy's HttpServletDispatcher at "/api/*".
@@ -53,8 +51,6 @@ public class RestConfig {
                 defaultContextObjects.put(TestscenarioTemplateRepository.class, templateRepository);
                 defaultContextObjects.put(JournalRepository.class, journalRepository);
                 defaultContextObjects.put(GsakRepo.class,gsakRepo);
-                defaultContextObjects.put(LocalKafkaProducer.class, localKafkaProducer);
-                defaultContextObjects.put(AdminClient.class, kafkaAdminClient);
                 defaultContextObjects.put(PensjonTestdataService.class, pensjonTestdataService);
             }
         });
