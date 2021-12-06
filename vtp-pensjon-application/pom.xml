@@ -263,6 +263,11 @@
                 <artifactId>dialog-v1-tjenestespesifikasjon</artifactId>
                 <version>${tjenestespesifikasjoner.version}</version>
             </dependency>
+            <dependency>
+                <groupId>no.nav.pensjon.brev</groupId>
+                <artifactId>pensjon-brevbaker-api-model</artifactId>
+                <version>1.2.6</version>
+            </dependency>
 
             <!-- Eksterne bibliotek -->
             <dependency>
@@ -504,6 +509,10 @@
         <dependency>
             <groupId>no.nav.tjenestespesifikasjoner</groupId>
             <artifactId>behandleArbeidOgAktivitetOppgave-v1-tjenestespesifikasjon</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.brev</groupId>
+            <artifactId>pensjon-brevbaker-api-model</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
