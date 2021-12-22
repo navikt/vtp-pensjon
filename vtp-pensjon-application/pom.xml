@@ -28,7 +28,7 @@
 
         <maven.test.skip>false</maven.test.skip>
 
-        <cxf.version>3.4.5</cxf.version>
+        <cxf.version>3.5.0</cxf.version>
         <tjenestespesifikasjoner.version>1.2020.07.17-17.06-31e5aa824db7</tjenestespesifikasjoner.version>
         <pensjon-tjenestespesifikasjoner.version>1.2020.08.22-15.02-5a6bc2023040</pensjon-tjenestespesifikasjoner.version>
         <swagger.version>1.6.3</swagger.version>
