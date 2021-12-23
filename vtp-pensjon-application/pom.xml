@@ -652,7 +652,7 @@
             <plugin>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-codegen-plugin</artifactId>
-                <version>3.4.5</version>
+                <version>${cxf.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.cxf.xjcplugins</groupId>
