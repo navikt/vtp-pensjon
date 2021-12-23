@@ -241,6 +241,7 @@ class AzureAdMock(
                     .toString(), // user id - which is normally a UUID in Azure AD
                 "name" to user.displayName,
                 "preferred_username" to user.email,
+                "NAVident" to ansattId
             ),
             scope = scope,
             sid = sid,

@@ -2,7 +2,7 @@ package no.nav.pensjon.vtp.testmodell.ansatt
 
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
-import java.util.*
+import kotlin.random.Random.Default.nextInt
 
 @Service
 class AnsattService(
@@ -10,11 +10,11 @@ class AnsattService(
     private var eventPublisher: ApplicationEventPublisher
 ) {
     fun addAnnsatt(
-        cn: String = UUID.randomUUID().toString(),
-        givenname: String = UUID.randomUUID().toString(),
-        sn: String = UUID.randomUUID().toString(),
-        displayName: String = UUID.randomUUID().toString(),
-        email: String = UUID.randomUUID().toString(),
+        cn: String = randomString(10),
+        givenname: String = randomString(5),
+        sn: String = randomString(5),
+        displayName: String = randomString(10),
+        email: String = randomString(10),
         groups: List<String>,
         enheter: List<Long>,
         generated: Boolean
@@ -37,4 +37,13 @@ class AnsattService(
         .filter { includeGenerated || !it.generated }
 
     fun findByCn(ident: String) = ansatteIndeks.findByCn(ident)
+
+    companion object {
+        private val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+
+        private fun randomString(length: Int) = (1..length)
+            .map { nextInt(0, charPool.size) }
+            .map(charPool::get)
+            .joinToString("")
+    }
 }
