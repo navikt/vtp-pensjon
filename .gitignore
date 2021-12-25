@@ -24,8 +24,5 @@ application-local.properties
 allure-results/*
 *-result.json
 server/src/main/resources/webapps
-resources/ssl-terminator/localhost.*
-/node_modules/.yarn-integrity
-yarn.lock
 .DS_Store
 mocks/journalpost-mock/.openapi-generator/
