@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.auth.sts
 
-import io.swagger.annotations.Api
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport
 import no.nav.pensjon.vtp.auth.OidcTokenGenerator
 import no.nav.pensjon.vtp.auth.getUser
@@ -24,7 +24,7 @@ import java.util.Base64.getUrlEncoder
 import javax.xml.bind.JAXB.marshal
 
 @RestController
-@Api(tags = ["Security Token Service"])
+@Tag(name = "Security Token Service")
 @RequestMapping("/rest/v1/sts")
 class STSRestTjeneste(
     private val oidcTokenGenerator: OidcTokenGenerator,

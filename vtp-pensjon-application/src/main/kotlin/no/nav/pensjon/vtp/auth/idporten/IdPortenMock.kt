@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.auth.idporten
 
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport.*
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
@@ -32,7 +32,7 @@ class IdPortenMock(
     fun userinfo() = "userinfo".asResponseEntity()
 
     @GetMapping(value = ["/.well-known/openid-configuration"])
-    @ApiOperation(value = "Idporten well-known URL", notes = "Mock impl av ID-porten well-known URL. ")
+    @Operation(summary = "Idporten well-known URL", description = "Mock impl av ID-porten well-known URL. ")
     fun wellKnown(req: HttpServletRequest): WellKnownResponse {
         return WellKnownResponse(
             issuer = issuer(),
@@ -52,15 +52,15 @@ class IdPortenMock(
     }
 
     @GetMapping("/jwks")
-    @ApiOperation(value = "Idporten public key set")
+    @Operation(summary = "Idporten public key set")
     fun jwks() = Keys(jsonWebKeySupport.jwks()).asResponseEntity()
 
     @GetMapping("/privateKey")
-    @ApiOperation(value = "Idporten public key set")
+    @Operation(summary = "Idporten public key set")
     fun privateKey() = jsonWebKeySupport.privateKey()
 
     @PostMapping("/token")
-    @ApiOperation(value = "Exchange token via tokendings")
+    @Operation(summary = "Exchange token via tokendings")
     fun token(
         @RequestParam("grant_type") grantType: String,
         @RequestParam("code") code: String,

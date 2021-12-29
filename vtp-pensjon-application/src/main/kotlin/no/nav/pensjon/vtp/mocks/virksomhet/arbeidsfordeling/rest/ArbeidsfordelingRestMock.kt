@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsfordeling.rest
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PostMapping
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@Api(tags = ["Norg2 enheter"])
+@Tag(name = "Norg2 enheter")
 @RequestMapping("/rest/norg2/api/v1/arbeidsfordeling")
 class ArbeidsfordelingRestMock(private val enheterIndeks: EnheterIndeks) {
     @PostMapping(
@@ -18,7 +18,7 @@ class ArbeidsfordelingRestMock(private val enheterIndeks: EnheterIndeks) {
         produces = [MediaType.APPLICATION_JSON_VALUE],
         consumes = [MediaType.APPLICATION_JSON_VALUE]
     )
-    @ApiOperation(value = "allenheter", notes = "Returnerer enheter fra NORG2")
+    @Operation(summary = "allenheter", description = "Returnerer enheter fra NORG2")
     fun hentAlleEnheter(@RequestBody request: ArbeidsfordelingRequest) =
         enheterIndeks.alleEnheter
             .filter {
@@ -45,7 +45,7 @@ class ArbeidsfordelingRestMock(private val enheterIndeks: EnheterIndeks) {
         produces = [MediaType.APPLICATION_JSON_VALUE],
         consumes = [MediaType.APPLICATION_JSON_VALUE]
     )
-    @ApiOperation(value = "finnenhet", notes = "Returnerer  enheter fra NORG2")
+    @Operation(summary = "finnenhet", description = "Returnerer  enheter fra NORG2")
     fun finnEnhet(@RequestBody request: ArbeidsfordelingRequest): Array<ArbeidsfordelingResponse> {
         val enhet =
             if (request.diskresjonskode != null && listOf("UFB", "SPSF", "SPFO").contains(request.diskresjonskode)) {

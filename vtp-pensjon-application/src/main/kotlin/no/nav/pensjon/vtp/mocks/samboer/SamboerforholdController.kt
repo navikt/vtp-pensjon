@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.samboer
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import no.nav.pensjon.vtp.testmodell.personopplysning.SamboerforholdModell
 import org.springframework.hateoas.server.mvc.linkTo
@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
-@Api(tags = ["Samboerforhold"])
+@Tag(name = "Samboerforhold")
 @RequestMapping("/rest/")
 class SamboerforholdController(
     private val personModellRepository: PersonModellRepository,
 ) {
 
     @GetMapping("api/samboer/{pid}")
-    @ApiOperation(value = "Henter alle samboerforhold")
+    @Operation(summary = "Henter alle samboerforhold")
     fun hentSamboer(
         @PathVariable("pid") pid: String
     ): ResponseEntity<SamboerDTO> = personModellRepository.findById(pid)
@@ -41,7 +41,7 @@ class SamboerforholdController(
         ?: noContent().build()
 
     @PostMapping("/api/samboer")
-    @ApiOperation(value = "Registrer samboerforhold")
+    @Operation(summary = "Registrer samboerforhold")
     fun registrerForhold(
         @RequestBody request: SamboerDTO,
     ) = personModellRepository.findById(request.fnrInnmelder)?.apply {
@@ -61,7 +61,7 @@ class SamboerforholdController(
     } ?: ResponseEntity.status(NOT_FOUND).build<Any>()
 
     @PutMapping("/api/forhold/{forholdId}/avslutt")
-    @ApiOperation(value = "Avslutt samboerforhold")
+    @Operation(summary = "Avslutt samboerforhold")
     fun avsluttForhold(
         @PathVariable forholdId: String
     ) = personModellRepository.findBySamboerforholdId(forholdId)

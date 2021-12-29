@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.dokdist.fordeling
 
-import io.swagger.annotations.Api
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dokdist.fordeling.generated.model.DistribuerJournalpostRequestToModel
 import no.nav.dokdist.fordeling.generated.model.DistribuerJournalpostResponseToModel
 import no.nav.pensjon.vtp.testmodell.dokdist.Adresse
@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Api(tags = ["Dokdist"])
+@Tag(name = "Dokdist")
 @RequestMapping("/rest/dokdist/rest/v1")
 class DokdistFordelingMock(
     private val dokdistRepository: DokdistRepository,

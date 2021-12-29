@@ -2,12 +2,12 @@ package no.nav.pensjon.vtp.mocks.pdl
 
 import graphql.ExecutionInput
 import graphql.GraphQL
-import io.swagger.annotations.Api
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Api(tags = ["PDL"])
+@Tag(name = "PDL")
 @RequestMapping("/rest/pdl-api")
 class PdlMock(private val graphQL: GraphQL) {
 

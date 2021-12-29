@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.auth
 
-import io.swagger.annotations.Api
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import org.apache.http.client.utils.URIBuilder
 import org.jose4j.jwt.JwtClaims
@@ -29,7 +29,7 @@ data class UserSummary(
 )
 
 @RestController
-@Api(tags = ["LoginService"])
+@Tag(name = "LoginService")
 @RequestMapping("/rest/loginservice")
 class LoginService(
     private val jsonWebKeySupport: JsonWebKeySupport,

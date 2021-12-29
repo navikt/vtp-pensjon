@@ -15,9 +15,9 @@ class AdresserTest {
 
     private fun sjekkAdresseIndeks(sc: AdresseIndeks) {
         val bostedsadresse = sc.finn(AdresseType.BOSTEDSADRESSE, Landkode.NOR)
-        Assertions.assertThat(bostedsadresse).isNotNull()
-        Assertions.assertThat(sc.finn(AdresseType.MIDLERTIDIG_POSTADRESSE, Landkode.NOR)).isNotNull()
-        Assertions.assertThat(sc.finn(AdresseType.MIDLERTIDIG_POSTADRESSE, Landkode.USA)).isNotNull()
-        Assertions.assertThat(sc.finn(AdresseType.POSTADRESSE, Landkode.NOR)).isNotNull()
+        Assertions.assertThat(bostedsadresse).isNotNull
+        Assertions.assertThat(sc.finn(AdresseType.MIDLERTIDIG_POSTADRESSE, Landkode.NOR)).isNotNull
+        Assertions.assertThat(sc.finn(AdresseType.MIDLERTIDIG_POSTADRESSE, Landkode.USA)).isNotNull
+        Assertions.assertThat(sc.finn(AdresseType.POSTADRESSE, Landkode.NOR)).isNotNull
     }
 }

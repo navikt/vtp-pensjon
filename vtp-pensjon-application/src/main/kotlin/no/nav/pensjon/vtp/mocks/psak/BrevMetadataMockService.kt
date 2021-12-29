@@ -1,13 +1,13 @@
 package no.nav.pensjon.vtp.mocks.psak
 
-import io.swagger.annotations.Api
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.testmodell.brev.BrevMetadataIndeks
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@Api(tags = ["Brev"])
+@Tag(name = "Brev")
 @RequestMapping("/rest/api/brevdata/allBrev")
 class BrevMetadataMockService(private val brevMetadataIndeks: BrevMetadataIndeks) {
 

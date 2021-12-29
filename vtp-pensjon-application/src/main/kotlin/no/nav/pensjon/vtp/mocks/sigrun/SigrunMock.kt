@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.sigrun
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import org.springframework.http.HttpStatus
@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@Api(tags = ["Sigrun/beregnetskatt"])
+@Tag(name = "Sigrun/beregnetskatt")
 @RequestMapping("/rest/api/beregnetskatt")
 class SigrunMock(
     private val personModellRepository: PersonModellRepository,
     private val inntektYtelseIndeks: InntektYtelseIndeks
 ) {
     @GetMapping
-    @ApiOperation(value = "beregnetskatt", notes = "Returnerer beregnetskatt fra Sigrun")
+    @Operation(summary = "beregnetskatt", description = "Returnerer beregnetskatt fra Sigrun")
     fun buildPermitResponse(
         @RequestHeader(value = "x-naturligident", required = false) brukerFnr: String?,
         @RequestHeader(value = "x-inntektsaar", required = false) inntektsAar: String?,

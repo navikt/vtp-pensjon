@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.fpformidling
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.mocks.fpformidling.dto.BehandlingUuidDto
 import no.nav.pensjon.vtp.mocks.fpformidling.dto.DokumentProdusertDto
 import no.nav.pensjon.vtp.mocks.fpformidling.dto.DokumentbestillingDto
@@ -15,14 +15,14 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
 @RestController
-@Api("/fpformidling")
+@Tag(name = "/fpformidling")
 @RequestMapping("/rest/fpformidling")
 class FpFormidlingMock {
     private val dokumentProduksjon: MutableMap<UUID, MutableList<String>> = ConcurrentHashMap()
     private val saksbehandlerTekst: MutableMap<UUID, TekstFraSaksbehandlerDto?> = ConcurrentHashMap()
 
     @PostMapping(value = ["/hent-dokumentmaler"])
-    @ApiOperation(value = "HentDokumentmalListe", notes = "Returnerer tilgjengelige dokumentmaler")
+    @Operation(summary = "HentDokumentmalListe", description = "Returnerer tilgjengelige dokumentmaler")
     fun hentDokumentmalListe(request: BehandlingUuidDto?) = HentBrevmalerDto(emptyList())
 
     @PostMapping(value = ["brev/maler"])

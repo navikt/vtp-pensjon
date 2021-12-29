@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.inntekt.hentinntektlistebolk
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.mocks.virksomhet.inntekt.hentinntektlistebolk.modell.HentInntektlisteBolkMapperRest
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks
 import no.nav.tjenester.aordningen.inntektsinformasjon.request.HentInntektListeBolkRequest
@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController
 import java.time.YearMonth
 
 @RestController
-@Api("/inntektskomponenten-ws/rs/api/v1/hentinntektlistebolk")
+@Tag(name = "/inntektskomponenten-ws/rs/api/v1/hentinntektlistebolk")
 @RequestMapping("/rest/inntektskomponenten-ws/rs/api/v1/hentinntektlistebolk")
 class HentInntektlisteBolkREST(
     private val hentInntektlisteBolkMapperRest: HentInntektlisteBolkMapperRest,
     private val inntektYtelseIndeks: InntektYtelseIndeks
 ) {
     @PostMapping
-    @ApiOperation(value = "HentInntektlisteBolk", notes = "Returnerer inntektliste fra Inntektskomponenten")
+    @Operation(summary = "HentInntektlisteBolk", description = "Returnerer inntektliste fra Inntektskomponenten")
     fun hentInntektlisteBolk(@RequestBody request: HentInntektListeBolkRequest) =
         HentInntektListeBolkResponse().apply {
             arbeidsInntektIdentListe = request.identListe.mapNotNull { aktoer ->

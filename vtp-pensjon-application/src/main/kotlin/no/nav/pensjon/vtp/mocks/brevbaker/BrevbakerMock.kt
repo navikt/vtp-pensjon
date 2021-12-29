@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.brevbaker
 
-import io.swagger.annotations.Api
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.brev.api.model.LetterMetadata
 import no.nav.pensjon.brev.api.model.LetterRequest
 import no.nav.pensjon.brev.api.model.LetterResponse
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
-@Api(tags = ["Brevbaker"])
+@Tag(name = "Brevbaker")
 @RequestMapping("rest/brevbaker")
 class BrevbakerMock {
 

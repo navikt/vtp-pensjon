@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.tps.aktoerregister.rest.api.v1
 
-import io.swagger.annotations.Api
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
@@ -13,7 +13,7 @@ private const val PERSONIDENT_IDENTGRUPPE = "NorskIdent"
 private const val GJELDENDE = "gjeldende"
 
 @RestController
-@Api(tags = ["aktoerregister"])
+@Tag(name = "aktoerregister")
 @RequestMapping("/rest/aktoerregister/api/v1/identer")
 class AktoerIdentMock {
     // TODO (TEAM FAMILIE) Lag mock-responser fra scenario NOSONAR

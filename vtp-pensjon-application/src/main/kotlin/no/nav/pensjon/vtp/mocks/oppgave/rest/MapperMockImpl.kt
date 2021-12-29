@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.oppgave.rest
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import io.swagger.annotations.Api
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@Api(tags = ["Mapper Mock"])
+@Tag(name = "Mapper Mock")
 @RequestMapping(
     value = ["/rest/oppgave/api/v1/mapper"],
     produces = [MediaType.APPLICATION_JSON_VALUE],

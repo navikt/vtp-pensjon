@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.psak.aktoerregister.rest.api.v1
 
-import io.swagger.annotations.Api
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModell
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import org.springframework.http.MediaType
@@ -20,7 +20,7 @@ private const val GJELDENDE = "gjeldende"
  */
 // TODO avklare denne med FP
 @RestController
-@Api(tags = ["aktoerregister"])
+@Tag(name = "aktoerregister")
 @RequestMapping("/rest/psak/aktoerregister/api/v1/identer")
 class PsakAktoerIdentMock(private val personModellRepository: PersonModellRepository) {
 

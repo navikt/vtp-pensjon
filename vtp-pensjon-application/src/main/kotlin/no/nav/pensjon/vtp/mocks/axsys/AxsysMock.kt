@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.axsys
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.axsys.model.AxsysEnhetDTO
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import no.nav.pensjon.vtp.testmodell.enheter.EnheterIndeks
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@Api(tags = ["AxsysMock"])
+@Tag(name = "AxsysMock")
 @RequestMapping("/rest/axsys/api/v1")
 class AxsysMock(
     private val ansatteIndeks: AnsatteIndeks,
@@ -26,7 +26,7 @@ class AxsysMock(
         value = ["/tilgang/{ident}"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    @ApiOperation(value = "hentTilgangerForIdent", notes = "Hent alle tilganger for en ident")
+    @Operation(summary = "hentTilgangerForIdent", description = "Hent alle tilganger for en ident")
     fun hentTilgangerForIdent(@PathVariable("ident") ident: String): TilgangerResponse {
         val enheter = ansatteIndeks.findByCn(ident)?.enheter?.let {
             enheterIndeks.findByEnhetIdIn(it)
@@ -51,7 +51,7 @@ class AxsysMock(
         value = ["/enhet/{id}/brukere"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    @ApiOperation(value = "hentAlleBrukereForEnhet", notes = "Hent alle brukere for en NAV-enhet")
+    @Operation(summary = "hentAlleBrukereForEnhet", description = "Hent alle brukere for en NAV-enhet")
     fun hentAlleBrukereForEnhet(@PathVariable("id") enhetsId: String): List<EnhetBruker> {
         return ansatteIndeks.findByEnhetsId(enhetsId = enhetsId.toLong()).map {
             EnhetBruker(

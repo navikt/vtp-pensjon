@@ -3,7 +3,7 @@ package no.nav.pensjon.vtp.auth.azuread
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.nimbusds.jose.JOSEObject
 import com.nimbusds.jwt.JWTClaimsSet
-import io.swagger.annotations.Api
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsatteIndeks
 import no.nav.pensjon.vtp.testmodell.ansatt.NAVAnsatt
 import org.springframework.http.HttpStatus.FORBIDDEN
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
 @RestController
-@Api(tags = ["AzureAd"])
+@Tag(name = "AzureAd")
 @RequestMapping("/rest/MicrosoftGraphApi")
 class MicrosoftGraphApiMock(private val ansatteIndeks: AnsatteIndeks) {
     @GetMapping(value = ["/oidc/userinfo"], produces = [APPLICATION_JSON_VALUE])

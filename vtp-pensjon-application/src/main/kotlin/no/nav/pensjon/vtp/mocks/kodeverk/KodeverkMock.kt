@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.kodeverk
 
-import io.swagger.annotations.Api
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.configuration.graphql.model.mapBostedsadresser
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
@@ -12,7 +12,7 @@ data class Betydning(val beskrivelser: Map<String, Beskrivelse>, val gyldigFra: 
 data class KodeBetydninger(val betydninger: Map<String, List<Betydning>>)
 
 @RestController
-@Api(tags = ["Kodeverk"])
+@Tag(name = "Kodeverk")
 @RequestMapping("rest/kodeverk/v1/kodeverk")
 class KodeverkMock(private val personModellRepository: PersonModellRepository) {
 
