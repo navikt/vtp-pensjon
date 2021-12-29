@@ -2,7 +2,7 @@ package no.nav.pensjon.vtp.auth.azuread
 
 import com.nimbusds.jose.JOSEObject
 import com.nimbusds.jwt.JWTClaimsSet
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
 import no.nav.pensjon.vtp.auth.*
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport.*
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsattService
@@ -61,7 +61,7 @@ class AzureAdMock(
     }
 
     @GetMapping(value = ["/{tenant}/v2.0/.well-known/openid-configuration"], produces = [APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "Azure AD Discovery url", notes = "Mock impl av Azure AD discovery urlen. ")
+    @Operation(summary = "Azure AD Discovery url", description = "Mock impl av Azure AD discovery urlen. ")
     fun wellKnown(req: HttpServletRequest, @PathVariable("tenant") tenant: String, @RequestParam("p") profile: String?) =
         WellKnownResponse(
             issuer = getIssuer(tenant, profile),
@@ -249,7 +249,7 @@ class AzureAdMock(
     }
 
     @GetMapping(value = ["/{tenant}/v2.0/users"], produces = [APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "/v2.0/users", notes = "Hent brukere/saksbehandlere man kan logge inn som")
+    @Operation(summary = "/v2.0/users", description = "Hent brukere/saksbehandlere man kan logge inn som")
     fun users(
         req: HttpServletRequest?,
         resp: HttpServletResponse?,
@@ -285,9 +285,9 @@ class AzureAdMock(
     }
 
     @PostMapping(value = ["/{tenant}/v2.0/users"])
-    @ApiOperation(
-        value = "/v2.0/users",
-        notes = "Creates a ansatt with the given attributes and issues a token for the ansatt"
+    @Operation(
+        summary = "/v2.0/users",
+        description = "Creates a ansatt with the given attributes and issues a token for the ansatt"
     )
     fun newUser(
         @PathVariable("tenant") tenant: String,

@@ -1,8 +1,8 @@
 package no.nav.pensjon.vtp.auth.isso
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.auth.*
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport.*
 import no.nav.pensjon.vtp.testmodell.ansatt.AnsattService
@@ -21,7 +21,7 @@ import java.util.UUID.randomUUID
 import javax.servlet.http.HttpServletRequest
 
 @RestController
-@Api(tags = ["Openam"])
+@Tag(name = "Openam")
 @RequestMapping("/rest/isso")
 class IssoMock(
     private val ansattService: AnsattService,
@@ -29,7 +29,7 @@ class IssoMock(
     @Value("\${ISSO_OAUTH2_ISSUER}") val issuer: String,
 ) {
     @GetMapping(value = ["/oauth2/users"], produces = [APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "oauth2/users", notes = "Liste over brukere til OpenAM-innlogging")
+    @Operation(summary = "oauth2/users", description = "Liste over brukere til OpenAM-innlogging")
     fun users(
         req: HttpServletRequest,
         @RequestParam(defaultValue = "winssochain") session: String?,
@@ -66,7 +66,7 @@ class IssoMock(
     }
 
     @PostMapping(value = ["/oauth2/access_token"], produces = [APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "oauth2/access_token", notes = "Mock impl av Oauth2 access_token")
+    @Operation(summary = "oauth2/access_token", description = "Mock impl av Oauth2 access_token")
     fun accessToken(
         @RequestHeader(AUTHORIZATION) authorization: String?,
         @RequestParam grant_type: String,
@@ -107,9 +107,9 @@ class IssoMock(
         ?: status(UNAUTHORIZED).body("Missing basic authorization header")
 
     @PostMapping(value = ["/oauth2/ansatt"])
-    @ApiOperation(
-        value = "oauth2/mock_access_token",
-        notes = "Creates a ansatt with the given attributes and issues a token for the ansatt"
+    @Operation(
+        summary = "oauth2/mock_access_token",
+        description = "Creates a ansatt with the given attributes and issues a token for the ansatt"
     )
     fun newAnsatt(
         @RequestHeader(AUTHORIZATION) authorization: String?,
@@ -154,16 +154,16 @@ class IssoMock(
     fun isAliveMockRassUrl() = "Server is ALIVE"
 
     @GetMapping(value = ["/oauth2/connect/jwk_uri"])
-    @ApiOperation(value = "oauth2/connect/jwk_uri", notes = "Mock impl av Oauth2 jwk_uri")
+    @Operation(summary = "oauth2/connect/jwk_uri", description = "Mock impl av Oauth2 jwk_uri")
     fun authorize() = Keys(oidcTokenGenerator.jwks()).asResponseEntity()
 
     /**
      * brukes til autentisere bruker slik at en slipper å autentisere senere. OpenAM mikk-makk .
      */
     @PostMapping("/json/authenticate")
-    @ApiOperation(value = "json/authenticate", notes = "Mock impl av OpenAM autenticate for service bruker innlogging")
+    @Operation(summary = "json/authenticate", description = "Mock impl av OpenAM autenticate for service bruker innlogging")
     fun serviceBrukerAuthenticate(
-        @ApiParam("Liste over aksjonspunkt som skal bekreftes, inklusiv data som trengs for å løse de.") enduserTemplate: EndUserAuthenticateTemplate?
+        @Parameter(description = "Liste over aksjonspunkt som skal bekreftes, inklusiv data som trengs for å løse de.") enduserTemplate: EndUserAuthenticateTemplate?
     ) = enduserTemplate
         ?.let {
             EndUserAuthenticateTemplate(
@@ -193,7 +193,7 @@ class IssoMock(
     }
 
     @GetMapping(value = ["/oauth2/.well-known/openid-configuration"])
-    @ApiOperation(value = "Discovery url", notes = "Mock impl av discovery urlen. ")
+    @Operation(summary = "Discovery url", description = "Mock impl av discovery urlen. ")
     fun wellKnown(req: HttpServletRequest) =
         WellKnownResponse(
             frontendUrl = getFrontendUrl(req),

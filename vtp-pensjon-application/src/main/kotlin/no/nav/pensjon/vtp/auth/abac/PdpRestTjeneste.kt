@@ -1,21 +1,21 @@
 package no.nav.pensjon.vtp.auth.abac
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Api(tags = ["ABAC-PDP-Mock"])
+@Tag(name = "ABAC-PDP-Mock")
 @RequestMapping("/rest/asm-pdp/authorize")
 class PdpRestTjeneste {
     @GetMapping(value = ["/ping"], produces = [MediaType.TEXT_PLAIN_VALUE])
     fun ping(): ResponseEntity<*> = ResponseEntity.ok().build<Any>()
 
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "asm-pdp/authorize", notes = "Mock impl av ABAC PDP authorize")
+    @Operation(summary = "asm-pdp/authorize", description = "Mock impl av ABAC PDP authorize")
     fun authorize(@RequestBody entity: String) =
         ResponseEntity.ok(buildPermitResponse(getPermits(entity)))
 

@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.oppgave.sak
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.mocks.oppgave.gask.sak.v1.GsakRepo
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import org.springframework.http.HttpStatus
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 
 @RestController
-@Api(tags = ["Gsak repository"])
+@Tag(name = "Gsak repository")
 @RequestMapping("/rest/api/sak")
 class SakRestTjeneste(private val personModellRepository: PersonModellRepository, private val gsakRepo: GsakRepo) {
     @PostMapping
-    @ApiOperation(value = "", notes = "Lager nytt saksnummer fra sekvens", response = OpprettSakResponseDTO::class)
+    @Operation(summary = "", description = "Lager nytt saksnummer fra sekvens")
     fun foreldrepengesoknadErketype(@RequestBody requestDTO: OpprettSakRequestDTO): OpprettSakResponseDTO {
         if (requestDTO.lokalIdent.isEmpty()) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Request mangler påkrevde verdier")

@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.journalforing
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.testmodell.dokument.JournalpostModellGenerator.lagJournalpostStrukturertDokument
 import no.nav.pensjon.vtp.testmodell.dokument.JournalpostModellGenerator.lagJournalpostUstrukturertDokument
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId
@@ -14,17 +14,16 @@ import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @RestController
-@Api(tags = ["Journalføringsmock"])
+@Tag(name = "Journalføringsmock")
 @RequestMapping("/rest/api/journalforing")
 class JournalforingRestTjeneste(private val journalRepository: JournalRepository) {
     @PostMapping(
         value = ["/foreldrepengesoknadxml/fnr/{fnr}/dokumenttypeid/{dokumenttypeid}"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    @ApiOperation(
-        value = "",
-        notes = "Lager en journalpost av type DokumenttypeId (se kilde for gyldige verdier, e.g. I000003). Innhold i journalpost legges ved som body.",
-        response = JournalforingResultatDto::class
+    @Operation(
+        summary = "",
+        description = "Lager en journalpost av type DokumenttypeId (se kilde for gyldige verdier, e.g. I000003). Innhold i journalpost legges ved som body.",
     )
     fun foreldrepengesoknadErketype(
         @RequestBody xml: String?,

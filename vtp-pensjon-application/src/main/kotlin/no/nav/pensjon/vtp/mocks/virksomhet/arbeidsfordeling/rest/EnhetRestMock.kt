@@ -1,9 +1,7 @@
 package no.nav.pensjon.vtp.mocks.virksomhet.arbeidsfordeling.rest
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiResponse
-import io.swagger.annotations.ApiResponses
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.norg2.model.Norg2RsArbeidsfordeling
 import no.nav.norg2.model.Norg2RsEnhet
 import no.nav.norg2.model.Norg2RsOrganisering
@@ -15,31 +13,15 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate.of
 import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
-import java.util.*
 
 @RestController
-@Api(tags = ["Norg2 enheter"])
+@Tag(name = "Norg2 enheter")
 @RequestMapping("/rest/norg2/api/v1")
 class EnhetRestMock(private val enheterIndeks: EnheterIndeks) {
     @PostMapping(value = ["/arbeidsfordelinger"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(
-        value = "Returnerer alle arbeidsfordelinger basert på multiple set av søkekriterier",
-        response = Fordeling::class,
-        responseContainer = "List",
+    @Operation(
+        summary = "Returnerer alle arbeidsfordelinger basert på multiple set av søkekriterier",
         tags = ["arbeidsfordeling"]
-    )
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                code = 200,
-                message = "Success",
-                response = Fordeling::class,
-                responseContainer = "List"
-            ), ApiResponse(code = 400, message = "Bad request"), ApiResponse(
-                code = 404,
-                message = "Not found"
-            ), ApiResponse(code = 500, message = "Internal Server Error")
-        ]
     )
     fun getArbeidsFordelinger(
         @RequestBody(required = false) fordelinger: List<Fordeling?>?,
@@ -49,24 +31,9 @@ class EnhetRestMock(private val enheterIndeks: EnheterIndeks) {
     )
 
     @GetMapping(value = ["/enhet"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(
-        value = "Returnerer en filtrert liste av alle enheter",
-        response = Norg2RsEnhet::class,
-        responseContainer = "List",
+    @Operation(
+        summary = "Returnerer en filtrert liste av alle enheter",
         tags = ["enhet"]
-    )
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                code = 200,
-                message = "Success",
-                response = Norg2RsEnhet::class,
-                responseContainer = "List"
-            ), ApiResponse(code = 400, message = "Bad request"), ApiResponse(
-                code = 404,
-                message = "Not found"
-            ), ApiResponse(code = 500, message = "Internal Server Error")
-        ]
     )
     fun getAllEnheterUsingGET(
         @RequestParam(value = "enhetStatusListe", required = false, defaultValue = "") enhetStatusListe: List<String?>,
@@ -88,18 +55,9 @@ class EnhetRestMock(private val enheterIndeks: EnheterIndeks) {
     }
 
     @GetMapping(value = ["/enhet/navkontor/{geografiskOmraade}"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(
-        value = "Returnerer en NAV kontor som er en lokalkontor for spesifisert geografisk område",
-        response = Norg2RsEnhet::class,
+    @Operation(
+        summary = "Returnerer en NAV kontor som er en lokalkontor for spesifisert geografisk område",
         tags = ["enhet"]
-    )
-    @ApiResponses(
-        value = [
-            ApiResponse(code = 200, message = "Success", response = Norg2RsEnhet::class), ApiResponse(
-                code = 404,
-                message = "Not Found"
-            ), ApiResponse(code = 500, message = "Internal Server Error")
-        ]
     )
     fun getEnhetByGeografiskOmraadeUsingGET(
         @PathVariable("geografiskOmraade") geografiskOmraade: String,
@@ -107,18 +65,9 @@ class EnhetRestMock(private val enheterIndeks: EnheterIndeks) {
     ) = enEnhet(4407L)
 
     @GetMapping(value = ["/enhet/{enhetsnummer}"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(
-        value = "Returnerer en enhet basert på enhetsnummer",
-        response = Norg2RsEnhet::class,
+    @Operation(
+        summary = "Returnerer en enhet basert på enhetsnummer",
         tags = ["enhet"]
-    )
-    @ApiResponses(
-        value = [
-            ApiResponse(code = 200, message = "Success", response = Norg2RsEnhet::class), ApiResponse(
-                code = 404,
-                message = "Not Found"
-            ), ApiResponse(code = 500, message = "Internal Server Error")
-        ]
     )
     fun getEnhetUsingGET(@PathVariable("enhetsnummer") enhetsnummer: String) =
         norg2RsEnheter(enheterIndeks.alleEnheter)
@@ -126,19 +75,9 @@ class EnhetRestMock(private val enheterIndeks: EnheterIndeks) {
             ?: enEnhet(enhetsnummer.toLong())
 
     @GetMapping(value = ["/enhet/{enhetsnummer}/organisering"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(
-        value = "Returnerer en organiseringsliste for enhetsnummer",
-        response = Array<Norg2RsOrganisering>::class,
+    @Operation(
+        summary = "Returnerer en organiseringsliste for enhetsnummer",
         tags = ["enhet"]
-    )
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                code = 200,
-                message = "Success",
-                response = Array<Norg2RsOrganisering>::class
-            ), ApiResponse(code = 404, message = "Not Found"), ApiResponse(code = 500, message = "Internal Server Error")
-        ]
     )
     fun getOrganiseringListeForEnhet(@PathVariable("enhetsnummer") enhetsnummer: String): List<Norg2RsOrganisering> {
         val norg2RsEnhet = getEnhetUsingGET(enhetsnummer)

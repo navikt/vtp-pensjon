@@ -13,7 +13,7 @@ class FoedselsnummerTest {
     fun fiktiv_vilkaarlig_kjonn_lager_fnr() {
         val fiktiveFnr = FiktiveFnr()
         val fnr = fiktiveFnr.tilfeldigFnr()
-        Assertions.assertThat(fnr).isNotEmpty()
+        Assertions.assertThat(fnr).isNotEmpty
         Assertions.assertThat(fnr).hasSize(11)
     }
 

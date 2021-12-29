@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.samboer.proxy
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import no.nav.pensjon.vtp.testmodell.personopplysning.SamboerforholdModell
 import org.springframework.http.HttpStatus
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
-@Api(tags = ["Samboerforhold TPS proxy"])
+@Tag(name = "Samboerforhold TPS proxy")
 @RequestMapping("/rest/")
 class SamboerProxyController(
     private val personModellRepository: PersonModellRepository
 ) {
 
     @GetMapping("api/proxy/samboer/{pid}")
-    @ApiOperation(value = "Hent samboerforhold")
+    @Operation(summary = "Hent samboerforhold")
     fun hentSamboerforhold(
         @PathVariable("pid") pid: String
     ) = personModellRepository.findById(pid).let {
@@ -33,7 +33,7 @@ class SamboerProxyController(
     }
 
     @PostMapping("api/proxy/samboer")
-    @ApiOperation(value = "Opprett samboerforhold")
+    @Operation(summary = "Opprett samboerforhold")
     fun opprettSamboerforhold(
         @RequestBody request: SamboerProxyDTO
     ) = personModellRepository.findById(request.fnrInnmelder)?.apply {

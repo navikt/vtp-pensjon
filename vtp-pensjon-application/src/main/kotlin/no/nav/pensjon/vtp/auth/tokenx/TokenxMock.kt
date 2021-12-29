@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.auth.tokenx
 
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
 import no.nav.pensjon.vtp.auth.JsonWebKeySupport
 import no.nav.pensjon.vtp.util.asResponseEntity
 import no.nav.pensjon.vtp.util.withoutQueryParameters
@@ -21,7 +21,7 @@ class TokenxMock(
     fun dummy() = "pong".asResponseEntity()
 
     @GetMapping(value = ["/.well-known/oauth-authorization-server"], produces = [APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "TokenX well-known URL", notes = "Mock impl av TokenX well-known URL. ")
+    @Operation(summary = "TokenX well-known URL", description = "Mock impl av TokenX well-known URL. ")
     fun wellKnown(req: HttpServletRequest): WellKnownResponse {
         return WellKnownResponse(
             issuer = issuer(),
@@ -41,15 +41,15 @@ class TokenxMock(
     }
 
     @GetMapping("/jwks")
-    @ApiOperation(value = "TokenX public key set")
+    @Operation(summary = "TokenX public key set")
     fun jwks() = JsonWebKeySupport.Keys(jsonWebKeySupport.jwks()).asResponseEntity()
 
     @GetMapping("/privateKey")
-    @ApiOperation(value = "TokenX public key set")
+    @Operation(summary = "TokenX public key set")
     fun privateKey() = jsonWebKeySupport.privateKey()
 
     @PostMapping("/token")
-    @ApiOperation(value = "Exchange token via tokendings")
+    @Operation(summary = "Exchange token via tokendings")
     fun token(
         req: HttpServletRequest,
         @RequestParam("grant_type", defaultValue = "urn:ietf:params:oauth:grant-type:token-exchange") grantType: String,

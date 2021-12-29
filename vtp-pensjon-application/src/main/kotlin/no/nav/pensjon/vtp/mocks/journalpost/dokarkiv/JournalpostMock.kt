@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.journalpost.dokarkiv
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dokarkiv.generated.model.*
 import no.nav.pensjon.vtp.testmodell.repo.JournalRepository
 import org.springframework.http.MediaType
@@ -12,7 +12,7 @@ import java.net.InetAddress
 import java.net.URI
 
 @RestController
-@Api(tags = ["Dokarkiv"])
+@Tag(name = "Dokarkiv")
 @RequestMapping(JournalpostMock.BASE_PATH)
 class JournalpostMock(private val journalRepository: JournalRepository) {
 
@@ -55,7 +55,7 @@ class JournalpostMock(private val journalRepository: JournalRepository) {
     )
 
     @PutMapping("/journalpost/{journalpostid}")
-    @ApiOperation(value = "Oppdater journalpost")
+    @Operation(summary = "Oppdater journalpost")
     fun oppdaterJournalpost(
         @RequestBody oppdaterJournalpostRequest: OppdaterJournalpostRequest,
         @PathVariable("journalpostid") journalpostId: String
@@ -74,12 +74,12 @@ class JournalpostMock(private val journalRepository: JournalRepository) {
         )
 
     @PatchMapping("/journalpost/{journalpostid}/ferdigstill")
-    @ApiOperation(value = "Ferdigstill journalpost")
+    @Operation(summary = "Ferdigstill journalpost")
     fun ferdigstillJournalpost(@RequestBody ferdigstillJournalpostRequest: FerdigstillJournalpostRequest) =
         ok("OK")
 
     @GetMapping(value = [HENT_JOURNALPOST_SUB_PATH], produces = [MediaType.APPLICATION_PDF_VALUE])
-    @ApiOperation(value = "Hent journalpost fil")
+    @Operation(summary = "Hent journalpost fil")
     fun hentJournalpostFil(
         @PathVariable(JOURNALPOST_ID_PARAM) journalpostId: String,
         @PathVariable(FIL_UUID_PARAM) filUuid: String,

@@ -28,7 +28,7 @@ const Frame = (props: Props) => (
           <Link className="nav-link" to="/tokenGenerator">
             Generer token
           </Link>
-          <a className="nav-link" href="http://localhost:8060/swagger-ui/">
+          <a className="nav-link" href="/swagger-ui/index.html">
             Swagger
           </a>
         </Nav>

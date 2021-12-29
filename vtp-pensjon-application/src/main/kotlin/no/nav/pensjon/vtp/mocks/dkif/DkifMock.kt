@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.mocks.dkif
 
-import io.swagger.annotations.Api
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.testmodell.dkif.*
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.GetMapping
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@Api(tags = ["Digital kontaktinformasjon"])
+@Tag(name = "Digital kontaktinformasjon")
 @RequestMapping("/rest/dkif")
 class DkifMock(private val dkifRepository: DkifRepository) {
 

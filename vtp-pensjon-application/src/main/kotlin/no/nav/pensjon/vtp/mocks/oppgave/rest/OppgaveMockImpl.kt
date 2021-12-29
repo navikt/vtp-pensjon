@@ -1,16 +1,16 @@
 package no.nav.pensjon.vtp.mocks.oppgave.rest
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiImplicitParam
-import io.swagger.annotations.ApiImplicitParams
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.Parameters
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Api(tags = ["Oppgave Mock"])
+@Tag(name = "Oppgave Mock")
 @RequestMapping(
     value = ["/rest/oppgave/api/v1/oppgaver"]
 )
@@ -22,15 +22,13 @@ class OppgaveMockImpl {
     private var oppfolgingId = 1L
 
     @PostMapping
-    @ApiOperation(value = "Opprett oppgave")
-    @ApiImplicitParams(
-        ApiImplicitParam(
+    @Operation(summary = "Opprett oppgave")
+    @Parameters(
+        Parameter(
             name = "X-Correlation-ID",
             required = true,
-            dataType = "string",
-            paramType = "header"
         ),
-        ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
+        Parameter(name = "Authorization", required = true)
     )
     fun opprettOppgave(
         @RequestBody oppgave: Oppgave,
@@ -42,15 +40,13 @@ class OppgaveMockImpl {
     }
 
     @PutMapping("/{oppgaveid}")
-    @ApiOperation(value = "Oppdater oppgave")
-    @ApiImplicitParams(
-        ApiImplicitParam(
+    @Operation(summary = "Oppdater oppgave")
+    @Parameters(
+        Parameter(
             name = "X-Correlation-ID",
             required = true,
-            dataType = "string",
-            paramType = "header"
         ),
-        ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
+        Parameter(name = "Authorization", required = true)
     )
     fun oppdaterOppgave(
         @PathVariable("oppgaveid") oppgaveId: Long,
@@ -63,33 +59,29 @@ class OppgaveMockImpl {
     }
 
     @GetMapping
-    @ApiOperation(value = "Hent oppgaver", response = HentOppgaverResponse::class)
-    @ApiImplicitParams(
-        ApiImplicitParam(
+    @Operation(summary = "Hent oppgaver")
+    @Parameters(
+        Parameter(
             name = "X-Correlation-ID",
             required = true,
-            dataType = "string",
-            paramType = "header"
         ),
-        ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header"),
-        ApiImplicitParam(name = "tema", dataType = "string", paramType = "query", allowMultiple = true),
-        ApiImplicitParam(name = "oppgavetype", dataType = "string", paramType = "query"),
-        ApiImplicitParam(name = "journalpostId", dataType = "string", paramType = "query"),
-        ApiImplicitParam(name = "aktoerId", dataType = "string", paramType = "query")
+        Parameter(name = "Authorization", required = true),
+        Parameter(name = "tema"),
+        Parameter(name = "oppgavetype"),
+        Parameter(name = "journalpostId"),
+        Parameter(name = "aktoerId")
     )
     fun hentOppgaver(@RequestHeader httpHeaders: HttpHeaders?) =
         HentOppgaverResponse(antallTreffTotalt = oppgaver.size, oppgaver = oppgaver)
 
     @GetMapping("/{oppgaveid}")
-    @ApiOperation(value = "Hent oppgave", response = Oppgave::class)
-    @ApiImplicitParams(
-        ApiImplicitParam(
+    @Operation(summary = "Hent oppgave")
+    @Parameters(
+        Parameter(
             name = "X-Correlation-ID",
             required = true,
-            dataType = "string",
-            paramType = "header"
         ),
-        ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
+        Parameter(name = "Authorization", required = true)
     )
     fun hentOppgave(
         @RequestHeader httpHeaders: HttpHeaders?,
@@ -98,15 +90,13 @@ class OppgaveMockImpl {
         oppgaver.firstOrNull { it.id == oppgaveId }
 
     @PatchMapping
-    @ApiOperation(value = "Ferdigstille oppgaver", response = FerdigstillOppgaverResponse::class)
-    @ApiImplicitParams(
-        ApiImplicitParam(
+    @Operation(summary = "Ferdigstille oppgaver")
+    @Parameters(
+        Parameter(
             name = "X-Correlation-ID",
             required = true,
-            dataType = "string",
-            paramType = "header"
         ),
-        ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
+        Parameter(name = "Authorization", required = true)
     )
     fun bulkUpdateOppgaver(): FerdigstillOppgaverResponse {
         val antallOppdaterte = oppgaver.size
@@ -117,15 +107,13 @@ class OppgaveMockImpl {
     }
 
     @GetMapping("/{oppgaveid}/oppfolging")
-    @ApiOperation(value = "Hent oppfølginger for oppgave")
-    @ApiImplicitParams(
-        ApiImplicitParam(
+    @Operation(summary = "Hent oppfølginger for oppgave")
+    @Parameters(
+        Parameter(
             name = "X-Correlation-ID",
             required = true,
-            dataType = "string",
-            paramType = "header"
         ),
-        ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
+        Parameter(name = "Authorization", required = true)
     )
     fun hentOppfolginger(
         @PathVariable("oppgaveid") oppgaveId: Long
@@ -135,15 +123,13 @@ class OppgaveMockImpl {
     }
 
     @PostMapping("/{oppgaveid}/oppfolging")
-    @ApiOperation(value = "Opprett oppfølging")
-    @ApiImplicitParams(
-        ApiImplicitParam(
+    @Operation(summary = "Opprett oppfølging")
+    @Parameters(
+        Parameter(
             name = "X-Correlation-ID",
             required = true,
-            dataType = "string",
-            paramType = "header"
         ),
-        ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
+        Parameter(name = "Authorization", required = true)
     )
     fun opprettOppfolging(
         @PathVariable("oppgaveid") oppgaveId: Long,
@@ -156,15 +142,13 @@ class OppgaveMockImpl {
     }
 
     @PutMapping("/{oppgaveid}/oppfolging/{oppfolgingid}")
-    @ApiOperation(value = "Oppdater oppfølging")
-    @ApiImplicitParams(
-        ApiImplicitParam(
+    @Operation(summary = "Oppdater oppfølging")
+    @Parameters(
+        Parameter(
             name = "X-Correlation-ID",
             required = true,
-            dataType = "string",
-            paramType = "header"
         ),
-        ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
+        Parameter(name = "Authorization", required = true)
     )
     fun oppdaterOppfolging(
         @PathVariable("oppgaveid") oppgaveId: Long,

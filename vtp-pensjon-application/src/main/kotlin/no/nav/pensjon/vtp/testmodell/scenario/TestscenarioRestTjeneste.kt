@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.testmodell.scenario
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.testmodell.pensjon_testdata.PensjonTestdataScenario
 import no.nav.pensjon.vtp.testmodell.pensjon_testdata.PensjonTestdataService
 import no.nav.pensjon.vtp.testmodell.repo.Testscenario
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.client.HttpClientErrorException
 
 @RestController
-@Api(tags = ["Testscenario"])
+@Tag(name = "Testscenario")
 @RequestMapping("/api/testscenarios")
 class TestscenarioRestTjeneste(
     private val templateRepository: TestscenarioTemplateRepository,
@@ -27,28 +27,23 @@ class TestscenarioRestTjeneste(
     private val pensjonTestdataService: PensjonTestdataService
 ) {
     @GetMapping
-    @ApiOperation(
-        value = "",
-        notes = "Henter alle templates som er initiert i minnet til VTP",
-        responseContainer = "List",
-        response = TestscenarioDto::class
+    @Operation(
+        description = "Henter alle templates som er initiert i minnet til VTP",
     )
     fun hentInitialiserteCaser() =
         testscenarioService.findAll()
             .map { konverterTilTestscenarioDto(it) }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "", notes = "Returnerer testscenario som matcher id", response = TestscenarioDto::class)
+    @Operation(summary = "", description = "Returnerer testscenario som matcher id")
     fun hentScenario(@PathVariable("id") id: String) =
         testscenarioService.getTestscenario(id)
             ?.let { ok(konverterTilTestscenarioDto(it)) }
             ?: notFound().build()
 
     @PostMapping("/{key}")
-    @ApiOperation(
-        value = "",
-        notes = "Initialiserer et test scenario basert på angitt template key i VTPs eksempel templates",
-        response = TestscenarioDto::class
+    @Operation(
+        description = "Initialiserer et test scenario basert på angitt template key i VTPs eksempel templates",
     )
     fun initialiserTestscenario(@PathVariable("key") templateKey: String) =
         templateRepository.finn(templateKey)
@@ -61,29 +56,27 @@ class TestscenarioRestTjeneste(
             ?: notFound().build()
 
     @PostMapping
-    @ApiOperation(
-        value = "",
-        notes = "Initialiserer et testscenario basert på angitt json streng og returnerer det initialiserte objektet",
-        response = TestscenarioDto::class
+    @Operation(
+        description = "Initialiserer et testscenario basert på angitt json streng og returnerer det initialiserte objektet",
     )
     fun initialiserTestScenario(@RequestBody testscenarioJson: String) =
         status(CREATED)
             .body(konverterTilTestscenarioDto(testscenarioService.opprettTestscenarioFraJsonString(testscenarioJson)))
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "", notes = "Sletter et initialisert testscenario som matcher id")
+    @Operation(summary = "", description = "Sletter et initialisert testscenario som matcher id")
     fun slettScenario(@PathVariable("id") id: String): ResponseEntity<*> {
         testscenarioService.slettScenario(id)
         return noContent().build<Any>()
     }
 
     @GetMapping("/cases")
-    @ApiOperation(value = "", notes = "Henter alle scenarios i pensjon-testdata")
+    @Operation(summary = "", description = "Henter alle scenarios i pensjon-testdata")
     fun hentPensjonTestdataTestScenarios(): ResponseEntity<List<PensjonTestdataScenario>> =
         ok(pensjonTestdataService.hentScenarios())
 
     @PostMapping("/cases")
-    @ApiOperation(value = "", notes = "Oppretter valgt scenario i pensjon-testdata for initialisert testscenario id")
+    @Operation(summary = "", description = "Oppretter valgt scenario i pensjon-testdata for initialisert testscenario id")
     fun opprettPensjonTestdataTestScenario(@RequestBody dt: OpprettSakDto): ResponseEntity<String>? {
         return try {
             testscenarioService.getTestscenario(dt.testScenarioId)
