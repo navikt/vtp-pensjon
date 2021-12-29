@@ -813,7 +813,6 @@
 
                     <args>
                         <arg>-Xjsr305=strict</arg>
-                        <arg>-Werror</arg>
                     </args>
 
                     <compilerPlugins>
