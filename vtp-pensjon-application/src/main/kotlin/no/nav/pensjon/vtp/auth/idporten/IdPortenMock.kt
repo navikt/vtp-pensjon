@@ -53,11 +53,11 @@ class IdPortenMock(
 
     @GetMapping("/jwks")
     @Operation(summary = "Idporten public key set")
-    fun jwks() = Keys(jsonWebKeySupport.jwks()).asResponseEntity()
+    fun jwks(): ResponseEntity<Keys> = Keys(jsonWebKeySupport.jwks()).asResponseEntity()
 
     @GetMapping("/privateKey")
     @Operation(summary = "Idporten public key set")
-    fun privateKey() = jsonWebKeySupport.privateKey()
+    fun privateKey(): String = jsonWebKeySupport.privateKey()
 
     @PostMapping("/token")
     @Operation(summary = "Exchange token via tokendings")
@@ -144,7 +144,7 @@ class IdPortenMock(
         return ResponseEntity
             .status(TEMPORARY_REDIRECT)
             .location(URI(redirectUriString))
-            .build<Any>()
+            .build()
     }
 /*
     @GetMapping(value = ["/users"])

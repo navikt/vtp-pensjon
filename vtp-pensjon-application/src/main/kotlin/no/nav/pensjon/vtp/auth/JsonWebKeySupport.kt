@@ -24,7 +24,7 @@ class JsonWebKeySupport(private val jwk: RsaJsonWebKey) {
         )
     )
 
-    fun privateKey() = RSAKey.Builder(jwk.publicKey as RSAPublicKey)
+    fun privateKey(): String = RSAKey.Builder(jwk.publicKey as RSAPublicKey)
         .privateKey(jwk.privateKey as RSAPrivateKey)
         .keyUse(KeyUse.SIGNATURE)
         .keyID(UUID.randomUUID().toString())

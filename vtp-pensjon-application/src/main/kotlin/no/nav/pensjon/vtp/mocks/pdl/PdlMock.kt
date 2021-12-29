@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*
 class PdlMock(private val graphQL: GraphQL) {
 
     @PostMapping(path = ["/graphql"])
-    fun query(@RequestBody query: String) = graphQL.execute(query).toSpecification()
+    fun query(@RequestBody query: String): MutableMap<String, Any> = graphQL.execute(query).toSpecification()
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun pdlRequest(@RequestBody request: PdlRequest) =
+    fun pdlRequest(@RequestBody request: PdlRequest): MutableMap<String, Any> =
         ExecutionInput.newExecutionInput()
             .query(request.query)
             .variables(request.variables)

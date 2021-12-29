@@ -49,7 +49,7 @@ class AzureAdMock(
                 .queryParams(requestParams).build().query
 
             fromUriString(getFrontendUrl(req))
-                .fragment("/azuread/$tenant/v2.0/authorize?" + query)
+                .fragment("/azuread/$tenant/v2.0/authorize?$query")
                 .build()
                 .toUri()
         }

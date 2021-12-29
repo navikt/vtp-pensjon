@@ -21,9 +21,9 @@ class DkifMock(private val dkifRepository: DkifRepository) {
         requestIdenter.forEach {
             val kontaktinfo = dkifRepository.findById(it)
             if (kontaktinfo != null) {
-                kontaktinfoMap.put(it, kontaktinfo)
+                kontaktinfoMap[it] = kontaktinfo
             } else {
-                feilMap.put(it, Feil("Ingen kontaktinformasjon er registrert på personen"))
+                feilMap[it] = Feil("Ingen kontaktinformasjon er registrert på personen")
             }
         }
 
