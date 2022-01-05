@@ -5,6 +5,8 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.*
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType.BOSTEDSADRESSE
 import no.nav.pensjon.vtp.util.asGregorianCalendar
 import org.springframework.stereotype.Component
+import java.time.LocalDate
+import java.util.*
 
 @Component
 class PsakpselvPersonAdapter(
@@ -25,6 +27,7 @@ class PsakpselvPersonAdapter(
     fun toASBOPerson(person: PersonModell, personopplysninger: Personopplysninger): ASBOPenPerson {
         return populateAsboPenPerson(person).apply {
             relasjoner = fetchRelasjoner(personopplysninger)
+            samboer = fetchSamboer(person)
         }
     }
 
@@ -35,6 +38,16 @@ class PsakpselvPersonAdapter(
                 .toTypedArray()
         }
     }
+
+    private fun fetchSamboer(person: PersonModell) = person.samboerforhold.map {
+        ASBOPenSamboer().apply {
+            fodselsnummer = it.motpart
+            fomDato = localDateToCalendar(it.fraOgMed)
+            tomDato = it.tilOgMed?.let { localDateToCalendar(it) }
+            endretAvSaksbehandler = it.opprettetAv
+            endretAvSystem = "PP01"
+        }
+    }.firstOrNull()
 
     private fun populateAsboPenRelasjon(
         personopplysninger: Personopplysninger,
@@ -119,6 +132,10 @@ class PsakpselvPersonAdapter(
                 historiskeFnr = ASBOPenHistoriskFnrListe().apply { historiskeFnr = arrayOfNulls(0) }
                 navnEndringer = ASBOPenNavnEndringListe().apply { navnEndringer = arrayOfNulls(0) }
             }
+        }
+
+        private fun localDateToCalendar(date: LocalDate) = Calendar.getInstance().apply {
+            set(date.year, date.monthValue - 1, date.dayOfMonth)
         }
     }
 }
