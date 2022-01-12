@@ -315,7 +315,7 @@
             <dependency>
                 <groupId>com.nimbusds</groupId>
                 <artifactId>oauth2-oidc-sdk</artifactId>
-                <version>9.20.1</version>
+                <version>9.21</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
