@@ -24,6 +24,9 @@ class KodeverkMock(private val personModellRepository: PersonModellRepository) {
             "Postnummer" ->
                 postnummer()
 
+            "Landkoder" ->
+                landkoder()
+
             else ->
                 throw NotImplementedException()
         }
@@ -36,4 +39,11 @@ class KodeverkMock(private val personModellRepository: PersonModellRepository) {
             .associate {
                 it to listOf(Betydning(mapOf("nb" to Beskrivelse("HUTTAHEI"))))
             }.let { KodeBetydninger(it) }
+
+    private fun landkoder(): KodeBetydninger =
+        KodeBetydninger(
+            mapOf(
+                "NOR" to listOf(Betydning(mapOf("nb" to Beskrivelse("NORGE"))))
+            )
+        )
 }
