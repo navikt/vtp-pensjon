@@ -3,6 +3,7 @@ package no.nav.pensjon.vtp.configuration.soap
 import no.nav.pensjon.vtp.util.CORRELATION_ID_HEADER_NAME
 import no.nav.pensjon.vtp.util.resetCorrelationId
 import no.nav.pensjon.vtp.util.setCorrelationId
+import org.apache.cxf.service.model.BindingFaultInfo
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import javax.xml.bind.JAXBContext
@@ -51,7 +52,24 @@ class MockServiceSOAPHandler : SOAPHandler<SOAPMessageContext> {
             .firstOrNull()
             ?.correlationId
 
-    override fun handleFault(context: SOAPMessageContext) = true
+    override fun handleFault(context: SOAPMessageContext): Boolean {
+        if (context[SOAPMessageContext.MESSAGE_OUTBOUND_PROPERTY] as Boolean) {
+            val fault = context.message.soapBody.fault
+            val faultInfo = (context[BINDING_FAULT_INFO_KEY] as BindingFaultInfo).faultInfo
+
+            context.message.soapBody.fault.faultCode = "Server"
+
+            fault.addDetail().apply {
+                addDetailEntry(faultInfo.messageParts[0].elementQName)
+            }
+        }
+
+        return true
+    }
 
     override fun close(context: MessageContext) = resetCorrelationId()
+
+    companion object {
+        private const val BINDING_FAULT_INFO_KEY = "org.apache.cxf.service.model.BindingFaultInfo"
+    }
 }
