@@ -156,7 +156,7 @@ class PsakPersonServiceMockImpl(
     override fun hentSamboerforhold(
         @WebParam(name = "hentSamboerforholdRequest") hentSamboerforholdRequest: ASBOPenHentSamboerforholdRequest
     ) = psakpselvPersonAdapter.getASBOPenPerson(hentSamboerforholdRequest.fodselsnummer)
-        ?: throw HentSamboerforholdFaultPenGeneriskMsg()
+        ?: throw HentSamboerforholdFaultPenPersonIkkeFunnetMsg("PERSON IKKE FUNNET")
 
     override fun lagreDodsdato(lagreDodsdatoRequest: ASBOPenPerson) = throw NotImplementedException()
 
