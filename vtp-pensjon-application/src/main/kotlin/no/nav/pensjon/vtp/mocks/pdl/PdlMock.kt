@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/rest/pdl-api")
 class PdlMock(private val graphQL: GraphQL) {
 
-    @PostMapping(path = ["/graphql"])
-    fun query(@RequestBody query: String): MutableMap<String, Any> = graphQL.execute(query).toSpecification()
-
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(path = ["", "/graphql"], consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun pdlRequest(@RequestBody request: PdlRequest): MutableMap<String, Any> =
         ExecutionInput.newExecutionInput()
             .query(request.query)
