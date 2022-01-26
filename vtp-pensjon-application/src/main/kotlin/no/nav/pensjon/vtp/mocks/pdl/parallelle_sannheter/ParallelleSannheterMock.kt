@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @Tag(name = "Pensjon Parallelle-Sannheter")
-@RequestMapping("/api")
+@RequestMapping("/rest/pensjon-parallelle-sannheter/api")
 class ParallelleSannheterMock {
 
     private val emptyAvklaring = ObjectMapper().readTree("")
