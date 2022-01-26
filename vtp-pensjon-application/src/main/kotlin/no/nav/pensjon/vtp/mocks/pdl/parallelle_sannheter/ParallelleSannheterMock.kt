@@ -10,15 +10,14 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @Tag(name = "Pensjon Parallelle-Sannheter")
-@RequestMapping("/rest/pensjon-parallelle-sannheter/api")
+@RequestMapping("/api")
 class ParallelleSannheterMock {
 
     private val emptyAvklaring = ObjectMapper().readTree("")
 
-    @PostMapping("/navn")
-    fun navn(@RequestBody navnList: JsonNode) = responseTemplate(
-        type = "navn",
-        avklaring = navnList.firstOrNull()?.firstOrNull()
+    @PostMapping("/*")
+    fun avklar(@RequestBody itemList: JsonNode) = responseTemplate(
+        type = itemList.fieldNames().next().toString(), avklaring = itemList.firstOrNull()?.firstOrNull()
     )
 
     private fun responseTemplate(type: String, avklaring: JsonNode?) = "{ \"$type\": [${avklaring ?: emptyAvklaring}]"
