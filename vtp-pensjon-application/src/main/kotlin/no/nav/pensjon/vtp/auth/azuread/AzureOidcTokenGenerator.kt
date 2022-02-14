@@ -64,6 +64,7 @@ fun azureSystemToken(
         notBefore = issuedAt
         expirationTime = expiration
         subject = sub
+        setClaim("oid", sub)
         setClaim("azp", clientId)
         setClaim("tid", tenantId)
         setClaim("ver", "2.0")

@@ -222,7 +222,7 @@ class AzureAdMock(
                         Oauth2AccessTokenResponse(
                             accessToken = azureSystemToken(
                                 aud = listOf(scope),
-                                sub = "",
+                                sub = UUID.randomUUID().toString(),
                                 clientId = clientId,
                                 issuer = getIssuer(tenant),
                                 tenantId = tenant,
