@@ -173,7 +173,7 @@ class AzureAdMock(
             // https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-on-behalf-of-flow
             "urn:ietf:params:oauth:grant-type:jwt-bearer" -> {
                 if (requestedTokenUse != "on_behalf_of") {
-                    badRequest().body("Unknown grant_type $grantType")
+                    badRequest().body("Unknown requested_token_use $requestedTokenUse")
                 } else if (scope.isNullOrBlank()) {
                     badRequest().body("Missing scope for on_behalf_of flow")
                 } else if (assertion.isNullOrBlank()) {
@@ -210,6 +210,26 @@ class AzureAdMock(
                                 scope = scope,
                                 nonce = claims.getStringClaimOrNull("nonce")
                             )
+                        )
+                    )
+                }
+            }
+            "client_credentials" -> {
+                if (scope.isNullOrBlank()) {
+                    badRequest().body("Missing scope for client_credentials flow")
+                } else {
+                    ok(
+                        Oauth2AccessTokenResponse(
+                            accessToken = azureSystemToken(
+                                aud = listOf(scope),
+                                sub = "",
+                                clientId = clientId,
+                                issuer = getIssuer(tenant),
+                                tenantId = tenant,
+                                jsonWebKeySupport = jsonWebKeySupport
+                            ),
+                            idToken = "",
+                            refreshToken = ""
                         )
                     )
                 }

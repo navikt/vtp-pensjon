@@ -46,3 +46,28 @@ fun azureOidcToken(
     sid?.let { claims.setClaim("sid", sid) }
     return jsonWebKeySupport.createRS256Token(claims.toJson()).compactSerialization
 }
+
+fun azureSystemToken(
+    aud: List<String> = ArrayList(),
+    sub: String,
+    clientId: String,
+    issuer: String? = null,
+    issuedAt: NumericDate = NumericDate.now(),
+    tenantId: String,
+    expiration: NumericDate = NumericDate.fromSeconds(NumericDate.now().value + 3600 * 6),
+    jsonWebKeySupport: JsonWebKeySupport,
+): String {
+    val claims = JwtClaims().apply {
+        audience = aud
+        this.issuer = issuer
+        this.issuedAt = issuedAt
+        notBefore = issuedAt
+        expirationTime = expiration
+        subject = sub
+        setClaim("azp", clientId)
+        setClaim("tid", tenantId)
+        setClaim("ver", "2.0")
+        setClaim("roles", listOf("access_as_application"))
+    }
+    return jsonWebKeySupport.createRS256Token(claims.toJson()).compactSerialization
+}
