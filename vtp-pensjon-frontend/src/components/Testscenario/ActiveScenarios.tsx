@@ -25,7 +25,7 @@ export default function ActiveScenarios(props: ActiveScenarioProps) {
         </Button>
       </Card.Header>
       <Card.Body>
-        <Card.Title>Åpne i PSAK</Card.Title>
+        <Card.Title>{scenario.personopplysninger?.soekerIdent}</Card.Title>
         <ul>
           <li>
             <a
@@ -34,7 +34,17 @@ export default function ActiveScenarios(props: ActiveScenarioProps) {
                 scenario.personopplysninger?.soekerIdent
               }
             >
-              {scenario.personopplysninger?.soekerIdent}
+                Åpne i PSAK
+            </a>
+          </li>
+          <li>
+            <a
+              href={
+                "http://localhost:9080/pselv/publisering/dinpensjon.jsf?context=pensjon&_loggedOnName=veileder&_brukerId=" +
+                scenario.personopplysninger?.soekerIdent
+              }
+            >
+                Åpne i PSelv
             </a>
           </li>
         </ul>

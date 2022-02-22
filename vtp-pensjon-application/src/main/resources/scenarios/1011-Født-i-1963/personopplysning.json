@@ -1,0 +1,78 @@
+{
+	"søker": {
+		"ident": "${for1}",
+		"fornavn": "Donald",
+		"etternavn": "Duck",
+		"fødselsdato": "${for1_fødselsdato}",
+		"kjønn": "M",
+		"geografiskTilknytning": {
+			"type": "Land",
+			"kode": "NOR"
+		},
+		"adresser": [
+			{
+				"@type": "ref",
+				"fom": "now() - P1Y",
+				"adresseType": "BOSTEDSADRESSE",
+				"land": "NOR"
+			}
+		],
+		"personstatus": [
+			{
+				"kode": "BOSA",
+                "fom": "now()-P50Y"
+			}
+		],
+		"statsborgerskap": [{
+			"land": "NOR",
+			"fom": null,
+			"tom": null,
+			"endringstype": "ny",
+			"endringstidspunkt": null
+		}],
+		"sivilstand": [
+			{
+				"kode": "GIFT"
+			}
+		]
+	},
+	"annenPart": {
+		"ident": "${for2}",
+		"fornavn": "Dolly",
+		"etternavn": "Duck",
+		"fødselsdato": "${for2_fødselsdato}",
+		"kjønn": "K",
+		"personstatus": [
+			{
+				"kode": "BOSA",
+				"fom": "now()-P50Y"
+			}
+		],
+		"statsborgerskap": [{
+			"land": "NOR",
+			"fom": null,
+			"tom": null,
+			"endringstype": "ny",
+			"endringstidspunkt": null
+		}],
+		"adresser": [
+			{
+				"@type": "ref",
+				"fom": "now() - P1Y",
+				"adresseType": "BOSTEDSADRESSE",
+				"land": "NOR"
+			}
+		],
+		"sivilstand": [
+			{
+				"kode": "GIFT"
+			}
+		]
+	},
+	"familierelasjoner": [
+		{
+			"rolle": "EKTE",
+			"til": "${for2}"
+		}
+	]
+}
