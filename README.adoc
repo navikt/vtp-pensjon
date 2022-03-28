@@ -22,7 +22,7 @@ Interne henvendelser kan sendes via Slack i kanalen #pensjon-teknisk
 
 === Teknologi som må installeres
 
-* Java 11 (https://adoptopenjdk.net/)
+* Java 11 (https://adoptium.net)
 * Node.js 14 (https://nodejs.org/en/download/)
 * Maven 3.6 (http://maven.apache.org/)
 
