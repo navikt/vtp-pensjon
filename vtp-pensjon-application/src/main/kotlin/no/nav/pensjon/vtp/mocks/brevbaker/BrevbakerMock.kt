@@ -30,4 +30,7 @@ class BrevbakerMock {
 
     @GetMapping("/isAlive")
     fun ping() = "Brevbaker kjører i vtp-pensjon"
+
+    @GetMapping("/ping_authorized")
+    fun pingAuth() = "Autorisert i vtp-pensjon"
 }
