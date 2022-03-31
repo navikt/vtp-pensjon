@@ -1,9 +1,9 @@
-FROM adoptopenjdk:11-jre-hotspot as builder
+FROM eclipse-temurin:11 as builder
 ARG JAR_FILE=vtp-pensjon-application/target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM adoptopenjdk:11-jre-hotspot
+FROM eclipse-temurin:11
 ENV TZ="Europe/Oslo"
 COPY --from=builder dependencies/ ./
 COPY --from=builder snapshot-dependencies/ ./
