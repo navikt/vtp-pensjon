@@ -8,6 +8,8 @@ import graphql.schema.GraphQLSchema
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
+import no.nav.pensjon.vtp.configuration.graphql.model.IdenterBolkDataFetcher
+import no.nav.pensjon.vtp.configuration.graphql.model.IdenterDataFetcher
 import no.nav.pensjon.vtp.configuration.graphql.model.PersonDataFetcher
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import org.springframework.context.annotation.Bean
@@ -32,6 +34,8 @@ class GraphQLConfig(
         scalar(JavaPrimitives.GraphQLLong)
         type("Query") {
             it.dataFetcher("hentPerson", PersonDataFetcher(personModellRepository))
+            it.dataFetcher("hentIdenter", IdenterDataFetcher(personModellRepository))
+            it.dataFetcher("hentIdenterBolk", IdenterBolkDataFetcher(personModellRepository))
         }
     }.build()
 

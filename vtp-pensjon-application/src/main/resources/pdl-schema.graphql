@@ -8,6 +8,8 @@ schema {
 
 type Query {
     hentPerson(ident: ID!): Person
+    hentIdenter(ident: ID!, grupper: [IdentGruppe!], historikk: Boolean = false): Identliste
+    hentIdenterBolk(identer: [ID!]!, grupper: [IdentGruppe!], historikk: Boolean = false): [HentIdenterBolkResult!]!
 }
 
 type Person {
@@ -196,4 +198,26 @@ type UtenlandskAdresseIFrittFormat {
     postkode: String
     byEllerStedsnavn: String
     landkode: String!
+}
+
+type Identliste {
+    identer: [IdentInformasjon!]!
+}
+
+type IdentInformasjon {
+    ident: String!
+    gruppe: IdentGruppe!
+    historisk: Boolean!
+}
+
+enum IdentGruppe {
+    AKTORID,
+    FOLKEREGISTERIDENT,
+    NPID
+}
+
+type HentIdenterBolkResult {
+    ident: String!
+    identer: [IdentInformasjon!]
+    code: String!
 }
