@@ -75,12 +75,13 @@ class IssoMock(
         @RequestParam(required = false) refresh_token: String?,
         @RequestParam(required = false) redirect_uri: String?,
         @RequestParam("client_id", required = false) client_id: String?,
+        @RequestParam("issuer") requestedIssuer: String?,
     ): ResponseEntity<*> = (client_id ?: getUser(authorization))
         ?.let { clientId ->
             when (grant_type) {
                 "authorization_code" -> ok(
                     Oauth2AccessTokenResponse(
-                        idToken = createIdToken(clientId, code),
+                        idToken = createIdToken(clientId, code, requestedIssuer),
                         refreshToken = "refresh:$code",
                         accessToken = "access:$code"
                     )
@@ -93,7 +94,7 @@ class IssoMock(
                             } else {
                                 ok(
                                     Oauth2AccessTokenResponse(
-                                        idToken = createIdToken(clientId, refresh_token.substring(8)),
+                                        idToken = createIdToken(clientId, refresh_token.substring(8), requestedIssuer),
                                         refreshToken = "refresh:${refresh_token.substring(8)}",
                                         accessToken = "access:${refresh_token.substring(8)}"
                                     )
@@ -113,13 +114,14 @@ class IssoMock(
     )
     fun newAnsatt(
         @RequestHeader(AUTHORIZATION) authorization: String?,
-        @RequestBody ansattRequest: AnsattRequest
+        @RequestBody ansattRequest: AnsattRequest,
+        @RequestParam("issuer") requestedIssuer: String?,
     ): ResponseEntity<*> = getUser(authorization)
         ?.let { clientId ->
             createUser(ansattRequest.groups).let { (cn) ->
                 ok(
                     Oauth2AccessTokenResponse(
-                        idToken = createIdToken(clientId, cn),
+                        idToken = createIdToken(clientId, cn, requestedIssuer),
                         refreshToken = "refresh:$cn",
                         accessToken = "access:$cn"
                     )
@@ -131,13 +133,13 @@ class IssoMock(
     fun createUser(groups: List<String>) =
         ansattService.addAnnsatt(groups = groups, enheter = emptyList(), generated = true)
 
-    private fun createIdToken(clientId: String, code: String): String {
+    private fun createIdToken(clientId: String, code: String, requestedIssuer: String?): String {
         val codeData = code.split(";".toRegex()).toTypedArray()
 
         return oidcTokenGenerator.oidcToken(
             subject = codeData[0],
             nonce = if (codeData.size > 1) codeData[1] else null,
-            issuer = issuer,
+            issuer = requestedIssuer ?: issuer,
             aud = listOf(clientId),
             expiration = now().apply { addSeconds(3600L * 6L) },
             additionalClaims = mapOf(

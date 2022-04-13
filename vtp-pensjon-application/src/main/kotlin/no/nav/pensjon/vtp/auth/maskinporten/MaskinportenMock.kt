@@ -56,7 +56,8 @@ class MaskinportenMock(
                         consumer = claims.issuer,
                         scope = claims.getStringClaim("scope"),
                         issuedAt = now,
-                        expiration = now.apply { addSeconds(3600L * 6L) }
+                        expiration = now.apply { addSeconds(3600L * 6L) },
+                        requestedIssuer = issuer,
                     ),
                     expires_in = 3600L * 6L,
                     scope = claims.getStringClaim("scope"),
@@ -69,19 +70,15 @@ class MaskinportenMock(
 
     @PostMapping("/mock_access_token")
     fun generateAccessToken(
-        @RequestParam(required = false)
-        resource: String?,
-        @RequestParam
-        consumer: String,
-        @RequestParam
-        scope: String,
-        @RequestParam(required = false)
-        issuedAt: NumericDate?,
-        @RequestParam(required = false)
-        expiration: NumericDate?
+        @RequestParam resource: String?,
+        @RequestParam consumer: String,
+        @RequestParam scope: String,
+        @RequestParam issuedAt: NumericDate?,
+        @RequestParam expiration: NumericDate?,
+        @RequestParam("issuer") requestedIssuer: String?,
     ) = oidcTokenGenerator.oidcToken(
         subject = "subject",
-        issuer = issuer,
+        issuer = requestedIssuer ?: issuer,
         aud = listOfNotNull(resource),
         additionalClaims = mapOf(
             "client_id" to consumer,
