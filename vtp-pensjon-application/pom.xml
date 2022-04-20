@@ -31,7 +31,7 @@
         <cxf.version>3.5.1</cxf.version>
         <tjenestespesifikasjoner.version>1.2020.07.17-17.06-31e5aa824db7</tjenestespesifikasjoner.version>
         <pensjon-tjenestespesifikasjoner.version>1.2020.08.22-15.02-5a6bc2023040</pensjon-tjenestespesifikasjoner.version>
-        <ks-tjenestespesifikasjoner.version>1.2019.12.18-12.22-ce897c4eb2c1</ks-tjenestespesifikasjoner.version>
+        <ks-tjenestespesifikasjoner.version>1.2021.02.22-10.45-4201aaea72fb</ks-tjenestespesifikasjoner.version>
     </properties>
 
     <dependencyManagement>
