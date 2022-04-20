@@ -19,6 +19,6 @@
     <modules>
         <module>vtp-pensjon-frontend</module>
         <module>vtp-pensjon-application</module>
-        <module>vtp-penjon-client</module>
+        <module>vtp-pensjon-client</module>
     </modules>
 </project>

@@ -11,7 +11,7 @@
         <relativePath/>
     </parent>
 
-    <artifactId>vtp-penjon-client</artifactId>
+    <artifactId>vtp-pensjon-client</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -58,6 +58,10 @@
             <version>9.21</version>
             <optional>true</optional>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

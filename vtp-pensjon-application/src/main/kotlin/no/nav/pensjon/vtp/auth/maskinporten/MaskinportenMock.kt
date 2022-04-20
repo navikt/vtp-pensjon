@@ -76,7 +76,7 @@ class MaskinportenMock(
         @RequestParam issuedAt: NumericDate?,
         @RequestParam expiration: NumericDate?,
         @RequestParam("issuer") requestedIssuer: String?,
-    ) = oidcTokenGenerator.oidcToken(
+    ): String = oidcTokenGenerator.oidcToken(
         subject = "subject",
         issuer = requestedIssuer ?: issuer,
         aud = listOfNotNull(resource),

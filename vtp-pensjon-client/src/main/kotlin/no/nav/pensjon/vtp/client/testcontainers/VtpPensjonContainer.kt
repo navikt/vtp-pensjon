@@ -35,6 +35,7 @@ open class VtpPensjonContainer(image: String = defaultVtpPensjonImage()) : Gener
         return self()
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun withMongoDb(container: MongoDBContainer): VtpPensjonContainer = dependsOn(container)
         .withNetwork(container.network)
         .withEnv("SPRING_DATA_MONGODB_HOST", container.networkAliases[0])
