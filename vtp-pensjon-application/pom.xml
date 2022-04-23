@@ -91,19 +91,6 @@
                 <version>${tjenestespesifikasjoner.version}</version>
             </dependency>
 
-            <!-- Kontraktsavhengigheter -->
-            <dependency>
-                <groupId>no.nav.foreldrepenger.kontrakter</groupId>
-                <artifactId>foreldrepenger-kontrakter-root</artifactId>
-                <version>5.0_20191210082234_0bd32f2</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.foreldrepenger.kontrakter.topics</groupId>
-                <artifactId>fp-topics-manifest</artifactId>
-                <version>5.1_20200117132228_47cdf2f</version>
-            </dependency>
             <dependency>
                 <groupId>no.nav.tjenestespesifikasjoner</groupId>
                 <artifactId>nav-fim-aktoer-v2-tjenestespesifikasjon</artifactId>
