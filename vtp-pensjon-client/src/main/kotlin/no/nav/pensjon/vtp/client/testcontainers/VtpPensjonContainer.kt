@@ -1,14 +1,20 @@
 package no.nav.pensjon.vtp.client.testcontainers
 
 import no.nav.pensjon.vtp.client.VtpPensjonClient
+import org.slf4j.LoggerFactory.getLogger
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.MongoDBContainer
 import org.testcontainers.containers.Network
 import org.testcontainers.containers.output.OutputFrame
 import org.testcontainers.utility.DockerImageName
+import java.lang.RuntimeException
+import java.util.*
 import java.util.function.Consumer
 
-open class VtpPensjonContainer(image: String = defaultVtpPensjonImage()) : GenericContainer<VtpPensjonContainer>(image) {
+private const val pomProperties = "/vtp-pensjon-client.properties"
+
+open class VtpPensjonContainer(image: String = defaultVtpPensjonImage()) :
+    GenericContainer<VtpPensjonContainer>(image) {
     init {
         exposedPorts = listOf(8060, 8389)
     }
@@ -22,8 +28,7 @@ open class VtpPensjonContainer(image: String = defaultVtpPensjonImage()) : Gener
     fun withEmbeddedMongoDB(
         logConsumer: Consumer<OutputFrame>? = null,
     ): VtpPensjonContainer {
-        val mongoDBContainer = MongoDBContainer(DockerImageName.parse("mongo:4.0.10"))
-            .withNetwork(Network.newNetwork())
+        val mongoDBContainer = MongoDBContainer(DockerImageName.parse("mongo:4.0.10")).withNetwork(Network.newNetwork())
             .withNetworkAliases("mongodb")
 
         logConsumer?.let(mongoDBContainer::withLogConsumer)
@@ -36,9 +41,9 @@ open class VtpPensjonContainer(image: String = defaultVtpPensjonImage()) : Gener
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
-    fun withMongoDb(container: MongoDBContainer): VtpPensjonContainer = dependsOn(container)
-        .withNetwork(container.network)
-        .withEnv("SPRING_DATA_MONGODB_HOST", container.networkAliases[0])
+    fun withMongoDb(container: MongoDBContainer): VtpPensjonContainer =
+        dependsOn(container).withNetwork(container.network)
+            .withEnv("SPRING_DATA_MONGODB_HOST", container.networkAliases[0])
 
     fun baseUrl(): String {
         return "http://${host}:${getMappedPort(8060)}"
@@ -69,6 +74,24 @@ open class VtpPensjonContainer(image: String = defaultVtpPensjonImage()) : Gener
     )
 
     companion object {
-        internal fun defaultVtpPensjonImage() = "ghcr.io/navikt/vtp-pensjon/vtp-pensjon:2022.04.01-09.34-b9cb0ceb52e4"
+        private val logger = getLogger(VtpPensjonContainer::class.java)
+
+        internal fun defaultVtpPensjonImage(): String {
+            val version = (VtpPensjonContainer::class.java.getResourceAsStream(pomProperties).also {
+                    logger.info(
+                        if (it != null) {
+                            "Loading version from {}"
+                        } else {
+                            "Resource file {} was not found"
+                        }, pomProperties
+                    )
+                }?.use {
+                    Properties().apply { load(it) }["version"]
+                        .also { logger.info("vtp-pensjon version={}", it) }
+                        ?: throw RuntimeException("Unable to determinate vtp-pensjon-client version")
+                }) ?: "latest"
+
+            return "ghcr.io/navikt/vtp-pensjon/vtp-pensjon:${version}"
+        }
     }
 }

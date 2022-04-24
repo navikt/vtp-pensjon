@@ -11,12 +11,14 @@
         <relativePath/>
     </parent>
 
+    <groupId>no.nav.pensjon.vtp</groupId>
     <artifactId>vtp-pensjon-client</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${revision}</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <revision>1.0.0-SNAPSHOT</revision>
 
         <java.version>1.8</java.version>
         <kotlin.code.style>official</kotlin.code.style>
@@ -111,15 +113,38 @@
             <optional>true</optional>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>vtp-pensjon-application</artifactId>
+            <version>${revision}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources-filtered</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <version>${kotlin.version}</version>
+
+                <configuration>
+                    <jvmTarget>${java.version}</jvmTarget>
+                </configuration>
             </plugin>
         </plugins>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
     </build>
 </project>

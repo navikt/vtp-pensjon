@@ -47,26 +47,42 @@ class MaskinportenMock(
     ) = when (grantType) {
         "urn:ietf:params:oauth:grant-type:jwt-bearer" -> {
             val claims = JWTClaimsSet.parse(JOSEObject.parse(assertion).payload.toJSONObject())
-            val now = now()
 
             ok(
-                AccessTokenResponse(
-                    access_token = generateAccessToken(
-                        resource = claims.getStringClaim("resource"),
-                        consumer = claims.issuer,
-                        scope = claims.getStringClaim("scope"),
-                        issuedAt = now,
-                        expiration = now.apply { addSeconds(3600L * 6L) },
-                        requestedIssuer = issuer,
-                    ),
-                    expires_in = 3600L * 6L,
+                accessTokenResponse(
+                    resource = claims.getStringClaim("resource"),
+                    consumer = claims.issuer,
                     scope = claims.getStringClaim("scope"),
-                    token_type = "Bearer"
+                    issuedAt = now(),
+                    expiresIn = 3600L * 6L,
+                    requestedIssuer = issuer
                 )
             )
         }
         else -> badRequest().body("Unsupported grant_type '$grantType'")
     }
+
+    @PostMapping("/access_token")
+    private fun accessTokenResponse(
+        @RequestParam resource: String?,
+        @RequestParam consumer: String,
+        @RequestParam scope: String,
+        @RequestParam issuedAt: NumericDate?,
+        @RequestParam(defaultValue = "3600") expiresIn: Long,
+        @RequestParam("issuer") requestedIssuer: String?,
+    ) = AccessTokenResponse(
+        access_token = generateAccessToken(
+            resource = resource,
+            consumer = consumer,
+            scope = scope,
+            issuedAt = issuedAt ?: now(),
+            expiration = (issuedAt ?: now()).apply { addSeconds(expiresIn) },
+            requestedIssuer = requestedIssuer ?: issuer,
+        ),
+        expires_in = expiresIn,
+        scope = scope,
+        token_type = "Bearer"
+    )
 
     @PostMapping("/mock_access_token")
     fun generateAccessToken(

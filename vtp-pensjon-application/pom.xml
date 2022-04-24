@@ -10,14 +10,16 @@
         <relativePath/>
     </parent>
 
+    <groupId>no.nav.pensjon.vtp</groupId>
     <artifactId>vtp-pensjon-application</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${revision}</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <revision>1.0.0-SNAPSHOT</revision>
 
-        <java.version>11</java.version>
+        <java.version>1.8</java.version>
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin.format.skip>false</kotlin.format.skip>
 
@@ -81,7 +83,7 @@
             <dependency>
                 <groupId>no.nav.pensjon.vtp</groupId>
                 <artifactId>vtp-pensjon-frontend</artifactId>
-                <version>${project.version}</version>
+                <version>${revision}</version>
                 <scope>provided</scope>
             </dependency>
 
@@ -232,7 +234,6 @@
                 <artifactId>nav-fim-kodeverk-v2-tjenestespesifikasjon</artifactId>
                 <version>${tjenestespesifikasjoner.version}</version>
             </dependency>
-            <!-- 2.1.8 er ligger på fp-formidling på GPR -->
             <dependency>
                 <groupId>no.nav.tjenestespesifikasjoner</groupId>
                 <artifactId>nav-fim-dokumentproduksjon-v2-tjenestespesifikasjon</artifactId>
@@ -955,6 +956,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <classifier>exec</classifier>
                     <layers>
                         <enabled>true</enabled>
                     </layers>

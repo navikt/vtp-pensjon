@@ -15,7 +15,7 @@ class VtpPensjonClient(
         vtpPensjonUrl = baseUrl,
     )
 
-    fun azureAdOboToken(groups: List<String>, issuer: String? = null, audience: String? = null): TokenMeta =
+    fun azureAdOboToken(groups: List<String>, issuer: String? = null, audience: String? = null): TokenMeta<String> =
         tokenFetcher.fetchAzureAdToken(
             issuer = issuer
                 ?: azureAdIssuer
@@ -27,7 +27,7 @@ class VtpPensjonClient(
             units = emptyList()
         )
 
-    fun issoToken(clientId: String, groups: List<String>, issuer: String? = null): TokenMeta =
+    fun issoToken(clientId: String, groups: List<String>, issuer: String? = null): TokenMeta<String> =
         tokenFetcher.fetchIssoToken(
             issuer = issuer
                 ?: issoIssuer
@@ -37,16 +37,17 @@ class VtpPensjonClient(
             units = emptyList()
         )
 
-    fun maskinportenToken(consumer: String, scope: String, issuer: String? = null): TokenMeta =
-        tokenFetcher.fetchMaskinportenToken(
+    fun maskinportenToken(consumer: String, scope: String, issuer: String? = null) = TokenMeta(
+        token = tokenFetcher.fetchMaskinportenToken(
             issuer = issuer
                 ?: maskinportenIssuer
                 ?: throw IllegalStateException("Must supply a issuer or define maskinportenIssuer"),
             consumer = consumer,
             scope = scope
-        )
+        ),
+    username = consumer)
 
-    fun stsToken(user: String, issuer: String? = null): TokenMeta = tokenFetcher.fetchStsToken(
+    fun stsToken(user: String, issuer: String? = null): TokenMeta<String> = tokenFetcher.fetchStsToken(
         issuer = issuer
             ?: stsIssuer
             ?: throw IllegalStateException("Must supply a issuer or define stsIssuer"),

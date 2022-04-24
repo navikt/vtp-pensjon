@@ -51,26 +51,32 @@ jobs:
           distribution: 'adopt'
           java-version: 11
 
-      - name: Build
+      - name: Define version
         shell: bash
-        run: |
-          mvn -T1C verify --settings maven-settings.xml -Dfile.encoding=UTF-8 -Dkotlin.format.skip=true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build Docker image
         run: |
           TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
           COMMIT=$(git rev-parse --short=12 HEAD)
           export VERSION="$TIME-$COMMIT"
           echo "Building version $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Build
+        shell: bash
+        run: |
+          mvn -T1C verify --settings maven-settings.xml -Drevision="${VERSION}" -Dfile.encoding=UTF-8 -Dkotlin.format.skip=true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image
+        env:
+          VERSION: ${{ env.VERSION }}
+        run: |
           export DOCKER_BUILDKIT=1
 
           docker build --pull \
             --tag ${IMAGE_BASE_GHCR}:${VERSION} \
             --tag ${IMAGE_BASE_GHCR}:latest \
             .
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Log in to the Container registry
         if: github.ref == 'refs/heads/main'

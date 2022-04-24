@@ -1,31 +1,26 @@
 package no.nav.pensjon.vtp.client
 
 import com.nimbusds.jwt.JWTParser
-import no.nav.pensjon.vtp.client.testcontainers.VtpPensjonContainer
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import no.nav.pensjon.vtp.VtpPensjonApplication
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.slf4j.LoggerFactory
-import org.testcontainers.containers.output.Slf4jLogConsumer
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.test.context.TestPropertySource
 
-@Testcontainers
-class VtpPensjonClientTest {
-    companion object {
-        @Container
-        val vtpPensjonContainer: VtpPensjonContainer = VtpPensjonContainer()
-            .withEmbeddedMongoDB()
-            .withLogConsumer(Slf4jLogConsumer(LoggerFactory.getLogger(VtpPensjonContainer::class.java)))
-    }
-
-    private val vtpPensjon = vtpPensjonContainer.client()
-
-    @Test
-    fun `basic values are configured`() {
-        assertNotNull(vtpPensjonContainer.baseUrl())
-        assertNotNull(vtpPensjonContainer.ldapUrl())
-    }
+@SpringBootTest(
+    classes = [VtpPensjonApplication::class],
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
+@TestPropertySource(
+    properties = [
+        "ldap.server.enabled=false"
+    ]
+)
+class VtpPensjonClientTest constructor(
+    @LocalServerPort serverPort: Int
+) {
+    private val vtpPensjon = VtpPensjonClient("http://localhost:$serverPort")
 
     @Test
     fun `client can create AzureAD On Behalf Of tokens`() {
@@ -43,7 +38,7 @@ class VtpPensjonClientTest {
 
         JWTParser.parse(token.token).run {
             assertEquals(issuer, jwtClaimsSet.issuer)
-            assertEquals(audience, jwtClaimsSet.audience)
+            assertTrue(jwtClaimsSet.audience.contains(audience))
         }
     }
 
@@ -77,7 +72,7 @@ class VtpPensjonClientTest {
         assertNotNull(token)
         assertEquals("testConsumer", token.username)
 
-        JWTParser.parse(token.token).run {
+        JWTParser.parse(token.token.access_token).run {
             assertEquals(issuer, jwtClaimsSet.issuer)
         }
     }
