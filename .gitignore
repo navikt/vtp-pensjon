@@ -26,3 +26,5 @@ allure-results/*
 server/src/main/resources/webapps
 .DS_Store
 mocks/journalpost-mock/.openapi-generator/
+.flattened-pom.xml
+.flattened-pom.xml.bak
