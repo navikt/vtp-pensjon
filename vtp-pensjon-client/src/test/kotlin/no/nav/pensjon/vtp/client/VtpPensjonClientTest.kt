@@ -36,7 +36,7 @@ class VtpPensjonClientTest constructor(
         assertNotNull(token)
         assertNotNull(token.username)
 
-        JWTParser.parse(token.token).run {
+        JWTParser.parse(token.tokenResponse.accessToken).run {
             assertEquals(issuer, jwtClaimsSet.issuer)
             assertTrue(jwtClaimsSet.audience.contains(audience))
         }
@@ -54,7 +54,7 @@ class VtpPensjonClientTest constructor(
         assertNotNull(token)
         assertEquals("srv", token.username)
 
-        JWTParser.parse(token.token).run {
+        JWTParser.parse(token.tokenResponse.accessToken).run {
             assertEquals(issuer, jwtClaimsSet.issuer)
         }
     }
@@ -72,7 +72,7 @@ class VtpPensjonClientTest constructor(
         assertNotNull(token)
         assertEquals("testConsumer", token.username)
 
-        JWTParser.parse(token.token.access_token).run {
+        JWTParser.parse(token.tokenResponse.accessToken).run {
             assertEquals(issuer, jwtClaimsSet.issuer)
         }
     }

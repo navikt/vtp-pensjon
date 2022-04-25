@@ -1,6 +1,6 @@
 package no.nav.pensjon.vtp.client.tokens
 
-data class TokenMeta<T>(
-    val token: T,
+data class TokenMeta(
+    val tokenResponse: AccessTokenResponse,
     val username: String,
 )

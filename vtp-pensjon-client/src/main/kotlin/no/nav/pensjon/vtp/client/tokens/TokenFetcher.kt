@@ -7,7 +7,6 @@ import no.nav.pensjon.vtp.client.support.url
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
 import okhttp3.MediaType.parse as mediaType
 import okhttp3.Request.Builder as request
 import okhttp3.RequestBody.create as createBody
@@ -24,7 +23,7 @@ internal class TokenFetcher(
         issuer: String,
         consumer: String,
         scope: String,
-    ) = okHttpClient
+    ): AccessTokenResponse = okHttpClient
         .newCall(
             request()
                 .post(createBody(null, ""))
@@ -38,16 +37,14 @@ internal class TokenFetcher(
                 )
                 .build()
         )
-        .readJsonResponse<AccessTokenResponse, AccessTokenResponse> {
-            this
-        }
+        .readSuccessfulJsonResponse()
 
     fun fetchAzureAdToken(
         issuer: String,
         clientId: String,
         groups: List<String>,
         units: List<String>,
-    ) = okHttpClient
+    ): AccessTokenResponse = okHttpClient
         .newCall(
             request()
                 .postJson(
@@ -63,19 +60,14 @@ internal class TokenFetcher(
                 .basicAuth(username = clientId, password = "dummy")
                 .build()
         )
-        .readJsonResponse<IdTokenResponse, TokenMeta<String>> {
-            TokenMeta(
-                token = id_token,
-                username = JWT.decode(id_token).getStringClaim("NAVident")
-            )
-        }
+        .readSuccessfulJsonResponse()
 
     fun fetchIssoToken(
         issuer: String,
         clientId: String,
         groups: List<String>,
         units: List<String>,
-    ): TokenMeta<String> = okHttpClient
+    ): AccessTokenResponse = okHttpClient
         .newCall(
             request()
                 .postJson(
@@ -91,17 +83,12 @@ internal class TokenFetcher(
                 .basicAuth(username = clientId, password = "dummy")
                 .build()
         )
-        .readJsonResponse<IdTokenResponse, TokenMeta<String>> {
-            TokenMeta(
-                token = id_token,
-                username = JWT.decode(id_token).subject
-            )
-        }
+        .readSuccessfulJsonResponse()
 
     fun fetchStsToken(
         issuer: String,
         user: String,
-    ): TokenMeta<String> = okHttpClient
+    ): AccessTokenResponse = okHttpClient
         .newCall(
             request()
                 .url(
@@ -115,12 +102,7 @@ internal class TokenFetcher(
                 .basicAuth(username = user, password = "dummy")
                 .build()
         )
-        .readJsonResponse<AccessTokenResponse, TokenMeta<String>> {
-            TokenMeta(
-                token = access_token,
-                username = user
-            )
-        }
+        .readSuccessfulJsonResponse()
 
     data class AnsattRequest(
         val groups: List<String>,
@@ -134,24 +116,15 @@ internal class TokenFetcher(
         )
     )
 
-    private inline fun <reified T, R> Call.readJsonResponse(block: T.() -> R): R = execute().run {
+    private inline fun <reified T> Call.readSuccessfulJsonResponse(): T = execute().run {
         if (isSuccessful) {
-            block(readJsonResponse<T>())
+            val body = body()
+                ?.string()
+                ?: throw RuntimeException("Response from VTP was empty")
+
+            return objectMapper.readValue(body, T::class.java)
         } else {
             throw RuntimeException("Failed to fetch token status=${code()} body=${body()?.string()}")
         }
-    }
-
-    private inline fun <reified T> Response.readJsonResponse() = objectMapper.readValue(
-        responseBody(),
-        T::class.java
-    )
-
-
-    companion object {
-        private fun Response.responseBody() = (body()
-            ?.string()
-            ?: throw RuntimeException("Response from VTP was empty"))
-
     }
 }

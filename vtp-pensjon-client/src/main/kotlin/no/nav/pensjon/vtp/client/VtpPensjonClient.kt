@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.client
 
+import no.nav.pensjon.vtp.client.tokens.JWT
 import no.nav.pensjon.vtp.client.tokens.TokenFetcher
 import no.nav.pensjon.vtp.client.tokens.TokenMeta
 
@@ -15,7 +16,7 @@ class VtpPensjonClient(
         vtpPensjonUrl = baseUrl,
     )
 
-    fun azureAdOboToken(groups: List<String>, issuer: String? = null, audience: String? = null): TokenMeta<String> =
+    fun azureAdOboToken(groups: List<String>, issuer: String? = null, audience: String? = null): TokenMeta =
         tokenFetcher.fetchAzureAdToken(
             issuer = issuer
                 ?: azureAdIssuer
@@ -25,9 +26,14 @@ class VtpPensjonClient(
                 ?: throw IllegalStateException("Must supply a audience or define azureAdClientId"),
             groups = groups,
             units = emptyList()
-        )
+        ).let {
+            TokenMeta(
+                tokenResponse = it,
+                username = JWT.decode(it.idToken ?: throw RuntimeException("Missing id_token from AzureAD OBO call")).getStringClaim("NAVident"),
+            )
+        }
 
-    fun issoToken(clientId: String, groups: List<String>, issuer: String? = null): TokenMeta<String> =
+    fun issoToken(clientId: String, groups: List<String>, issuer: String? = null): TokenMeta =
         tokenFetcher.fetchIssoToken(
             issuer = issuer
                 ?: issoIssuer
@@ -35,10 +41,15 @@ class VtpPensjonClient(
             clientId = clientId,
             groups = groups,
             units = emptyList()
-        )
+        ).let {
+            TokenMeta(
+                tokenResponse = it,
+                username = JWT.decode(it.idToken ?: throw RuntimeException("Missing id_token from isso call")).subject,
+            )
+        }
 
     fun maskinportenToken(consumer: String, scope: String, issuer: String? = null) = TokenMeta(
-        token = tokenFetcher.fetchMaskinportenToken(
+        tokenResponse = tokenFetcher.fetchMaskinportenToken(
             issuer = issuer
                 ?: maskinportenIssuer
                 ?: throw IllegalStateException("Must supply a issuer or define maskinportenIssuer"),
@@ -47,10 +58,15 @@ class VtpPensjonClient(
         ),
     username = consumer)
 
-    fun stsToken(user: String, issuer: String? = null): TokenMeta<String> = tokenFetcher.fetchStsToken(
+    fun stsToken(user: String, issuer: String? = null): TokenMeta = tokenFetcher.fetchStsToken(
         issuer = issuer
             ?: stsIssuer
             ?: throw IllegalStateException("Must supply a issuer or define stsIssuer"),
         user = user
-    )
+    ).let {
+        TokenMeta(
+            tokenResponse = it,
+            username = user,
+        )
+    }
 }

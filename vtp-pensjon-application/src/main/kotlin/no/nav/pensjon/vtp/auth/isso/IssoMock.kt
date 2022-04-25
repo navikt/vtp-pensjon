@@ -79,26 +79,14 @@ class IssoMock(
     ): ResponseEntity<*> = (client_id ?: getUser(authorization))
         ?.let { clientId ->
             when (grant_type) {
-                "authorization_code" -> ok(
-                    Oauth2AccessTokenResponse(
-                        idToken = createIdToken(clientId, code, requestedIssuer),
-                        refreshToken = "refresh:$code",
-                        accessToken = "access:$code"
-                    )
-                )
+                "authorization_code" -> oauth2AccessTokenResponse(clientId, code, requestedIssuer)
                 "refresh_token" ->
                     refresh_token
                         ?.let {
                             if (!refresh_token.startsWith("refresh:")) {
                                 status(FORBIDDEN).body("Invalid refresh token $refresh_token")
                             } else {
-                                ok(
-                                    Oauth2AccessTokenResponse(
-                                        idToken = createIdToken(clientId, refresh_token.substring(8), requestedIssuer),
-                                        refreshToken = "refresh:${refresh_token.substring(8)}",
-                                        accessToken = "access:${refresh_token.substring(8)}"
-                                    )
-                                )
+                                oauth2AccessTokenResponse(clientId, refresh_token.substring(8), requestedIssuer)
                             }
                         }
                         ?: badRequest().body("Missing required parameter 'request_token'")
@@ -118,22 +106,28 @@ class IssoMock(
         @RequestParam("issuer") requestedIssuer: String?,
     ): ResponseEntity<*> = getUser(authorization)
         ?.let { clientId ->
-            createUser(ansattRequest.groups).let { (cn) ->
-                ok(
-                    Oauth2AccessTokenResponse(
-                        idToken = createIdToken(clientId, cn, requestedIssuer),
-                        refreshToken = "refresh:$cn",
-                        accessToken = "access:$cn"
-                    )
-                )
+            createUser(ansattRequest.groups).run {
+                oauth2AccessTokenResponse(clientId, cn, requestedIssuer)
             }
         }
         ?: status(UNAUTHORIZED).body("Missing basic authorization header")
 
+    private fun oauth2AccessTokenResponse(
+        clientId: String,
+        code: String,
+        requestedIssuer: String?
+    ) = ok(
+        Oauth2AccessTokenResponse(
+            idToken = createOidcToken(clientId, code, requestedIssuer),
+            refreshToken = "refresh:$code",
+            accessToken = createOidcToken(clientId, code, requestedIssuer),
+        )
+    )
+
     fun createUser(groups: List<String>) =
         ansattService.addAnnsatt(groups = groups, enheter = emptyList(), generated = true)
 
-    private fun createIdToken(clientId: String, code: String, requestedIssuer: String?): String {
+    private fun createOidcToken(clientId: String, code: String, requestedIssuer: String?): String {
         val codeData = code.split(";".toRegex()).toTypedArray()
 
         return oidcTokenGenerator.oidcToken(
