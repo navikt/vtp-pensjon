@@ -2,7 +2,6 @@ package no.nav.pensjon.vtp.client.tokens
 
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
-import com.nimbusds.jwt.JWTParser.parse
 import no.nav.pensjon.vtp.client.support.basicAuth
 import no.nav.pensjon.vtp.client.support.url
 import okhttp3.Call
@@ -67,7 +66,7 @@ internal class TokenFetcher(
         .readJsonResponse<IdTokenResponse, TokenMeta<String>> {
             TokenMeta(
                 token = id_token,
-                username = parse(id_token).jwtClaimsSet.getStringClaim("NAVident"),
+                username = JWT.decode(id_token).getStringClaim("NAVident")
             )
         }
 
@@ -95,7 +94,7 @@ internal class TokenFetcher(
         .readJsonResponse<IdTokenResponse, TokenMeta<String>> {
             TokenMeta(
                 token = id_token,
-                username = parse(id_token).jwtClaimsSet.subject,
+                username = JWT.decode(id_token).subject
             )
         }
 
