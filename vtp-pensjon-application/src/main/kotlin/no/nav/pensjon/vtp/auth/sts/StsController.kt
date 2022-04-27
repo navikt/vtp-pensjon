@@ -26,7 +26,7 @@ import javax.xml.bind.JAXB.marshal
 @RestController
 @Tag(name = "Security Token Service")
 @RequestMapping("/rest/v1/sts")
-class STSRestTjeneste(
+class StsController(
     private val oidcTokenGenerator: OidcTokenGenerator,
     private val generator: STSIssueResponseGenerator,
     private val samlTokenGenerator: SamlTokenGenerator,
@@ -54,7 +54,8 @@ class STSRestTjeneste(
     fun dummyToken(
         @RequestHeader(AUTHORIZATION) authorization: String?,
         @RequestParam grant_type: String?,
-        @RequestParam scope: String?
+        @RequestParam scope: String?,
+        @RequestParam("issuer") requestedIssuer: String?,
     ) = getUser(authorization)
         ?.let { user ->
             val expiresInSeconds = 3600L * 6L
@@ -67,7 +68,7 @@ class STSRestTjeneste(
                             user,
                             "vtp-pensjon"
                         ),
-                        issuer = issuer,
+                        issuer = requestedIssuer ?: this.issuer,
                         expiration = now().apply { addSeconds(expiresInSeconds) },
                         additionalClaims = mapOf(
                             "azp" to user
@@ -108,9 +109,9 @@ class STSRestTjeneste(
     @GetMapping("/.well-known/openid-configuration")
     fun wellKnown() = WellKnown(
         issuer = issuer,
-        token_endpoint = linkTo<STSRestTjeneste> { dummyToken(null, null, null) }.toUri().withoutQueryParameters(),
-        exchange_token_endpoint = linkTo<STSRestTjeneste> { dummySaml("dummy", "dummy", "dummy") }.toUri().withoutQueryParameters(),
-        jwks_uri = linkTo<STSRestTjeneste> { jwks() }.toUri().withoutQueryParameters(),
+        token_endpoint = linkTo<StsController> { dummyToken(null, null, null, null) }.toUri().withoutQueryParameters(),
+        exchange_token_endpoint = linkTo<StsController> { dummySaml("dummy", "dummy", "dummy") }.toUri().withoutQueryParameters(),
+        jwks_uri = linkTo<StsController> { jwks() }.toUri().withoutQueryParameters(),
     )
 
     data class SAMLResponse(

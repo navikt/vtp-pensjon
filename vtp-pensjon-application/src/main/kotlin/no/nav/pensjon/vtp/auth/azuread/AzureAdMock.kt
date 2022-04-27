@@ -243,7 +243,7 @@ class AzureAdMock(
         }
     }
 
-    private fun createToken(audience: List<String>, ansattId: String, tenant: String, clientId: String, nonce: String? = null, scope: String? = null, sid: String? = null): String {
+    private fun createToken(audience: List<String>, ansattId: String, tenant: String, clientId: String, nonce: String? = null, scope: String? = null, sid: String? = null, requestedIssuer: String? = null): String {
         val user = ansattService.findByCn(ansattId)
             ?: throw RuntimeException("Fant ikke NAV-ansatt med brukernavn $ansattId")
 
@@ -252,7 +252,7 @@ class AzureAdMock(
             jsonWebKeySupport = jsonWebKeySupport,
             email = user.email,
             nonce = nonce,
-            issuer = getIssuer(tenant),
+            issuer = requestedIssuer ?: getIssuer(tenant),
             groups = user.groups.map { ldapGroupName: String -> toAzureGroupId(ldapGroupName) },
             aud = audience,
             additionalClaims = mapOf(
@@ -340,7 +340,8 @@ class AzureAdMock(
     fun newAnsatt(
         @PathVariable("tenant") tenant: String,
         @RequestHeader(AUTHORIZATION) authorization: String?,
-        @RequestBody ansattRequest: AnsattRequest
+        @RequestBody ansattRequest: AnsattRequest,
+        @RequestParam("issuer") requestedIssuer: String?,
     ): ResponseEntity<*> = getUser(authorization)
         ?.let { clientId ->
             createUser(ansattRequest.groups).let { (cn) ->
@@ -353,7 +354,8 @@ class AzureAdMock(
                             tenant = tenant,
                             clientId = clientId,
                             scope = "foo",
-                            sid = sid
+                            sid = sid,
+                            requestedIssuer = requestedIssuer,
                         ),
                         refreshToken = createToken(
                             audience = listOf(clientId),
@@ -361,7 +363,8 @@ class AzureAdMock(
                             tenant = tenant,
                             clientId = clientId,
                             scope = "foo",
-                            sid = sid
+                            sid = sid,
+                            requestedIssuer = requestedIssuer,
                         ),
                         accessToken = createToken(
                             audience = listOf(clientId),
@@ -369,7 +372,8 @@ class AzureAdMock(
                             tenant = tenant,
                             clientId = clientId,
                             scope = "foo",
-                            sid = sid
+                            sid = sid,
+                            requestedIssuer = requestedIssuer,
                         ),
                     )
                 )

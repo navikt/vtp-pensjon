@@ -13,14 +13,12 @@ import no.nav.pensjon.vtp.configuration.graphql.model.IdenterDataFetcher
 import no.nav.pensjon.vtp.configuration.graphql.model.PersonDataFetcher
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import org.springframework.context.annotation.Bean
-import org.springframework.core.io.ResourceLoader
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 
 @Component
 class GraphQLConfig(
     private val personModellRepository: PersonModellRepository,
-    private val resourceLoader: ResourceLoader
 ) {
     @Bean
     @PostConstruct
@@ -40,7 +38,7 @@ class GraphQLConfig(
     }.build()
 
     private fun typeRegistry() =
-        resourceLoader.getResource("classpath:pdl-schema.graphql").let {
-            SchemaParser().parse(it.file)
+        javaClass.getResourceAsStream("/pdl-schema.graphql").use {
+            SchemaParser().parse(it)
         }
 }

@@ -1,0 +1,13 @@
+package no.nav.pensjon.vtp.client.tokens
+
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+
+const val stsToken = "eyJraWQiOiIxIiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOlsic2Frc2JlaCIsInZ0cC1wZW5zam9uIl0sImlzcyI6InZ0cC1wZW5zam9uLXN0cy1pc3N1ZXIiLCJleHAiOjE2NTA4ODk5MzYsImlhdCI6MTY1MDg2ODMzNiwic3ViIjoic2Frc2JlaCIsImp0aSI6IjVQblc4M1NBTnBxcnFFc3ZFb3R4Q3ciLCJhenAiOiJzYWtzYmVoIn0.C3gzFyMQrL2EhB2F2rJQ1YCCEkj0u2u_Dm2Q7dSOStRXgip8IPgVb_X7Zvmo7Ggf28w0LYEcVwO3JDS9sO_vsFAL2DKfRzZ7gUgx56ww1QQ8udep1ao1uLR7csCb81FgQ041TYKRNJOLiZ9cHqLLnDQSSEXivrgHuqjVkrPEaekJWPkJmr1QF2EiMR6_-ih3YHPKnN3uZPIGZ3AQ4htVpqjSLyFhlq3imF-p_qEOeyzFawaP97jFNfeaJED8502CZrgJ2BSCgkFI1IGe86snxkpf2QFeLwWVaWfvRvKx5gLZXNhaiz_UH8iDJdWV01NKzMOcYZxN-L3ptW-a3OYA4g"
+
+internal class JwtTest {
+    @Test
+    internal fun testDecode() {
+        assertEquals("saksbeh", JWT.decode(stsToken).subject)
+    }
+}
