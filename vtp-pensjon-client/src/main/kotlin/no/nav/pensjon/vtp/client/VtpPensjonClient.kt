@@ -55,8 +55,7 @@ class VtpPensjonClient(
                 ?: throw IllegalStateException("Must supply a issuer or define maskinportenIssuer"),
             consumer = consumer,
             scope = scope
-        ),
-    username = consumer)
+        ))
 
     fun stsToken(user: String, issuer: String? = null): TokenMeta = tokenFetcher.fetchStsToken(
         issuer = issuer
