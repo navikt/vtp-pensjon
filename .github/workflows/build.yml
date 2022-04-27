@@ -63,7 +63,7 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          mvn -T1C verify --settings maven-settings.xml -Drevision="${VERSION}" -Dfile.encoding=UTF-8 -Dkotlin.format.skip=true
+          mvn -T1C verify -Drevision="${VERSION}" -Dfile.encoding=UTF-8 -Dkotlin.format.skip=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -82,7 +82,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         shell: bash
         run: |
-          mvn -T1C deploy --settings maven-settings.xml -Drevision="${VERSION}" -Dfile.encoding=UTF-8 -Dkotlin.format.skip=true -Dkotlin.check.skip=true -DskipTests source:jar
+          mvn -T1C deploy -Drevision="${VERSION}" -Dfile.encoding=UTF-8 -Dkotlin.format.skip=true -Dkotlin.check.skip=true -DskipTests source:jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
