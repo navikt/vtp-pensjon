@@ -47,9 +47,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <revision>1.0.0-SNAPSHOT</revision>
-
-        <maven.deploy.skip>true</maven.deploy.skip>
-    </properties>
+s    </properties>
 
     <build>
         <pluginManagement>
