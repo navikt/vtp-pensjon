@@ -29,6 +29,12 @@
         <url>https://github.com/navikt/vtp-pensjon</url>
         <tag>vtp-pensjon</tag>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/navikt/pesys-esb-wsclient</url>
+        </repository>
+    </distributionManagement>
 
     <modules>
         <module>vtp-pensjon-frontend</module>
@@ -41,6 +47,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <revision>1.0.0-SNAPSHOT</revision>
+
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <build>
