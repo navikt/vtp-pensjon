@@ -78,6 +78,14 @@ jobs:
             --tag ${IMAGE_BASE_GHCR}:latest \
             .
 
+      - name: Deploy Maven Artifacts
+        if: github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          mvn -T1C deploy --settings maven-settings.xml -Drevision="${VERSION}" -Dfile.encoding=UTF-8 -Dkotlin.format.skip=true -DskipTests source:jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Log in to the Container registry
         if: github.ref == 'refs/heads/main'
         uses: docker/login-action@v1
