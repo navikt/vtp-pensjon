@@ -16,6 +16,7 @@
         <java.version>1.8</java.version>
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin.format.skip>false</kotlin.format.skip>
+        <kotlin.check.skip>false</kotlin.check.skip>
 
         <sonar.projectKey>navikt_vtp-pensjon</sonar.projectKey>
         <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
@@ -778,6 +779,9 @@
                          binding to a phase before sources are generated
                         -->
                         <phase>validate</phase>
+                        <configuration>
+                            <skip>${kotlin.check.skip}</skip>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
