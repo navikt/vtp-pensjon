@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.kotlinModule
 import no.nav.pensjon.vtp.client.support.basicAuth
 import no.nav.pensjon.vtp.client.support.url
 import okhttp3.Call
+import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.MediaType.parse as mediaType
@@ -39,7 +40,7 @@ internal class TokenFetcher(
         )
         .readSuccessfulJsonResponse()
 
-    fun fetchAzureAdToken(
+    fun fetchAzureAdOboToken(
         issuer: String,
         clientId: String,
         groups: List<String>,
@@ -58,6 +59,21 @@ internal class TokenFetcher(
                     queryParameters = mapOf("issuer" to issuer),
                 )
                 .basicAuth(username = clientId, password = "dummy")
+                .build()
+        )
+        .readSuccessfulJsonResponse()
+
+    fun fetchAzureAdCcToken(audience: String): AccessTokenResponse = okHttpClient
+        .newCall(
+            request()
+                .url("$vtpPensjonUrl/rest/AzureAd/vtp-pensjon/oauth2/v2.0/token")
+                .post(
+                    FormBody.Builder()
+                        .add("client_id", "hmm")
+                        .add("grant_type", "client_credentials")
+                        .add("scope", audience)
+                        .build()
+                )
                 .build()
         )
         .readSuccessfulJsonResponse()
@@ -100,6 +116,25 @@ internal class TokenFetcher(
                     )
                 )
                 .basicAuth(username = user, password = "dummy")
+                .build()
+        )
+        .readSuccessfulJsonResponse()
+
+    fun fetchTokenXToken(
+            clientAssertion: String,
+            subjectToken: String,
+            audience: String
+    ): AccessTokenResponse = okHttpClient
+        .newCall(
+            request()
+                .url("$vtpPensjonUrl/rest/tokenx/token")
+                .post(
+                    FormBody.Builder()
+                        .add("client_assertion", clientAssertion)
+                        .add("subject_token", subjectToken)
+                        .add("audience", audience)
+                        .build()
+                )
                 .build()
         )
         .readSuccessfulJsonResponse()

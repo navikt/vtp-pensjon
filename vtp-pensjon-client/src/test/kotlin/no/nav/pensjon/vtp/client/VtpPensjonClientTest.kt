@@ -73,6 +73,21 @@ class VtpPensjonClientTest constructor(
     }
 
     @Test
+    fun `client can create AzureAD Client Credentials tokens`() {
+        val audience = "myAudience"
+
+        val token = vtpPensjon.azureAdCcToken(audience)
+
+        assertNotNull(token)
+
+        JWTParser.parse(token.tokenResponse.accessToken).run {
+            assertTrue(jwtClaimsSet.issuer.contains("/vtp-pensjon/v2.0"))
+            assertTrue(jwtClaimsSet.audience.contains(audience))
+            assertTrue((jwtClaimsSet.getClaim("roles") as List<*>).contains("access_as_application"))
+        }
+    }
+
+    @Test
     fun `client can create ISSO tokens`() {
         val issuer = "http://vtp-pensjon.local/isso"
         val audience = "myAudience"
@@ -124,6 +139,24 @@ class VtpPensjonClientTest constructor(
 
         JWTParser.parse(token.tokenResponse.accessToken).run {
             assertEquals(issuer, jwtClaimsSet.issuer)
+        }
+    }
+
+    @Test
+    fun `client can create TokenX tokens`() {
+        val audience = "testAudience"
+
+        val token = vtpPensjon.tokenXToken(
+            clientAssertion = "testClientAssertion",
+            subjectToken = "testSubjectToken",
+            audience = audience
+        )
+
+        assertNotNull(token)
+
+        JWTParser.parse(token.tokenResponse.accessToken).run {
+            assertTrue(jwtClaimsSet.audience.contains(audience))
+            assertTrue(jwtClaimsSet.issuer.contains("/rest/tokenx"))
         }
     }
 }

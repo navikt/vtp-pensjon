@@ -17,7 +17,7 @@ class VtpPensjonClient(
     )
 
     fun azureAdOboToken(groups: List<String>, issuer: String? = null, audience: String? = null): TokenMeta =
-        tokenFetcher.fetchAzureAdToken(
+        tokenFetcher.fetchAzureAdOboToken(
             issuer = issuer
                 ?: azureAdIssuer
                 ?: throw IllegalStateException("Must supply a issuer or define azureAdClientId"),
@@ -31,6 +31,11 @@ class VtpPensjonClient(
                 tokenResponse = it,
                 username = JWT.decode(it.idToken ?: throw RuntimeException("Missing id_token from AzureAD OBO call")).getStringClaim("NAVident"),
             )
+        }
+
+    fun azureAdCcToken(audience: String): TokenMeta =
+        tokenFetcher.fetchAzureAdCcToken(audience).let {
+            TokenMeta(tokenResponse = it)
         }
 
     fun issoToken(clientId: String, groups: List<String>, issuer: String? = null): TokenMeta =
@@ -68,4 +73,13 @@ class VtpPensjonClient(
             username = user,
         )
     }
+
+    fun tokenXToken(clientAssertion: String, subjectToken: String, audience: String): TokenMeta =
+        tokenFetcher.fetchTokenXToken(
+                clientAssertion = clientAssertion,
+                subjectToken = subjectToken,
+                audience = audience
+        ).let {
+            TokenMeta(tokenResponse = it)
+        }
 }
