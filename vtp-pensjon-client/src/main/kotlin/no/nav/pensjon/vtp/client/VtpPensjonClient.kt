@@ -3,6 +3,7 @@ package no.nav.pensjon.vtp.client
 import no.nav.pensjon.vtp.client.tokens.JWT
 import no.nav.pensjon.vtp.client.tokens.TokenFetcher
 import no.nav.pensjon.vtp.client.tokens.TokenMeta
+import no.nav.pensjon.vtp.client.unleash.UnleashSomething
 
 class VtpPensjonClient(
     baseUrl: String,
@@ -14,6 +15,10 @@ class VtpPensjonClient(
 ) {
     private val tokenFetcher = TokenFetcher(
         vtpPensjonUrl = baseUrl,
+    )
+
+    private val unleash = UnleashSomething(
+        vtpPensjonUrl = baseUrl
     )
 
     fun azureAdOboToken(groups: List<String>, issuer: String? = null, audience: String? = null): TokenMeta =
@@ -82,4 +87,14 @@ class VtpPensjonClient(
         ).let {
             TokenMeta(tokenResponse = it)
         }
+
+    fun enableToggle(name: String) = unleash.toggle(
+        name = name,
+        enabled = true
+    )
+
+    fun disableToggle(name: String) = unleash.toggle(
+        name = name,
+        enabled = false
+    )
 }
