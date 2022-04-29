@@ -2,6 +2,7 @@ package no.nav.pensjon.vtp.client
 
 import com.nimbusds.jwt.JWTParser
 import no.nav.pensjon.vtp.VtpPensjonApplication
+import no.nav.pensjon.vtp.client.unleash.UnleashTestUtil
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
@@ -50,7 +51,10 @@ class VtpPensjonClientTest constructor(
         }
     }
 
-    private val vtpPensjon = VtpPensjonClient("http://localhost:$serverPort")
+    private val vtpPensjonBaseUrl = "http://localhost:$serverPort"
+
+    private val vtpPensjon = VtpPensjonClient(vtpPensjonBaseUrl)
+    private val unleashTestUtil = UnleashTestUtil(vtpPensjonBaseUrl)
 
     @Test
     fun `client can create AzureAD On Behalf Of tokens`() {
@@ -158,5 +162,16 @@ class VtpPensjonClientTest constructor(
             assertTrue(jwtClaimsSet.audience.contains(audience))
             assertTrue(jwtClaimsSet.issuer.contains("/rest/tokenx"))
         }
+    }
+
+    @Test
+    fun `client can enable enable and disable toggle`() {
+        val toggleName = "testToggle"
+
+        vtpPensjon.enableToggle(toggleName)
+        assertTrue(unleashTestUtil.isEnabled(toggleName))
+
+        vtpPensjon.disableToggle(toggleName)
+        assertFalse(unleashTestUtil.isEnabled(toggleName))
     }
 }
