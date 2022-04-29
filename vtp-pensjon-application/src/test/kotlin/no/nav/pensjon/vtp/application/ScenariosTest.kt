@@ -3,6 +3,7 @@ package no.nav.pensjon.vtp.application
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger
 import no.nav.pensjon.vtp.testmodell.repo.*
 import no.nav.pensjon.vtp.testmodell.repo.impl.TestscenarioService
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

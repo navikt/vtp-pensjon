@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.client
 
+import no.nav.pensjon.vtp.client.scenario.SamboerScenario
 import no.nav.pensjon.vtp.client.tokens.JWT
 import no.nav.pensjon.vtp.client.tokens.TokenFetcher
 import no.nav.pensjon.vtp.client.tokens.TokenMeta
@@ -18,6 +19,10 @@ class VtpPensjonClient(
     )
 
     private val unleash = UnleashSomething(
+        vtpPensjonUrl = baseUrl
+    )
+
+    private val samboerScenario = SamboerScenario(
         vtpPensjonUrl = baseUrl
     )
 
@@ -97,4 +102,6 @@ class VtpPensjonClient(
         name = name,
         enabled = false
     )
+
+    fun samboerScenario() = samboerScenario.initScenario("1010")
 }
