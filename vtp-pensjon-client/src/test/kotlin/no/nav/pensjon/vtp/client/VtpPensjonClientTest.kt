@@ -47,6 +47,7 @@ class VtpPensjonClientTest constructor(
             TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
                 configurableApplicationContext.environment,
                 "spring.data.mongodb.port=${mongoDBContainer.firstMappedPort}",
+                "pensjon.testdata.url="
             )
         }
     }
