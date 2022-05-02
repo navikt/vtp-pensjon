@@ -47,6 +47,7 @@ class VtpPensjonClientTest constructor(
             TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
                 configurableApplicationContext.environment,
                 "spring.data.mongodb.port=${mongoDBContainer.firstMappedPort}",
+                "pensjon.testdata.url="
             )
         }
     }
@@ -173,5 +174,16 @@ class VtpPensjonClientTest constructor(
 
         vtpPensjon.disableToggle(toggleName)
         assertFalse(unleashTestUtil.isEnabled(toggleName))
+    }
+
+    @Test
+    fun `client can initialize scenario`() {
+        val samboerScenario = vtpPensjon.samboerScenario()
+        assertNotNull(samboerScenario)
+        assertNotNull(samboerScenario.personopplysningerDto)
+        assertNotNull(samboerScenario.personopplysningerDto.soekerIdent)
+        assertTrue(samboerScenario.personopplysningerDto.soekerIdent.length == 11)
+        assertNotNull(samboerScenario.personopplysningerDto.annenpartIdent)
+        assertTrue(samboerScenario.personopplysningerDto.annenpartIdent.length == 11)
     }
 }
