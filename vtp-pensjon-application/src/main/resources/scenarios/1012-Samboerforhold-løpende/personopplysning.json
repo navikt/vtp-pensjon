@@ -1,0 +1,86 @@
+{
+	"søker": {
+		"ident": "${for1}",
+		"fødselsdato": "now()-P50Y",
+		"kjønn": "M",
+		"geografiskTilknytning": {
+			"type": "Land",
+			"kode": "NOR"
+		},
+		"adresser": [
+			{
+				"@type": "ref",
+				"fom": "now() - P1Y",
+				"adresseType": "BOSTEDSADRESSE",
+				"land": "NOR"
+			}
+		],
+		"personstatus": [
+			{
+				"kode": "BOSA",
+                "fom": "now()-P50Y"
+			}
+		],
+		"statsborgerskap": [{
+			"land": "NOR",
+			"fom": null,
+			"tom": null,
+			"endringstype": "ny",
+			"endringstidspunkt": null
+		}],
+		"sivilstand": [
+			{
+				"kode": "UGIF"
+			}
+		],
+		"samboerforhold": [
+			{
+				"fraOgMed": "2020-01-01",
+				"opprettetAv": "Bruker selv"
+			}
+		]
+	},
+	"annenPart": {
+		"ident": "${for2}",
+		"fødselsdato": "now()-P50Y",
+		"kjønn": "K",
+		"personstatus": [
+			{
+				"kode": "BOSA",
+				"fom": "now()-P50Y"
+			}
+		],
+		"statsborgerskap": [{
+			"land": "NOR",
+			"fom": null,
+			"tom": null,
+			"endringstype": "ny",
+			"endringstidspunkt": null
+		}],
+		"adresser": [
+			{
+				"@type": "ref",
+				"fom": "now() - P1Y",
+				"adresseType": "BOSTEDSADRESSE",
+				"land": "NOR"
+			}
+		],
+		"sivilstand": [
+			{
+				"kode": "UGIF"
+			}
+		],
+		"samboerforhold": [
+			{
+				"fraOgMed": "2020-01-01",
+				"opprettetAv": "Bruker selv"
+			}
+		]
+	},
+	"familierelasjoner": [
+		{
+			"rolle": "SAMB",
+			"til": "${for2}"
+		}
+	]
+}
