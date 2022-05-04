@@ -2,7 +2,7 @@ package no.nav.pensjon.vtp.mocks.popp.kjerne
 
 data class Inntekt(
     val inntektId: Long? = null,
-    val pid: Pid? = null,
+    val fnr: Pid? = null,
     val kilde: String? = null,
     val kommune: String? = null,
     val piMerke: String? = null,
