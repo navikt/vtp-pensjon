@@ -40,6 +40,7 @@
         <module>vtp-pensjon-frontend</module>
         <module>vtp-pensjon-application</module>
         <module>vtp-pensjon-client</module>
+        <module>vtp-pensjon-common</module>
     </modules>
 
 

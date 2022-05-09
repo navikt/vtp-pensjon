@@ -347,6 +347,11 @@
             <artifactId>pselv-esb-wsclient-legacy</artifactId>
         </dependency>
         <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>vtp-pensjon-common</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
             <groupId>no.nav.tjenester</groupId>
             <artifactId>aordningen-inntektsinformasjon-v1</artifactId>
         </dependency>

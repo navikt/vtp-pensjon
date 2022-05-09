@@ -1,8 +1,5 @@
 package no.nav.pensjon.vtp.mocks.popp.kjerne
 
-import no.nav.pensjon.vtp.mocks.popp.kjerne.ChangeStamp
-import no.nav.pensjon.vtp.mocks.popp.kjerne.Pid
-
 data class Omsorg(
     val omsorgId: Long? = null,
     val fnr: Pid? = null,

@@ -1,10 +1,12 @@
 package no.nav.pensjon.vtp.client
 
 import no.nav.pensjon.vtp.client.scenario.SamboerScenario
+import no.nav.pensjon.vtp.client.scenario.VtpPensjonTestScenarioService
 import no.nav.pensjon.vtp.client.tokens.JWT
 import no.nav.pensjon.vtp.client.tokens.TokenFetcher
 import no.nav.pensjon.vtp.client.tokens.TokenMeta
 import no.nav.pensjon.vtp.client.unleash.UnleashSomething
+import no.nav.pensjon.vtp.common.testscenario.VtpPensjonTestScenario
 
 class VtpPensjonClient(
     baseUrl: String,
@@ -25,6 +27,8 @@ class VtpPensjonClient(
     private val samboerScenario = SamboerScenario(
         vtpPensjonUrl = baseUrl
     )
+
+    private val vtpPensjonTestScenarioService = VtpPensjonTestScenarioService(vtpPensjonUrl = baseUrl)
 
     fun azureAdOboToken(groups: List<String>, issuer: String? = null, audience: String? = null): TokenMeta =
         tokenFetcher.fetchAzureAdOboToken(
@@ -104,4 +108,6 @@ class VtpPensjonClient(
     )
 
     fun samboerScenario() = samboerScenario.initScenario("1010")
+
+    fun createScenario(vtpPensjonTestScenario: VtpPensjonTestScenario) = vtpPensjonTestScenarioService.createScenario(vtpPensjonTestScenario)
 }
