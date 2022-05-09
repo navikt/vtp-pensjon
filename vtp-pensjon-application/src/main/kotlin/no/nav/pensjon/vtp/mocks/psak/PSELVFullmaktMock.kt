@@ -26,14 +26,14 @@ class PSELVFullmaktMock : PSELVFullmakt {
 
     @WebMethod
     @RequestWrapper(
-            localName = "hentFullmaktListe",
-            targetNamespace = "http://nav-cons-pen-pselv-fullmakt/no/nav/inf",
-            className = "no.nav.inf.pselv.fullmakt.HentFullmaktListe"
+        localName = "hentFullmaktListe",
+        targetNamespace = "http://nav-cons-pen-pselv-fullmakt/no/nav/inf",
+        className = "no.nav.inf.pselv.fullmakt.HentFullmaktListe"
     )
     @ResponseWrapper(
-            localName = "hentFullmaktListeResponse",
-            targetNamespace = "http://nav-cons-pen-pselv-fullmakt/no/nav/inf",
-            className = "no.nav.inf.pselv.fullmakt.HentFullmaktListeResponse"
+        localName = "hentFullmaktListeResponse",
+        targetNamespace = "http://nav-cons-pen-pselv-fullmakt/no/nav/inf",
+        className = "no.nav.inf.pselv.fullmakt.HentFullmaktListeResponse"
     )
     @WebResult(name = "hentFullmaktListeResponse", targetNamespace = "")
     override fun hentFullmaktListe(request: ASBOPenHentFullmaktListeRequest?): ASBOPenFullmaktListe = ASBOPenFullmaktListe()

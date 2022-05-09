@@ -1,8 +1,5 @@
 package no.nav.pensjon.vtp.mocks.popp.kjerne
 
-import no.nav.pensjon.vtp.mocks.popp.kjerne.ChangeStamp
-import no.nav.pensjon.vtp.mocks.popp.kjerne.Pid
-
 data class Dagpenger(
     val dagpengerId: Long? = null,
     val fnr: Pid? = null,
@@ -16,4 +13,3 @@ data class Dagpenger(
     val barnetillegg: Int? = null,
     val changeStamp: ChangeStamp? = null,
 )
-
