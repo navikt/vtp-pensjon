@@ -1,6 +1,5 @@
 package no.nav.pensjon.vtp.mocks.popp.kjerne
 
-import no.nav.pensjon.vtp.mocks.popp.kjerne.ChangeStamp
 import java.util.*
 
 class ForstegangstjenestePeriode {

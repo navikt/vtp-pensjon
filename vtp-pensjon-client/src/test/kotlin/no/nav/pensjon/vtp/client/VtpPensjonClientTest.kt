@@ -3,6 +3,7 @@ package no.nav.pensjon.vtp.client
 import com.nimbusds.jwt.JWTParser
 import no.nav.pensjon.vtp.VtpPensjonApplication
 import no.nav.pensjon.vtp.client.unleash.UnleashTestUtil
+import no.nav.pensjon.vtp.common.testscenario.VtpPensjonTestScenario
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
@@ -185,5 +186,20 @@ class VtpPensjonClientTest constructor(
         assertTrue(samboerScenario.personopplysningerDto.soekerIdent.length == 11)
         assertNotNull(samboerScenario.personopplysningerDto.annenpartIdent)
         assertTrue(samboerScenario.personopplysningerDto.annenpartIdent.length == 11)
+    }
+
+    @Test
+    fun `client can create test scenario`() {
+        val wantedPid = "12345678901"
+
+        val result = vtpPensjon.createScenario(
+            VtpPensjonTestScenario(
+                pid = wantedPid
+            )
+        )
+
+        assertNotNull(result)
+        assertEquals(wantedPid, result.pid)
+        assertNotNull(result.fornavn)
     }
 }
