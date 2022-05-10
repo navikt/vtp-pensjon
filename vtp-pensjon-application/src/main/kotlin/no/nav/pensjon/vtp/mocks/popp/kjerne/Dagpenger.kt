@@ -13,4 +13,3 @@ data class Dagpenger(
     val barnetillegg: Int? = null,
     val changeStamp: ChangeStamp? = null,
 )
-
