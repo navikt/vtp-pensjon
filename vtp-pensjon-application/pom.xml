@@ -26,6 +26,7 @@
         <maven.test.skip>false</maven.test.skip>
 
         <cxf.version>3.5.2</cxf.version>
+        <jaxb2-basics.version>0.12.0</jaxb2-basics.version>
         <tjenestespesifikasjoner.version>1.2021.02.22-10.45-4201aaea72fb</tjenestespesifikasjoner.version>
         <pensjon-tjenestespesifikasjoner.version>1.2020.08.22-15.02-5a6bc2023040</pensjon-tjenestespesifikasjoner.version>
     </properties>
@@ -285,7 +286,7 @@
             <dependency>
                 <groupId>org.jvnet.jaxb2_commons</groupId>
                 <artifactId>jaxb2-basics-runtime</artifactId>
-                <version>0.12.0</version>
+                <version>${jaxb2-basics.version}</version>
             </dependency>
 
             <dependency>
@@ -640,7 +641,7 @@
                     <dependency>
                         <groupId>org.jvnet.jaxb2_commons</groupId>
                         <artifactId>jaxb2-basics</artifactId>
-                        <version>0.12.0</version>
+                        <version>${jaxb2-basics.version}</version>
                     </dependency>
                 </dependencies>
                 <executions>
