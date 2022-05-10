@@ -755,42 +755,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.github.gantsign.maven</groupId>
-                <artifactId>ktlint-maven-plugin</artifactId>
-                <version>1.13.1</version>
-                <executions>
-                    <execution>
-                        <id>format-kotlin-code</id>
-                        <goals>
-                            <goal>format</goal>
-                        </goals>
-                        <!--
-                         Unable to get plugin to exclude generated sources (using sourcesExcludes),
-                         binding to a phase before sources are generated
-                        -->
-                        <phase>validate</phase>
-                        <configuration>
-                            <skip>${kotlin.format.skip}</skip>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>check-kotlin-code</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <!--
-                         Unable to get plugin to exclude generated sources (using sourcesExcludes),
-                         binding to a phase before sources are generated
-                        -->
-                        <phase>validate</phase>
-                        <configuration>
-                            <skip>${kotlin.check.skip}</skip>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <version>${kotlin.version}</version>
