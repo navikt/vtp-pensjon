@@ -7,13 +7,13 @@ import java.util.*
 import kotlin.random.Random
 
 @RestController
-@Tag(name = "POPP Pensjonspoeng")
-@RequestMapping("/rest/popp/api/")
-class PensjonsPoengController { // http://localhost:8060/rest/popp/api/pensjonspoeng"
+@Tag(name = "POPP Pensjonspoeng, opptjeningsrunnlag og beholdning")
+@RequestMapping("/rest")
+class POPPMock {
 
-    @GetMapping(path = ["/pensjonspoeng"])
+    @GetMapping(value = ["/popp/api/pensjonspoeng"])
     fun hentPensjonspoengListe(
-        @RequestHeader("fnr") fodselsnummer: String?,
+        @RequestHeader("fnr", required = true) fodselsnummer: String,
         @RequestParam(required = false) fomAr: Int?,
         @RequestParam(required = false) tomAr: Int?,
         @RequestParam(required = false) pensjonspoengType: String?
@@ -26,7 +26,7 @@ class PensjonsPoengController { // http://localhost:8060/rest/popp/api/pensjonsp
                     IntRange(fomAr, tomAr)
                         .forEach {
                             pensjonspoeng.add(
-                                Pensjonspoeng().apply {
+                                Poeng().apply {
                                     pensjonspoengId = Random.nextLong()
                                     this.fnr = fnr
                                     fnrOmsorgFor = null
@@ -57,8 +57,8 @@ class PensjonsPoengController { // http://localhost:8060/rest/popp/api/pensjonsp
         }
     }
 
-    @GetMapping(path = ["/opptjeningsgrunnlag/{fnr}"])
-    fun hentOpptjeningsGrunnlag(@PathVariable fnr: String, @RequestParam grunnlagsTypeListe: List<String>): HentOpptjeningsGrunnlagResponse {
+    @GetMapping(value = ["/popp/api/opptjeningsgrunnlag/{fnr}"])
+    fun hentOpptjeningsGrunnlag(@PathVariable fnr: String, @RequestParam(required = false) grunnlagsTypeListe: List<String>? = null): HentOpptjeningsGrunnlagResponse {
         return HentOpptjeningsGrunnlagResponse().apply {
             opptjeningsGrunnlag = OpptjeningsGrunnlag().apply {
                 this.fnr = Pid(fnr)
@@ -66,10 +66,27 @@ class PensjonsPoengController { // http://localhost:8060/rest/popp/api/pensjonsp
         }
     }
 
+    @PostMapping(value = ["/popp/api/beholdning"])
+    fun hentBeholdningListe(@RequestBody(required = false) body: HentBeholdningListeRequest): HentBeholdningListeResponse {
+        return HentBeholdningListeResponse()
+    }
+
+    class HentBeholdningListeResponse {
+        val beholdninger = emptyList<String>()
+    }
+
+    class HentBeholdningListeRequest {
+        private val fnr: Pid? = null
+        private val beholdningType: String? = null
+        private val serviceDirectiveTPOPP006: String? = null
+        private val fomDato: Date? = null
+        private val tomDato: Date? = null
+    }
+
     class Pid(val pid: String?) : Serializable
 
     class HentPensjonspoengListeResponse : Serializable {
-        val pensjonspoeng: MutableList<Pensjonspoeng> = mutableListOf()
+        val pensjonspoeng: MutableList<Poeng> = mutableListOf()
     }
 
     class Inntekt : Serializable {
@@ -84,7 +101,7 @@ class PensjonsPoengController { // http://localhost:8060/rest/popp/api/pensjonsp
         var inntektType: String? = null
     }
 
-    class Pensjonspoeng : Serializable {
+    class Poeng : Serializable {
         var pensjonspoengId: Long? = null
         var fnr: Pid? = null
         var fnrOmsorgFor: Pid? = null
