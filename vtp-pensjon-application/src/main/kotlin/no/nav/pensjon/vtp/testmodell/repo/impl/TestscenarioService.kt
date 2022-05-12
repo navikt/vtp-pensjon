@@ -1,9 +1,8 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl
 
-import no.nav.pensjon.vtp.testmodell.dkif.DkifRepository
-import no.nav.pensjon.vtp.testmodell.dkif.dkifModellMapper
 import no.nav.pensjon.vtp.testmodell.identer.IdenterIndeks
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseIndeks
+import no.nav.pensjon.vtp.testmodell.krr.DigdirRepository
 import no.nav.pensjon.vtp.testmodell.load.TestscenarioLoad
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonRepository
 import no.nav.pensjon.vtp.testmodell.personopplysning.*
@@ -19,7 +18,7 @@ class TestscenarioService(
     private val inntektYtelseIndeks: InntektYtelseIndeks,
     private val organisasjonRepository: OrganisasjonRepository,
     private val personModellRepository: PersonModellRepository,
-    private val dkifRepository: DkifRepository,
+    private val digdirRepository: DigdirRepository,
     private val adresseIndeks: AdresseIndeks,
     private val identerIndeks: IdenterIndeks,
 ) {
@@ -55,7 +54,8 @@ class TestscenarioService(
 
         organisasjonRepository.saveAll(testScenario.organisasjonModeller)
 
-        dkifRepository.saveAll(dkifModellMapper(testScenario.dkifModeller, identerIndeks.getIdenter(testscenarioId)))
+        testScenario.digitalKontaktinformasjon
+            ?.let { digdirRepository.save(mapper.mapDigitalkontaktinformasjon(it, personopplysninger.søker.ident)) }
 
         return testscenarioRepository.save(mapToTestscenario(testScenario, testscenarioId, personopplysninger))
     }
@@ -70,7 +70,7 @@ class TestscenarioService(
         load.søkerInntektYtelse,
         load.annenpartInntektYtelse,
         load.organisasjonModeller,
-        load.dkifModeller,
+        load.digitalKontaktinformasjon,
         load.variabelContainer.getVars()
     )
 
