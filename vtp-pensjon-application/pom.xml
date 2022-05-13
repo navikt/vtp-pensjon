@@ -26,6 +26,7 @@
         <maven.test.skip>false</maven.test.skip>
 
         <cxf.version>3.5.2</cxf.version>
+        <jaxb2-basics.version>0.13.1</jaxb2-basics.version>
         <tjenestespesifikasjoner.version>1.2021.02.22-10.45-4201aaea72fb</tjenestespesifikasjoner.version>
         <pensjon-tjenestespesifikasjoner.version>1.2020.08.22-15.02-5a6bc2023040</pensjon-tjenestespesifikasjoner.version>
     </properties>
@@ -252,13 +253,13 @@
             <dependency>
                 <groupId>com.unboundid</groupId>
                 <artifactId>unboundid-ldapsdk</artifactId>
-                <version>6.0.4</version>
+                <version>6.0.5</version>
             </dependency>
 
             <dependency>
                 <groupId>org.bitbucket.b_c</groupId>
                 <artifactId>jose4j</artifactId>
-                <version>0.7.11</version>
+                <version>0.7.12</version>
             </dependency>
 
             <dependency>
@@ -285,7 +286,7 @@
             <dependency>
                 <groupId>org.jvnet.jaxb2_commons</groupId>
                 <artifactId>jaxb2-basics-runtime</artifactId>
-                <version>0.12.0</version>
+                <version>${jaxb2-basics.version}</version>
             </dependency>
 
             <dependency>
@@ -345,6 +346,11 @@
         <dependency>
             <groupId>no.nav.pensjon</groupId>
             <artifactId>pselv-esb-wsclient-legacy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.pensjon.vtp</groupId>
+            <artifactId>vtp-pensjon-common</artifactId>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>no.nav.tjenester</groupId>
@@ -555,12 +561,12 @@
         <dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java</artifactId>
-            <version>18.0</version>
+            <version>18.1</version>
         </dependency>
         <dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java-extended-scalars</artifactId>
-            <version>18.0</version>
+            <version>18.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.hateoas</groupId>
@@ -635,7 +641,7 @@
                     <dependency>
                         <groupId>org.jvnet.jaxb2_commons</groupId>
                         <artifactId>jaxb2-basics</artifactId>
-                        <version>0.12.0</version>
+                        <version>${jaxb2-basics.version}</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -749,42 +755,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>com.github.gantsign.maven</groupId>
-                <artifactId>ktlint-maven-plugin</artifactId>
-                <version>1.13.1</version>
-                <executions>
-                    <execution>
-                        <id>format-kotlin-code</id>
-                        <goals>
-                            <goal>format</goal>
-                        </goals>
-                        <!--
-                         Unable to get plugin to exclude generated sources (using sourcesExcludes),
-                         binding to a phase before sources are generated
-                        -->
-                        <phase>validate</phase>
-                        <configuration>
-                            <skip>${kotlin.format.skip}</skip>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>check-kotlin-code</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <!--
-                         Unable to get plugin to exclude generated sources (using sourcesExcludes),
-                         binding to a phase before sources are generated
-                        -->
-                        <phase>validate</phase>
-                        <configuration>
-                            <skip>${kotlin.check.skip}</skip>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
