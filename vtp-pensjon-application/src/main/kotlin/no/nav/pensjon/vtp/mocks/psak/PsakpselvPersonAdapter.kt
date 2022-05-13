@@ -47,7 +47,13 @@ class PsakpselvPersonAdapter(
             endretAvSaksbehandler = it.opprettetAv
             endretAvSystem = "PP01"
         }
-    }.firstOrNull()
+    }.firstOrNull() ?: ASBOPenSamboer().apply {
+        fodselsnummer = ""
+        fomDato = null
+        tomDato = null
+        endretAvSaksbehandler = ""
+        endretAvSystem = ""
+    }
 
     private fun populateAsboPenRelasjon(
         personopplysninger: Personopplysninger,
