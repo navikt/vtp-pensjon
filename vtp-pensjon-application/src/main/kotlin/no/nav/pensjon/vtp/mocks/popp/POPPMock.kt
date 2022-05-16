@@ -12,11 +12,11 @@ import kotlin.random.Random
 class POPPMock {
 
     @GetMapping(value = ["/popp/api/pensjonspoeng"])
-    fun hentPensjonspoengListe(
+    fun hentPensjonspoeng(
         @RequestHeader("fnr", required = true) fodselsnummer: String,
-        @RequestParam(required = false) fomAr: Int?,
-        @RequestParam(required = false) tomAr: Int?,
-        @RequestParam(required = false) pensjonspoengType: String?
+        @RequestParam("fomAr", required = false) fomAr: Int?,
+        @RequestParam("tomAr", required = false) tomAr: Int?,
+        @RequestParam("pensjonspoengType", required = false) pensjonspoengType: String?
     ): PensjonspoengListeResponse {
         val fnr = Pid(fodselsnummer)
         return PensjonspoengListeResponse().apply {
