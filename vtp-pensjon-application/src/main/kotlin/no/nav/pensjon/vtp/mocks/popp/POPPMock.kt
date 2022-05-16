@@ -17,9 +17,9 @@ class POPPMock {
         @RequestParam(required = false) fomAr: Int?,
         @RequestParam(required = false) tomAr: Int?,
         @RequestParam(required = false) pensjonspoengType: String?
-    ): HentPensjonspoengListeResponse {
+    ): PensjonspoengListeResponse {
         val fnr = Pid(fodselsnummer)
-        return HentPensjonspoengListeResponse().apply {
+        return PensjonspoengListeResponse().apply {
 
             fomAr?.let { fomAr ->
                 tomAr?.let { tomAr ->
@@ -58,8 +58,8 @@ class POPPMock {
     }
 
     @GetMapping(value = ["/popp/api/opptjeningsgrunnlag/{fnr}"])
-    fun hentOpptjeningsGrunnlag(@PathVariable fnr: String, @RequestParam(required = false) grunnlagsTypeListe: List<String>? = null): HentOpptjeningsGrunnlagResponse {
-        return HentOpptjeningsGrunnlagResponse().apply {
+    fun hentOpptjeningsGrunnlag(@PathVariable fnr: String, @RequestParam(required = false) grunnlagsTypeListe: List<String>? = null): OpptjeningsGrunnlagResponse {
+        return OpptjeningsGrunnlagResponse().apply {
             opptjeningsGrunnlag = OpptjeningsGrunnlag().apply {
                 this.fnr = Pid(fnr)
             }
@@ -67,15 +67,15 @@ class POPPMock {
     }
 
     @PostMapping(value = ["/popp/api/beholdning"])
-    fun hentBeholdningListe(@RequestBody(required = false) body: HentBeholdningListeRequest): HentBeholdningListeResponse {
-        return HentBeholdningListeResponse()
+    fun hentBeholdningListe(@RequestBody(required = false) body: BeholdningListeRequest): BeholdningListeResponse {
+        return BeholdningListeResponse()
     }
 
-    class HentBeholdningListeResponse {
+    class BeholdningListeResponse {
         val beholdninger = emptyList<String>()
     }
 
-    class HentBeholdningListeRequest {
+    class BeholdningListeRequest {
         private val fnr: Pid? = null
         private val beholdningType: String? = null
         private val serviceDirectiveTPOPP006: String? = null
@@ -85,7 +85,7 @@ class POPPMock {
 
     class Pid(val pid: String?) : Serializable
 
-    class HentPensjonspoengListeResponse : Serializable {
+    class PensjonspoengListeResponse : Serializable {
         val pensjonspoeng: MutableList<Poeng> = mutableListOf()
     }
 
@@ -116,7 +116,7 @@ class POPPMock {
         var changeStamp: ChangeStamp? = null
     }
 
-    class HentOpptjeningsGrunnlagResponse : Serializable {
+    class OpptjeningsGrunnlagResponse : Serializable {
         var opptjeningsGrunnlag: OpptjeningsGrunnlag? = null
     }
 
