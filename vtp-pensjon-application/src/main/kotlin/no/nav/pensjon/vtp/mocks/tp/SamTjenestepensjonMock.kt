@@ -15,7 +15,7 @@ import no.nav.pensjon.vtp.mocks.tss.tjenestepensjon
 import no.nav.pensjon.vtp.mocks.tss.tpNr
 import no.nav.pensjon.vtp.util.isOverlapping
 import no.nav.pensjon.vtp.util.toLocalDate
-import org.apache.commons.lang.time.DateUtils.isSameDay
+import org.apache.commons.lang3.time.DateUtils.isSameDay
 import org.hibernate.validator.internal.util.CollectionHelper.asSet
 import javax.jws.HandlerChain
 import javax.jws.WebMethod
