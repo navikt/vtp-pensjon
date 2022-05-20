@@ -4,14 +4,31 @@ import java.time.LocalDateTime
 import java.util.*
 
 data class Person(
+    val folkeregisteridentifikator: List<Folkeregisteridentifikator>,
     val navn: List<Navn> = emptyList(),
     val foedsel: List<Foedsel> = emptyList(),
     val doedsfall: List<Doedsfall> = emptyList(),
     val statsborgerskap: List<Statsborgerskap> = emptyList(),
     val bostedsadresse: List<Bostedsadresse> = emptyList(),
     val kontaktadresse: List<Kontaktadresse> = emptyList(),
-    val oppholdsadresse: List<Oppholdsadresse> = emptyList()
+    val oppholdsadresse: List<Oppholdsadresse> = emptyList(),
+    val adressebeskyttelse: List<Adressebeskyttelse> = listOf(Adressebeskyttelse()),
 )
+
+data class Folkeregisteridentifikator(
+    val identifikasjonsnummer: String,
+    val status: String = "I_BRUK",
+    val type: String = "FNR",
+    val folkeregistermetadata: Folkeregistermetadata = Folkeregistermetadata(),
+    val metadata: Metadata = Metadata.freg,
+)
+
+data class Adressebeskyttelse(
+    val gradering: AdressebeskyttelseGradering = AdressebeskyttelseGradering.UGRADERT,
+    val metadata: Metadata = Metadata.freg,
+)
+
+enum class AdressebeskyttelseGradering { STRENGT_FORTROLIG_UTLAND, STRENGT_FORTROLIG, FORTROLIG, UGRADERT }
 
 data class Foedsel(
     val foedselsaar: Int? = null,
