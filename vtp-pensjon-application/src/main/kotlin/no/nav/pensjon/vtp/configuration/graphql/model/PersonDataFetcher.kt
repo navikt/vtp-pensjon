@@ -15,6 +15,7 @@ class PersonDataFetcher(val personModellRepository: PersonModellRepository) : Da
             if (this == null) return@with null
 
             Person(
+                folkeregisteridentifikator = Folkeregisteridentifikator(env.getArgument("ident")).asList(),
                 navn = Navn(
                     fornavn = fornavn,
                     etternavn = etternavn,

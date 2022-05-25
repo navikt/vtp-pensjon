@@ -13,13 +13,23 @@ type Query {
 }
 
 type Person {
+    folkeregisteridentifikator(historikk: Boolean = false): [Folkeregisteridentifikator!]!
     navn: [Navn!]!
     foedsel: Foedsel
     statsborgerskap: Statsborgerskap
     doedsfall : Doedsfall
+    adressebeskyttelse(historikk: Boolean = false): [Adressebeskyttelse!]!
     bostedsadresse(historikk: Boolean = false): [Bostedsadresse!]!
     kontaktadresse(historikk: Boolean = false): [Kontaktadresse!]!
     oppholdsadresse(historikk: Boolean = false):[Oppholdsadresse!]!
+}
+
+type Folkeregisteridentifikator {
+    identifikasjonsnummer: String!
+    status: String!
+    type: String!
+    folkeregistermetadata: Folkeregistermetadata!
+    metadata: Metadata!
 }
 
 type Navn {
@@ -83,6 +93,19 @@ type Folkeregistermetadata {
     kilde: String
     aarsak: String
     sekvens: Int
+}
+
+type Adressebeskyttelse {
+    gradering: AdressebeskyttelseGradering!
+    folkeregistermetadata: Folkeregistermetadata
+    metadata: Metadata!
+}
+
+enum AdressebeskyttelseGradering {
+    STRENGT_FORTROLIG_UTLAND,
+    STRENGT_FORTROLIG,
+    FORTROLIG,
+    UGRADERT
 }
 
 type Bostedsadresse {

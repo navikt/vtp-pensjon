@@ -99,17 +99,18 @@ class LoginService(
 
         val claims = JwtClaims().apply {
             subject = fnr
-            issuer = "https://login.microsoftonline.com/d38f25aa-eab8-4c50-9f28-ebf92c1256f2/v2.0/"
+            issuer = "http://localhost:8060/rest/idporten"
             issuedAt = now
             notBefore = now
             setGeneratedJwtId()
             expirationTime = NumericDate.fromSeconds(now.value + 3600 * 6)
-            setAudience("0090b6e1-ffcc-4c37-bc21-049f7d1f0fe5")
+            setAudience("https://nav.no")
             setClaim("ver", "1.0")
             setClaim("acr", "Level4")
             setNumericDateClaim("auth_time", now)
             setClaim("nonce", "hardcoded")
             setClaim("at_hash", "unknown")
+            setClaim("pid", fnr)
         }
 
         val token = jsonWebKeySupport.createRS256Token(claims.toJson()).compactSerialization
