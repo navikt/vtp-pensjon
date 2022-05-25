@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl
 
-import no.nav.pensjon.vtp.testmodell.dkif.DkifModell
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell
+import no.nav.pensjon.vtp.testmodell.krr.DigitalKontaktinformasjon
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell
 import no.nav.pensjon.vtp.testmodell.personopplysning.Personopplysninger
 import no.nav.pensjon.vtp.testmodell.repo.TemplateVariable
@@ -39,13 +39,13 @@ class FileTestscenarioTemplate(
                 inntektopplysningReader("søker").use { søkerInntektopplysningReader ->
                     inntektopplysningReader("annenpart").use { annenpartInntektopplysningReader ->
                         organisasjonReader().use { organisasjonsReader ->
-                            digitalkontaktinfoReader().use { dkifReader ->
+                            digitalkontaktinfoReader().use { digitalkontaktinfoReader ->
                                 val finder = FindTemplateVariables()
                                 finder.scanForVariables(Personopplysninger::class.java, personopplysningReader)
                                 finder.scanForVariables(InntektYtelseModell::class.java, søkerInntektopplysningReader)
                                 finder.scanForVariables(InntektYtelseModell::class.java, annenpartInntektopplysningReader)
                                 finder.scanForVariables(OrganisasjonModell::class.java, organisasjonsReader)
-                                finder.scanForVariables(DkifModell::class.java, dkifReader)
+                                finder.scanForVariables(DigitalKontaktinformasjon::class.java, digitalkontaktinfoReader)
                                 return finder.discoveredVariables
                             }
                         }

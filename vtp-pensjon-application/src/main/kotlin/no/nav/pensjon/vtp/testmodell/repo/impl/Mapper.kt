@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.testmodell.repo.impl
 
 import no.nav.pensjon.vtp.testmodell.identer.LokalIdentIndeks
+import no.nav.pensjon.vtp.testmodell.krr.DigitalKontaktinformasjon
 import no.nav.pensjon.vtp.testmodell.load.*
 import no.nav.pensjon.vtp.testmodell.personopplysning.*
 import no.nav.pensjon.vtp.testmodell.util.FiktivtNavn.getAnnenPartName
@@ -25,6 +26,19 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
             familierelasjoner = l.familierelasjoner.map { familierelasjonModell(it) }
         )
     }
+
+    fun mapDigitalkontaktinformasjon(load: DigitalKontaktinformasjon, ident: String) = DigitalKontaktinformasjon(
+        personident = ident,
+        aktiv = load.aktiv,
+        kanVarsles = load.kanVarsles,
+        reservert = load.reservert,
+        spraak = load.spraak,
+        epostadresse = load.epostadresse,
+        epostadresseOppdatert = load.epostadresseOppdatert,
+        mobiltelefonnummer = load.mobiltelefonnummer,
+        mobiltelefonnummerOppdatert = load.mobiltelefonnummerOppdatert,
+        sikkerDigitalPostkasse = load.sikkerDigitalPostkasse
+    )
 
     private fun familierelasjonModell(it: FamilierelasjonTemplate): FamilierelasjonModell {
         return FamilierelasjonModell(

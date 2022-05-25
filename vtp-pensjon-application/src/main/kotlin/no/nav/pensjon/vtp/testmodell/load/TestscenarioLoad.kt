@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.testmodell.load
 
-import no.nav.pensjon.vtp.testmodell.dkif.DkifModell
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell
+import no.nav.pensjon.vtp.testmodell.krr.DigitalKontaktinformasjon
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell
 import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
 
@@ -11,7 +11,7 @@ class TestscenarioLoad(
     val søkerInntektYtelse: InntektYtelseModell?,
     val annenpartInntektYtelse: InntektYtelseModell?,
     val organisasjonModeller: List<OrganisasjonModell>,
-    val dkifModeller: List<DkifModell>,
+    val digitalKontaktinformasjon: DigitalKontaktinformasjon?,
     val variabelContainer: VariabelContainer
 ) {
     override fun toString(): String {

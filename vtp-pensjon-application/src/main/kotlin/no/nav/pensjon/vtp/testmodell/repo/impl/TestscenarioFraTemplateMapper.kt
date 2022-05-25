@@ -3,9 +3,8 @@ package no.nav.pensjon.vtp.testmodell.repo.impl
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
-import no.nav.pensjon.vtp.testmodell.dkif.DkifModell
-import no.nav.pensjon.vtp.testmodell.dkif.DkifModeller
 import no.nav.pensjon.vtp.testmodell.inntektytelse.InntektYtelseModell
+import no.nav.pensjon.vtp.testmodell.krr.DigitalKontaktinformasjon
 import no.nav.pensjon.vtp.testmodell.load.PersonopplysningerTemplate
 import no.nav.pensjon.vtp.testmodell.load.TestscenarioLoad
 import no.nav.pensjon.vtp.testmodell.organisasjon.OrganisasjonModell
@@ -81,7 +80,7 @@ class TestscenarioFraTemplateMapper {
 
         val digitalkontaktinfo = if (node.has("digitalkontaktinfo")) {
             val digitalkontaktinfoResult = node["digitalkontaktinfo"]
-            objectMapper.convertValue(digitalkontaktinfoResult, DkifModeller::class.java).kontaktinfo
+            objectMapper.convertValue(digitalkontaktinfoResult, DigitalKontaktinformasjon::class.java)
         } else {
             throw IllegalArgumentException("Must include digitalkontaktinfo")
         }
@@ -114,14 +113,14 @@ class TestscenarioFraTemplateMapper {
             null
         }
         val organisasjonModeller = loadOrganisasjonModeller(template, objectMapper)
-        val dkifModeller = loadDigitalkontaktinfo(template, objectMapper)
+        val digitalKontaktinformasjon = loadDigitalkontaktinfo(template, objectMapper)
         return TestscenarioLoad(
             template.templateName,
             personopplysninger,
             soekerInntektYtelse,
             annenPartInntektYtelse,
             organisasjonModeller,
-            dkifModeller,
+            digitalKontaktinformasjon,
             variabelContainer
         )
     }
@@ -183,13 +182,13 @@ class TestscenarioFraTemplateMapper {
     private fun loadDigitalkontaktinfo(
         template: TestscenarioTemplate,
         objectMapper: ObjectMapper
-    ): List<DkifModell> {
+    ): DigitalKontaktinformasjon? {
         try {
             template.digitalkontaktinfoReader().use { reader ->
                 return if (reader != null) {
-                    objectMapper.readValue(reader, DkifModeller::class.java).kontaktinfo
+                    objectMapper.readValue(reader, DigitalKontaktinformasjon::class.java)
                 } else {
-                    emptyList()
+                    return null;
                 }
             }
         } catch (e: IOException) {
