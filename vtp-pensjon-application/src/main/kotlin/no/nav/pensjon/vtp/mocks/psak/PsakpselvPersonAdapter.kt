@@ -19,6 +19,8 @@ class PsakpselvPersonAdapter(
 
         return if (personModell != null && personopplysninger != null) {
             toASBOPerson(personModell, personopplysninger)
+        } else if (personModell != null && personopplysninger == null) {
+            ASBOPenPerson().apply { personUtland = ASBOPenPersonUtland().apply { statsborgerKode = "NOR" } }
         } else {
             null
         }
@@ -64,7 +66,7 @@ class PsakpselvPersonAdapter(
         }
 
         val annen = personopplysninger.annenPart
-            ?.takeIf { it.ident == personModellRepository.findById(fr.til)?.ident ?: throw RuntimeException("No person with ident " + fr.til) }
+            ?.takeIf { it.ident == personModellRepository.findById(fr.til)?.ident }
             ?.let { populateAsboPenPerson(it) }
             ?.also {
                 relasjon.fom = personopplysninger.søker.getSivilstandFoo().fom?.asGregorianCalendar()

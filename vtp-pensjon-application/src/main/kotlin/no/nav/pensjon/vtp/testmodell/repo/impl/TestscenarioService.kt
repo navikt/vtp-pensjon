@@ -41,6 +41,7 @@ class TestscenarioService(
 
         leggTil(personopplysninger.søker)
         personopplysninger.annenPart?.let { leggTil(it) }
+        personopplysninger.foreldre?.forEach { leggTil(it) }
 
         personIndeks.indekserPersonopplysningerByIdent(personopplysninger)
         testScenario.søkerInntektYtelse
