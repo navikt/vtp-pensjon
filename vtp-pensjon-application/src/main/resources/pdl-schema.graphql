@@ -22,6 +22,8 @@ type Person {
     bostedsadresse(historikk: Boolean = false): [Bostedsadresse!]!
     kontaktadresse(historikk: Boolean = false): [Kontaktadresse!]!
     oppholdsadresse(historikk: Boolean = false):[Oppholdsadresse!]!
+    innflyttingTilNorge: [InnflyttingTilNorge!]!
+    utflyttingFraNorge: [UtflyttingFraNorge!]!
 }
 
 type Folkeregisteridentifikator {
@@ -243,4 +245,19 @@ type HentIdenterBolkResult {
     ident: String!
     identer: [IdentInformasjon!]
     code: String!
+}
+
+type InnflyttingTilNorge {
+    fraflyttingsland: String
+    fraflyttingsstedIUtlandet: String
+    folkeregistermetadata: Folkeregistermetadata
+    metadata: Metadata!
+}
+
+type UtflyttingFraNorge {
+    tilflyttingsland: String
+    tilflyttingsstedIUtlandet: String
+    utflyttingsdato: Date
+    folkeregistermetadata: Folkeregistermetadata
+    metadata: Metadata!
 }

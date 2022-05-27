@@ -13,6 +13,8 @@ data class Person(
     val kontaktadresse: List<Kontaktadresse> = emptyList(),
     val oppholdsadresse: List<Oppholdsadresse> = emptyList(),
     val adressebeskyttelse: List<Adressebeskyttelse> = listOf(Adressebeskyttelse()),
+    val innflyttingTilNorge: List<InnflyttingTilNorge> = emptyList(),
+    val utflyttingFraNorge: List<UtflyttingFraNorge> = emptyList(),
 )
 
 data class Folkeregisteridentifikator(
@@ -195,6 +197,21 @@ data class Oppholdsadresse(
     val vegadresse: Vegadresse? = null,
     val matrikkeladresse: Matrikkeladresse? = null,
     val oppholdAnnetSted: String? = null,
+    val folkeregistermetadata: Folkeregistermetadata? = null,
+    val metadata: Metadata
+)
+
+data class InnflyttingTilNorge(
+    val fraflyttingsland: String? = null,
+    val fraflyttingsstedIUtlandet: String? = null,
+    val folkeregistermetadata: Folkeregistermetadata? = null,
+    val metadata: Metadata
+)
+
+data class UtflyttingFraNorge(
+    val tilflyttingsland: String? = null,
+    val tilflyttingsstedIUtlandet: String? = null,
+    val utflyttingsdato: Date? = null,
     val folkeregistermetadata: Folkeregistermetadata? = null,
     val metadata: Metadata
 )
