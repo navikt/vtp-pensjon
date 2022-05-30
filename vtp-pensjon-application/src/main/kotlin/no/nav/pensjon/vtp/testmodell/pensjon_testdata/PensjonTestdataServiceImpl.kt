@@ -14,6 +14,7 @@ class PensjonTestdataServiceImpl(private val baseUrl: String) : PensjonTestdataS
     override fun opprettData(testscenario: Testscenario) {
         lagrePerson(testscenario.personopplysninger.søker.ident)
         testscenario.personopplysninger.annenPart?.let { lagrePerson(it.ident) }
+        testscenario.personopplysninger.foreldre?.forEach { lagrePerson(it.ident) }
     }
 
     fun lagrePerson(ident: String) {
