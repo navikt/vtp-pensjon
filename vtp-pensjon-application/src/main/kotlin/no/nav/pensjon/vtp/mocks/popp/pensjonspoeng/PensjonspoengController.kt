@@ -13,5 +13,5 @@ class PensjonspoengController {
     fun getPensjonspoeng(@RequestHeader("fnr") pid: String) = HentPensjonspoengListeResponse()
 
     @GetMapping("/{fnr}")
-    fun getPensjonspoengMedPathParam(@PathVariable("fnr") pid: String) = HentPensjonspoengListeResponse()
+    fun getPensjonspoengWithPath(@PathVariable("fnr") pid: String) = HentPensjonspoengListeResponse()
 }

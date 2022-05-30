@@ -20,9 +20,18 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
             )
         }
 
+        val foreldre = l.foreldre?.map {
+            personModell(
+                it,
+                getAnnenPartName(l.søker, l.søker.etternavn ?: fallbackName.etternavn, it.kjønn),
+                getPersonIdent(it)
+            )
+        }
+
         return Personopplysninger(
             søker = personModell(l.søker, fallbackName, annenPart?.ident),
             annenPart = annenPart,
+            foreldre = foreldre,
             familierelasjoner = l.familierelasjoner.map { familierelasjonModell(it) }
         )
     }

@@ -1,0 +1,115 @@
+{
+	"søker": {
+		"ident": "${for1}",
+		"fødselsdato": "${for1_fødselsdato}",
+		"kjønn": "K",
+		"geografiskTilknytning": {
+			"type": "Land",
+			"kode": "NOR"
+		},
+		"adresser": [
+			{
+				"@type": "ref",
+				"fom": "now() - P1Y",
+				"adresseType": "BOSTEDSADRESSE",
+				"land": "NOR"
+			}
+		],
+		"personstatus": [
+			{
+				"kode": "BOSA",
+                "fom": "now()-P1Y"
+			}
+		],
+		"statsborgerskap": [{
+			"land": "NOR",
+			"fom": null,
+			"tom": null,
+			"endringstype": "ny",
+			"endringstidspunkt": null
+		}],
+		"sivilstand": [
+			{
+				"kode": "UGIF"
+			}
+		]
+	},
+	"foreldre": [
+		{
+		"ident": "${for2}",
+		"fødselsdato": "${for2_fødselsdato}",
+		"kjønn": "K",
+		"personstatus": [
+			{
+				"kode": "BOSA",
+				"fom": "now()-1Y"
+			}
+		],
+		"statsborgerskap": [{
+			"land": "NOR",
+			"fom": null,
+			"tom": null,
+			"endringstype": "ny",
+			"endringstidspunkt": null
+		}],
+		"adresser": [
+			{
+				"@type": "ref",
+				"fom": "now() - P1Y",
+				"adresseType": "BOSTEDSADRESSE",
+				"land": "NOR"
+			}
+		],
+		"sivilstand": [
+			{
+				"kode": "GIFT"
+			}
+		]
+		},
+		{
+			"ident": "${for3}",
+			"fødselsdato": "${for3_fødselsdato}",
+			"kjønn": "M",
+			"personstatus": [
+				{
+					"kode": "BOSA",
+					"fom": "now()-1Y"
+				}
+			],
+			"statsborgerskap": [{
+				"land": "NOR",
+				"fom": null,
+				"tom": null,
+				"endringstype": "ny",
+				"endringstidspunkt": null
+			}],
+			"adresser": [
+				{
+					"@type": "ref",
+					"fom": "now() - P1Y",
+					"adresseType": "BOSTEDSADRESSE",
+					"land": "NOR"
+				}
+			],
+			"sivilstand": [
+				{
+					"kode": "GIFT"
+				}
+			]
+		}
+	],
+	"familierelasjoner": [
+		{
+			"rolle": "FARA",
+			"til": "${for3}"
+		},
+		{
+			"rolle": "MORA",
+			"til": "${for2}"
+		},
+		{
+			"rolle": "BARN",
+			"til": "${for1}"
+		}
+	]
+}
