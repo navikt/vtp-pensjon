@@ -247,7 +247,8 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
     )
     @WebResult(name = "hentFamilierelasjonsHistorikkResponse")
     override fun hentFamilierelasjonsHistorikk(@WebParam(name = "hentFamilierelasjonsHistorikkRequest") var1: ASBOPenHentFamilierelasjonsHistorikkRequest) =
-        ASBOPenPerson()
+        psakpselvPersonAdapter.getASBOPenPerson(var1.fnr)
+            ?: throw HentSamboerforholdFaultPenGeneriskMsg()
 
     @WebMethod
     @RequestWrapper(

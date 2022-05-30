@@ -20,7 +20,7 @@ class TestscenarioService(
     private val personModellRepository: PersonModellRepository,
     private val digdirRepository: DigdirRepository,
     private val adresseIndeks: AdresseIndeks,
-    private val identerIndeks: IdenterIndeks,
+    private val identerIndeks: IdenterIndeks
 ) {
     fun opprettTestscenario(template: TestscenarioTemplate) = opprettTestscenario(template, emptyMap())
 
