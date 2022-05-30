@@ -1,5 +1,6 @@
 package no.nav.pensjon.vtp.configuration.graphql.model
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
@@ -95,7 +96,7 @@ data class Endring(
 enum class EndringsType { OPPRETT, KORRIGER, OPPHOER }
 
 data class Bostedsadresse(
-    val angittFlyttedao: Date? = null,
+    val angittFlyttedato: LocalDate? = null,
     val gyldigFraOgMed: LocalDateTime? = null,
     val gyldigTilOgMed: LocalDateTime? = null,
     val coAdressenavn: String? = null,
@@ -211,7 +212,7 @@ data class InnflyttingTilNorge(
 data class UtflyttingFraNorge(
     val tilflyttingsland: String? = null,
     val tilflyttingsstedIUtlandet: String? = null,
-    val utflyttingsdato: Date? = null,
+    val utflyttingsdato: LocalDate? = null,
     val folkeregistermetadata: Folkeregistermetadata? = null,
     val metadata: Metadata
 )

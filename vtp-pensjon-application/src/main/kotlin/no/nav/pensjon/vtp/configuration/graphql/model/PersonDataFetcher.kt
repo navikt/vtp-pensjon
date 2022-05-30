@@ -2,10 +2,7 @@ package no.nav.pensjon.vtp.configuration.graphql.model
 
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
-import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseModell
-import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType
-import no.nav.pensjon.vtp.testmodell.personopplysning.GateadresseModell
-import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
+import no.nav.pensjon.vtp.testmodell.personopplysning.*
 import java.util.*
 
 class PersonDataFetcher(val personModellRepository: PersonModellRepository) : DataFetcher<Person> {
@@ -38,6 +35,23 @@ class PersonDataFetcher(val personModellRepository: PersonModellRepository) : Da
                     )
                 } ?: emptyList(),
                 bostedsadresse = adresser.mapBostedsadresser(),
+                innflyttingTilNorge = innflyttingTilNorge?.map {
+                    InnflyttingTilNorge(
+                        fraflyttingsland = it.fraflyttingsland,
+                        folkeregistermetadata = Folkeregistermetadata(
+                            gyldighetstidspunkt = it.folkeregistermetadata.gyldighetstidspunkt,
+                            ajourholdstidspunkt = it.folkeregistermetadata.ajourholdstidspunkt
+                        ),
+                        metadata = Metadata.freg
+                    )
+                } ?: emptyList(),
+                utflyttingFraNorge = utflyttingFraNorge?.map {
+                    UtflyttingFraNorge(
+                        utflyttingsdato = it.utflyttingsdato,
+                        tilflyttingsland = it.tilflyttingsland,
+                        metadata = Metadata.freg
+                    )
+                } ?: emptyList()
             )
         }
 }
@@ -56,6 +70,8 @@ fun List<AdresseModell>.mapBostedsadresser() =
                     husbokstav = it.husbokstav,
                     postnummer = it.postnummer
                 ),
+                angittFlyttedato = it.fom,
+                utenlandskAdresse = if (it.land != Landkode.NOR) UtenlandskAdresse(landkode = it.land.toString()) else null,
                 metadata = Metadata.freg,
             )
             else -> null

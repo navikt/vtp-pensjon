@@ -33,6 +33,8 @@ data class PersonModell(
     val adresser: List<AdresseModell>,
     val medlemskap: MedlemskapModell?,
     var samboerforhold: List<SamboerforholdModell>,
+    val innflyttingTilNorge: List<InnflyttingTilNorgeModell>?,
+    val utflyttingFraNorge: List<UtflyttingFraNorgeModell>?,
 ) {
     fun getAdresse(adresseType: AdresseType): AdresseModell? {
         return adresser.firstOrNull { it.adresseType == adresseType }
