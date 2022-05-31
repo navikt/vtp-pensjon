@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.client.support
 
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import java.util.*
 
@@ -10,10 +11,12 @@ fun Request.Builder.basicAuth(username: String, password: String) = this.header(
 )
 
 fun Request.Builder.url(url: String, queryParameters: Map<String, String>) = this.url(
-    HttpUrl.get(url).newBuilder().run {
+    url.toHttpUrl().newBuilder().run {
         queryParameters.forEach { (key, value) ->
             addQueryParameter(key, value)
         }
         build()
     }
 )
+
+val APPLICATION_JSON = "application/json".toMediaTypeOrNull()
