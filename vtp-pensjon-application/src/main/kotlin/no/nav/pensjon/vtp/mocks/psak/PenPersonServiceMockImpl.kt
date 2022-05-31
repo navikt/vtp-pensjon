@@ -97,9 +97,14 @@ class PenPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPers
     @Throws(
         HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg::class
     )
-    override fun hentFamilierelasjoner(@WebParam(name = "hentFamilierelasjonerRequest") hentFamilierelasjonerRequest: ASBOPenHentFamilierelasjonerRequest) =
-        psakpselvPersonAdapter.getASBOPenPerson(hentFamilierelasjonerRequest.fodselsnummer)
-            ?: throw HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg()
+    override fun hentFamilierelasjoner(@WebParam(name = "hentFamilierelasjonerRequest") hentFamilierelasjonerRequest: ASBOPenHentFamilierelasjonerRequest): ASBOPenPerson? {
+        val asboPenPerson = psakpselvPersonAdapter.getASBOPenPerson(hentFamilierelasjonerRequest.fodselsnummer)
+        if ( asboPenPerson!= null && !hentFamilierelasjonerRequest.hentSamboerforhold) {
+            asboPenPerson.apply { samboer = null }
+            asboPenPerson.relasjoner.relasjoner.filter { it.relasjonsType == "SAMB" }
+        }
+        return asboPenPerson ?: throw HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg()
+    }
 
     @WebMethod
     @RequestWrapper(
