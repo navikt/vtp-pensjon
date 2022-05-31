@@ -94,7 +94,9 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
                     innmelder = getPersonIdent(i),
                     motpart = annenPartIdent,
                 )
-            } ?: emptyList()
+            } ?: emptyList(),
+            innflyttingTilNorge = i.innflyttingTilNorge,
+            utflyttingFraNorge = i.utflyttingFraNorge
         )
     }
 

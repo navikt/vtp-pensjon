@@ -5,6 +5,8 @@ import no.nav.pensjon.vtp.testmodell.kodeverk.Kjønn
 import no.nav.pensjon.vtp.testmodell.medlemskap.MedlemskapModell
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseModell
 import no.nav.pensjon.vtp.testmodell.personopplysning.AdresseType
+import no.nav.pensjon.vtp.testmodell.personopplysning.InnflyttingTilNorgeModell
+import no.nav.pensjon.vtp.testmodell.personopplysning.UtflyttingFraNorgeModell
 import java.time.LocalDate
 
 data class PersonTemplate(
@@ -26,4 +28,6 @@ data class PersonTemplate(
     val adresser: List<AdresseModell>?,
     val medlemskap: MedlemskapModell?,
     val samboerforhold: List<SamboerforholdTemplate>?,
+    val innflyttingTilNorge: List<InnflyttingTilNorgeModell>?,
+    val utflyttingFraNorge: List<UtflyttingFraNorgeModell>?
 )
