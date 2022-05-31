@@ -30,7 +30,7 @@ internal class UnleashTestUtil(
                 .build()
         )
         .execute()
-        .let { objectMapper.readValue(it.body()?.string(), UnleashFeatures::class.java)}
+        .let { objectMapper.readValue(it.body?.string(), UnleashFeatures::class.java)}
         .features
         .filter { it.name == name }
         .takeUnless { it.isEmpty() }?.first()?.enabled ?: false

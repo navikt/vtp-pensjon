@@ -4,7 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class SamboerScenario(
     private val vtpPensjonUrl: String,
@@ -18,13 +18,13 @@ class SamboerScenario(
         .newCall(
             Request.Builder()
                 .url("$vtpPensjonUrl/api/testscenarios/${key}")
-                .post(RequestBody.create(null, ""))
+                .post("".toRequestBody(null))
                 .build()
         )
         .execute()
         .also { response ->
             if (!response.isSuccessful) {
-                throw RuntimeException("Failed with scenario key: ${key} and response status: ${response.code()}")
+                throw RuntimeException("Failed with scenario key: $key and response status: ${response.code}")
             }
-        }.run { objectMapper.readValue(body()?.string(), SamboerScenarioDto::class.java) }
+        }.run { objectMapper.readValue(body?.string(), SamboerScenarioDto::class.java) }
 }

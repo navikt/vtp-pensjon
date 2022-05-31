@@ -2,15 +2,15 @@ package no.nav.pensjon.vtp.client.tokens
 
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
+import no.nav.pensjon.vtp.client.support.APPLICATION_JSON
 import no.nav.pensjon.vtp.client.support.basicAuth
 import no.nav.pensjon.vtp.client.support.url
 import okhttp3.Call
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.MediaType.parse as mediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Request.Builder as request
-import okhttp3.RequestBody.create as createBody
 
 internal class TokenFetcher(
     private val vtpPensjonUrl: String,
@@ -27,7 +27,7 @@ internal class TokenFetcher(
     ): AccessTokenResponse = okHttpClient
         .newCall(
             request()
-                .post(createBody(null, ""))
+                .post("".toRequestBody(null))
                 .url(
                     url = "$vtpPensjonUrl/rest/maskinporten/access_token",
                     queryParameters = mapOf(
@@ -145,21 +145,18 @@ internal class TokenFetcher(
     )
 
     private fun Request.Builder.postJson(any: Any) = this.post(
-        createBody(
-            mediaType("application/json"),
-            objectMapper.writeValueAsString(any),
-        )
+        objectMapper.writeValueAsString(any).toRequestBody(APPLICATION_JSON),
     )
 
     private inline fun <reified T> Call.readSuccessfulJsonResponse(): T = execute().run {
         if (isSuccessful) {
-            val body = body()
+            val body = body
                 ?.string()
                 ?: throw RuntimeException("Response from VTP was empty")
 
             return objectMapper.readValue(body, T::class.java)
         } else {
-            throw RuntimeException("Failed to fetch token status=${code()} body=${body()?.string()}")
+            throw RuntimeException("Failed to fetch token status=$code body=${body?.string()}")
         }
     }
 }

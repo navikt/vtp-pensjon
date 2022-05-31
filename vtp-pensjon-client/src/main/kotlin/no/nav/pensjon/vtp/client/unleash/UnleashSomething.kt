@@ -2,10 +2,10 @@ package no.nav.pensjon.vtp.client.unleash
 
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
-import okhttp3.MediaType
+import no.nav.pensjon.vtp.client.support.APPLICATION_JSON
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class UnleashSomething(
     private val vtpPensjonUrl: String,
@@ -20,22 +20,20 @@ class UnleashSomething(
             Request.Builder()
                 .url("$vtpPensjonUrl/rest/unleash/api/client/features")
                 .put(
-                    RequestBody.create(
-                        MediaType.parse("application/json"),
-                        objectMapper.writeValueAsString(
-                            UnleashFeature(
-                                name = name,
-                                enabled = enabled
-                            )
-                        )
-                    )
+                    UnleashFeature(
+                        name = name,
+                        enabled = enabled
+                    ).asJsonRequestBody()
                 )
                 .build()
         )
         .execute()
         .also { response ->
             if (!response.isSuccessful) {
-                throw RuntimeException("Failed to ${if (enabled) "enable" else "disable"} toggle with status: ${response.code()}")
+                throw RuntimeException("Failed to ${if (enabled) "enable" else "disable"} toggle with status: ${response.code}")
             }
         }.isSuccessful
+
+    private fun Any.asJsonRequestBody() =
+        objectMapper.writeValueAsString(this).toRequestBody(APPLICATION_JSON)
 }
