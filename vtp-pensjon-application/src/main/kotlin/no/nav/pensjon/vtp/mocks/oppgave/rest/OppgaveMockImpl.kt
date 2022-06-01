@@ -158,4 +158,19 @@ class OppgaveMockImpl {
         oppfolginger.removeIf { e -> e.id == oppfolging.id }
         oppfolginger.add(oppfolging.apply { this.oppgaveId = oppgaveId })
     }
+
+    @PatchMapping("/{oppgaveid}")
+    @Operation(summary = "Patch oppgave")
+    @Parameters(
+        Parameter(
+            name = "X-Correlation-ID",
+            required = true,
+        ),
+        Parameter(name = "Authorization", required = true)
+    )
+    fun PatchOppgave(
+        @RequestHeader httpHeaders: HttpHeaders?,
+        @PathVariable("oppgaveid") oppgaveId: Long
+    ) =
+        oppgaver.firstOrNull { it.id == oppgaveId }
 }
