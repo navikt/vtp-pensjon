@@ -17,6 +17,7 @@ class OidcTokenGenerator(
         aud: List<String>,
         expiration: NumericDate,
         issuedAt: NumericDate = now(),
+        scope: String? = null,
         additionalClaims: Map<String, Any>
     ): String {
         return jsonWebKeySupport.createRS256Token(
@@ -36,6 +37,8 @@ class OidcTokenGenerator(
                 for ((key, value) in additionalClaims) {
                     setClaim(key, value)
                 }
+
+                scope?.let { setClaim("scope", scope) }
             }.toJson()
         ).compactSerialization
     }

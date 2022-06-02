@@ -14,6 +14,7 @@ import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpStatus.OK
 import org.springframework.http.HttpStatus.UNAUTHORIZED
+import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.http.ResponseEntity.status
 import org.springframework.web.bind.annotation.*
@@ -37,7 +38,7 @@ class StsController(
         @RequestParam grant_type: String,
         @RequestParam subject_token_type: String,
         @RequestParam subject_token: String
-    ) = SAMLResponse(
+    ): ResponseEntity<SAMLResponse> = SAMLResponse(
         access_token = asBase64(
             xmlMarshal(
                 generator.buildRequestSecurityTokenResponseType(
@@ -56,7 +57,8 @@ class StsController(
         @RequestParam grant_type: String?,
         @RequestParam scope: String?,
         @RequestParam("issuer") requestedIssuer: String?,
-    ) = getUser(authorization)
+        @RequestParam("audience") audience: List<String>?,
+    ): ResponseEntity<out Any> = getUser(authorization)
         ?.let { user ->
             val expiresInSeconds = 3600L * 6L
 
@@ -64,18 +66,16 @@ class StsController(
                 UserTokenResponse(
                     access_token = oidcTokenGenerator.oidcToken(
                         subject = user,
-                        aud = listOf(
-                            user,
-                            "vtp-pensjon"
-                        ),
+                        aud = audience ?: listOf(user),
+                        scope = scope,
                         issuer = requestedIssuer ?: this.issuer,
                         expiration = now().apply { addSeconds(expiresInSeconds) },
                         additionalClaims = mapOf(
                             "azp" to user
-                        )
+                        ),
                     ),
                     expires_in = expiresInSeconds,
-                    token_type = "Bearer"
+                    token_type = "Bearer",
                 )
             )
         }
@@ -88,7 +88,7 @@ class StsController(
             )
 
     @GetMapping(value = ["/samltoken"])
-    fun dummyToken() = status(OK)
+    fun dummyToken(): ResponseEntity<SAMLResponse> = status(OK)
         .header("Cache-Control", "no-store")
         .header("Pragma", "no-cache")
         .body(
@@ -104,12 +104,12 @@ class StsController(
         )
 
     @GetMapping("/jwks")
-    fun jwks() = JsonWebKeySupport.Keys(oidcTokenGenerator.jwks()).asResponseEntity()
+    fun jwks(): ResponseEntity<JsonWebKeySupport.Keys> = JsonWebKeySupport.Keys(oidcTokenGenerator.jwks()).asResponseEntity()
 
     @GetMapping("/.well-known/openid-configuration")
     fun wellKnown() = WellKnown(
         issuer = issuer,
-        token_endpoint = linkTo<StsController> { dummyToken(null, null, null, null) }.toUri().withoutQueryParameters(),
+        token_endpoint = linkTo<StsController> { dummyToken(null, null, null, null, null) }.toUri().withoutQueryParameters(),
         exchange_token_endpoint = linkTo<StsController> { dummySaml("dummy", "dummy", "dummy") }.toUri().withoutQueryParameters(),
         jwks_uri = linkTo<StsController> { jwks() }.toUri().withoutQueryParameters(),
     )

@@ -104,6 +104,8 @@ internal class TokenFetcher(
     fun fetchStsToken(
         issuer: String,
         user: String,
+        scope: String = "openid",
+        audience: List<String>? = null,
     ): AccessTokenResponse = okHttpClient
         .newCall(
             request()
@@ -112,8 +114,8 @@ internal class TokenFetcher(
                     queryParameters = mapOf(
                         "issuer" to issuer,
                         "grant_type" to "client_credentials",
-                        "scope" to "openid"
-                    )
+                        "scope" to scope
+                    ) + (audience?.let { mapOf("audience" to audience.joinToString(",")) } ?: emptyMap())
                 )
                 .basicAuth(username = user, password = "dummy")
                 .build()
