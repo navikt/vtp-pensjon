@@ -81,6 +81,7 @@ class VtpPensjonClient(
         issuer: String? = null,
         scope: String = "openid",
         audience: List<String>? = null,
+        clientOrgno: String? = null,
     ): TokenMeta = tokenFetcher.fetchStsToken(
         issuer = issuer
             ?: stsIssuer
@@ -88,6 +89,7 @@ class VtpPensjonClient(
         user = user,
         scope = scope,
         audience = audience,
+        clientOrgno = clientOrgno,
     ).let {
         TokenMeta(
             tokenResponse = it,

@@ -58,6 +58,7 @@ class StsController(
         @RequestParam scope: String?,
         @RequestParam("issuer") requestedIssuer: String?,
         @RequestParam("audience") audience: List<String>?,
+        @RequestParam("client_orgno") clientOrgno: String?,
     ): ResponseEntity<out Any> = getUser(authorization)
         ?.let { user ->
             val expiresInSeconds = 3600L * 6L
@@ -72,7 +73,7 @@ class StsController(
                         expiration = now().apply { addSeconds(expiresInSeconds) },
                         additionalClaims = mapOf(
                             "azp" to user
-                        ),
+                        ) + (clientOrgno?.let { mapOf("client_orgno" to it) } ?: emptyMap()),
                     ),
                     expires_in = expiresInSeconds,
                     token_type = "Bearer",
@@ -109,7 +110,7 @@ class StsController(
     @GetMapping("/.well-known/openid-configuration")
     fun wellKnown() = WellKnown(
         issuer = issuer,
-        token_endpoint = linkTo<StsController> { dummyToken(null, null, null, null, null) }.toUri().withoutQueryParameters(),
+        token_endpoint = linkTo<StsController> { dummyToken(null, null, null, null, null, null) }.toUri().withoutQueryParameters(),
         exchange_token_endpoint = linkTo<StsController> { dummySaml("dummy", "dummy", "dummy") }.toUri().withoutQueryParameters(),
         jwks_uri = linkTo<StsController> { jwks() }.toUri().withoutQueryParameters(),
     )

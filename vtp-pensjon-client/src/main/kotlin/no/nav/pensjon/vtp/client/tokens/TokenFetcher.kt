@@ -106,6 +106,7 @@ internal class TokenFetcher(
         user: String,
         scope: String = "openid",
         audience: List<String>? = null,
+        clientOrgno: String? = null,
     ): AccessTokenResponse = okHttpClient
         .newCall(
             request()
@@ -115,7 +116,9 @@ internal class TokenFetcher(
                         "issuer" to issuer,
                         "grant_type" to "client_credentials",
                         "scope" to scope
-                    ) + (audience?.let { mapOf("audience" to audience.joinToString(",")) } ?: emptyMap())
+                    )
+                        + (audience?.let { mapOf("audience" to it.joinToString(",")) } ?: emptyMap())
+                        + (clientOrgno?.let { mapOf("client_orgno" to it)} ?: emptyMap())
                 )
                 .basicAuth(username = user, password = "dummy")
                 .build()
