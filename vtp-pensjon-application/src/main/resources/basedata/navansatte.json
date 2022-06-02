@@ -133,5 +133,18 @@
       "0000-GA-PENSJON_UTLAND",
       "0000-GA-PENSJON_UTVIDET"
     ]
+  },
+  {
+    "cn": "pensjon-pip",
+    "givenname": "Pensjon PIP",
+    "sn": "PIP",
+    "displayName": "Pensjon PIP",
+    "email": "pensjon.pip@example.com",
+    "enheter": [
+      "1234"
+    ],
+    "groups": [
+      "0000-GA-PENSJON-PIP"
+    ]
   }
 ]

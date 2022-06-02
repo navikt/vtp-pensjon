@@ -9,17 +9,17 @@ import java.util.UUID.randomUUID
 data class RequestResponse(
     @Id
     val id: String = randomUUID().toString(),
-    val timestamp: LocalDateTime,
+    val timestamp: LocalDateTime = LocalDateTime.now(),
     val method: String,
     val path: String,
-    val queryString: String?,
+    val queryString: String? = null,
     val url: String,
     val status: Int,
-    val handler: String?,
-    val handlerClass: String?,
-    val handlerMethod: String?,
-    val exception: String?,
-    val stackTrace: String?,
+    val handler: String? = null,
+    val handlerClass: String? = null,
+    val handlerMethod: String? = null,
+    val exception: String? = null,
+    val stackTrace: String? = null,
 
     val request: Payload,
 
