@@ -76,11 +76,18 @@ class VtpPensjonClient(
             scope = scope
         ))
 
-    fun stsToken(user: String, issuer: String? = null): TokenMeta = tokenFetcher.fetchStsToken(
+    fun stsToken(
+        user: String,
+        issuer: String? = null,
+        scope: String = "openid",
+        audience: List<String>? = null,
+    ): TokenMeta = tokenFetcher.fetchStsToken(
         issuer = issuer
             ?: stsIssuer
             ?: throw IllegalStateException("Must supply a issuer or define stsIssuer"),
-        user = user
+        user = user,
+        scope = scope,
+        audience = audience,
     ).let {
         TokenMeta(
             tokenResponse = it,
