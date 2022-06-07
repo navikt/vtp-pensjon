@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 class PenPerson {
 
     @GetMapping(path = ["/erPenPerson"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun erPenPerson(@RequestParam request: List<String>): ErPenPersonResponse = ErPenPersonResponse()
+    fun erPenPerson(@RequestParam(name = "Pid") request: List<String>): ErPenPersonResponse = ErPenPersonResponse()
 }
 
 data class ErPenPersonResponse(val fnrListe: List<String> = listOf())
