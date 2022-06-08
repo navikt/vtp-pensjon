@@ -902,6 +902,32 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>io.github.kobylynskyi</groupId>
+                <artifactId>graphql-codegen-maven-plugin</artifactId>
+                <version>5.4.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generatedLanguage>KOTLIN</generatedLanguage>
+                            <graphqlSchemaPaths>${project.basedir}/src/main/resources/saf.graphql</graphqlSchemaPaths>
+                            <outputDir>target/generated-sources/graphql</outputDir>
+                            <packageName>no.nav.pensjon.vtp.mocks.saf</packageName>
+                            <customTypesMapping>
+                                <DateTime>java.util.Date</DateTime>
+                            </customTypesMapping>
+                            <customAnnotationsMapping>
+                                <EpochMillis>
+                                    <annotation>com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.example.json.EpochMillisScalarDeserializer.class)</annotation>
+                                </EpochMillis>
+                            </customAnnotationsMapping>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
