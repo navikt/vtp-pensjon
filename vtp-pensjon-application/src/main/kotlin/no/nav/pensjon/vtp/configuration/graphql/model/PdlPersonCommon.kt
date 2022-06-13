@@ -35,10 +35,11 @@ enum class AdressebeskyttelseGradering { STRENGT_FORTROLIG_UTLAND, STRENGT_FORTR
 
 data class Foedsel(
     val foedselsaar: Int? = null,
-    val foedselsdato: Date? = null,
+    val foedselsdato: LocalDate? = null,
     val foedeland: String? = null,
     val foedested: String? = null,
     val foedekommune: String? = null,
+    val folkeregistermetadata: Folkeregistermetadata? = null,
     val metadata: Metadata
 )
 

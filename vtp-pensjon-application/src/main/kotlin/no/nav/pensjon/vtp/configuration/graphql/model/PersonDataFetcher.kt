@@ -19,7 +19,7 @@ class PersonDataFetcher(val personModellRepository: PersonModellRepository) : Da
                     metadata = Metadata.freg,
                 ).asList(),
                 foedsel = Foedsel(
-                    foedselsdato = fødselsdato?.let { Date(it.toEpochDay()) },
+                    foedselsdato = fødselsdato,//?.let { Date(it.toEpochDay()) },
                     metadata = Metadata.freg,
                 ).asList(),
                 doedsfall = Doedsfall(
