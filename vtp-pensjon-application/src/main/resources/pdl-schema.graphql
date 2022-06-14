@@ -15,7 +15,7 @@ type Query {
 type Person {
     folkeregisteridentifikator(historikk: Boolean = false): [Folkeregisteridentifikator!]!
     navn: [Navn!]!
-    foedsel: Foedsel
+    foedsel: [Foedsel!]!
     statsborgerskap: Statsborgerskap
     doedsfall : Doedsfall
     adressebeskyttelse(historikk: Boolean = false): [Adressebeskyttelse!]!
@@ -52,6 +52,7 @@ type Foedsel {
     foedested: String
     foedekommune: String
     metadata: Metadata!
+    folkeregistermetadata: Folkeregistermetadata
 }
 
 type Statsborgerskap {
