@@ -7,6 +7,7 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.*
 import no.nav.pensjon.vtp.testmodell.util.FiktivtNavn.getAnnenPartName
 import no.nav.pensjon.vtp.testmodell.util.FiktivtNavn.getRandomName
 import no.nav.pensjon.vtp.testmodell.util.VariabelContainer
+import java.time.*
 import java.util.*
 
 class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, val vars: VariabelContainer) {
@@ -70,6 +71,9 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
     }
 
     private fun personModell(i: PersonTemplate, fallbackName: PersonNavn, annenPartIdent: String?): PersonModell {
+        if (i.fødselsdato == null) {
+            i.fødselsdato = randomFødselsdato()
+        }
         return PersonModell(
             ident = getPersonIdent(i),
             aktørIdent = getAktørIdent(i),
@@ -100,15 +104,12 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
         )
     }
 
-    fun getPersonIdent(i: PersonTemplate): String {
-        return getFødselsdatoFraVars(i)
-            ?.let { identer.getVoksenIdentForLokalIdent(i.ident, i.kjønn, it) }
-            ?: identer.getVoksenIdentForLokalIdent(i.ident, i.kjønn)
-    }
+    fun getPersonIdent(i: PersonTemplate) = identer.getVoksenIdentForLokalIdent(i.ident, i.kjønn, i.fødselsdato.toString())
 
-    private fun getFødselsdatoFraVars(i: PersonTemplate): String? {
-        return vars.getVar(i.ident.replace("\${", "").replace("}", "") + "_fødselsdato")
-    }
+    private fun randomFødselsdato() = LocalDate.ofYearDay(
+        (LocalDate.now().minusYears(100).year .. LocalDate.now().minusYears(18).year).random(),
+        (1 .. 365).random()
+    )
 
     fun getAktørIdent(i: PersonTemplate): String {
         if (i.aktørIdent != null) {
