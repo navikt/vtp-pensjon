@@ -14,7 +14,7 @@ data class PersonTemplate(
     val aktørIdent: String?,
     var fornavn: String?,
     var etternavn: String?,
-    val fødselsdato: LocalDate?,
+    var fødselsdato: LocalDate?,
     val dødsdato: LocalDate?,
     val diskresjonskode: Diskresjonskoder?,
     val egenansatt: Boolean,
