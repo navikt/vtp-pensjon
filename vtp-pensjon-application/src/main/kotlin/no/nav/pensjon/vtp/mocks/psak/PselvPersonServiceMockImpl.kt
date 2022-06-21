@@ -311,6 +311,10 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.HentPersonListeResponse"
     )
     @WebResult(name = "hentPersonListeResponse")
-    override fun hentPersonListe(@WebParam(name = "hentPersonListeRequest") var1: ASBOPenHentPersonListeRequest) =
-        throw NotImplementedException()
+    override fun hentPersonListe(@WebParam(name = "hentPersonListeRequest") request: ASBOPenHentPersonListeRequest) =
+        ASBOPenPersonListe().apply {
+            personer = request.fnrListe.map {
+                psakpselvPersonAdapter.getASBOPenPerson(it.fnr)
+            }.toTypedArray()
+        }
 }
