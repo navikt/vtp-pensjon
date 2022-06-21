@@ -14,18 +14,37 @@ objectclass: organization
 
 dn: OU=BusinessUnits,DC=test,DC=local
 changetype: add
-dc: BusinessUnits
+ou: BusinessUnits
 objectClass: organizationalUnit
 objectClass: top
 
 dn: OU=NAV,OU=BusinessUnits,DC=test,DC=local
 changetype: add
-dc: NAV
+ou: NAV
 objectClass: organizationalUnit
 objectClass: top
 
 dn: OU=Users,OU=NAV,OU=BusinessUnits,DC=test,DC=local
 changetype: add
-dc: Users
+ou: Users
 objectClass: organizationalUnit
 objectClass: top
+
+dn: OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local
+changetype: add
+ou: Groups
+objectClass: organizationalUnit
+objectClass: top
+
+dn: OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local
+changetype: add
+ou: AccountGroups
+objectClass: organizationalUnit
+objectClass: top
+
+dn: CN=0000-GA-PENSJON-PIP,OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local
+changetype: add
+cn: 0000-GA-PENSJON-PIP
+objectclass: top
+objectclass: groupofnames
+member: CN=pensjon-pip,OU=Users,OU=NAV,OU=BusinessUnits,DC=test,DC=local

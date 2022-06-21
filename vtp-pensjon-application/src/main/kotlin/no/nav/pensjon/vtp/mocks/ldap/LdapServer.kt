@@ -2,7 +2,9 @@ package no.nav.pensjon.vtp.mocks.ldap
 
 import com.unboundid.ldap.listener.InMemoryDirectoryServer
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig
-import com.unboundid.ldap.listener.InMemoryListenerConfig
+import com.unboundid.ldap.listener.InMemoryListenerConfig.createLDAPConfig
+import com.unboundid.ldap.listener.InMemoryListenerConfig.createLDAPSConfig
+import com.unboundid.ldap.sdk.Attribute
 import com.unboundid.ldap.sdk.Entry
 import com.unboundid.ldif.LDIFAddChangeRecord
 import com.unboundid.ldif.LDIFReader
@@ -20,8 +22,9 @@ import javax.net.ssl.SSLContext
 @ConditionalOnProperty("ldap.server.enabled")
 class LdapServer(
     private val ansatteIndeks: AnsatteIndeks,
-    @Value("\${ldap.server.port}") listenerPortLdap: Int,
-    @Value("\${ldap.server.securePort}") listenerPortLdaps: Int,
+    private val snitchInMemoryOperationInterceptor: SnitchInMemoryOperationInterceptor,
+    @Value("\${ldap.server.port}") private val listenerPortLdap: Int,
+    @Value("\${ldap.server.securePort}") private val listenerPortLdaps: Int,
     tlsContext: SSLContext
 ) {
     private val directoryServer: InMemoryDirectoryServer
@@ -39,20 +42,20 @@ class LdapServer(
         LDIFAddChangeRecord(entry).processChange(directoryServer)
     }
 
-    private fun NAVAnsatt.mapToEntry() = Entry("CN=${cn}_xxx,OU=Users,OU=NAV,OU=BusinessUnits,DC=test,DC=local").apply {
-        addAttribute("objectClass", "user", "organizationalPerson", "person", "top")
-        addAttribute("objectCategory", "CN=Person,CN=Schema,CN=Configuration,DC=test,DC=local")
-        addAttribute("cn", cn)
-        addAttribute("samaccountname", cn)
-        addAttribute("displayName", displayName)
-        addAttribute("givenname", givenname)
-        addAttribute("sn", sn)
-        addAttribute("mail", email)
-        addAttribute(
-            "memberOf",
-            groups.map { group -> "CN=$group,OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local" }
-        )
-    }
+    private fun NAVAnsatt.mapToEntry() = Entry(
+        "CN=${cn},OU=Users,OU=NAV,OU=BusinessUnits,DC=test,DC=local",
+        Attribute("objectClass", "user", "organizationalPerson", "person", "top"),
+        Attribute("objectCategory", "CN=Person,CN=Schema,CN=Configuration,DC=test,DC=local"),
+        Attribute("cn", cn),
+        Attribute("samaccountname", cn),
+        Attribute("displayName", displayName),
+        Attribute("givenname", givenname),
+        Attribute("sn", sn),
+        Attribute("mail", email),
+        Attribute("userPrincipalName", cn),
+        Attribute("userPassword", "dummy"),
+        Attribute("memberOf", groups.map { "CN=$it,OU=AccountGroups,OU=Groups,OU=NAV,OU=BusinessUnits,DC=test,DC=local" }),
+    )
 
     private fun readLdifFilesFromClasspath() {
         javaClass.classLoader.getResources(BASEDATA_USERS_LDIF).iterator().forEach {
@@ -82,13 +85,16 @@ class LdapServer(
                 schema = null // dropper valider schema slik at vi slipper å definere alle object classes
 
                 setListenerConfigs(
-                    InMemoryListenerConfig.createLDAPSConfig(
+                    createLDAPSConfig(
                         "LDAPS",
                         listenerPortLdaps,
                         tlsContext.serverSocketFactory
                     ),
-                    InMemoryListenerConfig.createLDAPConfig("LDAP", listenerPortLdap)
+
+                    createLDAPConfig("LDAP", listenerPortLdap)
                 )
+
+                addInMemoryOperationInterceptor(snitchInMemoryOperationInterceptor)
             }
         )
 

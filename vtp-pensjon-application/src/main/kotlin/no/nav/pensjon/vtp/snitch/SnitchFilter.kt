@@ -81,7 +81,6 @@ class SnitchFilter(
         requestWrapper: ContentCachingRequestWrapper,
         responseWrapper: ContentCachingResponseWrapper
     ) = RequestResponse(
-        timestamp = now(),
         path = URL(requestWrapper.requestURL.toString()).path,
         queryString = requestWrapper.queryString,
         url = fullURL(requestWrapper),
