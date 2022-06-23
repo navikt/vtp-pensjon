@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.mocks.oppgave.gask.sak.v1.GsakRepo
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,9 +14,9 @@ import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @Tag(name = "Gsak repository")
-@RequestMapping("/rest/api/sak")
+@RequestMapping("/rest/api")
 class SakRestTjeneste(private val personModellRepository: PersonModellRepository, private val gsakRepo: GsakRepo) {
-    @PostMapping
+    @PostMapping("/sak")
     @Operation(summary = "", description = "Lager nytt saksnummer fra sekvens")
     fun foreldrepengesoknadErketype(@RequestBody requestDTO: OpprettSakRequestDTO): OpprettSakResponseDTO {
         if (requestDTO.lokalIdent.isEmpty()) {
@@ -32,5 +33,10 @@ class SakRestTjeneste(private val personModellRepository: PersonModellRepository
             requestDTO.sakstype
         )
         return OpprettSakResponseDTO(sak.sakId)
+    }
+
+    @GetMapping("/v1/saker")
+    fun finnGenerellSakListe() : Array<String> {
+        return emptyArray()
     }
 }
