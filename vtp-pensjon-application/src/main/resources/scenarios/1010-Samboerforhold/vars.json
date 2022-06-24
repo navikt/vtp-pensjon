@@ -1,5 +1,7 @@
 {
   "startdate": "now()-P20Y",
   "nevø1": "Dole",
-  "arenasak1": 999
+  "arenasak1": 999,
+  "for1_fødselsdato": "1980",
+  "for2_fødselsdato": "1980"
 }
