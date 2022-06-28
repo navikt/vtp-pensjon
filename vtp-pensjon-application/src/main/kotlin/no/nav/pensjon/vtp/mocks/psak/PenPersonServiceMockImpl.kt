@@ -101,7 +101,7 @@ class PenPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPers
         val asboPenPerson = psakpselvPersonAdapter.getASBOPenPerson(hentFamilierelasjonerRequest.fodselsnummer)
         if ( asboPenPerson!= null && !hentFamilierelasjonerRequest.hentSamboerforhold) {
             asboPenPerson.apply { samboer = null }
-            asboPenPerson.relasjoner.relasjoner.filter { it.relasjonsType == "SAMB" }
+            asboPenPerson.relasjoner.relasjoner.filter { it.relasjonsType != "SAMB" }
         }
         return asboPenPerson ?: throw HentFamilierelasjonerFaultPenPersonIkkeFunnetMsg()
     }
