@@ -6,6 +6,7 @@ import {
   Form,
   FormControl,
   Row,
+  Stack,
 } from "react-bootstrap";
 import { TokenDisplay } from "./TokenDisplay";
 import { CommandDisplay } from "./CommandDisplay";
@@ -286,70 +287,115 @@ function TokenPanel(props: {
 }
 
 const TokenGenerator = () => {
+
+  const [ tokenPanel, setTokenPanel ] = useState("AzureAd")
+
   return (
     <Container fluid>
       <Row>
-        <Col>
-          <h2>STS token</h2>
-          <TokenPanel
-            username={{ default: "saksbeh" }}
-            clientId={{ default: "psak" }}
-            requestSupplier={stsRequestSupplier}
-            responseMapper={stsResponseMapper}
-          />
+        <Col style={{ textAlign: "center", marginTop: "12px"}} sm={2}>
+          <Stack gap={2}>
+            <Button
+                size="lg"
+                onClick={() => setTokenPanel("AzureAd")}
+            >AzureAD</Button>
+            <Button
+                size="lg"
+                onClick={() => setTokenPanel("TokenX")}
+            >TokenX</Button>
+            <Button
+                size="lg"
+                onClick={() => setTokenPanel("IDPorten")}
+            >ID-Porten</Button>
+            <Button
+                size="lg"
+                onClick={() => setTokenPanel("STS")}
+            >STS</Button>
+            <Button
+                size="lg"
+                onClick={() => setTokenPanel("OpenAM")}
+            >OpenAM</Button>
+            <Button
+                size="lg"
+                onClick={() => setTokenPanel("Maskinporten")}
+            >Maskinporten</Button>
+          </Stack>
         </Col>
         <Col>
-          <h2>OpenAM token</h2>
-          <TokenPanel
-            username={{ default: "saksbeh" }}
-            clientId={{ default: "psak" }}
-            requestSupplier={openAMRequestSupplier}
-            responseMapper={openAmResponseMapper}
-          />
-        </Col>
-        <Col>
-          <h2>Azure AD token</h2>
-          <TokenPanel
-            username={{ default: "saksbeh" }}
-            clientId={{ default: "psak" }}
-            scope={{}}
-            tenantId={{ default: "966ac572-f5b7-4bbe-aa88-c76419c0f851" }}
-            requestSupplier={azureADRequestSupplier}
-            responseMapper={azureAdResponseMapper}
-          />
-        </Col>
-        <Col>
-          <h2>Maskinporten token</h2>
-          <TokenPanel
-            clientId={{ default: "889640782" }}
-            resource={{}}
-            scope={{ default: "nav:pensjon/v1/tpregisteret" }}
-            requestSupplier={maskinportenRequestSupplier}
-            responseMapper={maskinportenResponseMapper}
-          />
-        </Col>
-        <Col>
-          <h2>Idporten</h2>
-          <TokenLogin
-            pid={"213"}
-                />
-          <TokenPanel
-              code={{}}
-              clientId={{ default: "889640782" }}
-              clientAssertion={{default: "waew1"}}
-              requestSupplier={idportenRequestSupplier}
-              responseMapper={idportenResponseMapper}
-          />
-        </Col>
-        <Col>
-          <h2>Tokenx</h2>
-          <TokenPanel
-              clientAssertion={{ default: "889640782" }}
-              subjectToken={{default: "subject"}}
-              audience={{default: "aud"}}
-              requestSupplier={tokenxRequestSupplier}
-              responseMapper={tokenxResponseMapper}
-          />
+          { tokenPanel === "TokenX" &&
+            <div>
+              <h2>Token X</h2>
+              <TokenPanel
+                  clientAssertion={{default: "889640782"}}
+                  subjectToken={{default: "subject"}}
+                  audience={{default: "aud"}}
+                  requestSupplier={tokenxRequestSupplier}
+                  responseMapper={tokenxResponseMapper}
+              />
+            </div>
+          }
+          { tokenPanel === "AzureAd" &&
+            <div>
+              <h2>Azure AD token</h2>
+              <TokenPanel
+                  username={{default: "saksbeh"}}
+                  clientId={{default: "psak"}}
+                  scope={{}}
+                  tenantId={{default: "966ac572-f5b7-4bbe-aa88-c76419c0f851"}}
+                  requestSupplier={azureADRequestSupplier}
+                  responseMapper={azureAdResponseMapper}
+              />
+            </div>
+          }
+          { tokenPanel === "IDPorten" &&
+            <div>
+              <h2>Idporten</h2>
+              <TokenLogin
+                  pid={"213"}
+              />
+              <TokenPanel
+                  code={{}}
+                  clientId={{ default: "889640782" }}
+                  clientAssertion={{default: "waew1"}}
+                  requestSupplier={idportenRequestSupplier}
+                  responseMapper={idportenResponseMapper}
+              />
+            </div>
+          }
+          { tokenPanel === "OpenAM" &&
+            <div>
+              <h2>OpenAM token</h2>
+              <TokenPanel
+                  username={{ default: "saksbeh" }}
+                  clientId={{ default: "psak" }}
+                  requestSupplier={openAMRequestSupplier}
+                  responseMapper={openAmResponseMapper}
+              />
+            </div>
+          }
+          { tokenPanel === "STS" &&
+            <div>
+              <h2>STS token</h2>
+              <TokenPanel
+                  username={{ default: "saksbeh" }}
+                  clientId={{ default: "psak" }}
+                  requestSupplier={stsRequestSupplier}
+                  responseMapper={stsResponseMapper}
+              />
+            </div>
+          }
+          { tokenPanel === "Maskinporten" &&
+            <div>
+              <h2>Maskinporten token</h2>
+              <TokenPanel
+                  clientId={{ default: "889640782" }}
+                  resource={{}}
+                  scope={{ default: "nav:pensjon/v1/tpregisteret" }}
+                  requestSupplier={maskinportenRequestSupplier}
+                  responseMapper={maskinportenResponseMapper}
+              />
+            </div>
+          }
         </Col>
       </Row>
     </Container>
