@@ -1,17 +1,26 @@
 package no.nav.pensjon.vtp.configuration.graphql.model
 
+import graphql.GraphqlErrorBuilder
+import graphql.execution.DataFetcherResult
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import no.nav.pensjon.vtp.testmodell.personopplysning.*
 import java.util.*
 
-class PersonDataFetcher(val personModellRepository: PersonModellRepository) : DataFetcher<Person> {
+class PersonDataFetcher(val personModellRepository: PersonModellRepository) : DataFetcher<Any> {
 
-    override fun get(env: DataFetchingEnvironment): Person? =
+    override fun get(env: DataFetchingEnvironment): Any =
         with(personModellRepository.findById(env.getArgument("ident"))) {
-            if (this == null) return@with null
+            if (this == null) {
+                return DataFetcherResult.newResult<Any>()
+                    .error(GraphqlErrorBuilder.newError(env)
+                        .message("Fant ikke person")
+                        .extensions(mapOf("code" to "not_found"))
+                        .build()
+                    ).build()
+            }
 
-            Person(
+            val person = Person(
                 folkeregisteridentifikator = Folkeregisteridentifikator(env.getArgument("ident")).asList(),
                 navn = Navn(
                     fornavn = fornavn,
@@ -53,6 +62,8 @@ class PersonDataFetcher(val personModellRepository: PersonModellRepository) : Da
                     )
                 } ?: emptyList()
             )
+
+            return DataFetcherResult.newResult<Any>().data(person).build()
         }
 }
 
