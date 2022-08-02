@@ -23,11 +23,11 @@ class SamboerProxyController(
     ) = personModellRepository.findById(pid).let {
         it?.samboerforhold?.map {
             SamboerProxyDTO(
-                fnrInnmelder = it.innmelder,
-                fnrMotpart = it.motpart,
-                gyldigFraOgMed = it.fraOgMed,
-                gyldigTilOgMed = it.tilOgMed,
-                opprettetAv = it.opprettetAv
+                pidBruker = it.innmelder,
+                pidSamboer = it.motpart,
+                datoFom = it.fraOgMed,
+                datoTom = it.tilOgMed,
+                registrertAv = it.opprettetAv
             )
         }?.firstOrNull() ?: ResponseEntity.status(HttpStatus.NO_CONTENT).build<Any>()
     }
@@ -36,16 +36,16 @@ class SamboerProxyController(
     @Operation(summary = "Opprett samboerforhold")
     fun opprettSamboerforhold(
         @RequestBody request: SamboerProxyDTO
-    ) = personModellRepository.findById(request.fnrInnmelder)?.apply {
+    ) = personModellRepository.findById(request.pidBruker)?.apply {
         copy(
             samboerforhold = listOf(
                 SamboerforholdModell(
                     id = UUID.randomUUID().toString(),
-                    innmelder = request.fnrInnmelder,
-                    motpart = request.fnrMotpart,
-                    fraOgMed = request.gyldigFraOgMed,
-                    tilOgMed = request.gyldigTilOgMed,
-                    opprettetAv = request.opprettetAv
+                    innmelder = request.pidBruker,
+                    motpart = request.pidSamboer,
+                    fraOgMed = request.datoFom,
+                    tilOgMed = request.datoTom,
+                    opprettetAv = request.registrertAv
                 )
             )
         ).let(personModellRepository::save)
