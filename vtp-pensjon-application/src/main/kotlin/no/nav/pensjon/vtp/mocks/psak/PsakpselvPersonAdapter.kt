@@ -43,9 +43,9 @@ class PsakpselvPersonAdapter(
 
     private fun fetchSamboer(person: PersonModell) = person.samboerforhold.map {
         ASBOPenSamboer().apply {
-            fodselsnummer = it.motpart
-            fomDato = localDateToCalendar(it.fraOgMed)
-            tomDato = it.tilOgMed?.let { localDateToCalendar(it) }
+            fodselsnummer = it.pidSamboer
+            fomDato = localDateToCalendar(it.datoFom)
+            tomDato = it.datoTom?.let { localDateToCalendar(it) }
             endretAvSaksbehandler = it.opprettetAv
             endretAvSystem = "PP01"
         }
