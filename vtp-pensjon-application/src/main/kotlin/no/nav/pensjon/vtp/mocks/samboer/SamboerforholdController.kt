@@ -26,10 +26,10 @@ class SamboerforholdController(
         ?.run {
             samboerforhold.map {
                 SamboerDTO(
-                    fnrInnmelder = it.innmelder,
-                    fnrMotpart = it.motpart,
-                    gyldigFraOgMed = it.fraOgMed,
-                    gyldigTilOgMed = it.tilOgMed,
+                    pidBruker = it.innmelder,
+                    pidSamboer = it.motpart,
+                    datoFom = it.fraOgMed,
+                    datoTom = it.tilOgMed,
                     opprettetAv = it.opprettetAv
                 ).apply {
                     add(linkTo<SamboerforholdController> { hentSamboer(pid) }.withSelfRel())
@@ -44,15 +44,15 @@ class SamboerforholdController(
     @Operation(summary = "Registrer samboerforhold")
     fun registrerForhold(
         @RequestBody request: SamboerDTO,
-    ) = personModellRepository.findById(request.fnrInnmelder)?.apply {
+    ) = personModellRepository.findById(request.pidBruker)?.apply {
         copy(
             samboerforhold = listOf(
                 SamboerforholdModell(
                     id = UUID.randomUUID().toString(),
-                    innmelder = request.fnrInnmelder,
-                    motpart = request.fnrMotpart,
-                    fraOgMed = request.gyldigFraOgMed,
-                    tilOgMed = request.gyldigTilOgMed,
+                    innmelder = request.pidBruker,
+                    motpart = request.pidSamboer,
+                    fraOgMed = request.datoFom,
+                    tilOgMed = request.datoTom,
                     opprettetAv = request.opprettetAv
                 )
             )

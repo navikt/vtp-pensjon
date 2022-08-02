@@ -4,9 +4,9 @@ import org.springframework.hateoas.RepresentationModel
 import java.time.LocalDate
 
 data class SamboerDTO(
-    val fnrInnmelder: String,
-    val fnrMotpart: String,
-    val gyldigFraOgMed: LocalDate,
-    val gyldigTilOgMed: LocalDate?,
+    val pidBruker: String,
+    val pidSamboer: String,
+    val datoFom: LocalDate,
+    val datoTom: LocalDate?,
     val opprettetAv: String,
 ) : RepresentationModel<SamboerDTO>()
