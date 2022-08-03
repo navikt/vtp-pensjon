@@ -164,10 +164,9 @@ class Mapper(val identer: LokalIdentIndeks, val adresseIndeks: AdresseIndeks, va
     private fun samboerforholdModell(load: SamboerforholdTemplate, innmelder: String, motpart: String?): SamboerforholdModell {
         return SamboerforholdModell(
             id = UUID.randomUUID().toString(),
-            innmelder = innmelder,
-            motpart = motpart!!,
-            fraOgMed = load.fraOgMed,
-            tilOgMed = load.tilOgMed,
+            pidSamboer = motpart!!,
+            datoFom = load.fraOgMed,
+            datoTom = load.tilOgMed,
             opprettetAv = load.opprettetAv,
         )
     }

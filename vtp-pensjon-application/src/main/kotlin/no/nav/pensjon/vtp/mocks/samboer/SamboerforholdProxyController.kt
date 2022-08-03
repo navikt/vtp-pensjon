@@ -1,4 +1,4 @@
-package no.nav.pensjon.vtp.mocks.samboer.proxy
+package no.nav.pensjon.vtp.mocks.samboer
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -10,42 +10,41 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
-@Tag(name = "Samboerforhold TPS proxy")
-@RequestMapping("/rest/")
-class SamboerProxyController(
+@Tag(name = "Samboerforhold proxy")
+@RequestMapping("/rest/samboer")
+class SamboerforholdProxyController(
     private val personModellRepository: PersonModellRepository
 ) {
 
-    @GetMapping("api/proxy/samboer/{pid}")
+    @GetMapping("proxy/samboer/{pid}")
     @Operation(summary = "Hent samboerforhold")
     fun hentSamboerforhold(
         @PathVariable("pid") pid: String
     ) = personModellRepository.findById(pid).let {
         it?.samboerforhold?.map {
-            SamboerProxyDTO(
-                pidBruker = it.innmelder,
-                pidSamboer = it.motpart,
-                datoFom = it.fraOgMed,
-                datoTom = it.tilOgMed,
-                registrertAv = it.opprettetAv
+            SamboerDTO(
+                pidBruker = pid,
+                pidSamboer = it.pidSamboer,
+                datoFom = it.datoFom,
+                datoTom = it.datoTom,
+                opprettetAv = it.opprettetAv
             )
-        }?.firstOrNull() ?: ResponseEntity.status(HttpStatus.NO_CONTENT).build<Any>()
+        }?.firstOrNull { it.datoTom != null } ?: ResponseEntity.status(HttpStatus.NO_CONTENT).build<Any>()
     }
 
-    @PostMapping("api/proxy/samboer")
+    @PostMapping("proxy/samboer")
     @Operation(summary = "Opprett samboerforhold")
     fun opprettSamboerforhold(
-        @RequestBody request: SamboerProxyDTO
+        @RequestBody request: SamboerDTO
     ) = personModellRepository.findById(request.pidBruker)?.apply {
         copy(
             samboerforhold = listOf(
                 SamboerforholdModell(
                     id = UUID.randomUUID().toString(),
-                    innmelder = request.pidBruker,
-                    motpart = request.pidSamboer,
-                    fraOgMed = request.datoFom,
-                    tilOgMed = request.datoTom,
-                    opprettetAv = request.registrertAv
+                    pidSamboer = request.pidSamboer,
+                    datoFom = request.datoFom,
+                    datoTom = request.datoFom,
+                    opprettetAv = request.opprettetAv
                 )
             )
         ).let(personModellRepository::save)
