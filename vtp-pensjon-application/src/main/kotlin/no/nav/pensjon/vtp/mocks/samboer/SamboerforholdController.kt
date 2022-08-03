@@ -62,28 +62,28 @@ class SamboerforholdController(
         ResponseEntity.status(CREATED).build<Any>()
     } ?: ResponseEntity.status(NOT_FOUND).build<Any>()
 
-    @PutMapping("/api/samboer/forhold/{forholdId}/avslutt")
+    @PutMapping("/api/samboer/periode/{periodeId}/avslutt")
     @Operation(summary = "Avslutt samboerforhold")
     fun avsluttForhold(
-        @PathVariable forholdId: String,
+        @PathVariable periodeId: String,
         @RequestParam datoTom: String
-    ) = personModellRepository.findBySamboerforholdId(forholdId)
+    ) = personModellRepository.findBySamboerforholdId(periodeId)
         ?.run {
             copy(samboerforhold = samboerforhold.also {
-                it.find { it.id == forholdId }?.datoTom = LocalDate.parse(datoTom, DateTimeFormatter.ISO_DATE)
+                it.find { it.id == periodeId }?.datoTom = LocalDate.parse(datoTom, DateTimeFormatter.ISO_DATE)
             }).let(personModellRepository::save)
             ResponseEntity.status(OK).build<Any>()
         }
         ?: ResponseEntity.status(NOT_FOUND).build<Any>()
 
-    @PutMapping("/api/samboer/forhold/{forholdId}/annuller")
+    @PutMapping("/api/samboer/periode/{periodeId}/annuller")
     @Operation(summary = "Annuller samboerforhold")
     fun annullerForhold(
-        @PathVariable forholdId: String
-    ) = personModellRepository.findBySamboerforholdId(forholdId)
+        @PathVariable periodeId: String
+    ) = personModellRepository.findBySamboerforholdId(periodeId)
         ?.run {
             copy(samboerforhold = samboerforhold.also {
-                it.find { it.id == forholdId }?.annullert = true
+                it.find { it.id == periodeId }?.annullert = true
             }).let(personModellRepository::save)
             ResponseEntity.status(OK).build<Any>()
         }
