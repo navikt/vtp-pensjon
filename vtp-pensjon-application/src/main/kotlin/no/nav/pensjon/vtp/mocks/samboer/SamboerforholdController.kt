@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
 import no.nav.pensjon.vtp.testmodell.personopplysning.SamboerforholdModell
+import org.springframework.hateoas.Link
 import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.HttpStatus.*
 import org.springframework.http.ResponseEntity
@@ -35,7 +36,8 @@ class SamboerforholdController(
                     opprettetAv = it.opprettetAv
                 ).apply {
                     add(linkTo<SamboerforholdController> { hentSamboerforhold(pid) }.withSelfRel())
-                    add(linkTo<SamboerforholdController> { avsluttForhold(it.id, "{datoTom}") }.withRel("avslutt"))
+                    add(Link.of(linkTo<SamboerforholdController> { avsluttForhold(it.id, "") }
+                        .toString().replace("datoTom=", "") + "{datoTom}").withRel("avslutt"))
                     add(linkTo<SamboerforholdController> { annullerForhold(it.id) }.withRel("annuller"))
                 }
             }.firstOrNull { it.datoTom == null }
