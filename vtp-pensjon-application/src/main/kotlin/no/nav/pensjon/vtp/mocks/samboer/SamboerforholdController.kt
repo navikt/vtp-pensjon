@@ -35,7 +35,7 @@ class SamboerforholdController(
                     opprettetAv = it.opprettetAv
                 ).apply {
                     add(linkTo<SamboerforholdController> { hentSamboerforhold(pid) }.withSelfRel())
-                    add(linkTo<SamboerforholdController> { avsluttForhold(it.id, "{datoTom}") }.withRel("avslutt"))
+                    add(linkTo<SamboerforholdController> { avsluttForhold(it.id, "datoTom={datoTom}") }.withRel("avslutt"))
                     add(linkTo<SamboerforholdController> { annullerForhold(it.id) }.withRel("annuller"))
                 }
             }.firstOrNull { it.datoTom == null }
