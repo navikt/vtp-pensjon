@@ -8,5 +8,5 @@ data class SamboerDTO(
     val pidSamboer: String,
     val datoFom: LocalDate,
     val datoTom: LocalDate?,
-    val opprettetAv: String,
+    val registrertAv: String,
 ) : RepresentationModel<SamboerDTO>()

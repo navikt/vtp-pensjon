@@ -33,7 +33,7 @@ class SamboerforholdController(
                     pidSamboer = it.pidSamboer,
                     datoFom = it.datoFom,
                     datoTom = it.datoTom,
-                    opprettetAv = it.opprettetAv
+                    registrertAv = it.opprettetAv
                 ).apply {
                     add(linkTo<SamboerforholdController> { hentSamboerforhold(pid) }.withSelfRel())
                     add(Link.of(linkTo<SamboerforholdController> { avsluttForhold(it.id, "") }
@@ -57,7 +57,7 @@ class SamboerforholdController(
                     pidSamboer = request.pidSamboer,
                     datoFom = request.datoFom,
                     datoTom = request.datoTom,
-                    opprettetAv = request.opprettetAv
+                    opprettetAv = request.registrertAv
                 )
             )
         ).let(personModellRepository::save)

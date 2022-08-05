@@ -27,9 +27,9 @@ class SamboerforholdProxyController(
                 pidSamboer = it.pidSamboer,
                 datoFom = it.datoFom,
                 datoTom = it.datoTom,
-                opprettetAv = it.opprettetAv
+                registrertAv = it.opprettetAv
             )
-        }?.firstOrNull { it.datoTom != null } ?: ResponseEntity.status(HttpStatus.NO_CONTENT).build<Any>()
+        }?.firstOrNull { it.datoTom == null } ?: ResponseEntity.status(HttpStatus.NO_CONTENT).build<Any>()
     }
 
     @PostMapping("proxy/samboer")
@@ -44,7 +44,7 @@ class SamboerforholdProxyController(
                     pidSamboer = request.pidSamboer,
                     datoFom = request.datoFom,
                     datoTom = request.datoFom,
-                    opprettetAv = request.opprettetAv
+                    opprettetAv = request.registrertAv
                 )
             )
         ).let(personModellRepository::save)
