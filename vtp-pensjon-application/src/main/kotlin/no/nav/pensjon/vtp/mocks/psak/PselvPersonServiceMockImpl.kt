@@ -1,10 +1,18 @@
 package no.nav.pensjon.vtp.mocks.psak
 
 import no.nav.inf.pselv.person.*
+import no.nav.lib.pen.psakpselv.asbo.ASBOPenTomRespons
 import no.nav.lib.pen.psakpselv.asbo.person.*
 import no.nav.lib.pen.psakpselv.fault.ObjectFactory
 import no.nav.pensjon.vtp.annotations.SoapService
 import no.nav.pensjon.vtp.testmodell.exceptions.NotImplementedException
+import no.nav.pensjon.vtp.testmodell.kodeverk.Rolle
+import no.nav.pensjon.vtp.testmodell.personopplysning.FamilierelasjonModell
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonIdentFooRepository
+import no.nav.pensjon.vtp.testmodell.personopplysning.PersonModellRepository
+import no.nav.pensjon.vtp.testmodell.personopplysning.SamboerforholdModell
+import java.time.LocalDate
+import java.util.*
 import javax.jws.*
 import javax.xml.bind.annotation.XmlSeeAlso
 import javax.xml.ws.RequestWrapper
@@ -21,7 +29,11 @@ import javax.xml.ws.ResponseWrapper
     no.nav.lib.pen.psakpselv.fault.person.ObjectFactory::class
 )
 @HandlerChain(file = "/Handler-chain.xml")
-class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPersonAdapter) : PSELVPerson {
+class PselvPersonServiceMockImpl(
+    private val personModellRepository: PersonModellRepository,
+    private val psakpselvPersonAdapter: PsakpselvPersonAdapter,
+    private val personIdentFooRepository: PersonIdentFooRepository
+) : PSELVPerson {
 
     @WebMethod
     @RequestWrapper(
@@ -95,8 +107,60 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.OpprettSamboerforholdResponse"
     )
     @WebResult(name = "opprettSamboerforholdResponse")
-    override fun opprettSamboerforhold(@WebParam(name = "opprettSamboerforholdRequest") var1: ASBOPenPerson) =
-        throw NotImplementedException()
+    @Throws(
+        OpprettSamboerforholdFaultPenAlleredeRegistrertSamboerforholdMsg::class,
+        OpprettSamboerforholdFaultPenGeneriskMsg::class,
+        OpprettSamboerforholdFaultPenPersonIkkeFunnetMsg::class,
+        OpprettSamboerforholdFaultPenSamboerDodMsg::class,
+        OpprettSamboerforholdFaultPenSamboerIFamilieMsg::class,
+        OpprettSamboerforholdFaultPenSamboerIkkeFunnetMsg::class,
+        OpprettSamboerforholdFaultPenSamboerValideringFeiletMsg::class
+    )
+    override fun opprettSamboerforhold(@WebParam(name = "opprettSamboerforholdRequest") request: ASBOPenPerson): ASBOPenTomRespons {
+        val person = personModellRepository.findById(request.fodselsnummer)
+            ?: throw OpprettSamboerforholdFaultPenPersonIkkeFunnetMsg()
+
+        if (person.samboerforhold.filter { it.datoTom == null && !it.annullert }.isNotEmpty()) {
+            throw OpprettSamboerforholdFaultPenAlleredeRegistrertSamboerforholdMsg()
+        }
+
+        val samboer = personModellRepository.findById(request.samboer.fodselsnummer)
+            ?: throw OpprettSamboerforholdFaultPenSamboerIkkeFunnetMsg()
+
+        if (samboer.dødsdato != null) {
+            throw OpprettSamboerforholdFaultPenSamboerDodMsg()
+        }
+
+        with(personIdentFooRepository.findById(person.ident)!!) {
+            if (personopplysninger.familierelasjoner.filter { it.rolle != Rolle.SAMB && it.til == samboer.ident }.isNotEmpty()) {
+                throw OpprettSamboerforholdFaultPenSamboerIFamilieMsg()
+            }
+
+            personIdentFooRepository.save(
+                copy(
+                    personopplysninger = personopplysninger.apply {
+                        familierelasjoner = listOf(FamilierelasjonModell(Rolle.SAMB, samboer.ident, true))
+                    }
+                )
+            )
+        }
+
+        personModellRepository.save(
+            person.copy(
+                samboerforhold = listOf(
+                    SamboerforholdModell(
+                        id = UUID.randomUUID().toString(),
+                        pidSamboer = request.samboer.fodselsnummer,
+                        datoFom = with(request.samboer.fomDato.time) { LocalDate.of(year, month, day) },
+                        datoTom = with(request.samboer.tomDato) { if (this != null) LocalDate.of(time.year, time.month, time.day) else null },
+                        opprettetAv = request.samboer.endretAvSaksbehandler ?: "srvpselv"
+                    )
+                )
+            )
+        )
+
+        return ASBOPenTomRespons()
+    }
 
     @WebMethod
     @RequestWrapper(
@@ -201,8 +265,39 @@ class PselvPersonServiceMockImpl(private val psakpselvPersonAdapter: PsakpselvPe
         className = "no.nav.inf.pselv.person.SlettSamboerforholdResponse"
     )
     @WebResult(name = "slettSamboerResponse")
-    override fun slettSamboerforhold(@WebParam(name = "slettSamboerRequest") var1: ASBOPenPerson) =
-        throw NotImplementedException()
+    @Throws(
+        SlettSamboerforholdFaultPenPersonIkkeFunnetMsg::class,
+        SlettSamboerforholdFaultPenSamboerIkkeFunnetMsg::class,
+        SlettSamboerforholdFaultPenGeneriskMsg::class
+    )
+    override fun slettSamboerforhold(@WebParam(name = "slettSamboerRequest") request: ASBOPenPerson): ASBOPenTomRespons {
+        val person = personModellRepository.findById(request.fodselsnummer) ?: throw SlettSamboerforholdFaultPenPersonIkkeFunnetMsg()
+        val samboerforhold = person.samboerforhold.filter { it.datoTom == null && !it.annullert }
+
+        if (samboerforhold.isEmpty()) {
+            throw SlettSamboerforholdFaultPenGeneriskMsg("Ingen Aktiv samboer funnet.")
+        }
+
+        personModellRepository.save(
+            person.copy(
+                samboerforhold = samboerforhold.apply {
+                    first().datoTom = LocalDate.now()
+                }
+            )
+        )
+
+        with(personIdentFooRepository.findById(person.ident)!!) {
+            personIdentFooRepository.save(
+                copy (
+                    personopplysninger = personopplysninger.apply {
+                        familierelasjoner = familierelasjoner.filter { it.rolle != Rolle.SAMB }
+                    }
+                )
+            )
+        }
+
+        return ASBOPenTomRespons()
+    }
 
     @WebMethod
     @RequestWrapper(
