@@ -41,7 +41,8 @@ class PsakpselvPersonAdapter(
         }
     }
 
-    private fun fetchSamboer(person: PersonModell) = person.samboerforhold.map {
+    private fun fetchSamboer(person: PersonModell) = person.samboerforhold
+        .filter { it.datoTom == null && !it.annullert }.map {
         ASBOPenSamboer().apply {
             fodselsnummer = it.pidSamboer
             fomDato = localDateToCalendar(it.datoFom)
