@@ -1,12 +1,12 @@
 package no.nav.pensjon.vtp.client.scenario
 
 import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 import no.nav.pensjon.vtp.client.support.APPLICATION_JSON
 import no.nav.pensjon.vtp.common.testscenario.VtpPensjonTestScenario
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 
 class VtpPensjonTestScenarioService(
@@ -14,6 +14,7 @@ class VtpPensjonTestScenarioService(
     private val okHttpClient: OkHttpClient = OkHttpClient(),
     private val objectMapper: JsonMapper = jsonMapper {
         addModule(kotlinModule())
+        addModule(JavaTimeModule())
     }
 ) {
     fun createScenario(vtpPensjonTestScenario: VtpPensjonTestScenario): VtpPensjonTestScenario = okHttpClient
