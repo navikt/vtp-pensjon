@@ -1,7 +1,7 @@
 {
 	"søker": {
 		"ident": "${for1}",
-		"fødselsdato": "now()-P50Y",
+		"fødselsdato": "${for1_foedselsdato}",
 		"kjønn": "M",
 		"geografiskTilknytning": {
 			"type": "Land",

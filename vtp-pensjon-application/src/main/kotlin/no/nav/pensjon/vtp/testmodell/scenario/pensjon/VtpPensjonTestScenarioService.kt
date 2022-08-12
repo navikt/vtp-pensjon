@@ -13,7 +13,9 @@ class VtpPensjonTestScenarioService(
 ) {
     fun opprettVtpPensjonTestScenario(input: VtpPensjonTestScenario) =
         templateRepository.finn("1000")?.let {
-            testscenarioService.opprettTestscenario(it, mapOf("for1" to input.pid!!)).asVtpPensjonTestScenario()
+            val map = mutableMapOf("for1" to input.pid!!)
+            input.foedselsdato?.let { fodselsdato -> map.put ("for1_foedselsdato", fodselsdato.toString())}
+            testscenarioService.opprettTestscenario(it, map).asVtpPensjonTestScenario()
         }
 
     fun getSamTestScenario(testscenarioId: String) =
@@ -23,6 +25,7 @@ class VtpPensjonTestScenarioService(
         private fun Testscenario.asVtpPensjonTestScenario() = VtpPensjonTestScenario(
             testScenarioId = id,
             pid = personopplysninger.søker.ident,
+            foedselsdato = personopplysninger.søker.fødselsdato,
             fornavn = personopplysninger.søker.fornavn,
             etternavn = personopplysninger.søker.etternavn,
             diskresjonskode = personopplysninger.søker.diskresjonskode?.name,
