@@ -52,13 +52,47 @@ export default function RequestResponseList(props: {
                 <thead>
                 <tr>
                     <th>Timestamp</th>
-                    <th>Method</th>
+                    <th>
                     <Dropdown className="mx-2" autoClose="outside">
-                        <Dropdown.Toggle id="dropdown-autoclose-outside">
-                            Path
-                        </Dropdown.Toggle>
+                        <Dropdown.Toggle variant="secondary">Method</Dropdown.Toggle>
                         <Dropdown.Menu>
-                            {props.requests.map((request, i) => {
+                            {props.requests
+                                .filter((request, i) => {
+                                    return props.requests.findIndex((value, i) => { return value.method === request.method }) === i
+                                })
+                                .map((request, i) => {
+                                return <Form className="mx-2">
+                                    <Form.Check
+                                        type={"checkbox"}
+                                        label={request.method}
+                                        onChange={() => {
+                                            var pathMethods = props.filters.methods
+                                            if (pathMethods.indexOf(request.method) !== -1) {
+                                                pathMethods = pathMethods.filter((method) => { return method !== request.method })
+                                            } else {
+                                                pathMethods = pathMethods.concat(request.method)
+                                            }
+                                            var updatedFilters = new RequestFilters()
+                                            updatedFilters.paths = props.filters.paths
+                                            updatedFilters.methods = pathMethods
+                                            updatedFilters.status = props.filters.status
+                                            props.setFilters(updatedFilters)
+                                        }}
+                                    />
+                                </Form>
+                            })}
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    </th>
+                    <th>
+                    <Dropdown className="mx-2" autoClose="outside">
+                        <Dropdown.Toggle variant="secondary">Path</Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            {props.requests
+                                .filter((request, i) => {
+                                    return props.requests.findIndex((value, i) => { return value.path === request.path }) === i
+                                })
+                                .map((request, i) => {
                                 return <Form className="mx-2">
                                     <Form.Check
                                         type={"checkbox"}
@@ -72,6 +106,8 @@ export default function RequestResponseList(props: {
                                             }
                                             var updatedFilters = new RequestFilters()
                                             updatedFilters.paths = pathFilters
+                                            updatedFilters.methods = props.filters.methods
+                                            updatedFilters.status = props.filters.status
                                             props.setFilters(updatedFilters)
                                         }}
                                     />
@@ -79,20 +115,62 @@ export default function RequestResponseList(props: {
                             })}
                         </Dropdown.Menu>
                     </Dropdown>
-                    <th>Status</th>
+                    </th>
+                    <th>
+                    <Dropdown className="mx-2" autoClose="outside">
+                        <Dropdown.Toggle variant="secondary">Status</Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            {props.requests
+                                .filter((request, i) => {
+                                    return props.requests.findIndex((value, i) => { return value.status.toString() === request.status.toString() }) === i
+                                })
+                                .map((request, i) => {
+                                return <Form className="mx-2">
+                                    <Form.Check
+                                        type={"checkbox"}
+                                        label={request.status}
+                                        onChange={() => {
+                                            var statusFilters = props.filters.status
+                                            if (statusFilters.indexOf(request.status.toString()) !== -1) {
+                                                statusFilters = statusFilters.filter((status) => { return status !== request.status.toString() })
+                                            } else {
+                                                statusFilters = statusFilters.concat(request.status.toString())
+                                            }
+                                            var updatedFilters = new RequestFilters()
+                                            updatedFilters.paths = props.filters.paths
+                                            updatedFilters.methods = props.filters.methods
+                                            updatedFilters.status = statusFilters
+                                            props.setFilters(updatedFilters)
+                                        }}
+                                    />
+                                </Form>
+                            })}
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    </th>
                     <th className="d-none d-xxl-table-cell">Handler</th>
                     <th/>
                 </tr>
                 </thead>
                 <tbody>
                 {props.requests.filter( request => {
-                    if (props.filters.paths.length === 0) {
-                        console.log("Re-draw: Empty filter!")
-                        return true;
-                    } else {
-                        console.log(request.path + " in " + props.filters.paths + "? -> " + props.filters.paths.includes(request.path))
-                        return props.filters.paths.includes(request.path);
+                    let pathCheck = true
+                    let methodCheck = true
+                    let statusCheck = true
+
+                    if (props.filters.paths.length > 0) {
+                        pathCheck = props.filters.paths.includes(request.path);
                     }
+
+                    if (props.filters.methods.length > 0) {
+                        methodCheck = props.filters.methods.includes(request.method)
+                    }
+
+                    if (props.filters.status.length > 0) {
+                        statusCheck = props.filters.status.includes(request.status.toString())
+                    }
+
+                    return pathCheck && methodCheck && statusCheck
                 }).map((request, i) => {
                     let rowClass =
                         request === props.selectedRequest ? "table-primary" : "";

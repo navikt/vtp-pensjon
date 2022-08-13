@@ -26,4 +26,6 @@ export interface RequestResponse {
 
 export class RequestFilters {
   paths: string[] = []
+  methods: string[] = []
+  status: string[] = []
 }
