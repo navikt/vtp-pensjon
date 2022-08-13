@@ -22,6 +22,8 @@ const Snitch = () => {
     const [selectedRequest, setSelectedRequest] =
         useState<RequestResponse | null>(null);
 
+    const [filters, setFilters] = useState<string[]>([]);
+
     const [requests, clear, ignorePath] = useSnitchDataStream();
 
     const scrollable: CSSProperties = {
@@ -41,6 +43,8 @@ const Snitch = () => {
                         setSelectedRequest={setSelectedRequest}
                         onClear={clear}
                         onIgnorePath={ignorePath}
+                        filters={filters}
+                        setFilters={setFilters}
                     />
                 </Col>
                 {requestToShow != null && (

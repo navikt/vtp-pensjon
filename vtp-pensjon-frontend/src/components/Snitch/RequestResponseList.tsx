@@ -1,4 +1,4 @@
-import {Badge, Button, Card, Dropdown, Table} from "react-bootstrap";
+import {Badge, Button, Card, Dropdown, Table, Form} from "react-bootstrap";
 import React from "react";
 import {RequestResponse} from "./types";
 import FormattedDate from "./FormattedDate";
@@ -30,9 +30,11 @@ const CustomToggle = React.forwardRef(
 export default function RequestResponseList(props: {
     requests: RequestResponse[];
     selectedRequest: RequestResponse | null;
-    setSelectedRequest: (request: RequestResponse) => any;
-    onClear: () => void,
-    onIgnorePath: (path: string) => void
+    setSelectedRequest: (request: RequestResponse | null) => any;
+    onClear: () => void;
+    onIgnorePath: (path: string) => void;
+    filters: string[];
+    setFilters: (filters: string[]) => any;
 }) {
     return (
         <Card>
@@ -51,14 +53,50 @@ export default function RequestResponseList(props: {
                 <tr>
                     <th>Timestamp</th>
                     <th>Method</th>
-                    <th>Path</th>
+                    <Dropdown className="mx-2" autoClose="outside">
+                        <Dropdown.Toggle id="dropdown-autoclose-outside">
+                            Path
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            {props.requests.map((request, i) => {
+                                return <Form className="mx-2">
+                                    <Form.Check
+                                        type={"checkbox"}
+                                        label={request.path}
+                                        onChange={() => {
+                                            console.log("Before: " + props.filters)
+                                            if (props.filters.indexOf(request.path) !== -1) {
+                                                console.log("Set filters: " + props.filters.filter((path) => { return path !== request.path }))
+                                                props.setFilters(
+                                                    props.filters.filter((path) => { return path !== request.path })
+                                                )
+                                            } else {
+                                                console.log("Set filters (pop): " + props.filters)
+                                                props.setFilters(
+                                                    props.filters.concat(request.path)
+                                                );
+                                            }
+                                        }}
+                                    />
+                                </Form>
+                            })}
+                        </Dropdown.Menu>
+                    </Dropdown>
                     <th>Status</th>
                     <th className="d-none d-xxl-table-cell">Handler</th>
                     <th/>
                 </tr>
                 </thead>
                 <tbody>
-                {props.requests.map((request, i) => {
+                {props.requests.filter( request => {
+                    if (props.filters.length === 0) {
+                        console.log("Re-draw: Empty filter!")
+                        return true;
+                    } else {
+                        console.log(request.path + " in " + props.filters + "? -> " + props.filters.includes(request.path))
+                        return props.filters.includes(request.path);
+                    }
+                }).map((request, i) => {
                     let rowClass =
                         request === props.selectedRequest ? "table-primary" : "";
 
