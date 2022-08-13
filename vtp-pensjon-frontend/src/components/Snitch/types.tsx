@@ -23,3 +23,7 @@ export interface RequestResponse {
 
   response: Payload;
 }
+
+export class RequestFilters {
+  paths: string[] = []
+}

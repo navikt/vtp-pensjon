@@ -1,6 +1,6 @@
 import {Badge, Button, Card, Dropdown, Table, Form} from "react-bootstrap";
 import React from "react";
-import {RequestResponse} from "./types";
+import {RequestFilters, RequestResponse} from "./types";
 import FormattedDate from "./FormattedDate";
 import {badgeBackground} from "./Snitch";
 import {Gear, Trash} from "react-bootstrap-icons";
@@ -33,8 +33,8 @@ export default function RequestResponseList(props: {
     setSelectedRequest: (request: RequestResponse | null) => any;
     onClear: () => void;
     onIgnorePath: (path: string) => void;
-    filters: string[];
-    setFilters: (filters: string[]) => any;
+    filters: RequestFilters;
+    setFilters: (filters: RequestFilters) => any;
 }) {
     return (
         <Card>
@@ -64,18 +64,15 @@ export default function RequestResponseList(props: {
                                         type={"checkbox"}
                                         label={request.path}
                                         onChange={() => {
-                                            console.log("Before: " + props.filters)
-                                            if (props.filters.indexOf(request.path) !== -1) {
-                                                console.log("Set filters: " + props.filters.filter((path) => { return path !== request.path }))
-                                                props.setFilters(
-                                                    props.filters.filter((path) => { return path !== request.path })
-                                                )
+                                            var pathFilters = props.filters.paths
+                                            if (pathFilters.indexOf(request.path) !== -1) {
+                                                pathFilters = pathFilters.filter((path) => { return path !== request.path })
                                             } else {
-                                                console.log("Set filters (pop): " + props.filters)
-                                                props.setFilters(
-                                                    props.filters.concat(request.path)
-                                                );
+                                                pathFilters = pathFilters.concat(request.path)
                                             }
+                                            var updatedFilters = new RequestFilters()
+                                            updatedFilters.paths = pathFilters
+                                            props.setFilters(updatedFilters)
                                         }}
                                     />
                                 </Form>
@@ -89,12 +86,12 @@ export default function RequestResponseList(props: {
                 </thead>
                 <tbody>
                 {props.requests.filter( request => {
-                    if (props.filters.length === 0) {
+                    if (props.filters.paths.length === 0) {
                         console.log("Re-draw: Empty filter!")
                         return true;
                     } else {
-                        console.log(request.path + " in " + props.filters + "? -> " + props.filters.includes(request.path))
-                        return props.filters.includes(request.path);
+                        console.log(request.path + " in " + props.filters.paths + "? -> " + props.filters.paths.includes(request.path))
+                        return props.filters.paths.includes(request.path);
                     }
                 }).map((request, i) => {
                     let rowClass =
