@@ -27,6 +27,15 @@ const CustomToggle = React.forwardRef(
     )
 );
 
+function handleFilter(filters: string[], candidate: string): string[] {
+    if (filters.indexOf(candidate) !== -1) {
+        return filters.filter((value) => {
+            return value !== candidate
+        })
+    }
+    return filters.concat(candidate)
+}
+
 export default function RequestResponseList(props: {
     requests: RequestResponse[];
     selectedRequest: RequestResponse | null;
@@ -66,17 +75,13 @@ export default function RequestResponseList(props: {
                                         type={"checkbox"}
                                         label={request.method}
                                         onChange={() => {
-                                            var pathMethods = props.filters.methods
-                                            if (pathMethods.indexOf(request.method) !== -1) {
-                                                pathMethods = pathMethods.filter((method) => { return method !== request.method })
-                                            } else {
-                                                pathMethods = pathMethods.concat(request.method)
-                                            }
-                                            var updatedFilters = new RequestFilters()
-                                            updatedFilters.paths = props.filters.paths
-                                            updatedFilters.methods = pathMethods
-                                            updatedFilters.status = props.filters.status
-                                            props.setFilters(updatedFilters)
+                                            props.setFilters(
+                                                new RequestFilters(
+                                                    props.filters.paths,
+                                                    handleFilter(props.filters.methods, request.method),
+                                                    props.filters.status
+                                                )
+                                            )
                                         }}
                                     />
                                 </Form>
@@ -98,17 +103,13 @@ export default function RequestResponseList(props: {
                                         type={"checkbox"}
                                         label={request.path}
                                         onChange={() => {
-                                            var pathFilters = props.filters.paths
-                                            if (pathFilters.indexOf(request.path) !== -1) {
-                                                pathFilters = pathFilters.filter((path) => { return path !== request.path })
-                                            } else {
-                                                pathFilters = pathFilters.concat(request.path)
-                                            }
-                                            var updatedFilters = new RequestFilters()
-                                            updatedFilters.paths = pathFilters
-                                            updatedFilters.methods = props.filters.methods
-                                            updatedFilters.status = props.filters.status
-                                            props.setFilters(updatedFilters)
+                                            props.setFilters(
+                                                new RequestFilters(
+                                                    handleFilter(props.filters.paths, request.path),
+                                                    props.filters.methods,
+                                                    props.filters.status
+                                                )
+                                            )
                                         }}
                                     />
                                 </Form>
@@ -130,17 +131,13 @@ export default function RequestResponseList(props: {
                                         type={"checkbox"}
                                         label={request.status}
                                         onChange={() => {
-                                            var statusFilters = props.filters.status
-                                            if (statusFilters.indexOf(request.status.toString()) !== -1) {
-                                                statusFilters = statusFilters.filter((status) => { return status !== request.status.toString() })
-                                            } else {
-                                                statusFilters = statusFilters.concat(request.status.toString())
-                                            }
-                                            var updatedFilters = new RequestFilters()
-                                            updatedFilters.paths = props.filters.paths
-                                            updatedFilters.methods = props.filters.methods
-                                            updatedFilters.status = statusFilters
-                                            props.setFilters(updatedFilters)
+                                            props.setFilters(
+                                                new RequestFilters(
+                                                    props.filters.paths,
+                                                    props.filters.methods,
+                                                    handleFilter(props.filters.status, request.status.toString())
+                                                )
+                                            )
                                         }}
                                     />
                                 </Form>

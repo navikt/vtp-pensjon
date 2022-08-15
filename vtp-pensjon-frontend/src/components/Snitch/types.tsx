@@ -25,6 +25,13 @@ export interface RequestResponse {
 }
 
 export class RequestFilters {
+
+  constructor(paths: string[], methods: string[], status: string[]) {
+    this.paths = paths
+    this.methods = methods
+    this.status = status
+  }
+
   paths: string[] = []
   methods: string[] = []
   status: string[] = []

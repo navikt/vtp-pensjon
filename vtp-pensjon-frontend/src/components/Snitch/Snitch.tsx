@@ -22,7 +22,7 @@ const Snitch = () => {
     const [selectedRequest, setSelectedRequest] =
         useState<RequestResponse | null>(null);
 
-    const [filters, setFilters] = useState<RequestFilters>(new RequestFilters());
+    const [filters, setFilters] = useState<RequestFilters>(new RequestFilters([], [], []));
 
     const [requests, clear, ignorePath] = useSnitchDataStream();
 
