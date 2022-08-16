@@ -1,6 +1,6 @@
 import React, {CSSProperties, useState} from "react";
 import {Col, Container, Row} from "react-bootstrap";
-import {RequestResponse} from "./types";
+import {RequestFilters, RequestResponse} from "./types";
 import RequestResponseList from "./RequestResponseList";
 import PayloadSummary from "./PayloadSummary";
 import useSnitchDataStream from "./useSnitchDataStream";
@@ -22,6 +22,8 @@ const Snitch = () => {
     const [selectedRequest, setSelectedRequest] =
         useState<RequestResponse | null>(null);
 
+    const [filters, setFilters] = useState<RequestFilters>(new RequestFilters([], [], []));
+
     const [requests, clear, ignorePath] = useSnitchDataStream();
 
     const scrollable: CSSProperties = {
@@ -41,6 +43,8 @@ const Snitch = () => {
                         setSelectedRequest={setSelectedRequest}
                         onClear={clear}
                         onIgnorePath={ignorePath}
+                        filters={filters}
+                        setFilters={setFilters}
                     />
                 </Col>
                 {requestToShow != null && (

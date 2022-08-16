@@ -37,10 +37,9 @@ export default function useSnitchDataStream(): [RequestResponse[], () => void, (
         fetch("/data/requestResponses")
             .then((response) => response.json())
             .then((result) =>
-                setRequests((state) => {
+                setRequests(() => {
                     return sortByTimestamp([
-                        ...result._embedded.requestResponses,
-                        ...state,
+                        ...result._embedded.requestResponses
                     ]);
                 })
             );
