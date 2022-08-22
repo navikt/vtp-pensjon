@@ -5,27 +5,35 @@ import no.nav.pensjon.brev.api.model.*
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
+val mockBrevMetadata = LetterMetadata(
+    displayTitle = "Test brev fra vtp-pensjon",
+    isSensitiv = false,
+    distribusjonstype = LetterMetadata.Distribusjonstype.VEDTAK,
+)
+
 @RestController
 @Tag(name = "Brevbaker")
 @RequestMapping("rest/brevbaker")
 class BrevbakerMock {
 
-    @PostMapping("/letter")
+    @PostMapping("/letter/vedtak")
     fun genererPDF(
-        @RequestBody letterRequest: LetterRequest,
+        @RequestBody letterRequest: VedtaksbrevRequest,
     ): LetterResponse =
         LetterResponse(
-            base64pdf = Base64.getEncoder().encodeToString(javaClass.getResource("/brevbaker-response.pdf")!!.readBytes()),
-            letterMetadata = LetterMetadata(letterRequest.template, false)
+            base64pdf = Base64.getEncoder()
+                .encodeToString(javaClass.getResource("/brevbaker-response.pdf")!!.readBytes()),
+            letterMetadata = mockBrevMetadata
         )
 
-    @GetMapping("/templates/{name}")
-    fun getTemplateDescription(@PathVariable("name") templateName: String): TemplateDescription =
+    @GetMapping("/templates/vedtaksbrev/{kode}")
+    fun getTemplateDescription(@PathVariable("kode") templateKode: String): TemplateDescription =
         TemplateDescription(
-            name = templateName,
+            name = templateKode,
             base = "PensjonLatex",
             letterDataClass = "OmsorgEgenAutoDto",
-            languages = listOf(LanguageCode.BOKMAL, LanguageCode.NYNORSK, LanguageCode.ENGLISH)
+            languages = listOf(LanguageCode.BOKMAL, LanguageCode.NYNORSK, LanguageCode.ENGLISH),
+            metadata = mockBrevMetadata
         )
 
     @GetMapping("/isAlive")
