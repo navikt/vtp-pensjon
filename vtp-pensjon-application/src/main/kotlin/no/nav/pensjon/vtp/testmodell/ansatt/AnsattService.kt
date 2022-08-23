@@ -2,6 +2,7 @@ package no.nav.pensjon.vtp.testmodell.ansatt
 
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.random.Random.Default.nextInt
 
 @Service
@@ -9,8 +10,9 @@ class AnsattService(
     private var ansatteIndeks: AnsatteIndeks,
     private var eventPublisher: ApplicationEventPublisher
 ) {
+    private val counter = AtomicInteger(1)
     fun addAnnsatt(
-        cn: String = randomString(10),
+        cn: String = "" + counter.getAndIncrement(),
         givenname: String = randomString(5),
         sn: String = randomString(5),
         displayName: String = randomString(10),
