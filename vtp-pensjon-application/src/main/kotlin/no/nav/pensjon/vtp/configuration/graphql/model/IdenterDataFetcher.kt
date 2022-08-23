@@ -15,6 +15,7 @@ class IdenterDataFetcher(val personModellRepository: PersonModellRepository) : D
         ) {
             if (this == null) return@with Identliste(emptyList())
 
+            // TODO: https://github.com/navikt/vtp-pensjon/issues/553
             when (IdentGruppe.valueOf((env.variables.get("grupper") as ArrayList<String>).first())) {
                 IdentGruppe.FOLKEREGISTERIDENT -> Identliste(
                     listOf(
