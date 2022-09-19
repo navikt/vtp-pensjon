@@ -57,10 +57,12 @@ class SamboerforholdProxyController(
     @Operation(summary = "Avslutt samboerforhold")
     fun avsluttSamboerforhold(
         @PathVariable("pid") pid: String,
-        @RequestParam("datoTom") datoTom: LocalDate
-    ) = personModellRepository.findById(pid)?.run {
+        @RequestParam("datoTom") datoTom: String
+    ) = personModellRepository.findById(pid)?.apply {
+        val parsedDatoTom = LocalDate.parse(datoTom, DateTimeFormatter.ISO_LOCAL_DATE)
         copy(samboerforhold = samboerforhold.also {
-            it.sortedBy { it.datoTom }.first().datoTom = datoTom
+            it.sortedBy { it.datoTom }.first().datoTom = parsedDatoTom
         }).let(personModellRepository::save)
-    }
+        ResponseEntity.status(HttpStatus.OK).build<Any>()
+    } ?: ResponseEntity.status(HttpStatus.NOT_FOUND).build<Any>()
 }
