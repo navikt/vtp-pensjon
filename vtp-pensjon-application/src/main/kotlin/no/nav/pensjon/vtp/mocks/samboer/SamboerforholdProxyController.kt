@@ -7,6 +7,8 @@ import no.nav.pensjon.vtp.testmodell.personopplysning.SamboerforholdModell
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @RestController
@@ -49,5 +51,18 @@ class SamboerforholdProxyController(
             )
         ).let(personModellRepository::save)
         ResponseEntity.status(HttpStatus.CREATED).build<Any>()
+    } ?: ResponseEntity.status(HttpStatus.NOT_FOUND).build<Any>()
+
+    @PutMapping("proxy/samboer/{pid}")
+    @Operation(summary = "Avslutt samboerforhold")
+    fun avsluttSamboerforhold(
+        @PathVariable("pid") pid: String,
+        @RequestParam("datoTom") datoTom: String
+    ) = personModellRepository.findById(pid)?.apply {
+        val parsedDatoTom = LocalDate.parse(datoTom, DateTimeFormatter.ISO_LOCAL_DATE)
+        copy(samboerforhold = samboerforhold.also {
+            it.sortedBy { it.datoTom }.first().datoTom = parsedDatoTom
+        }).let(personModellRepository::save)
+        ResponseEntity.status(HttpStatus.OK).build<Any>()
     } ?: ResponseEntity.status(HttpStatus.NOT_FOUND).build<Any>()
 }
