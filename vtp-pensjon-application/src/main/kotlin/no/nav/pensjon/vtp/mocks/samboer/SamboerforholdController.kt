@@ -36,7 +36,7 @@ class SamboerforholdController(
                     registrertAv = it.opprettetAv
                 ).apply {
                     add(linkTo<SamboerforholdController> { hentSamboerforhold(pid) }.withSelfRel())
-                    add(Link.of(linkTo<SamboerforholdController> { avsluttForhold(it.id, "") }
+                    add(Link.of(linkTo<SamboerforholdController> { avsluttForhold(it.id, "", pid) }
                         .toString().replace("datoTom=", "") + "{datoTom}").withRel("avslutt"))
                     add(linkTo<SamboerforholdController> { annullerForhold(it.id) }.withRel("annuller"))
                 }
@@ -68,7 +68,8 @@ class SamboerforholdController(
     @Operation(summary = "Avslutt samboerforhold")
     fun avsluttForhold(
         @PathVariable periodeId: String,
-        @RequestParam datoTom: String
+        @RequestParam datoTom: String,
+        @RequestParam pid: String
     ) = personModellRepository.findBySamboerforholdId(periodeId)
         ?.run {
             copy(samboerforhold = samboerforhold.also {
