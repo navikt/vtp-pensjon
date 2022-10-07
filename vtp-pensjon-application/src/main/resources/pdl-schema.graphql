@@ -17,7 +17,7 @@ type Person {
     navn: [Navn!]!
     foedsel: [Foedsel!]!
     statsborgerskap: Statsborgerskap
-    doedsfall : Doedsfall
+    doedsfall : [Doedsfall!]!
     adressebeskyttelse(historikk: Boolean = false): [Adressebeskyttelse!]!
     bostedsadresse(historikk: Boolean = false): [Bostedsadresse!]!
     kontaktadresse(historikk: Boolean = false): [Kontaktadresse!]!
