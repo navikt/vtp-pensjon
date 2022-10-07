@@ -66,6 +66,7 @@ type Statsborgerskap {
 type Doedsfall {
     doedsdato: Date
     metadata: Metadata!
+    folkeregistermetadata: Folkeregistermetadata
 }
 
 type Metadata {
