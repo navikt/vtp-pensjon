@@ -45,7 +45,8 @@ data class Foedsel(
 
 data class Doedsfall(
     val doedsdato: Date? = null,
-    val metadata: Metadata
+    val metadata: Metadata,
+    val folkeregistermetadata: Folkeregistermetadata? = null
 )
 
 data class Statsborgerskap(
