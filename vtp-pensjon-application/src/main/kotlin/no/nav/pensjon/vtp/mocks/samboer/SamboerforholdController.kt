@@ -45,6 +45,29 @@ class SamboerforholdController(
         ?.let { ResponseEntity.ok(it) }
         ?: noContent().build()
 
+    @GetMapping("api/samboer/historikk")
+    @Operation(summary = "Hent samboerforhold historikk")
+    fun hentSamboerforholdHistorikk(
+        @PathVariable("pid") pid: String
+    ) = personModellRepository.findById(pid)?.run {
+            samboerforhold.filter { !it.annullert }.map {
+                SamboerDTO(
+                    pidBruker = pid,
+                    pidSamboer = it.pidSamboer,
+                    datoFom = it.datoFom,
+                    datoTom = it.datoTom,
+                    registrertAv = it.opprettetAv
+                ).apply {
+                    add(linkTo<SamboerforholdController> { hentSamboerforhold(pid) }.withSelfRel())
+                    add(Link.of(linkTo<SamboerforholdController> { avsluttForhold(it.id, "", pid) }
+                        .toString().replace("datoTom=", "") + "{datoTom}").withRel("avslutt"))
+                    add(linkTo<SamboerforholdController> { annullerForhold(it.id) }.withRel("annuller"))
+                }
+            }
+        }?.let { ResponseEntity.ok(it) } ?: noContent().build()
+
+
+
     @PostMapping("/api/samboer")
     @Operation(summary = "Registrer samboerforhold")
     fun registrerForhold(

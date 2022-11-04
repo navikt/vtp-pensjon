@@ -34,6 +34,22 @@ class SamboerforholdProxyController(
         }?.firstOrNull { it.datoTom == null } ?: ResponseEntity.status(HttpStatus.NO_CONTENT).build<Any>()
     }
 
+    @GetMapping("proxy/samboer/historikk/{pid}")
+    @Operation(summary = "Hent alle samboerforhold registert på bruker")
+    fun hentSamboerhistorikk(
+        @PathVariable("pid") pid: String
+    ) = personModellRepository.findById(pid).let {
+        it?.samboerforhold?.map {
+            SamboerDTO(
+                pidBruker = pid,
+                pidSamboer = it.pidSamboer,
+                datoFom = it.datoFom,
+                datoTom = it.datoTom,
+                registrertAv = it.opprettetAv
+            )
+        } ?: ResponseEntity.status(HttpStatus.NO_CONTENT).build<Any>()
+    }
+
     @PostMapping("proxy/samboer")
     @Operation(summary = "Opprett samboerforhold")
     fun opprettSamboerforhold(
