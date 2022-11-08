@@ -25,10 +25,10 @@ class SamboerforholdController(
     @Operation(summary = "Hent samboerforhold")
     fun hentSamboerforhold(
         @PathVariable("pid") pid: String
-    ): ResponseEntity<SamboerDTO> = personModellRepository.findById(pid)
+    ): ResponseEntity<SamboerHateoasDTO> = personModellRepository.findById(pid)
         ?.run {
             samboerforhold.filter { !it.annullert }.map {
-                SamboerDTO(
+                SamboerHateoasDTO(
                     pidBruker = pid,
                     pidSamboer = it.pidSamboer,
                     datoFom = it.datoFom,
@@ -45,13 +45,13 @@ class SamboerforholdController(
         ?.let { ResponseEntity.ok(it) }
         ?: noContent().build()
 
-    @GetMapping("api/samboer/historikk")
+    @GetMapping("api/samboer/historikk/{pid}")
     @Operation(summary = "Hent samboerforhold historikk")
     fun hentSamboerforholdHistorikk(
         @PathVariable("pid") pid: String
     ) = personModellRepository.findById(pid)?.run {
             samboerforhold.filter { !it.annullert }.map {
-                SamboerDTO(
+                SamboerHateoasDTO(
                     pidBruker = pid,
                     pidSamboer = it.pidSamboer,
                     datoFom = it.datoFom,
@@ -71,18 +71,17 @@ class SamboerforholdController(
     @PostMapping("/api/samboer")
     @Operation(summary = "Registrer samboerforhold")
     fun registrerForhold(
-        @RequestBody request: SamboerDTO,
+        @RequestBody request: SamboerHateoasDTO,
     ) = personModellRepository.findById(request.pidBruker)?.apply {
         copy(
-            samboerforhold = listOf(
-                SamboerforholdModell(
-                    id = UUID.randomUUID().toString(),
-                    pidSamboer = request.pidSamboer,
-                    datoFom = request.datoFom,
-                    datoTom = request.datoTom,
-                    opprettetAv = request.registrertAv
-                )
-            )
+            samboerforhold = samboerforhold +
+                    SamboerforholdModell(
+                        id = UUID.randomUUID().toString(),
+                        pidSamboer = request.pidSamboer,
+                        datoFom = request.datoFom,
+                        datoTom = request.datoTom,
+                        opprettetAv = request.registrertAv
+                    )
         ).let(personModellRepository::save)
         ResponseEntity.status(CREATED).build<Any>()
     } ?: ResponseEntity.status(NOT_FOUND).build<Any>()

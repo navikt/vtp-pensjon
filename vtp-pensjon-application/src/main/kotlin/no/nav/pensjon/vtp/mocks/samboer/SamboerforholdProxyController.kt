@@ -53,17 +53,15 @@ class SamboerforholdProxyController(
     @PostMapping("proxy/samboer")
     @Operation(summary = "Opprett samboerforhold")
     fun opprettSamboerforhold(
-        @RequestBody request: SamboerDTO
+        @RequestBody request: SamboerHateoasDTO
     ) = personModellRepository.findById(request.pidBruker)?.apply {
         copy(
-            samboerforhold = listOf(
-                SamboerforholdModell(
+            samboerforhold = samboerforhold + SamboerforholdModell(
                     id = UUID.randomUUID().toString(),
                     pidSamboer = request.pidSamboer,
                     datoFom = request.datoFom,
                     datoTom = request.datoFom,
                     opprettetAv = request.registrertAv
-                )
             )
         ).let(personModellRepository::save)
         ResponseEntity.status(HttpStatus.CREATED).build<Any>()
