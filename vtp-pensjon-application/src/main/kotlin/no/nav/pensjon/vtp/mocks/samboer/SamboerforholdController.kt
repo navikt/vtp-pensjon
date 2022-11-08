@@ -71,7 +71,7 @@ class SamboerforholdController(
     @PostMapping("/api/samboer")
     @Operation(summary = "Registrer samboerforhold")
     fun registrerForhold(
-        @RequestBody request: SamboerHateoasDTO,
+        @RequestBody request: SamboerDTO,
     ) = personModellRepository.findById(request.pidBruker)?.apply {
         copy(
             samboerforhold = samboerforhold +
