@@ -68,6 +68,7 @@ fun azureSystemToken(
         setClaim("azp", clientId)
         setClaim("tid", tenantId)
         setClaim("ver", "2.0")
+        setClaim("azp_name", "dev-fss:pensjon-testdata:pensjon-testdata-server-local") //Ekte Azure provider setter azp_name til <cluster>:<namespace>:<app-name>
         setClaim("roles", listOf("access_as_application"))
     }
     return jsonWebKeySupport.createRS256Token(claims.toJson()).compactSerialization
