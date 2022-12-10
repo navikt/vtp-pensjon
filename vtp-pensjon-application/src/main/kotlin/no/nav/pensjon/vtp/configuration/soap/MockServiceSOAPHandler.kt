@@ -59,8 +59,10 @@ class MockServiceSOAPHandler : SOAPHandler<SOAPMessageContext> {
 
             context.message.soapBody.fault.faultCode = "Server"
 
-            fault.addDetail().apply {
-                addDetailEntry(faultInfo.messageParts[0].elementQName)
+            if (fault.detail == null) {
+                fault.addDetail().apply {
+                    addDetailEntry(faultInfo.messageParts[0].elementQName)
+                }
             }
         }
 
