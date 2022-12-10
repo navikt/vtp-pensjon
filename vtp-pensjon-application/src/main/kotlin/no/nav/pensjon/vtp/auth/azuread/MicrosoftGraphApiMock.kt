@@ -34,9 +34,21 @@ class MicrosoftGraphApiMock(private val ansatteIndeks: AnsatteIndeks) {
         val (ident, ansatt) = getAnsatt(auth)
 
         return User(
-            context = "https://graph.microsoft.com/v1.0/\$metadata#users($select)/\$entity",
+            id = ident,
+            context = "https://graph.microsoft.com/v1.0/\$metadata#users(id,onPremisesSamAccountName)/\$entity",
             onPremisesSamAccountName = ident,
             memberOf = ansatt.groups.map { Group(it) }
+        )
+    }
+
+    @GetMapping(value = ["/v1.0/users/{id}/memberOf/microsoft.graph.group"], produces = [APPLICATION_JSON_VALUE])
+    fun memberOf(@RequestHeader("Authorization") auth: String, @PathVariable id: String): MemberOfResponse {
+        val (_, ansatt) = getAnsatt(auth)
+
+        return MemberOfResponse(
+            context = "https://graph.microsoft.com/v1.0/\$metadata#groups(displayName)",
+            nextLink = null,
+            value = ansatt.groups.map { Group(it) }
         )
     }
 
@@ -63,9 +75,16 @@ class MicrosoftGraphApiMock(private val ansatteIndeks: AnsatteIndeks) {
     )
 
     data class User(
+        val id: String,
         @JsonProperty("@odata.context") var context: String,
         var onPremisesSamAccountName: String,
         var memberOf: List<Group>
+    )
+
+    data class MemberOfResponse(
+        @JsonProperty("@odata.context") val context: String,
+        @JsonProperty("@odata.nextLink") val nextLink: String?,
+        val value: List<Group>
     )
 
     data class Group(var displayName: String)
