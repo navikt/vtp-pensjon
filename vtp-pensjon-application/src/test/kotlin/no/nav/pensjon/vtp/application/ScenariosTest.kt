@@ -12,7 +12,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest
-@TestPropertySource("classpath:disable-ldap.properties")
+@TestPropertySource("classpath:test.properties")
 class ScenariosTest @Autowired constructor(
     private val testscenarioTemplateRepository: TestscenarioTemplateRepository,
     private val testscenarioService: TestscenarioService,

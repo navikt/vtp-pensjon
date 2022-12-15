@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestPropertySource("classpath:disable-ldap.properties")
+@TestPropertySource("classpath:test.properties")
 class OppgaveIntegrationTest @Autowired constructor() {
     @Autowired
     private val mockMvc: MockMvc? = null

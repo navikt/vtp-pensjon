@@ -6,7 +6,7 @@ image::vtp.png[alt text,title="VTP Logo"]
 
 * virtualisere grensesnitt rundt applikasjonene brukt i pensjonsområdet.
 * instansierer og holde testdata konsistente på tvers av grensesnittene
-* ha en plattform for å simulere grensesnitt over REST, SOAP, LDAP.
+* ha en plattform for å simulere grensesnitt over REST, SOAP.
 * sikkerhetshåndtering over OAuth2
 * REST-grensesnitt for å programatisk opprette testdata (for automatiske
 tester)

@@ -157,14 +157,6 @@ const Login: React.FC<{ usersUrl: string; queryParams: string }> = (props) => {
   }
 };
 
-export function OpenAMLogin(props: RouteComponentProps) {
-  return (
-    <Login
-      usersUrl="/rest/isso/oauth2/users"
-      queryParams={props.location.search}
-    />
-  );
-}
 export function AzureADLogin(props: RouteComponentProps<{ tenant: string }>) {
   const tenant = props.match.params.tenant;
   const queryParams = props.location.search;

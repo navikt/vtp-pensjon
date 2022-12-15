@@ -12,7 +12,6 @@ class VtpPensjonClient(
     baseUrl: String,
     private val azureAdClientId: String? = null,
     private val azureAdIssuer: String? = null,
-    private val issoIssuer: String? = null,
     private val maskinportenIssuer: String? = null,
     private val stsIssuer: String? = null,
 ) {
@@ -50,21 +49,6 @@ class VtpPensjonClient(
     fun azureAdCcToken(audience: String): TokenMeta =
         tokenFetcher.fetchAzureAdCcToken(audience).let {
             TokenMeta(tokenResponse = it)
-        }
-
-    fun issoToken(clientId: String, groups: List<String>, issuer: String? = null): TokenMeta =
-        tokenFetcher.fetchIssoToken(
-            issuer = issuer
-                ?: issoIssuer
-                ?: throw IllegalStateException("Must supply a issuer or define issoIssuer"),
-            clientId = clientId,
-            groups = groups,
-            units = emptyList()
-        ).let {
-            TokenMeta(
-                tokenResponse = it,
-                username = JWT.decode(it.idToken ?: throw RuntimeException("Missing id_token from isso call")).subject,
-            )
         }
 
     fun maskinportenToken(consumer: String, scope: String, issuer: String? = null) = TokenMeta(

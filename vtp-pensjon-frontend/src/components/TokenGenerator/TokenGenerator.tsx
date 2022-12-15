@@ -19,10 +19,6 @@ import {
   azureADRequestSupplier,
   azureAdResponseMapper,
 } from "./support/AzureADSupport";
-import {
-  openAMRequestSupplier,
-  openAmResponseMapper,
-} from "./support/OpenAMSupport";
 import { stsRequestSupplier, stsResponseMapper } from "./support/StsSupport";
 import { RequestParameters } from "./RequestParameters";
 import {tokenxRequestSupplier, tokenxResponseMapper} from "./support/TokenExchangeSupport";
@@ -313,10 +309,6 @@ const TokenGenerator = () => {
             >STS</Button>
             <Button
                 size="lg"
-                onClick={() => setTokenPanel("OpenAM")}
-            >OpenAM</Button>
-            <Button
-                size="lg"
                 onClick={() => setTokenPanel("Maskinporten")}
             >Maskinporten</Button>
           </Stack>
@@ -359,17 +351,6 @@ const TokenGenerator = () => {
                   clientAssertion={{default: "waew1"}}
                   requestSupplier={idportenRequestSupplier}
                   responseMapper={idportenResponseMapper}
-              />
-            </div>
-          }
-          { tokenPanel === "OpenAM" &&
-            <div>
-              <h2>OpenAM token</h2>
-              <TokenPanel
-                  username={{ default: "saksbeh" }}
-                  clientId={{ default: "psak" }}
-                  requestSupplier={openAMRequestSupplier}
-                  responseMapper={openAmResponseMapper}
               />
             </div>
           }

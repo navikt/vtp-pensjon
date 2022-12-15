@@ -253,7 +253,7 @@ class AzureAdMock(
             email = user.email,
             nonce = nonce,
             issuer = requestedIssuer ?: getIssuer(tenant),
-            groups = user.groups.map { ldapGroupName: String -> toAzureGroupId(ldapGroupName) },
+            groups = user.groups.map { toAzureGroupId(it) },
             aud = audience,
             additionalClaims = mapOf(
                 "tid" to tenant,

@@ -23,11 +23,6 @@ import org.testcontainers.utility.DockerImageName
     classes = [VtpPensjonApplication::class],
     webEnvironment = RANDOM_PORT,
 )
-@TestPropertySource(
-    properties = [
-        "ldap.server.enabled=false"
-    ]
-)
 @Testcontainers
 @ContextConfiguration(
     initializers = [
@@ -90,26 +85,6 @@ class VtpPensjonClientTest constructor(
             assertTrue(jwtClaimsSet.issuer.contains("/vtp-pensjon/v2.0"))
             assertTrue(jwtClaimsSet.audience.contains(audience))
             assertTrue((jwtClaimsSet.getClaim("roles") as List<*>).contains("access_as_application"))
-        }
-    }
-
-    @Test
-    fun `client can create ISSO tokens`() {
-        val issuer = "http://vtp-pensjon.local/isso"
-        val audience = "myAudience"
-
-        val token = vtpPensjon.issoToken(
-            issuer = issuer,
-            clientId = audience,
-            groups = listOf("MY-OWN-GROUP"),
-        )
-
-        assertNotNull(token)
-        assertNotNull(token.username)
-
-        JWTParser.parse(token.tokenResponse.accessToken).run {
-            assertEquals(issuer, jwtClaimsSet.issuer)
-            assertTrue(jwtClaimsSet.audience.contains(audience))
         }
     }
 

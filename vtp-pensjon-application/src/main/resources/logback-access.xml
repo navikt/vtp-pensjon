@@ -29,8 +29,7 @@
                     <filter>
                         <!--
                             Excluding the Authorization header since vtp-pensjon is
-                            used in some test environments where actual OpenAM and
-                            AzureAD tokens are used.
+                            used in some test environments where actual tokens are used.
                         -->
                         <exclude>Authorization</exclude>
                     </filter>
