@@ -30,13 +30,13 @@ private val GROUPS = mapOf(
     "0000-GA-PESYS_CHROME" to "10731768-a28c-4b35-b2a4-8e59fdba73e3",
 )
 
-fun toAzureGroupId(ldapGroupName: String): String {
-    return GROUPS[ldapGroupName]
-        ?: errorMessage(ldapGroupName)
+fun toAzureGroupId(groupName: String): String {
+    return GROUPS[groupName]
+        ?: errorMessage(groupName)
 }
 
-private fun errorMessage(ldapGroupName: String): String {
-    val errorMessage = "error: unknown Azure group ID for group $ldapGroupName"
+private fun errorMessage(groupName: String): String {
+    val errorMessage = "error: unknown Azure group ID for group $groupName"
     LOG.error(errorMessage)
     return errorMessage
 }

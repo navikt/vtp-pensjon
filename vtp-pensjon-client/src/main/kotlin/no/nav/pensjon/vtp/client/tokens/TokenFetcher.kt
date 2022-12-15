@@ -78,29 +78,6 @@ internal class TokenFetcher(
         )
         .readSuccessfulJsonResponse()
 
-    fun fetchIssoToken(
-        issuer: String,
-        clientId: String,
-        groups: List<String>,
-        units: List<String>,
-    ): AccessTokenResponse = okHttpClient
-        .newCall(
-            request()
-                .postJson(
-                    AnsattRequest(
-                        groups = groups,
-                        units = units
-                    )
-                )
-                .url(
-                    url = "$vtpPensjonUrl/rest/isso/oauth2/ansatt",
-                    queryParameters = mapOf("issuer" to issuer)
-                )
-                .basicAuth(username = clientId, password = "dummy")
-                .build()
-        )
-        .readSuccessfulJsonResponse()
-
     fun fetchStsToken(
         issuer: String,
         user: String,

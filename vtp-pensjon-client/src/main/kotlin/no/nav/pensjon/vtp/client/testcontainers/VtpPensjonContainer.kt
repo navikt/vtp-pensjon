@@ -49,10 +49,6 @@ open class VtpPensjonContainer(image: String = defaultVtpPensjonImage()) :
         return "http://${host}:${getMappedPort(8060)}"
     }
 
-    fun ldapUrl(): String {
-        return "ldap.url=ldap://$host:${getMappedPort(8389)}"
-    }
-
     override fun stop() {
         super.stop()
         embeddedMongoDBContainer?.stop()
@@ -61,14 +57,12 @@ open class VtpPensjonContainer(image: String = defaultVtpPensjonImage()) :
     fun client(
         azureAdClientId: String? = null,
         azureAdIssuer: String? = null,
-        issoIssuer: String? = null,
         maskinportenIssuer: String? = null,
         stsIssuer: String? = null,
     ) = VtpPensjonClient(
         baseUrl = baseUrl(),
         azureAdClientId = azureAdClientId,
         azureAdIssuer = azureAdIssuer,
-        issoIssuer = issoIssuer,
         maskinportenIssuer = maskinportenIssuer,
         stsIssuer = stsIssuer,
     )

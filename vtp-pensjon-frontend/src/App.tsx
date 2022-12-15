@@ -7,7 +7,7 @@ import Frame from "./components/Frame";
 import Snitch from "./components/Snitch/Snitch";
 import Testscenario from "./components/Testscenario/Testscenario";
 import ErrorBoundary from "./components/ErrorBoundary";
-import { AzureADLogin, OpenAMLogin } from "./components/AzureADLogin";
+import { AzureADLogin } from "./components/AzureADLogin";
 import TokenGenerator from "./components/TokenGenerator/TokenGenerator";
 import Loginservice from "./components/Loginservice/Loginservice";
 import {Unleash} from "./components/Unleash/unleash";
@@ -30,7 +30,6 @@ function App() {
             />
             <Route path="/loginservice/login" component={Loginservice} />
             <Route path="/idporten/login" component={IdPorten} />
-            <Route path="/openam/authorize" component={OpenAMLogin} />
             <Route path="/tokenGenerator" component={TokenGenerator} />
             <Route path="/unleash" component={Unleash} />
             <Route exact path="/">
