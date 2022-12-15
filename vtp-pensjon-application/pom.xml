@@ -27,7 +27,7 @@
 
         <cxf.version>3.5.3</cxf.version>
         <jaxb2-basics.version>0.13.1</jaxb2-basics.version>
-        <tjenestespesifikasjoner.version>2600.3800cc4</tjenestespesifikasjoner.version>
+        <tjenestespesifikasjoner.version>2608.668f35c</tjenestespesifikasjoner.version>
         <pensjon-tjenestespesifikasjoner.version>1.2020.08.22-15.02-5a6bc2023040</pensjon-tjenestespesifikasjoner.version>
     </properties>
 
