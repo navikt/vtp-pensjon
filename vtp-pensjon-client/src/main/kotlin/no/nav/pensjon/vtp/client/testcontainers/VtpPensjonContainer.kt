@@ -16,7 +16,7 @@ private const val pomProperties = "/vtp-pensjon-client.properties"
 open class VtpPensjonContainer(image: String = defaultVtpPensjonImage()) :
     GenericContainer<VtpPensjonContainer>(image) {
     init {
-        exposedPorts = listOf(8060, 8389)
+        exposedPorts = listOf(8060)
     }
 
     private var embeddedMongoDBContainer: MongoDBContainer? = null
