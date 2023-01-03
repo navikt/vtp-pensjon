@@ -12,7 +12,6 @@ import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.support.TestPropertySourceUtils
 import org.testcontainers.containers.MongoDBContainer
 import org.testcontainers.junit.jupiter.Container
