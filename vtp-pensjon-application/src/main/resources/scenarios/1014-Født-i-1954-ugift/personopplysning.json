@@ -1,0 +1,39 @@
+{
+	"søker": {
+		"ident": "${for1}",
+		"fødselsdato": "${for1_fødselsdato}",
+		"kjønn": "M",
+		"geografiskTilknytning": {
+			"type": "Land",
+			"kode": "NOR"
+		},
+		"adresser": [
+			{
+				"@type": "ref",
+				"fom": "now() - P1Y",
+				"adresseType": "BOSTEDSADRESSE",
+				"land": "NOR"
+			}
+		],
+		"personstatus": [
+			{
+				"kode": "BOSA",
+                "fom": "now()-P50Y"
+			}
+		],
+		"statsborgerskap": [{
+			"land": "NOR",
+			"fom": null,
+			"tom": null,
+			"endringstype": "ny",
+			"endringstidspunkt": null
+		}],
+		"sivilstand": [
+			{
+				"kode": "UGIF"
+			}
+		]
+	},
+	"annenPart": null,
+	"familierelasjoner": []
+}
