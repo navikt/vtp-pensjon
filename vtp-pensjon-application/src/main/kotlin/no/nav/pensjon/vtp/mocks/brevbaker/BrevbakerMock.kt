@@ -37,8 +37,8 @@ class BrevbakerMock {
         )
 
     @GetMapping("/templates/vedtaksbrev")
-    fun getTemplates() =
-        listOf(Brevkode.Vedtak.OMSORG_EGEN_AUTO)
+    fun getTemplates(): List<String> =
+        Brevkode.Vedtak.values().map { it.name }
 
     @GetMapping("/isAlive")
     fun ping() = "Brevbaker kjører i vtp-pensjon"
