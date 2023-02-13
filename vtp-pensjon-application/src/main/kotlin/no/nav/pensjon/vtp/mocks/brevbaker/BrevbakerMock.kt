@@ -2,6 +2,7 @@ package no.nav.pensjon.vtp.mocks.brevbaker
 
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.pensjon.brev.api.model.*
+import no.nav.pensjon.brev.api.model.maler.Brevkode
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -30,11 +31,14 @@ class BrevbakerMock {
     fun getTemplateDescription(@PathVariable("kode") templateKode: String): TemplateDescription =
         TemplateDescription(
             name = templateKode,
-            base = "PensjonLatex",
             letterDataClass = "OmsorgEgenAutoDto",
             languages = listOf(LanguageCode.BOKMAL, LanguageCode.NYNORSK, LanguageCode.ENGLISH),
             metadata = mockBrevMetadata
         )
+
+    @GetMapping("/templates/vedtaksbrev")
+    fun getTemplates() =
+        listOf(Brevkode.Vedtak.OMSORG_EGEN_AUTO)
 
     @GetMapping("/isAlive")
     fun ping() = "Brevbaker kjører i vtp-pensjon"
