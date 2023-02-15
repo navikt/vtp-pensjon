@@ -17,7 +17,7 @@ val mockBrevMetadata = LetterMetadata(
 @RequestMapping("rest/brevbaker")
 class BrevbakerMock {
 
-    @PostMapping("/letter/vedtak")
+    @PostMapping("/letter/autobrev")
     fun genererPDF(
         @RequestBody letterRequest: VedtaksbrevRequest,
     ): LetterResponse =
@@ -27,7 +27,7 @@ class BrevbakerMock {
             letterMetadata = mockBrevMetadata
         )
 
-    @GetMapping("/templates/vedtaksbrev/{kode}")
+    @GetMapping("/templates/autobrev/{kode}")
     fun getTemplateDescription(@PathVariable("kode") templateKode: String): TemplateDescription =
         TemplateDescription(
             name = templateKode,
@@ -36,7 +36,7 @@ class BrevbakerMock {
             metadata = mockBrevMetadata
         )
 
-    @GetMapping("/templates/vedtaksbrev")
+    @GetMapping("/templates/autobrev")
     fun getTemplates(): List<String> =
         Brevkode.Vedtak.values().map { it.name }
 
