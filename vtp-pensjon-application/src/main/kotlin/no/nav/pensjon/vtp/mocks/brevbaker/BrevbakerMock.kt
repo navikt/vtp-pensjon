@@ -10,6 +10,7 @@ val mockBrevMetadata = LetterMetadata(
     displayTitle = "Test brev fra vtp-pensjon",
     isSensitiv = false,
     distribusjonstype = LetterMetadata.Distribusjonstype.VEDTAK,
+    brevtype = LetterMetadata.Brevtype.VEDTAKSBREV,
 )
 
 @RestController
@@ -19,7 +20,7 @@ class BrevbakerMock {
 
     @PostMapping("/letter/autobrev")
     fun genererPDF(
-        @RequestBody letterRequest: VedtaksbrevRequest,
+        @RequestBody letterRequest: AutobrevRequest,
     ): LetterResponse =
         LetterResponse(
             base64pdf = Base64.getEncoder()
@@ -38,7 +39,7 @@ class BrevbakerMock {
 
     @GetMapping("/templates/autobrev")
     fun getTemplates(): List<String> =
-        Brevkode.Vedtak.values().map { it.name }
+        Brevkode.AutoBrev.values().map { it.name }
 
     @GetMapping("/isAlive")
     fun ping() = "Brevbaker kjører i vtp-pensjon"
