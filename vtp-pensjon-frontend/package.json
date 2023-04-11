@@ -86,8 +86,8 @@
     "xml-formatter": "^2.4.0"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "start": "unset NODE_OPTIONS && node scripts/start.js",
+    "build": "unset NODE_OPTIONS && node scripts/build.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
