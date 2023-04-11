@@ -55,6 +55,9 @@
                                 <argument>run</argument>
                                 <argument>build</argument>
                             </arguments>
+                            <environmentVariables>
+                               <NODE_OPTIONS>--open-legacy-provider</NODE_OPTIONS>
+                            </environmentVariables>
                         </configuration>
                     </execution>
 
