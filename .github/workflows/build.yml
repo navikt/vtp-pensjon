@@ -93,6 +93,8 @@ jobs:
         if: github.ref == 'refs/heads/main'
         shell: bash
         run: |
+          export NODE_OPTIONS=--openssl-legacy-provider
+          
           mvn -T1C deploy -Drevision="${VERSION}" -Dfile.encoding=UTF-8 -Dkotlin.format.skip=true -Dkotlin.check.skip=true -DskipTests source:jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
