@@ -735,7 +735,7 @@
             <plugin>
                 <groupId>com.github.ekryd.sortpom</groupId>
                 <artifactId>sortpom-maven-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.2.1</version>
                 <configuration>
                     <expandEmptyElements>false</expandEmptyElements>
                     <nrOfIndentSpace>4</nrOfIndentSpace>
