@@ -1,7 +1,7 @@
 package no.nav.pensjon.vtp.mocks.oppgave.rest.infrastruktur.validering
 
 import org.assertj.core.api.Assertions
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import javax.validation.Validation
 
 class AtleastOneOfValidatorTest {
