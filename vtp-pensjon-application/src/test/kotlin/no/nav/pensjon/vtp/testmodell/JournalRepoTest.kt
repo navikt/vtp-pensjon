@@ -7,8 +7,8 @@ import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.DokumenttypeId.ADOPSJ
 import no.nav.pensjon.vtp.testmodell.dokument.modell.koder.Journalstatus.MOTTATT
 import no.nav.pensjon.vtp.testmodell.repo.impl.JournalRepositoryImpl
 import org.assertj.core.api.Assertions
-import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Test
 
 class JournalRepoTest {
     @Test
@@ -82,6 +82,6 @@ class JournalRepoTest {
                 journalStatus = MOTTATT,
             )
         )
-        Assert.assertNotNull(resultatModell.journalpostId)
+        assertNotNull(resultatModell.journalpostId)
     }
 }
