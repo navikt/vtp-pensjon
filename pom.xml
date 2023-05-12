@@ -48,6 +48,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <revision>1.0.0-SNAPSHOT</revision>
+
+        <!-- Override Spring Boot align with Pesys -->
+        <kotlin.version>1.8.21</kotlin.version>
     </properties>
 
     <build>
