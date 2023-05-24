@@ -88,8 +88,11 @@ class AzureAdMock(
         @RequestParam("scope", required = false) scope: String?,
         @RequestParam("requested_token_use", required = false) requestedTokenUse: String?,
         @RequestParam("assertion", required = false) assertion: String?,
+        @RequestParam("client_assertion", required = false) clientAssertion: String?,
+        @RequestParam("client_assertion_type", required = false) clientAssertionType: String?
     ): ResponseEntity<*> {
         val clientId = getUser(authorization)
+            ?: getClientId(clientAssertion, clientAssertionType)
             ?: inputClientId
             ?: return badRequest().body("Must supply either a AUTHORIZATION header or client_id request param")
 
