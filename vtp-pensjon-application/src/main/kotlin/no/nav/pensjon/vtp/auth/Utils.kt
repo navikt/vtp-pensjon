@@ -1,6 +1,7 @@
 package no.nav.pensjon.vtp.auth
 
 import com.nimbusds.oauth2.sdk.ParseException
+import com.nimbusds.oauth2.sdk.auth.JWTAuthentication.CLIENT_ASSERTION_TYPE
 import com.nimbusds.oauth2.sdk.auth.PrivateKeyJWT
 import java.nio.charset.StandardCharsets
 import java.util.*
@@ -15,7 +16,9 @@ fun getUser(authorization: String?): String? =
     }
 
 fun getClientId(clientAssertion: String?, clientAssertionType: String?): String? = try {
-    PrivateKeyJWT.parse("client_assertion_type=$clientAssertionType&client_assertion=$clientAssertion").clientID.value
+    if(clientAssertionType=="client_credentials")
+        PrivateKeyJWT.parse("client_assertion_type=$CLIENT_ASSERTION_TYPE&client_assertion=$clientAssertion").clientID.value
+    else null
 } catch (_: ParseException) {
     null
 }
