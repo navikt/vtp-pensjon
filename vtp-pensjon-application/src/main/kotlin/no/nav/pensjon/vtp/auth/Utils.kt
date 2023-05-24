@@ -1,8 +1,8 @@
 package no.nav.pensjon.vtp.auth
 
+import com.nimbusds.oauth2.sdk.ParseException
 import com.nimbusds.oauth2.sdk.auth.PrivateKeyJWT
 import java.nio.charset.StandardCharsets
-import java.text.ParseException
 import java.util.*
 import java.util.Base64.getDecoder
 
