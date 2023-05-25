@@ -252,7 +252,7 @@
             <dependency>
                 <groupId>no.nav.pensjon.brev</groupId>
                 <artifactId>pensjon-brevbaker-api-model</artifactId>
-                <version>3.5.10</version>
+                <version>36</version>
             </dependency>
 
             <dependency>
