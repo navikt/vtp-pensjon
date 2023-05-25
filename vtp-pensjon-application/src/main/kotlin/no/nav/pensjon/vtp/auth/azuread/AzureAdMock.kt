@@ -232,7 +232,14 @@ class AzureAdMock(
                                 jsonWebKeySupport = jsonWebKeySupport
                             ),
                             idToken = "",
-                            refreshToken = ""
+                            refreshToken = azureSystemToken(
+                                aud = listOf(clientId),
+                                sub = UUID.randomUUID().toString().substring(0,19),
+                                clientId = clientId,
+                                issuer = getIssuer(tenant),
+                                tenantId = tenant,
+                                jsonWebKeySupport = jsonWebKeySupport
+                            )
                         )
                     )
                 }
