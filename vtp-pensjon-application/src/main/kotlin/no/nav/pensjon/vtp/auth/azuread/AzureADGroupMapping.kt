@@ -27,7 +27,6 @@ private val GROUPS = mapOf(
     "0000-GA-PENSJON_NASJONAL_M_LOGG" to "753805ea-65a7-4855-bdc3-e6130348df9f",
     "0000-GA-PENSJON_NASJONAL_U_LOGG" to "ea7411eb-8b48-41a0-bc56-7b521fbf0c25",
     "0000-GA-PENSJON_UFORE" to "b0cc96b6-f9b3-4af9-b699-69a99e8a2d18",
-    "0000-GA-PESYS_CHROME" to "10731768-a28c-4b35-b2a4-8e59fdba73e3",
 )
 
 fun toAzureGroupId(groupName: String): String {
